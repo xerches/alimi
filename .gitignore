@@ -1,0 +1,42 @@
+# secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials*.json
+token*.json
+service-account*.json
+
+# pilot and scan output (never commit client data)
+out/
+**/out/
+*.findings.json
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# node / astro
+node_modules/
+.astro/
+site/dist/
+.netlify/
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# rendered kit PDFs are build artifacts
+kits/**/build/

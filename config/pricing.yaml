@@ -1,0 +1,101 @@
+# denimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
+# Starting points inside the ranges from the Oct 2026 research. Raise after three case studies.
+# Prices in USD. "range" is what we quote; "list" is what the site shows.
+
+currency: USD
+updated: 2026-10-31
+
+products:
+  ai_policy_kit:
+    name: AI Policy Kit
+    tagline: An AI acceptable use policy your staff will actually read, in 20 minutes.
+    tiers:
+      - id: free
+        type: product
+        name: Policy generator
+        list: 0
+        includes:
+          - AI acceptable use policy (Markdown and DOCX)
+          - One-page staff guide
+          - AI tool inventory template
+      - id: pro
+        type: product
+        name: Policy kit plus inventory scan
+        list: 99
+        range: [49, 99]
+        includes:
+          - Everything in free
+          - Read-only scan of Microsoft 365 or Google Workspace logs for AI apps in use
+          - Personal-account vs company-account breakdown
+      - id: implementation
+        type: service
+        name: AI policy implementation
+        range: [2500, 5000]
+        includes:
+          - Policy adoption with leadership
+          - Access rules set in Microsoft 365 or Google Workspace
+          - 45-minute staff training
+          - ISO 42001 gap check for companies that need it
+
+  workspace_scan:
+    name: Workspace Security Scan
+    tagline: The report your insurer and your customers are asking for.
+    tiers:
+      - id: free
+        type: product
+        name: One-page summary
+        list: 0
+        includes:
+          - Overall score
+          - Pass/fail against the six questions insurers ask
+      - id: full_report
+        type: product
+        name: Full insurer-ready report
+        range: [500, 1500]
+        includes:
+          - Every finding with evidence and plain-English fix
+          - Evidence pack checklist for the broker
+          - 30-minute debrief call
+      - id: insurance_ready_30
+        type: service
+        name: Insurance-ready in 30 days
+        range: [4000, 8000]
+        includes:
+          - Fix every finding from the report
+          - MFA, admin, forwarding and sharing hardening
+          - One incident response tabletop
+          - Evidence pack delivered to the broker
+
+  payment_fraud_kit:
+    name: Payment Fraud Protection Kit
+    tagline: Verify before you pay. A procedure, not a product pitch.
+    tiers:
+      - id: kit
+        type: product
+        name: Digital kit
+        range: [149, 299]
+        includes:
+          - Payment-change and wire verification procedure
+          - Callback scripts for finance staff
+          - One-page staff poster
+          - 20-minute training video
+          - Closing-day checklist for home buyers and sellers
+      - id: workshop
+        type: service
+        name: Half-day workshop and yearly drill
+        range: [1500, 3000]
+        includes:
+          - Half-day workshop for the finance team or closing office
+          - Procedure tailored to the firm
+          - One drill per year
+
+retainers:
+  fractional_security_lead:
+    name: Fractional security and compliance lead
+    range_per_month: [3000, 6000]
+    hours_per_month: [10, 20]
+
+terms:
+  minimum_monthly_retainer: 1500
+  payment: "Monthly in advance by card or ACH"
+  discount_multi_product: 0.10

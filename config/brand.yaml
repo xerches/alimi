@@ -1,0 +1,36 @@
+# denimi brand tokens. The site and reports read from here.
+# Status: working name, formal checks pending (MA entity search, USPTO, .com).
+
+name: denimi
+display_name: denimi
+tagline: Security that insurers, customers and auditors accept.
+tagline_alt: Security for companies too small for a security team.
+founder: Alex Dennis
+location: Boston, MA
+domain: TODO
+contact_email: TODO
+
+voice:
+  - Plain English a business owner understands.
+  - Define a term the first time it appears (MFA, EDR, BEC).
+  - No fear, no hooded hackers, no "cyber" clichés.
+  - Say what it costs and what happens next.
+
+colors:
+  background: "#0F1F1F"      # dark teal, from the earlier Caprius site
+  surface: "#16302F"
+  text: "#F4F1EA"             # warm off-white
+  text_muted: "#B8C4C2"
+  accent: "#3FB8AF"           # muted teal
+  accent_strong: "#F2B134"    # one warm accent for calls to action
+  danger: "#E2654F"
+  success: "#5CB85C"
+
+typography:
+  heading: "Inter, system-ui, sans-serif"
+  body: "Inter, system-ui, sans-serif"
+  mono: "JetBrains Mono, ui-monospace, monospace"
+
+social:
+  linkedin: TODO
+  github: https://github.com/xerches/denimi

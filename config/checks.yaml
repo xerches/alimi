@@ -1,0 +1,249 @@
+# Scanner checks. The scanner, the report and the site read from here.
+# severity: critical | high | medium | low
+# insurer_question: the underwriting question this check gives evidence for.
+#   mfa | admin_access | email_security | data_sharing | logging | edr | backups | incident_response
+# kind: automated (read from the tenant) | attestation (client confirms, we record evidence they supply)
+
+insurer_questions:
+  mfa: "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?"
+  admin_access: "Are privileged accounts limited, separate from daily-use accounts, and reviewed?"
+  email_security: "Are SPF, DKIM and DMARC in place, and is external auto-forwarding blocked?"
+  data_sharing: "Is external and anonymous file sharing controlled?"
+  logging: "Are audit logs enabled and retained for at least 90 days?"
+  edr: "Is endpoint detection and response deployed on at least 95% of endpoints?"
+  backups: "Are backups immutable or offline, and restore-tested at least quarterly?"
+  incident_response: "Is there a written incident response plan, tested in the last 12 months?"
+
+checks:
+  # ---------- Microsoft 365 ----------
+  - id: m365.mfa.coverage
+    platform: m365
+    kind: automated
+    title: MFA registration coverage
+    severity: critical
+    insurer_question: mfa
+    explain: Users without a second sign-in factor can be taken over with a stolen password alone.
+    remediation: Require MFA for all users through Conditional Access or Security Defaults; chase the unregistered users.
+    pass_when: "100% of enabled users are registered for MFA"
+
+  - id: m365.conditional_access.present
+    platform: m365
+    kind: automated
+    title: Conditional Access policies enforce MFA
+    severity: high
+    insurer_question: mfa
+    explain: Without a policy that requires MFA, registration alone does not protect sign-ins.
+    remediation: Create a Conditional Access policy requiring MFA for all users and all cloud apps, with a break-glass exclusion.
+    pass_when: "At least one enabled policy requires MFA for all users"
+
+  - id: m365.legacy_auth.blocked
+    platform: m365
+    kind: automated
+    title: Legacy authentication blocked
+    severity: critical
+    insurer_question: mfa
+    explain: Old protocols such as POP, IMAP and SMTP AUTH skip MFA entirely.
+    remediation: Block legacy authentication with Conditional Access and disable SMTP AUTH per mailbox.
+    pass_when: "A policy blocks legacy auth clients and no legacy sign-ins in the last 30 days"
+
+  - id: m365.security_defaults
+    platform: m365
+    kind: automated
+    title: Security Defaults or equivalent policy
+    severity: medium
+    insurer_question: mfa
+    explain: Small tenants without Conditional Access rely on Security Defaults for baseline protection.
+    remediation: Enable Security Defaults if Conditional Access is not licensed or configured.
+    pass_when: "Security Defaults enabled, or Conditional Access covers MFA and legacy auth"
+
+  - id: m365.admins.global_count
+    platform: m365
+    kind: automated
+    title: Number of Global Administrators
+    severity: high
+    insurer_question: admin_access
+    explain: Every standing Global Admin is a full-takeover target.
+    remediation: Keep 2 to 4 Global Admins, use least-privilege roles for everyone else, and separate admin accounts from daily mail accounts.
+    pass_when: "2 to 4 Global Admins, none with a mailbox used for daily work"
+
+  - id: m365.admins.mfa
+    platform: m365
+    kind: automated
+    title: All admins protected by MFA
+    severity: critical
+    insurer_question: admin_access
+    explain: An admin without MFA is the fastest route to a whole-tenant breach.
+    remediation: Require MFA, preferably phishing-resistant, for every privileged role.
+    pass_when: "100% of privileged role members registered and enforced"
+
+  - id: m365.forwarding.external
+    platform: m365
+    kind: automated
+    title: External mail forwarding and inbox rules
+    severity: high
+    insurer_question: email_security
+    explain: Attackers who get into a mailbox set up forwarding to read mail silently; this is the core of business email compromise.
+    remediation: Block automatic external forwarding in the outbound spam policy and review existing rules.
+    pass_when: "External auto-forwarding blocked and no unexpected external forwarding rules"
+
+  - id: m365.email_auth.dmarc
+    platform: m365
+    kind: automated
+    title: SPF, DKIM and DMARC configured
+    severity: high
+    insurer_question: email_security
+    explain: Without these records anyone can send mail that looks like it came from the company.
+    remediation: Publish SPF, enable DKIM signing for each domain, and move DMARC to p=quarantine then p=reject.
+    pass_when: "SPF present, DKIM enabled, DMARC policy quarantine or reject on all sending domains"
+
+  - id: m365.sharing.anonymous_links
+    platform: m365
+    kind: automated
+    title: Anonymous sharing links
+    severity: medium
+    insurer_question: data_sharing
+    explain: Anyone-with-the-link sharing leaks files with no record of who opened them.
+    remediation: Set SharePoint and OneDrive sharing to "new and existing guests" or stricter, and expire links.
+    pass_when: "Anonymous links disabled or expiring within 30 days"
+
+  - id: m365.guests.review
+    platform: m365
+    kind: automated
+    title: Guest users reviewed
+    severity: low
+    insurer_question: data_sharing
+    explain: Guest accounts from old projects keep access long after the work ends.
+    remediation: Review guests quarterly and remove inactive ones.
+    pass_when: "No guest inactive for more than 90 days"
+
+  - id: m365.audit.enabled
+    platform: m365
+    kind: automated
+    title: Unified audit log enabled
+    severity: high
+    insurer_question: logging
+    explain: Without audit logs there is no way to investigate an incident or prove what happened to an insurer.
+    remediation: Enable the unified audit log and confirm retention meets 90 days or more.
+    pass_when: "Audit log enabled with retention of at least 90 days"
+
+  - id: m365.secure_score
+    platform: m365
+    kind: automated
+    title: Microsoft Secure Score
+    severity: low
+    insurer_question: mfa
+    explain: A rough overall health number Microsoft calculates for the tenant.
+    remediation: Work through the top improvement actions, prioritising identity.
+    pass_when: "Score above 60% of maximum"
+
+  # ---------- Google Workspace ----------
+  - id: gws.2sv.enforced
+    platform: gws
+    kind: automated
+    title: 2-Step Verification enforced
+    severity: critical
+    insurer_question: mfa
+    explain: Google's MFA. Allowed is not the same as enforced.
+    remediation: Enforce 2-Step Verification for all organizational units, with security keys or passkeys for admins.
+    pass_when: "Enforcement on for all OUs and 100% of active users enrolled"
+
+  - id: gws.admins.super_count
+    platform: gws
+    kind: automated
+    title: Number of super admins
+    severity: high
+    insurer_question: admin_access
+    explain: Same risk as Global Admins in Microsoft 365.
+    remediation: Keep 2 to 4 super admins with separate accounts and delegate everything else.
+    pass_when: "2 to 4 super admins, each enrolled in 2SV"
+
+  - id: gws.forwarding.external
+    platform: gws
+    kind: automated
+    title: External forwarding
+    severity: high
+    insurer_question: email_security
+    explain: Same silent-reading risk as Microsoft 365.
+    remediation: Disable automatic forwarding in Gmail settings and review per-user filters that forward externally.
+    pass_when: "Automatic forwarding disabled and no external forwarding filters"
+
+  - id: gws.email_auth.dmarc
+    platform: gws
+    kind: automated
+    title: SPF, DKIM and DMARC configured
+    severity: high
+    insurer_question: email_security
+    explain: Without these records anyone can spoof the company's domain.
+    remediation: Publish SPF, turn on DKIM in Admin console, publish DMARC at quarantine or reject.
+    pass_when: "SPF present, DKIM on, DMARC quarantine or reject"
+
+  - id: gws.oauth.third_party
+    platform: gws
+    kind: automated
+    title: Third-party app access
+    severity: medium
+    insurer_question: data_sharing
+    explain: Users grant unknown apps access to mail and Drive; AI tools are the fastest growing category.
+    remediation: Restrict unconfigured third-party apps, allowlist approved ones, and review high-risk scopes.
+    pass_when: "Third-party access restricted and no unapproved app with mail or Drive scopes"
+
+  - id: gws.drive.external_sharing
+    platform: gws
+    kind: automated
+    title: Drive external sharing
+    severity: medium
+    insurer_question: data_sharing
+    explain: Anyone-with-the-link files leave with no trail.
+    remediation: Limit external sharing to allowlisted domains and turn off link sharing to anyone.
+    pass_when: "Link sharing to anyone disabled or warned, external sharing restricted"
+
+  - id: gws.lsa.disabled
+    platform: gws
+    kind: automated
+    title: Less secure app access disabled
+    severity: critical
+    insurer_question: mfa
+    explain: Legacy app access bypasses 2-Step Verification.
+    remediation: Disable less secure apps for all OUs.
+    pass_when: "Less secure app access off for all OUs"
+
+  - id: gws.audit.available
+    platform: gws
+    kind: automated
+    title: Audit logs available
+    severity: medium
+    insurer_question: logging
+    explain: Needed to investigate incidents and prove what happened.
+    remediation: Confirm admin and login audit logs are retained; export to a log store if retention is short.
+    pass_when: "Login and admin audit logs available for the last 90 days"
+
+  # ---------- Attestations (both platforms) ----------
+  - id: att.edr.coverage
+    platform: any
+    kind: attestation
+    title: EDR on 95% or more of endpoints
+    severity: critical
+    insurer_question: edr
+    explain: Insurers now require endpoint detection and response on nearly every device.
+    remediation: Deploy an EDR such as Defender for Business or a managed EDR; export the device coverage report as evidence.
+    evidence: "Device coverage export from the EDR console"
+
+  - id: att.backups.tested
+    platform: any
+    kind: attestation
+    title: Backups immutable and restore-tested quarterly
+    severity: critical
+    insurer_question: backups
+    explain: Ransomware recovery depends on a backup the attacker cannot delete and that has actually been restored.
+    remediation: Back up Microsoft 365 or Google Workspace with a third-party tool, keep an immutable copy, and record quarterly restore tests.
+    evidence: "Backup job report and dated restore test record"
+
+  - id: att.ir_plan.tested
+    platform: any
+    kind: attestation
+    title: Incident response plan tested in the last 12 months
+    severity: high
+    insurer_question: incident_response
+    explain: Insurers ask for a written plan and a tabletop exercise, not good intentions.
+    remediation: Adopt the denimi incident response plan template and run a one-hour tabletop; keep the after-action notes.
+    evidence: "Plan document and dated tabletop notes"
