@@ -1,6 +1,6 @@
 # alimi
 
-Working name for a security company founded by Alex Dennis (Boston, MA). Renamed from denimi on Nov 1, 2026 because it sounds better and avoids the "denim" search-engine autocorrect. The GitHub repo is still `xerches/denimi` until Alex renames it in repo settings; the old URL will redirect. Pre-LLC: everything here is a prototype until the entity, insurance and first signed SOW exist. This file is the project brief that Claude Code reads at the start of every session. Keep it current; when a decision changes, change it here first.
+Working name for a security company founded by Alex Dennis (Boston, MA). Renamed from denimi on Nov 1, 2026 because it sounds better and avoids the "denim" search-engine autocorrect. The GitHub repo is still `xerches/alimi` until Alex renames it in repo settings; the old URL will redirect. Pre-LLC: everything here is a prototype until the entity, insurance and first signed SOW exist. This file is the project brief that Claude Code reads at the start of every session. Keep it current; when a decision changes, change it here first.
 
 ## What alimi is
 
