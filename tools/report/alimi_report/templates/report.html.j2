@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ m.title }}: {{ m.tenant_name }}</title>
+<style>
+  :root {
+    --ink: #0F1F1F;
+    --muted: #5B6B6A;
+    --paper: #FFFFFF;
+    --panel: #F3F6F5;
+    --line: #D9E1DF;
+    --accent: {{ m.brand.color('accent') }};
+    --accent-strong: {{ m.brand.color('accent_strong') }};
+    --danger: {{ m.brand.color('danger') }};
+    --success: {{ m.brand.color('success') }};
+    --warn: #D99A1C;
+    --cover: {{ m.brand.color('background') }};
+    --cover-ink: {{ m.brand.color('text') }};
+    --cover-muted: {{ m.brand.color('text_muted') }};
+  }
+  @page { size: Letter; margin: {% if m.free %}11mm 13mm 14mm 13mm{% else %}18mm 16mm 20mm 16mm{% endif %};
+    @bottom-left { content: "{% if m.free %}{{ m.brand.display_name }} · {{ m.tenant_name }} · settings read {{ m.collected_at.strftime('%B %-d, %Y') }} · not a guarantee of security, insurance acceptance or audit results{% else %}{{ m.brand.display_name }} · {{ m.title }} · {{ m.tenant_name }}{% endif %}"; font-size: {% if m.free %}7.5pt{% else %}8.5pt{% endif %}; color: #5B6B6A; }
+    @bottom-right { content: "Page " counter(page) " of " counter(pages); font-size: 8.5pt; color: #5B6B6A; } }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink);
+    font-family: {{ m.brand.font }}; font-size: 10.5pt; line-height: 1.45; }
+  main { max-width: 820px; margin: 0 auto; padding: 0 16px 48px; }
+  h1, h2, h3 { font-family: {{ m.brand.heading_font }}; line-height: 1.2; margin: 0; }
+  h1 { font-size: 24pt; font-weight: 700; }
+  h2 { font-size: 15pt; font-weight: 700; margin: 28px 0 10px; padding-top: 6px; border-top: 2px solid var(--accent); }
+  h3 { font-size: 11.5pt; font-weight: 700; margin: 0 0 4px; }
+  p { margin: 0 0 8px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 9pt; }
+  a { color: var(--ink); }
+
+  .cover { background: var(--cover); color: var(--cover-ink); border-radius: 10px; padding: 26px 28px; margin: 20px 0 22px; }
+  .cover .who { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .cover .brand { font-weight: 700; letter-spacing: 0.02em; font-size: 13pt; }
+  .cover .brand img { max-height: 44px; max-width: 220px; display: block; }
+  .cover .powered { color: var(--cover-muted); font-size: 9pt; margin-top: 4px; }
+  .cover h1 { margin-top: 18px; color: var(--cover-ink); }
+  .cover .sub { color: var(--cover-muted); margin-top: 6px; }
+  .cover .tag { display: inline-block; margin-top: 12px; padding: 3px 9px; border-radius: 999px; font-size: 8.5pt;
+    background: rgba(255,255,255,0.08); color: var(--cover-muted); }
+
+  .score-row { display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: stretch; }
+  .score { background: var(--panel); border-radius: 10px; padding: 16px; text-align: center; }
+  .score .num { font-size: 38pt; font-weight: 800; line-height: 1; color: var(--accent); }
+  .score .num.at-risk, .score .num.needs-work { color: var(--danger); }
+  .score .num.good { color: var(--warn); }
+  .score .grade { font-weight: 700; margin-top: 6px; font-size: 12pt; }
+  .score .of { color: var(--muted); font-size: 9pt; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tile { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .tile .n { font-size: 18pt; font-weight: 800; }
+  .tile .l { color: var(--muted); font-size: 8.5pt; }
+  .tile.fail .n { color: var(--danger); } .tile.pass .n { color: var(--success); }
+  .tile.confirm .n { color: var(--warn); } .tile.error .n { color: var(--muted); }
+  .lede { margin-top: 10px; font-size: 11pt; }
+
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; }
+  th, td { text-align: left; vertical-align: top; padding: 7px 8px; border-bottom: 1px solid var(--line); font-size: 9.5pt; }
+  th { color: var(--muted); font-weight: 600; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 8.5pt; font-weight: 700; white-space: nowrap; color: #fff; }
+  .pill.pass { background: var(--success); } .pill.fail { background: var(--danger); }
+  .pill.attestation_needed { background: var(--warn); } .pill.unknown, .pill.error { background: #8A9796; }
+  .pill.not_applicable { background: #B8C4C2; color: var(--ink); }
+  .sev { display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .sev.critical, .sev.high { color: var(--danger); }
+
+  .fix { border: 1px solid var(--line); border-left: 4px solid var(--danger); border-radius: 8px; padding: 10px 14px; margin: 8px 0; page-break-inside: avoid; }
+  .fix .head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .fix .rank { color: var(--accent); font-weight: 800; margin-right: 6px; }
+  .fix dl { margin: 6px 0 0; display: grid; grid-template-columns: 112px 1fr; gap: 3px 10px; }
+  .fix dt { color: var(--muted); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
+  .fix dd { margin: 0; }
+
+  .finding { padding: 10px 0; border-bottom: 1px solid var(--line); page-break-inside: avoid; }
+  .finding .head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .finding .id { color: var(--muted); font-size: 8.5pt; font-family: ui-monospace, monospace; }
+  .finding .ev { background: var(--panel); border-radius: 6px; padding: 6px 10px; margin-top: 6px; font-size: 8.5pt; }
+  .finding .ev div { display: grid; grid-template-columns: 180px 1fr; gap: 2px 8px; }
+  .finding .ev span:first-child { color: var(--muted); }
+  .notes li { font-size: 9pt; color: var(--muted); }
+
+  .checklist li { margin: 0 0 8px; padding-left: 4px; }
+  .checklist .box { display: inline-block; width: 11px; height: 11px; border: 1.5px solid var(--ink); border-radius: 2px; margin-right: 8px; vertical-align: -1px; }
+
+  .cta { background: var(--panel); border: 1px dashed var(--accent); border-radius: 10px; padding: 14px 16px; margin: 18px 0; page-break-inside: avoid; }
+  .cta h3 { color: var(--ink); }
+  .cta .price { font-weight: 800; color: var(--accent); }
+
+  .break { page-break-before: always; }
+  footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 8.5pt; }
+  @media (max-width: 640px) {
+    .score-row { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .fix dl { grid-template-columns: 1fr; }
+    .finding .ev div { grid-template-columns: 1fr; }
+  }
+  @media print { main { max-width: none; padding: 0; } .cover { border-radius: 0; } main.compact footer { display: none; } }
+  /* The free summary has to fit one printed page. */
+  main.compact { font-size: 9pt; line-height: 1.35; }
+  main.compact .cover { padding: 12px 18px; margin: 0 0 10px; }
+  main.compact .cover h1 { font-size: 17pt; margin-top: 8px; }
+  main.compact .cover .tag { margin-top: 8px; }
+  main.compact h2 { margin: 10px 0 4px; font-size: 12pt; }
+  main.compact th, main.compact td { padding: 3px 6px; font-size: 8.5pt; }
+  main.compact th { font-size: 7.5pt; }
+  main.compact table { margin: 2px 0 4px; }
+  main.compact .score-row { gap: 12px; grid-template-columns: 150px 1fr; }
+  main.compact .score { padding: 8px; } main.compact .score .num { font-size: 26pt; } main.compact .score .grade { font-size: 10.5pt; margin-top: 2px; }
+  main.compact .tiles { gap: 6px; } main.compact .tile { padding: 4px 8px; } main.compact .tile .n { font-size: 13pt; } main.compact .tile .l { font-size: 7.5pt; }
+  main.compact .lede { font-size: 9.5pt; margin: 6px 0 0; }
+  main.compact .legend { font-size: 8pt; margin: 2px 0 0; }
+  .fixes-compact { margin: 2px 0 0; padding-left: 18px; }
+  .fixes-compact li { margin: 0 0 3px; }
+  main.compact .cta { padding: 8px 12px; margin: 10px 0 0; }
+  main.compact .cta h3 { font-size: 10.5pt; }
+  main.compact .cta ul { margin: 2px 0; padding-left: 16px; }
+  main.compact .cta p { margin: 0 0 3px; }
+  main.compact footer { margin-top: 6px; padding-top: 4px; font-size: 7.5pt; }
+  main.compact .cover { margin-bottom: 8px; }
+  main.compact .cover .sub { margin-top: 3px; }
+</style>
+</head>
+<body>
+<main{% if m.free %} class="compact"{% endif %}>
+
+<section class="cover">
+  <div class="who">
+    <div>
+      {% if m.reseller %}
+        <div class="brand">{% if m.reseller_logo %}<img src="{{ m.reseller_logo }}" alt="{{ m.reseller.name }}">{% else %}{{ m.reseller.name }}{% endif %}</div>
+        {% if m.reseller.powered_by %}<div class="powered">powered by {{ m.brand.display_name }}</div>{% endif %}
+      {% else %}
+        <div class="brand">{{ m.brand.display_name }}</div>
+        {% if m.brand.tagline %}<div class="powered">{{ m.brand.tagline }}</div>{% endif %}
+      {% endif %}
+    </div>
+    <div class="small" style="color: var(--cover-muted); text-align: right;">
+      {{ m.free and "Free summary" or "Full report" }}<br>
+      Settings read {{ m.collected_at.strftime('%B %-d, %Y') }}
+    </div>
+  </div>
+  <h1>{{ m.title }}</h1>
+  <div class="sub">Prepared for <strong style="color: var(--cover-ink)">{{ m.tenant_name }}</strong>{% if m.reseller %} by {{ m.reseller.name }}{% if m.reseller.contact %} ({{ m.reseller.contact }}){% endif %}{% endif %}</div>
+  <span class="tag">Read-only scan of {{ m.platform_label }} · no settings were changed</span>
+</section>
+
+<section class="score-row">
+  <div class="score">
+    {% if m.score is not none %}
+      <div class="num {{ m.grade|lower|replace(' ', '-') }}">{{ m.score|round|int }}</div>
+      <div class="of">out of 100</div>
+    {% else %}
+      <div class="num" style="font-size: 20pt;">n/a</div>
+    {% endif %}
+    <div class="grade">{{ m.grade }}</div>
+  </div>
+  <div>
+    <div class="tiles">
+      <div class="tile pass"><div class="n">{{ m.counts.passed }}</div><div class="l">in place</div></div>
+      <div class="tile fail"><div class="n">{{ m.counts.failed }}</div><div class="l">need fixing</div></div>
+      <div class="tile confirm"><div class="n">{{ m.counts.attestation_needed }}</div><div class="l">you confirm with evidence</div></div>
+      <div class="tile error"><div class="n">{{ m.counts.errors }}</div><div class="l">could not be checked</div></div>
+    </div>
+    <p class="lede">{{ m.grade_sentence }}</p>
+    {% if not m.free %}<p class="small muted">The score weighs the {{ m.counts.automated_total }} automated checks by severity (a critical check counts four times a low one). Items you confirm with evidence do not move the score.</p>{% endif %}
+  </div>
+</section>
+
+<h2>What your insurer will ask</h2>
+<table>
+  <thead><tr><th style="width: 110px">Answer today</th><th>Question</th>{% if not m.free %}<th style="width: 34%">Based on</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for q in m.questions %}
+    <tr>
+      <td><span class="pill {{ q.status }}">{{ q.label }}</span></td>
+      <td>{{ q.question_text }}{% if not m.free %}<div class="small muted">{{ q.help }}</div>{% endif %}</td>
+      {% if not m.free %}<td class="small muted">{{ q.checks|join(', ') }}</td>{% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if m.free %}<p class="small muted legend">Yes: the settings support it. No: a check failed. You confirm: not readable from the tenant, attach evidence. Not checked: a permission was missing.</p>{% endif %}
+
+<h2>{% if m.top_fixes %}Top {{ m.top_fixes|length }} fixes, in order{% else %}Fixes{% endif %}</h2>
+{% if not m.top_fixes %}
+  <p>No automated check failed. Keep the evidence pack current and re-run the scan before each renewal.</p>
+{% endif %}
+{% if m.free %}
+  <ol class="fixes-compact">
+  {% for fix in m.top_fixes %}
+    <li><strong>{{ fix.title }}</strong> <span class="sev {{ fix.severity.value }}">{{ fix.severity.value }}</span><br>{{ fix.what_to_do }}</li>
+  {% endfor %}
+  </ol>
+{% endif %}
+{% for fix in m.top_fixes if not m.free %}
+  <div class="fix">
+    <div class="head"><h3><span class="rank">{{ fix.rank }}</span>{{ fix.title }}</h3><span class="sev {{ fix.severity.value }}">{{ fix.severity.value }}</span></div>
+    <dl>
+      <dt>What we found</dt><dd>{{ fix.found }}</dd>
+      {% if fix.why and not m.free %}<dt>Why it matters</dt><dd>{{ fix.why }}</dd>{% endif %}
+      <dt>What to do</dt><dd>{{ fix.what_to_do }}</dd>
+    </dl>
+  </div>
+{% endfor %}
+
+{% if m.free %}
+  <div class="cta">
+    <h3>This is the free summary</h3>
+    <p>The <strong>{{ m.offer.report_name|lower }}</strong>{% if m.offer.report_from %} (from <span class="price">${{ '{:,}'.format(m.offer.report_from) }}</span>){% endif %} adds:</p>
+    <ul>
+      {% for line in m.offer.report_includes %}<li>{{ line }}</li>{% endfor %}
+    </ul>
+    <p>Need it fixed, not just found? <strong>{{ m.offer.service_name }}</strong>{% if m.offer.service_from %} starts at <span class="price">${{ '{:,}'.format(m.offer.service_from) }}</span>{% endif %}.
+    {% if m.reseller and m.reseller.contact %}Contact {{ m.reseller.name }}: {{ m.reseller.contact }}.{% elif m.brand.contact_email %}Contact {{ m.brand.contact_email }}.{% endif %}</p>
+  </div>
+{% else %}
+
+  <h2 class="break">Every finding</h2>
+  <p class="small muted">Grouped by what to do next. Each item names the check behind it so the fix can be verified by re-running the scan.</p>
+  {% for section in m.sections %}
+    <h3 style="margin-top: 16px;">{{ section.title }} ({{ section.findings|length }})</h3>
+    {% for f in section.findings %}
+      <div class="finding">
+        <div class="head">
+          <div><span class="pill {{ f.status.value }}">{{ f.status_label }}</span> &nbsp;<strong>{{ f.title }}</strong></div>
+          <div><span class="sev {{ f.severity.value }}">{{ f.severity.value }}</span> &nbsp;<span class="id">{{ f.check_id }}</span></div>
+        </div>
+        <p style="margin-top: 6px;">{{ f.found }}</p>
+        {% if f.why %}<p class="small"><strong>Why it matters.</strong> {{ f.why }}</p>{% endif %}
+        {% if f.status.value in ('fail', 'attestation_needed', 'error') %}<p class="small"><strong>What to do.</strong> {{ f.what_to_do }}</p>{% endif %}
+        {% if f.evidence_requested %}<p class="small"><strong>Evidence to attach.</strong> {{ f.evidence_requested }}</p>{% endif %}
+        {% if f.evidence %}
+          <div class="ev">{% for k, v in f.evidence %}<div><span>{{ k }}</span><span>{{ v }}</span></div>{% endfor %}</div>
+        {% endif %}
+        {% if f.notes %}<ul class="notes">{% for n in f.notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+    {% endfor %}
+  {% endfor %}
+
+  <h2 class="break">Evidence pack</h2>
+  <p>What to attach next to this report for a broker, an insurer or a customer. Each item answers one of the questions above that the scan could not prove on its own.</p>
+  {% if m.evidence_pack %}
+  <ol class="checklist">
+    {% for e in m.evidence_pack %}
+      <li><span class="box"></span><strong>{{ e.title }}.</strong> {{ e.attach }} <span class="small muted">Supports: {{ e.answers }}</span></li>
+    {% endfor %}
+  </ol>
+  {% else %}
+    <p>Nothing to attach: every question was answered from the tenant itself.</p>
+  {% endif %}
+
+  {% if m.notes %}
+    <h2>Notes from the scan</h2>
+    <ul class="notes">{% for n in m.notes %}<li>{{ n }}</li>{% endfor %}</ul>
+  {% endif %}
+
+  {% if m.glossary %}
+    <h2>Terms used</h2>
+    <table>
+      <tbody>{% for term, meaning in m.glossary %}<tr><td style="width: 150px"><strong>{{ term }}</strong></td><td>{{ meaning }}</td></tr>{% endfor %}</tbody>
+    </table>
+  {% endif %}
+
+  <h2>How to read this report</h2>
+  <p>The scan read {{ m.platform_label }} settings on {{ m.collected_at.strftime('%B %-d, %Y') }} with read-only access and changed nothing. It covers the questions insurers, customers and auditors ask most about a company's workspace: sign-in protection, admin accounts, email security, file sharing and logging. It does not cover devices, backups, the network or staff training; those appear only as items you confirm with evidence.</p>
+  <p>"In place" means the setting supports a yes to the question today. Settings change, so re-run the scan before a renewal or a customer questionnaire, and after any administrator change.</p>
+{% endif %}
+
+<footer>
+  {% if m.free %}
+  {{ m.brand.display_name }}{% if m.brand.location %}, {{ m.brand.location }}{% endif %} · settings read {{ m.collected_at.strftime('%B %-d, %Y') }} (source {{ m.source }}, scanner {{ m.scanner_version }}) · not a guarantee of security, insurance acceptance or audit results.
+  {% else %}
+  {{ m.brand.display_name }}{% if m.brand.location %}, {{ m.brand.location }}{% endif %}{% if m.brand.contact_email %} · {{ m.brand.contact_email }}{% endif %}{% if m.brand.domain %} · {{ m.brand.domain }}{% endif %}.
+  Generated {{ m.generated_at.strftime('%B %-d, %Y') }} from a scan collected {{ m.collected_at.strftime('%B %-d, %Y %H:%M') }} UTC (source {{ m.source }}, scanner {{ m.scanner_version }}).
+  This report describes settings as read on that date. It is not a guarantee of security, of insurance acceptance or of audit results.
+  {% endif %}
+</footer>
+
+</main>
+</body>
+</html>

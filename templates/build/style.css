@@ -1,0 +1,13 @@
+/* Print styles for the alimi templates. */
+@page { size: letter; margin: 1in 1in; @bottom-center { content: "DRAFT · page " counter(page) " of " counter(pages); font-family: Inter, system-ui, sans-serif; font-size: 8.5pt; color: #6b7877; } }
+html { font-size: 10.5pt; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1c2a2a; line-height: 1.45; max-width: none; margin: 0; }
+h1 { font-size: 19pt; color: #0f1f1f; margin: 0 0 0.6em; line-height: 1.2; }
+h2 { font-size: 13pt; color: #0f1f1f; margin: 1.3em 0 0.4em; border-bottom: 2px solid #3fb8af; padding-bottom: 0.15em; page-break-after: avoid; }
+h3 { font-size: 11pt; color: #16302f; margin: 1em 0 0.3em; page-break-after: avoid; }
+blockquote { margin: 0 0 1em; padding: 0.5em 0.8em; background: #fbe9e4; border-left: 4px solid #e2654f; font-size: 9.5pt; }
+blockquote p { margin: 0; }
+table { border-collapse: collapse; width: 100%; margin: 0.6em 0 1em; font-size: 9.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #c9d3d2; padding: 0.35em 0.5em; vertical-align: top; text-align: left; }
+th { background: #e7f3f2; }
+p, li { orphans: 3; widows: 3; }
