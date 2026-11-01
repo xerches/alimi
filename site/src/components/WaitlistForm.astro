@@ -1,0 +1,53 @@
+---
+// A Netlify form. `name` must be unique across the site (scripts/check-dist.mjs checks) and the
+// hidden form-name must match it. Posts to /thank-you with no JavaScript.
+const { name, title = "Join the waitlist", intro, button = "Join the waitlist", interest } = Astro.props;
+const id = (suffix) => `${name}-${suffix}`;
+---
+
+<div class="card">
+  <h3 id={id("title")}>{title}</h3>
+  {intro && <p class="muted">{intro}</p>}
+  <form class="form" name={name} method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby={id("title")}>
+    <input type="hidden" name="form-name" value={name} />
+    {interest && <input type="hidden" name="interest" value={interest} />}
+    <p class="hidden-field">
+      <label>Leave this field empty: <input name="bot-field" /></label>
+    </p>
+    <div class="form__row">
+      <div class="field">
+        <label for={id("name")}>Your name</label>
+        <input id={id("name")} name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for={id("email")}>Work email</label>
+        <input id={id("email")} name="email" type="email" autocomplete="email" required />
+      </div>
+    </div>
+    <div class="form__row">
+      <div class="field">
+        <label for={id("company")}>Company</label>
+        <input id={id("company")} name="company" type="text" autocomplete="organization" />
+      </div>
+      <div class="field">
+        <label for={id("size")}>Company size</label>
+        <select id={id("size")} name="company_size">
+          <option value="">Choose one</option>
+          <option>1 to 9 people</option>
+          <option>10 to 49 people</option>
+          <option>50 to 200 people</option>
+          <option>More than 200 people</option>
+        </select>
+      </div>
+    </div>
+    <slot />
+    <div class="field">
+      <label for={id("message")}>Anything we should know? <span class="muted">(optional)</span></label>
+      <textarea id={id("message")} name="message" rows="3"></textarea>
+    </div>
+    <div class="form__footer">
+      <button class="button button--primary" type="submit">{button}</button>
+      <p class="form__privacy">One email when it is ready. No list, no resale of your address.</p>
+    </div>
+  </form>
+</div>

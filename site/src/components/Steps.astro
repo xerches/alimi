@@ -1,0 +1,13 @@
+---
+// steps: [{ title, text }]
+const { steps } = Astro.props;
+---
+
+<ol class="steps">
+  {steps.map((step) => (
+    <li>
+      <h3>{step.title}</h3>
+      <p>{step.text}</p>
+    </li>
+  ))}
+</ol>

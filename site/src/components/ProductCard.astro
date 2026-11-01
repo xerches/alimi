@@ -1,0 +1,14 @@
+---
+import { freeTier } from "../lib/config.js";
+const { product, blurb } = Astro.props;
+const free = freeTier(product.key);
+const paid = product.tiers.find((tier) => tier.type === "product" && tier.list !== 0);
+const from = free ? `Free ${free.name.toLowerCase()}, then ${paid.price}` : `From ${paid.price}`;
+---
+
+<a class="card card--link" href={product.href}>
+  <h3>{product.name}</h3>
+  <p>{blurb ?? product.tagline}</p>
+  <p class="muted small">{from}</p>
+  <span class="card__cta">See what you get</span>
+</a>

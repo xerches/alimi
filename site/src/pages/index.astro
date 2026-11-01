@@ -1,0 +1,113 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import ProductCard from "../components/ProductCard.astro";
+import Todo from "../components/Todo.astro";
+import { brand, products, product, freeTier } from "../lib/config.js";
+
+const scan = product("workspace_scan");
+const freeScan = freeTier("workspace_scan");
+const moments = [
+  {
+    title: "Your insurer sent a questionnaire",
+    text: "Is multi-factor authentication (MFA, the extra code at sign-in) enforced for everyone? How many admin accounts are there? Are logs kept? The scan reads the answers from Microsoft 365 or Google Workspace and shows the fix for each gap.",
+    href: scan.href,
+    link: scan.name,
+  },
+  {
+    title: "A customer asked for your security policies",
+    text: "A set of policies written for a company your size, mapped to SOC 2, ISO 27001 and the insurer's questions, with your company name already filled in.",
+    href: product("policy_pack").href,
+    link: product("policy_pack").name,
+  },
+  {
+    title: "Someone in accounts nearly paid a fake invoice",
+    text: "A short verification procedure, callback scripts and a poster, so a changed bank account gets a phone call before it gets a payment.",
+    href: product("payment_fraud_kit").href,
+    link: product("payment_fraud_kit").name,
+  },
+  {
+    title: "Staff are using AI tools with no rules",
+    text: "An AI acceptable use policy and a staff guide in twenty minutes, plus an inventory of the AI apps actually in use.",
+    href: product("ai_policy_kit").href,
+    link: product("ai_policy_kit").name,
+  },
+];
+const steps = [
+  { title: "Start free", text: "Every product has a free tier: a one-page scan summary, three core policies, or the policy generator. No card and no account." },
+  { title: "Connect read-only, if you want the scan", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. alimi reads settings, never mail or files, and removes its own access at the end." },
+  { title: "Get the findings and the fix", text: "Every finding comes with evidence and a plain-English fix. Do it yourself, hand it to your IT provider, or have alimi do it for a fixed fee." },
+];
+const differences = [
+  { title: "A published price", text: "Each product has a price on its page. The compliance platforms built for larger companies quote by sales call and start in the tens of thousands a year." },
+  { title: "Insurer-ready first", text: "The first output is the evidence a broker or underwriter accepts. SOC 2 and ISO 27001 follow from the same work, when a customer asks for them." },
+  { title: "Plain English", text: "Written for the owner who signs the renewal, not the auditor. Every term is explained the first time it appears." },
+  { title: "A named security lead", text: "The scoping and policy calls that software leaves to you are made with you, by the person who built the tools." },
+];
+---
+
+<Base title={brand.display_name} description={`${brand.tagline} Read-only security scans, plain-English policies and a payment fraud procedure for companies of 10 to 200 people, at published prices.`} path="/">
+  <Hero eyebrow="For companies of 10 to 200 people" title={brand.tagline}>
+    <p class="lede">
+      Read-only scans, plain-English policies and a payment verification procedure, at published prices, from a security lead you can reach. No security team required.
+      <Todo note="final lede: lead with the owner's outcome (prompt 11)" />
+    </p>
+    <div class="actions">
+      <a class="button button--primary" href={`${scan.href}#waitlist`}>Get the free {freeScan.name.toLowerCase()}</a>
+      <a class="button button--secondary" href="/for-partners">Partner with {brand.display_name}</a>
+    </div>
+    <p class="muted small" style="margin-top:1rem">Every scan is read-only. {brand.display_name} never holds your passwords.</p>
+  </Hero>
+
+  <Section id="moments" tone="alt" title="Four moments this is built for" lede="The same small company meets all four within a year. Each one has a product that starts free and a fixed-fee service behind it.">
+    <div class="grid grid--two">
+      {moments.map((m) => (
+        <article class="card">
+          <h3>{m.title}</h3>
+          <p>{m.text}</p>
+          <a href={m.href}>{m.link}</a>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="products" title="What alimi sells" lede="Four products, each with a free tier, a paid product and a service with a fixed fee. Prices come from one price list and are the same on every page and in every proposal.">
+    <div class="grid">
+      {products().map((p) => (
+        <ProductCard product={p} />
+      ))}
+    </div>
+  </Section>
+
+  <Section id="how" tone="alt" title="How it works">
+    <Steps steps={steps} />
+  </Section>
+
+  <Section id="why" title="Why not a compliance platform?" lede="The well-known platforms are good products for companies that have a security owner and a budget to match. alimi is for the companies they are not built for.">
+    <div class="grid grid--two">
+      {differences.map((d) => (
+        <article class="card">
+          <h3>{d.title}</h3>
+          <p>{d.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="founder" tone="alt" title="Who is behind it">
+    <p class="measure">
+      {brand.display_name} is built by {brand.founder} in {brand.location}: security roles at a biopharma company, a software company and a managed IT provider, with SOC 2, ISO 27001 and HIPAA programs run from the inside.
+      <Todo note="metrics attributed to employment, as the rules in CLAUDE.md require (prompt 11)" />
+    </p>
+    <a href="/about">More about {brand.display_name}</a>
+  </Section>
+
+  <Section id="start" tone="dark" title="Start with the free summary" lede="One page: an overall score and pass or fail on the questions insurers ask. Join the waitlist and you will hear when the scan opens to pilots.">
+    <div class="actions">
+      <a class="button button--primary" href={`${scan.href}#waitlist`}>Join the scan waitlist</a>
+      <a class="button button--secondary" href="/contact">Ask a question</a>
+    </div>
+  </Section>
+</Base>

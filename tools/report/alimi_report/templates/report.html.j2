@@ -11,14 +11,13 @@
     --paper: #FFFFFF;
     --panel: #F3F6F5;
     --line: #D9E1DF;
-    --accent: {{ m.brand.color('accent') }};
-    --accent-strong: {{ m.brand.color('accent_strong') }};
+    --accent: {{ m.brand.color('primary') }};
     --danger: {{ m.brand.color('danger') }};
     --success: {{ m.brand.color('success') }};
-    --warn: #D99A1C;
-    --cover: {{ m.brand.color('background') }};
-    --cover-ink: {{ m.brand.color('text') }};
-    --cover-muted: {{ m.brand.color('text_muted') }};
+    --warn: {{ m.brand.color('warning') }};
+    --cover: {{ m.brand.color('secondary') }};
+    --cover-ink: {{ m.brand.color('text_inverse') }};
+    --cover-muted: {{ m.brand.color('text_inverse_muted') }};
   }
   @page { size: Letter; margin: {% if m.free %}11mm 13mm 14mm 13mm{% else %}18mm 16mm 20mm 16mm{% endif %};
     @bottom-left { content: "{% if m.free %}{{ m.brand.display_name }} · {{ m.tenant_name }} · settings read {{ m.collected_at.strftime('%B %-d, %Y') }} · not a guarantee of security, insurance acceptance or audit results{% else %}{{ m.brand.display_name }} · {{ m.title }} · {{ m.tenant_name }}{% endif %}"; font-size: {% if m.free %}7.5pt{% else %}8.5pt{% endif %}; color: #5B6B6A; }

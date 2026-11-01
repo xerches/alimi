@@ -1,0 +1,105 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import Pricing from "../components/Pricing.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+import Callout from "../components/Callout.astro";
+import Todo from "../components/Todo.astro";
+import { brand, product } from "../lib/config.js";
+import { insurerQuestions, checkCounts, check } from "../lib/content.js";
+
+const p = product("workspace_scan");
+const counts = checkCounts();
+const questions = insurerQuestions();
+const sample = check("m365.forwarding.external");
+const steps = [
+  { title: "Sign a one-page authorization", text: "It names the tenant, the read-only permissions, the dates and who can revoke access. Nothing happens before it is signed." },
+  { title: "Grant read-only access on a 45-minute call", text: "You stay in control of the admin console. The scan reads security settings and user flags, never mail or files, and runs from alimi's own laptop. No password or token is stored." },
+  { title: "Get the summary, then the report", text: "The free one-page summary gives a score and a pass or fail per insurer question. The full report adds every finding with evidence, the fix in plain English, an evidence pack checklist for your broker and a 30-minute debrief." },
+  { title: "Access removed, with proof", text: "The last step removes alimi's access and records the proof, so the report also shows that the person who scanned you no longer can." },
+];
+---
+
+<Base title={p.name} description="A read-only scan of Microsoft 365 or Google Workspace that scores your tenant against the questions cyber insurers ask, with evidence and a plain-English fix for every gap. Free summary, paid full report." path={p.href}>
+  <Hero eyebrow={p.name} title={p.tagline}>
+    <p class="lede">A read-only scan of Microsoft 365 or Google Workspace that scores your company against the questions cyber insurers ask, with evidence and a plain-English fix for every gap.</p>
+    <div class="actions">
+      <a class="button button--primary" href="#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="#pricing">See pricing</a>
+    </div>
+  </Hero>
+
+  <Section id="complaint" tone="alt" title="The renewal form asks for proof, not promises">
+    <p class="measure">
+      The questionnaire asks whether MFA is enforced for every user, how many global administrators you have, whether mail can be forwarded outside the company and whether audit logs are kept. Your IT provider says "mostly". The underwriter wants evidence, and so does the customer whose security review is holding up a contract.
+      <Todo note="confirm the complaint against broker conversations and add one real question an underwriter asked (prompt 11)" />
+    </p>
+    <dl class="facts">
+      <div><dt>Microsoft 365 checks</dt><dd>{counts.m365}</dd></div>
+      <div><dt>Google Workspace checks</dt><dd>{counts.gws}</dd></div>
+      <div><dt>Questions you confirm</dt><dd>{counts.attestation}</dd></div>
+      <div><dt>Passwords stored</dt><dd>0</dd></div>
+    </dl>
+  </Section>
+
+  <Section id="checks" title="What it checks" lede="The scan is organised around the underwriting questions, so the report reads the way a broker reads it.">
+    <ol class="questions">
+      {questions.map((q) => (
+        <li>
+          <span class={q.automated ? "badge" : "badge badge--service"}>{q.automated ? "Read from your tenant" : "You confirm, we record the evidence"}</span>
+          <span>{q.question}</span>
+        </li>
+      ))}
+    </ol>
+    <p class="measure" style="margin-top:1.5rem">
+      Three questions cannot be read from Microsoft 365 or Google Workspace: endpoint detection and response (EDR, the software that watches each laptop for attacks), backups, and the incident response plan. For those the report records what you confirm and the evidence you supply. It never guesses.
+    </p>
+    <h3>What a finding looks like</h3>
+    <article class="card" style="max-width:44rem">
+      <span class="badge badge--service">{sample.severity}</span>
+      <h4 style="margin-top:0.75rem">{sample.title}</h4>
+      <p><strong>Why it matters.</strong> {sample.explain}</p>
+      <p><strong>The fix.</strong> {sample.remediation}</p>
+      <p class="muted small" style="margin:0">Passes when: {sample.pass_when}</p>
+    </article>
+  </Section>
+
+  <Section id="how" tone="alt" title="How it works">
+    <Steps steps={steps} />
+  </Section>
+
+  <Section id="pricing" title="Pricing" lede="Start with the free summary. Buy the full report when you need the evidence, or have alimi fix the findings on a fixed fee.">
+    <Pricing product={p} />
+  </Section>
+
+  <Section id="next" tone="dark" title="What comes next" lede="The scan is the first module of a hosted compliance platform for the same companies.">
+    <div class="grid grid--two">
+      <div>
+        <p>Connected tenants with scheduled scans, controls proven by automated tests or uploaded evidence, policies from the policy pack with staff sign-off, a people list from your identity provider, and a readiness dashboard per framework: the insurer questionnaire first, then SOC 2, then ISO 27001. An export pack for a broker or auditor, and a multi-tenant view for the IT providers who resell it.</p>
+      </div>
+      <div>
+        <Callout label="When it holds your data" tone="info">
+          <p>The platform holds no customer data until the company is formed and insured, a pilot letter is signed and an outside security review is done. Until then it runs on sample data. Scan results stay on the operator's laptop and in your copy of the report.</p>
+        </Callout>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="waitlist" tone="alt" title="Join the waitlist" lede="Pilots run with a signed authorization letter, on your tenant, read-only. Tell us which platform you use and we will say when a slot opens.">
+    <WaitlistForm name="waitlist-workspace-scan" interest={p.name} title={`Waitlist: ${p.name}`}>
+      <div class="field">
+        <label for="waitlist-workspace-scan-platform">Which do you use?</label>
+        <select id="waitlist-workspace-scan-platform" name="platform">
+          <option value="">Choose one</option>
+          <option>Microsoft 365</option>
+          <option>Google Workspace</option>
+          <option>Both</option>
+          <option>Not sure</option>
+        </select>
+      </div>
+    </WaitlistForm>
+    <p class="muted small" style="margin-top:1rem">{brand.display_name} runs scans only on tenants it owns or that a signed pilot authorization letter covers.</p>
+  </Section>
+</Base>

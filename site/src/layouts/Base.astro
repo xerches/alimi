@@ -1,0 +1,43 @@
+---
+// Page shell: head metadata, the brand tokens inlined as CSS custom properties, skip link, header,
+// main landmark and footer. Every page passes its own path because build.format "file" makes
+// Astro.url.pathname end in .html.
+import "../styles/global.css";
+import { brand } from "../lib/config.js";
+import { cssVariables } from "../lib/tokens.js";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const { title, description, path } = Astro.props;
+if (!path) throw new Error("Base layout needs a path prop");
+const origin = String(brand.site_url).replace(/\/$/, "");
+const canonical = origin + path;
+const fullTitle = path === "/" ? `${brand.display_name}: ${brand.tagline}` : `${title} | ${brand.display_name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content={brand.colors.secondary} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={brand.display_name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <style is:inline set:html={cssVariables(brand)}></style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header current={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

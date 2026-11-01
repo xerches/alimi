@@ -1,0 +1,28 @@
+---
+import { partners } from "../lib/config.js";
+const { reseller } = partners();
+---
+
+<div class="table-wrap">
+  <table class="table">
+    <caption class="muted small" style="caption-side:bottom;text-align:left;padding-top:0.5rem">
+      {reseller.buys_at}. {reseller.review}.
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Tier</th>
+        <th scope="col">Active clients</th>
+        <th scope="col">Discount off list</th>
+      </tr>
+    </thead>
+    <tbody>
+      {reseller.tiers.map((tier) => (
+        <tr>
+          <th scope="row">{tier.name}</th>
+          <td>{tier.clients}</td>
+          <td>{tier.discount}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

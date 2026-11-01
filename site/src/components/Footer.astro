@@ -1,0 +1,42 @@
+---
+import { brand, decided, products } from "../lib/config.js";
+const email = decided(brand.contact_email);
+const linkedin = decided(brand.social?.linkedin);
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <h2>Products</h2>
+        <ul>
+          {products().map((p) => (
+            <li><a href={p.href}>{p.name}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Company</h2>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/for-partners">For partners</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Elsewhere</h2>
+        <ul>
+          {brand.social?.github && <li><a href={brand.social.github} rel="noopener">GitHub</a></li>}
+          {linkedin && <li><a href={linkedin} rel="noopener">LinkedIn</a></li>}
+          {email ? <li><a href={`mailto:${email}`}>{email}</a></li> : <li>Email address coming with the domain</li>}
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <p>{brand.display_name}, {brand.location}. {brand.tagline}</p>
+      <p>Working name of a company in formation. Prices are published starting points and every scan is read-only.</p>
+      <p>&copy; {year} {brand.founder}</p>
+    </div>
+  </div>
+</footer>

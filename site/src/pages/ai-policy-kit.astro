@@ -1,0 +1,54 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import Pricing from "../components/Pricing.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+import Callout from "../components/Callout.astro";
+import Todo from "../components/Todo.astro";
+import { product } from "../lib/config.js";
+
+const p = product("ai_policy_kit");
+const steps = [
+  { title: "Answer about twenty questions", text: "Which tools staff may use, what data may go into them, who approves a new one, how outputs are checked. It runs in your browser; nothing you type is uploaded." },
+  { title: "Download the policy, the guide and the inventory", text: "An AI acceptable use policy as Markdown and DOCX, a one-page staff guide, and an inventory template for the tools in use." },
+  { title: "Find the AI apps actually in use", text: "The paid tier reads the sign-in and app logs of Microsoft 365 or Google Workspace, read-only, and lists the AI apps staff have connected, split by personal and company accounts." },
+  { title: "Adopt it with leadership", text: "The implementation service sets the access rules in your tenant, trains staff in 45 minutes and, for companies that need it, runs an ISO 42001 gap check." },
+];
+---
+
+<Base title={p.name} description="An AI acceptable use policy, a one-page staff guide and an inventory of the AI tools in use, generated from about twenty questions. Free generator; paid read-only scan of Microsoft 365 or Google Workspace for AI apps in use." path={p.href}>
+  <Hero eyebrow={p.name} title={p.tagline}>
+    <p class="lede">About twenty questions produce an AI acceptable use policy, a one-page staff guide and an inventory of the AI tools in use. The generator runs in your browser and uploads nothing.</p>
+    <div class="actions">
+      <a class="button button--primary" href="#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="#pricing">See pricing</a>
+    </div>
+  </Hero>
+
+  <Section id="status" tight>
+    <Callout label="In development" tone="info">
+      <p>The generator is being built after the security scan and the payment fraud kit. The waitlist gets the first version and a say in the questions.</p>
+    </Callout>
+  </Section>
+
+  <Section id="complaint" tone="alt" title="Staff already use AI. The rules do not exist yet.">
+    <p class="measure">
+      Someone pasted a customer contract into a chatbot to summarise it. Someone else connected an AI note-taker to every meeting. The sales team is answering a security questionnaire that now asks about AI governance, and the honest answer is "we have no policy". Most companies this size have no AI strategy and no inventory of the tools in use.
+      <Todo note="replace the generic examples with the two questions customers actually ask in questionnaires (prompt 11)" />
+    </p>
+  </Section>
+
+  <Section id="how" title="How it works">
+    <Steps steps={steps} />
+  </Section>
+
+  <Section id="pricing" tone="alt" title="Pricing">
+    <Pricing product={p} />
+  </Section>
+
+  <Section id="waitlist" title="Join the waitlist" lede="Leave your email and you will get the generator the day it opens.">
+    <WaitlistForm name="waitlist-ai-policy-kit" interest={p.name} title={`Waitlist: ${p.name}`} />
+  </Section>
+</Base>

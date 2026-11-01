@@ -1,0 +1,76 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Todo from "../components/Todo.astro";
+import { brand, decided, products } from "../lib/config.js";
+
+const email = decided(brand.contact_email);
+const formName = "contact";
+const id = (suffix) => `${formName}-${suffix}`;
+---
+
+<Base title="Contact" description="Ask alimi about a cyber insurance renewal, a customer security questionnaire, the policy pack, payment fraud or a partnership. A reply within two business days." path="/contact">
+  <Hero eyebrow="Contact" title="Ask a question, or send the questionnaire">
+    <p class="lede">A reply within two business days, from the founder. Attachments can wait for the reply; the form takes text only.</p>
+  </Hero>
+
+  <Section id="form" tone="alt" tight>
+    <div class="grid grid--two" style="align-items:start">
+      <div class="card">
+        <form class="form" name={formName} method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" aria-label="Contact form">
+          <input type="hidden" name="form-name" value={formName} />
+          <p class="hidden-field">
+            <label>Leave this field empty: <input name="bot-field" /></label>
+          </p>
+          <div class="form__row">
+            <div class="field">
+              <label for={id("name")}>Your name</label>
+              <input id={id("name")} name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for={id("email")}>Email</label>
+              <input id={id("email")} name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label for={id("company")}>Company <span class="muted">(optional)</span></label>
+              <input id={id("company")} name="company" type="text" autocomplete="organization" />
+            </div>
+            <div class="field">
+              <label for={id("topic")}>About</label>
+              <select id={id("topic")} name="topic">
+                <option value="">Choose one</option>
+                {products().map((p) => <option>{p.name}</option>)}
+                <option>Partnering or referring</option>
+                <option>Something else</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for={id("message")}>Message</label>
+            <textarea id={id("message")} name="message" rows="5" required></textarea>
+          </div>
+          <div class="form__footer">
+            <button class="button button--primary" type="submit">Send</button>
+            <p class="form__privacy">Used only to reply to you.</p>
+          </div>
+        </form>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h2 class="h3">Other ways</h2>
+          <p>
+            {email ? <a href={`mailto:${email}`}>{email}</a> : <span>Email: arrives with the domain. <Todo note="contact email once the domain is bought" /></span>}
+          </p>
+          <p>{brand.location}. Remote-first; on site in Greater Boston when a workshop needs a room.</p>
+        </div>
+        <div class="card">
+          <h2 class="h3">Before you write</h2>
+          <p>Prices are on every product page, and the partner terms are on <a href="/for-partners">For partners</a>. If your insurer's questionnaire is already in hand, say which questions you cannot answer; that is usually the whole brief.</p>
+        </div>
+      </div>
+    </div>
+  </Section>
+</Base>

@@ -134,7 +134,7 @@ the pilot. Extend the decisions log with a section where I record what partners 
 
 ## Phase 5: Marketing site (weeks 17-19)
 
-**10. Marketing site**
+**10. Marketing site** (done Nov 1, 2026)
 ```
 Read CLAUDE.md and /config. In /site, build a fast static site with Astro. Pages: Home, the
 product pages (Workspace Security Scan, Policy Pack, Payment Fraud Kit, AI Policy Kit), For

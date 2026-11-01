@@ -69,7 +69,7 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | 4 | Payment fraud kit: docs, poster, checklist, video script (prompt 6) | Jan 30, 2027 | done Nov 1, 2026, PR #6 |
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | done Nov 1, 2026: prompt 8 PR #7, prompt 9 PR #8 |
-| 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | not started |
+| 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | prompt 10 done Nov 1, 2026, PR #9; prompt 11 not started |
 | 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12) | Mar 2027 | not started |
 | 9 | Platform: policies, people, dashboard, SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
 | 10 | AI policy generator and AI app inventory (prompts 15-16) | May 2027 | not started |
@@ -84,7 +84,7 @@ Gate for the hosted platform to hold customer data: LLC formed, insurance in pla
 
 ## Tone and brand
 
-Plain English a business owner understands. No fear-mongering, no hooded-hacker imagery, no "cyber" clichés. Explain the term the first time it appears (MFA, EDR, BEC). Brand tokens live in `config/brand.yaml`; until then, neutral dark-teal and off-white from the earlier Caprius site are fine.
+Plain English a business owner understands. No fear-mongering, no hooded-hacker imagery, no "cyber" clichés. Explain the term the first time it appears (MFA, EDR, BEC). Brand tokens live in `config/brand.yaml` (palette decided Nov 1, 2026: brick primary, the earlier dark teal as secondary, gold accent, warm off-white backgrounds); the site generates its CSS variables from that file and the report reads the same keys, so no component types a color.
 
 ## Background
 

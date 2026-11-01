@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { products } from "../lib/config.js";
+---
+
+<Base title="Thank you" description="Your message reached alimi. A reply within two business days." path="/thank-you">
+  <Hero eyebrow="Received" title="Thank you. It is in.">
+    <p class="lede">A reply within two business days. Waitlist sign-ups get one email when the product opens, and nothing else.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/">Back to the home page</a>
+    </div>
+  </Hero>
+  <Section id="meanwhile" tone="alt" title="Meanwhile">
+    <ul>
+      {products().map((p) => (
+        <li><a href={p.href}>{p.name}</a>: {p.tagline}</li>
+      ))}
+    </ul>
+  </Section>
+</Base>

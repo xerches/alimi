@@ -1,0 +1,115 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import PartnerTiers from "../components/PartnerTiers.astro";
+import Callout from "../components/Callout.astro";
+import Todo from "../components/Todo.astro";
+import { brand, partners, product, money } from "../lib/config.js";
+
+const { reseller, referral, principle } = partners();
+const pack = product("policy_pack");
+const packList = pack.tiers.find((tier) => tier.id === "full").list;
+const starter = reseller.tiers[0];
+const starterDiscount = Number(partners().reseller.tiers[0].discount.replace("%", "")) / 100;
+const wholesale = Math.round(packList * (1 - starterDiscount));
+const formName = "partners";
+const id = (suffix) => `${formName}-${suffix}`;
+---
+
+<Base title="For partners" description="Resell alimi under your own name with a wholesale discount, or refer clients and receive a fee. Reseller tiers and the referral fee are published here." path="/for-partners">
+  <Hero eyebrow="For partners" title="Sell or refer alimi to the clients who already ask you about security">
+    <p class="lede">Two ways to work together. IT providers and consultancies resell under their own name at a wholesale discount. Brokers, CPAs and attorneys refer and receive a fee, or pass it to their client.</p>
+    <div class="actions">
+      <a class="button button--primary" href="#partner-form">Start the conversation</a>
+      <a class="button button--secondary" href="#resellers">See the terms</a>
+    </div>
+  </Hero>
+
+  <Section id="resellers" tone="alt" title="Resellers" eyebrow={reseller.who} lede="You buy at list price minus your tier discount and set your own client price. The tier follows your active client count.">
+    <PartnerTiers />
+    <p class="measure">
+      A {starter.name} reseller buys the {money(packList)} {pack.name} at {money(wholesale)} and keeps everything above that at its own client price.
+      <Todo note="state the margin a reseller keeps in one sentence, confirmed with the first MSP conversation (prompt 11)" />
+    </p>
+    <h3>What the program includes</h3>
+    <ul class="checklist">
+      {reseller.includes.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="muted">{reseller.billing}.</p>
+  </Section>
+
+  <Section id="referrers" title="Referrers" eyebrow={referral.who} lede="Introduce us by email with the client copied. We respond within two business days, keep you informed, and never market to your other clients.">
+    <div class="grid grid--two">
+      <article class="card">
+        <h3>The fee</h3>
+        <p>{referral.feeText} of {referral.of}, paid {referral.paid}.</p>
+      </article>
+      <article class="card">
+        <h3>If your professional rules do not allow a fee</h3>
+        <p>The same amount goes to your client as a discount, or to a charity you name. You choose when you sign up.</p>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="principle" tone="alt" tight>
+    <Callout label="One rule for both channels" tone="brand">
+      <p>{principle}</p>
+    </Callout>
+  </Section>
+
+  <Section id="partner-form" title="Start the conversation" lede="Tell us who you are and how many clients might need this. A reply within two business days, from the founder.">
+    <div class="card">
+      <form class="form" name={formName} method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="partner-form-title">
+        <input type="hidden" name="form-name" value={formName} />
+        <p class="hidden-field">
+          <label>Leave this field empty: <input name="bot-field" /></label>
+        </p>
+        <div class="form__row">
+          <div class="field">
+            <label for={id("name")}>Your name</label>
+            <input id={id("name")} name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for={id("email")}>Work email</label>
+            <input id={id("email")} name="email" type="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for={id("firm")}>Firm</label>
+            <input id={id("firm")} name="firm" type="text" autocomplete="organization" required />
+          </div>
+          <div class="field">
+            <label for={id("type")}>You are</label>
+            <select id={id("type")} name="partner_type" required>
+              <option value="">Choose one</option>
+              <option>An IT provider or MSP</option>
+              <option>An IT consultancy or vCISO firm</option>
+              <option>An insurance broker</option>
+              <option>A CPA</option>
+              <option>An attorney</option>
+              <option>Something else</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for={id("clients")}>Clients who might need this</label>
+          <select id={id("clients")} name="clients">
+            <option value="">Choose one</option>
+            <option>None yet, exploring</option>
+            {reseller.tiers.map((tier) => <option>{tier.clients}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for={id("message")}>What your clients ask you about <span class="muted">(optional)</span></label>
+          <textarea id={id("message")} name="message" rows="4"></textarea>
+        </div>
+        <div class="form__footer">
+          <button class="button button--primary" type="submit">Send</button>
+          <p class="form__privacy">Used only to reply to you. {brand.display_name} never sells or shares the list.</p>
+        </div>
+      </form>
+    </div>
+  </Section>
+</Base>

@@ -3,7 +3,7 @@
 # Prices in USD. "range" is what we quote; "list" is what the site shows.
 
 currency: USD
-updated: 2026-10-31
+updated: 2026-11-01
 
 products:
   ai_policy_kit:
@@ -47,7 +47,7 @@ products:
         list: 0
         includes:
           - Overall score
-          - Pass/fail against the six questions insurers ask
+          - Pass/fail against the eight questions insurers ask
       - id: full_report
         type: product
         name: Full insurer-ready report
@@ -92,7 +92,12 @@ products:
   policy_pack:
     name: Policy Pack
     tagline: The policies SOC 2, ISO 27001 and your insurer expect, written for a company your size.
-    status: proposed 2026-11-01, confirm before publishing
+    # Full library priced Nov 1, 2026 by Alex's rule (comparable average minus 5-15%): six small-business
+    # policy kits average $568 (High Table £97 and £297 editions, Riskprofs $499, Techno-PM $699,
+    # IT Governance $799, Advisera $897; ComplianceForge at $1,980 and $15-20 Gumroad packs excluded as
+    # not like-for-like). $499 is 12% under. No vendor publishes a like-for-like half-day adoption
+    # workshop, so that range is still a starting point.
+    status: full library priced Nov 1, 2026; adoption workshop range is a starting point, confirm before publishing
     tiers:
       - id: free
         type: product
@@ -105,7 +110,8 @@ products:
       - id: full
         type: product
         name: Full policy library
-        range: [299, 499]
+        list: 499
+        range: [480, 540]
         includes:
           - Every policy in /policies, mapped to SOC 2, ISO 27001, ISO 42001 and insurer questions
           - Coverage matrix showing which requirement each policy satisfies

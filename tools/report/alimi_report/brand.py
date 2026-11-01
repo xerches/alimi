@@ -14,15 +14,15 @@ from pydantic import BaseModel, Field
 ENV_BRAND = "ALIMI_BRAND"
 ENV_PRICING = "ALIMI_PRICING"
 
+# Keys match config/brand.yaml. The cover uses the dark "secondary" band tokens; highlights use primary.
 DEFAULT_COLORS = {
-    "background": "#0F1F1F",
-    "surface": "#16302F",
-    "text": "#F4F1EA",
-    "text_muted": "#B8C4C2",
-    "accent": "#3FB8AF",
-    "accent_strong": "#F2B134",
-    "danger": "#E2654F",
-    "success": "#5CB85C",
+    "primary": "#9A3B1E",
+    "secondary": "#15302E",
+    "text_inverse": "#FAF7F1",
+    "text_inverse_muted": "#B7C0BE",
+    "warning": "#8A5A00",
+    "danger": "#B01E2B",
+    "success": "#1F6B43",
 }
 
 

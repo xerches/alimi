@@ -89,7 +89,7 @@ def test_reseller_logo_must_exist(gws_fail, brand, offer, tmp_path):
 
 
 def test_brand_colors_reach_the_stylesheet(m365_pass, offer):
-    brand = Brand(display_name="Acme Security", colors={"accent": "#123456"})
+    brand = Brand(display_name="Acme Security", colors={"primary": "#123456"})
     html = render_html(m365_pass, brand=brand, offer=offer, now=NOW)
     assert "--accent: #123456" in html
     assert "Acme Security" in html
@@ -157,7 +157,7 @@ def test_brand_and_offer_load_from_the_repo_config():
     assert find_brand_file() is not None
     brand = load_brand()
     assert brand.display_name == "alimi"
-    assert brand.color("accent").startswith("#")
+    assert brand.color("primary").startswith("#")
     assert brand.domain is None  # TODO in brand.yaml means not decided
     offer = load_offer()
     assert offer.report_from == 500

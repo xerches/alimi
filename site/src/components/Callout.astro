@@ -1,0 +1,10 @@
+---
+// tone: info (default) | warning | success | danger | brand
+const { label, tone = "info" } = Astro.props;
+const className = tone === "info" ? "callout" : `callout callout--${tone}`;
+---
+
+<div class={className} role={tone === "warning" || tone === "danger" ? "note" : undefined}>
+  {label && <span class="callout__label">{label}</span>}
+  <slot />
+</div>

@@ -1,0 +1,21 @@
+---
+// Renders a product's tiers from config/pricing.yaml. Nothing here is typed by hand.
+import { pricing } from "../lib/config.js";
+import { formatDate } from "../lib/content.js";
+const { product } = Astro.props;
+---
+
+<div class="tiers">
+  {product.tiers.map((tier) => (
+    <article class="card tier" aria-labelledby={`tier-${tier.id}`}>
+      <span class={tier.type === "service" ? "badge badge--service" : "badge"}>{tier.type === "service" ? "Service" : "Product"}</span>
+      <h3 class="tier__name" id={`tier-${tier.id}`} style="margin-top:0.75rem">{tier.name}</h3>
+      <p class="tier__price">{tier.price}</p>
+      <p class="tier__note">{tier.note}</p>
+      <ul class="checklist">
+        {tier.includes.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+  ))}
+</div>
+<p class="price-updated small">Prices in {pricing.currency}, updated {formatDate(pricing.updated)}. Resellers buy at a discount; see <a href="/for-partners">For partners</a>.</p>
