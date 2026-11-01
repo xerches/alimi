@@ -831,3 +831,149 @@ a:active {
     display: none;
   }
 }
+
+/* Platform tiers and stats (added with the platform rework, Nov 1, 2026) */
+.tier--featured {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.tier__meta {
+  margin: 0.25rem 0 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.tier__per {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.tier .button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  margin: 1.5rem 0;
+}
+
+.stat {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+}
+
+.stat__value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.stat__label {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.dark .stat {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+}
+
+.dark .stat__value {
+  color: var(--color-text-inverse);
+}
+
+.dark .stat__label {
+  color: var(--color-text-inverse-muted);
+}
+
+/* Documents rendered from the repo (free policies and the payment fraud procedure) */
+.document {
+  max-width: 72ch;
+}
+
+.document h2 {
+  margin-top: 2.5rem;
+  font-size: 1.5rem;
+}
+
+.document h3 {
+  margin-top: 1.75rem;
+  font-size: 1.2rem;
+}
+
+.document p,
+.document li {
+  line-height: 1.65;
+}
+
+.document blockquote {
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--color-warning);
+  background: var(--color-warning-soft);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.document blockquote p {
+  margin: 0;
+}
+
+.document table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.document th,
+.document td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.document th {
+  background: var(--color-background-alt);
+}
+
+.document .box {
+  display: inline-block;
+  min-width: 1.2em;
+  color: var(--color-text-secondary);
+}
+
+.document-wrap {
+  overflow-x: auto;
+}
+
+.document hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}
+
+.document code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .hero .actions,
+  .document-actions {
+    display: none;
+  }
+}

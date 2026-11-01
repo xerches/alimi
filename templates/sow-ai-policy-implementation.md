@@ -4,7 +4,7 @@ title: Statement of Work, AI Policy Implementation
 ---
 > **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.**
 
-# Statement of Work: {{pricing.products.ai_policy_kit.implementation.name}}
+# Statement of Work: {{pricing.products.services.ai_policy_implementation.name}}
 
 *Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
 
@@ -20,7 +20,7 @@ Give {{Client}} a clear, adopted position on how staff may use AI tools, enforce
 
 ## 3. Deliverables
 
-{{pricing.products.ai_policy_kit.implementation.includes}}
+{{pricing.products.services.ai_policy_implementation.includes}}
 
 Plus: the AI tool inventory with personal versus company accounts and the data each tool may receive; the approved-tool list; the training slides and recording; the ISO 42001 gap list if selected.
 
@@ -47,7 +47,7 @@ Up to 200 accounts, one tenant; the Client's licence tier supports the access ru
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.ai_policy_kit.implementation.price}}**, quoted for this engagement at **{{Quoted Price}}**, with the ISO 42001 gap check **[ ] included / [ ] not included** in the quote. Payment: {{pricing.terms.payment}}; invoiced on signing. The {{pricing.products.ai_policy_kit.pro.name}} ({{pricing.products.ai_policy_kit.pro.price}}) is included.
+Fixed fee within alimi's published range of **{{pricing.products.services.ai_policy_implementation.price}}**, quoted for this engagement at **{{Quoted Price}}**, with the ISO 42001 gap check **[ ] included / [ ] not included** in the quote. Payment: {{pricing.terms.payment}}; invoiced on signing. The {{pricing.products.free.ai_policy.name}} ({{pricing.products.free.ai_policy.price}}) is the starting document; the inventory of AI tools in use comes from the platform's AI governance module.
 
 ## 9. Acceptance
 

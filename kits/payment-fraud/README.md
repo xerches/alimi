@@ -1,6 +1,6 @@
 # Payment Fraud Protection Kit
 
-Five documents that stop the most expensive crime a 10 to 200 person company faces: a payment sent to a criminal because an email said so. The kit is sold as a digital product (`payment_fraud_kit.kit` in `config/pricing.yaml`) and used in the half-day workshop and yearly drill (`payment_fraud_kit.workshop`). It is written in plain English for finance staff, office managers and the owner, with every term defined where it first appears.
+Five documents that stop the most expensive crime a 10 to 200 person company faces: a payment sent to a criminal because an email said so. Since Nov 1, 2026 the kit is not a product of its own: the procedure, scripts, poster and checklist are published free on the site (Free resources) and live in the platform's policy module, and the half-day workshop and yearly drill are a service (`products.services.fraud_workshop` in `config/pricing.yaml`). It is written in plain English for finance staff, office managers and the owner, with every term defined where it first appears.
 
 | ID | File | What it is | For whom |
 | --- | --- | --- | --- |

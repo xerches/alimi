@@ -7,7 +7,7 @@
     python templates/build/render.py --pdf                       # also PDF through pandoc's weasyprint engine
 
 Tokens that read pricing.yaml (so proposals never drift from the price list):
-    {{pricing.products.<product>.<tier>.price}}   "$500 to $1,500", "$99" or "free"
+    {{pricing.products.<product>.<tier>.price}}   "$3,900", "$500 to $1,500" or "free"; <product> is platform, services or free
     {{pricing.products.<product>.<tier>.name}}
     {{pricing.products.<product>.<tier>.includes}}  bullet list
     {{pricing.products.<product>.product_name}} / .tagline
@@ -18,7 +18,7 @@ Tokens that read pricing.yaml (so proposals never drift from the price list):
     {{pricing.partners.referral.fee}}             "10%"
     {{pricing.partners.referral.of}} / .paid / .who
     {{pricing.partners.principle}}
-    {{pricing.terms.payment}} / .minimum_monthly_retainer / .discount_multi_product
+    {{pricing.terms.payment}} / .minimum_monthly_retainer
 
 Every other {{Placeholder}} is left for the person preparing the document unless passed with --set.
 Nothing here changes the Markdown sources. Output is git-ignored.
@@ -203,8 +203,6 @@ def resolve(path: str, pricing: dict) -> str:
             value = pricing["terms"][parts[1]]
             if parts[1] == "minimum_monthly_retainer":
                 return money(value) + " a month"
-            if parts[1] == "discount_multi_product":
-                return percent(value)
             return str(value)
     except (KeyError, StopIteration, ValueError):
         pass

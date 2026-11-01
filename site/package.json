@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "astro": "7.4.4",
-    "js-yaml": "5.5.0"
+    "js-yaml": "5.5.0",
+    "marked": "17.0.1"
   },
   "devDependencies": {
     "@lhci/cli": "0.15.1"

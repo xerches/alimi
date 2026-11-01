@@ -35,7 +35,7 @@ The Client provides timely access, information and decisions; names a contact wi
 
 ## 6. Fees and payment
 
-Fees are stated in each SOW and are drawn from alimi's published price list at the time of signing. Payment terms: {{pricing.terms.payment}}. Retainers are billed monthly in advance with a minimum of {{pricing.terms.minimum_monthly_retainer}}. Clients buying more than one product or service receive {{pricing.terms.discount_multi_product}} off the second and later items. Expenses are charged only when an SOW allows them and at cost. **[Attorney review]** Late payment interest and suspension rights.
+Fees are stated in each SOW and are drawn from alimi's published price list at the time of signing. Payment terms: {{pricing.terms.payment}}. Retainers are billed monthly in advance with a minimum of {{pricing.terms.minimum_monthly_retainer}}. Platform subscriptions are billed yearly in advance. Expenses are charged only when an SOW allows them and at cost. **[Attorney review]** Late payment interest and suspension rights.
 
 ## 7. Term and termination
 

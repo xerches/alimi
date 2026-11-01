@@ -4,22 +4,21 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import PartnerTiers from "../components/PartnerTiers.astro";
 import Callout from "../components/Callout.astro";
-import Todo from "../components/Todo.astro";
-import { brand, partners, product, money } from "../lib/config.js";
+import { brand, partners, platform, money } from "../lib/config.js";
 
 const { reseller, referral, principle } = partners();
-const pack = product("policy_pack");
-const packList = pack.tiers.find((tier) => tier.id === "full").list;
+const starterPlan = platform().tiers[0];
 const starter = reseller.tiers[0];
-const starterDiscount = Number(partners().reseller.tiers[0].discount.replace("%", "")) / 100;
-const wholesale = Math.round(packList * (1 - starterDiscount));
+const starterDiscount = Number(starter.discount.replace("%", "")) / 100;
+const wholesale = Math.round(starterPlan.list * (1 - starterDiscount));
+const margin = starterPlan.list - wholesale;
 const formName = "partners";
 const id = (suffix) => `${formName}-${suffix}`;
 ---
 
-<Base title="For partners" description="Resell alimi under your own name with a wholesale discount, or refer clients and receive a fee. Reseller tiers and the referral fee are published here." path="/for-partners">
+<Base title="For partners" description="Resell the alimi platform under your own name with a wholesale discount, or refer clients and receive a fee. Reseller tiers and the referral fee are published here." path="/for-partners">
   <Hero eyebrow="For partners" title="Sell or refer alimi to the clients who already ask you about security">
-    <p class="lede">Two ways to work together. IT providers and consultancies resell under their own name at a wholesale discount. Brokers, CPAs and attorneys refer and receive a fee, or pass it to their client.</p>
+    <p class="lede">Two ways to work together. IT providers and consultancies resell the platform under their own name at a wholesale discount, with a multi-tenant view across their clients. Brokers, CPAs and attorneys refer and receive a fee, or pass it to their client.</p>
     <div class="actions">
       <a class="button button--primary" href="#partner-form">Start the conversation</a>
       <a class="button button--secondary" href="#resellers">See the terms</a>
@@ -29,8 +28,7 @@ const id = (suffix) => `${formName}-${suffix}`;
   <Section id="resellers" tone="alt" title="Resellers" eyebrow={reseller.who} lede="You buy at list price minus your tier discount and set your own client price. The tier follows your active client count.">
     <PartnerTiers />
     <p class="measure">
-      A {starter.name} reseller buys the {money(packList)} {pack.name} at {money(wholesale)} and keeps everything above that at its own client price.
-      <Todo note="state the margin a reseller keeps in one sentence, confirmed with the first MSP conversation (prompt 11)" />
+      A {starter.name} reseller buys the {money(starterPlan.list)} {starterPlan.name} plan at {money(wholesale)} a year and keeps everything above that at its own client price: {money(margin)} a client at list, more if you bundle your own service around it.
     </p>
     <h3>What the program includes</h3>
     <ul class="checklist">

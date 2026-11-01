@@ -4,7 +4,7 @@ title: Statement of Work, Workspace Security Scan and Insurer-Ready Report
 ---
 > **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.**
 
-# Statement of Work: {{pricing.products.workspace_scan.product_name}}, {{pricing.products.workspace_scan.full_report.name}}
+# Statement of Work: {{pricing.products.services.assessment.name}}
 
 *Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
 
@@ -20,7 +20,7 @@ Give {{Client}} a clear, evidence-backed picture of the security settings in its
 
 ## 3. Deliverables
 
-{{pricing.products.workspace_scan.full_report.includes}}
+{{pricing.products.services.assessment.includes}}
 
 The report is delivered as PDF and HTML and contains, for every check: pass, fail or "you confirm", the evidence collected, the severity, and the plain-English fix. The evidence pack checklist tells the Client what to send the broker and in what form.
 
@@ -47,7 +47,7 @@ One tenant, up to 200 accounts; a single scan run (a rescan after fixes is avail
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.workspace_scan.full_report.price}}**, quoted for this engagement at **{{Quoted Price}}** based on account count and the number of domains. Payment: {{pricing.terms.payment}}; this SOW is invoiced on signing. No expenses.
+Fixed fee within alimi's published range of **{{pricing.products.services.assessment.price}}**, quoted for this engagement at **{{Quoted Price}}** based on account count and the number of domains. Payment: {{pricing.terms.payment}}; this SOW is invoiced on signing. No expenses.
 
 ## 9. Acceptance
 
