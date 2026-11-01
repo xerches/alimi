@@ -71,7 +71,7 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | done Nov 1, 2026: prompt 8 PR #7, prompt 9 PR #8 |
 | 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | prompt 10 done Nov 1, 2026, PR #9; prompt 11 not started |
-| 7a | Policy Pack demo for prospects: sample company, controls, evidence, policies, frameworks, people, vendors, AI, trust page, assistant placeholder (prompt 11a, added Nov 1, 2026) | Nov 2026 | built Nov 1, 2026 on branch feat/demo; PR open, palette decision pending |
+| 7a | Policy Pack demo for prospects: sample company, controls, evidence, policies, frameworks, people, vendors, AI, trust page, assistant placeholder (prompt 11a, added Nov 1, 2026) | Nov 2026 | done Nov 1, 2026, PR #10 (stacked on #9); palette switch and the demo's own Netlify site pending |
 | 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12) | Mar 2027 | not started |
 | 9 | Platform: policies, people, dashboard, SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
 | 10 | AI policy generator and AI app inventory (prompts 15-16) | May 2027 | not started |
