@@ -1,0 +1,43 @@
+{
+  "tenant_display_name": "Example Co (mock)",
+  "verified_domains": ["example.com"],
+  "collected_at": "2026-11-01T00:00:00Z",
+  "users": [
+    {"id": "g-001", "email": "ava@example.com", "display_name": "Ava Example", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2024-03-01T00:00:00Z", "last_login": "2026-10-31T14:00:00Z", "org_unit_path": "/Staff"},
+    {"id": "g-002", "email": "ben@example.com", "display_name": "Ben Example", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": true, "enrolled_2sv": true, "enforced_2sv": true, "created": "2024-03-01T00:00:00Z", "last_login": "2026-10-30T09:00:00Z", "org_unit_path": "/Staff"},
+    {"id": "g-003", "email": "chloe@example.com", "display_name": "Chloe Example", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2025-01-15T00:00:00Z", "last_login": "2026-10-29T17:30:00Z", "org_unit_path": "/Staff"},
+    {"id": "g-004", "email": "dan@example.com", "display_name": "Dan Example", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2025-06-01T00:00:00Z", "last_login": "2026-10-31T08:15:00Z", "org_unit_path": "/Staff"},
+    {"id": "g-005", "email": "former@example.com", "display_name": "Former Employee", "suspended": true, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": false, "enforced_2sv": false, "created": "2023-01-01T00:00:00Z", "last_login": "2025-12-01T00:00:00Z", "org_unit_path": "/Staff"},
+    {"id": "g-adm-1", "email": "adm-ava@example.com", "display_name": "Ava Example (admin)", "suspended": false, "archived": false, "is_super_admin": true, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2024-03-01T00:00:00Z", "last_login": "2026-10-28T10:00:00Z", "org_unit_path": "/Admins"},
+    {"id": "g-adm-2", "email": "adm-ben@example.com", "display_name": "Ben Example (admin)", "suspended": false, "archived": false, "is_super_admin": true, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2024-03-01T00:00:00Z", "last_login": "2026-10-20T10:00:00Z", "org_unit_path": "/Admins"}
+  ],
+  "policies": {
+    "two_sv_enforced_everywhere": true,
+    "two_sv_unenforced_org_units": [],
+    "less_secure_apps_allowed": false,
+    "auto_forwarding_allowed": false,
+    "external_sharing_mode": "ALLOWLISTED_DOMAINS",
+    "allow_publishing_files": false,
+    "warn_for_external_sharing": true,
+    "marketplace_access_level": "ALLOW_LISTED",
+    "third_party_access_restricted": true
+  },
+  "forwarding": [
+    {"user_email": "ava@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": ["finance@example.com"]},
+    {"user_email": "ben@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []},
+    {"user_email": "chloe@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []},
+    {"user_email": "dan@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []},
+    {"user_email": "adm-ava@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []},
+    {"user_email": "adm-ben@example.com", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []}
+  ],
+  "email_auth": [
+    {"domain": "example.com", "spf": "v=spf1 include:_spf.google.com ~all", "dkim_enabled": true, "dmarc": "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"}
+  ],
+  "third_party_apps": [
+    {"client_id": "100000000001-teamchat.apps.googleusercontent.com", "display_name": "Team Chat", "client_type": "WEB", "scopes": ["email", "https://www.googleapis.com/auth/drive.readonly", "openid"], "user_count": 4, "last_authorized": "2026-09-12T15:00:00Z"},
+    {"client_id": "100000000002-scheduler.apps.googleusercontent.com", "display_name": "Meeting Scheduler", "client_type": "WEB", "scopes": ["https://www.googleapis.com/auth/calendar.readonly", "openid"], "user_count": 2, "last_authorized": "2026-10-02T11:30:00Z"}
+  ],
+  "approved_client_ids": ["100000000001-teamchat.apps.googleusercontent.com"],
+  "audit": {"login_available": true, "admin_available": true, "retention_days": 180},
+  "notes": ["mock fixture: every automated check passes"]
+}
