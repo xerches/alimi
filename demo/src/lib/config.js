@@ -38,7 +38,7 @@ export function money(amount) {
   return "$" + Number(amount).toLocaleString("en-US");
 }
 
-/** "Free", "$3,900" or "$500 to $1,500". `list` wins over `range`, as in templates/build/render.py. */
+/** "Free", "$499" or "$500 to $1,500". `list` wins over `range`, as in templates/build/render.py. */
 export function tierPrice(tier) {
   if (typeof tier.list === "number") return tier.list === 0 ? "Free" : money(tier.list);
   if (Array.isArray(tier.range) && tier.range.length === 2) return `${money(tier.range[0])} to ${money(tier.range[1])}`;
@@ -51,7 +51,7 @@ export function tierNote(tier) {
   return "Billed yearly";
 }
 
-// pricing.yaml v2 (Nov 1, 2026): one platform, the services around it, and the free resources.
+// One product (the platform), the fixed-fee services around it, and the free resources in front of it.
 export const PRODUCT_ORDER = ["platform", "services", "free"];
 
 export const PRODUCT_PAGES = {
@@ -60,18 +60,38 @@ export const PRODUCT_PAGES = {
   free: "/resources",
 };
 
+export const FRAMEWORK_LABELS = {
+  insurer: "Cyber insurance questionnaire",
+  soc2: "SOC 2",
+  iso27001: "ISO 27001",
+  hipaa: "HIPAA",
+  iso42001: "ISO 42001",
+};
+
+function decorate(tier) {
+  const out = { ...tier, price: tierPrice(tier), note: tierNote(tier) };
+  if (typeof tier.people_up_to === "number") {
+    out.monthly = `${money(Math.round(tier.list / 12))} a month`;
+    out.yearly = `${money(tier.list)} a year`;
+    out.peopleLabel = `Up to ${tier.people_up_to} people`;
+    out.frameworkLabels = (tier.frameworks ?? []).map((id) => FRAMEWORK_LABELS[id] ?? id);
+    out.integrationsLabel =
+      tier.integrations === null || tier.integrations === undefined
+        ? "Unlimited integrations"
+        : `${tier.integrations} integration${tier.integrations === 1 ? "" : "s"}`;
+  }
+  return out;
+}
+
 export function product(key) {
   const entry = pricing.products[key];
   if (!entry) throw new Error(`pricing.yaml has no product "${key}"`);
-  const status = entry.status ? String(entry.status) : "";
   return {
     key,
     name: entry.name,
     tagline: entry.tagline,
     href: PRODUCT_PAGES[key],
-    tiers: entry.tiers.map((tier) => ({ ...tier, price: tierPrice(tier), note: tierNote(tier) })),
-    // A status that still says "confirm" keeps a visible draft banner on the page.
-    draft: /confirm/i.test(status) ? status : null,
+    tiers: entry.tiers.map(decorate),
   };
 }
 
@@ -79,8 +99,29 @@ export function products(order = PRODUCT_ORDER) {
   return order.map(product);
 }
 
-export function freeTier(key) {
-  return product(key).tiers.find((tier) => tier.list === 0) ?? null;
+/** The platform: tiers in price order plus what every tier includes. */
+export function platform() {
+  const entry = pricing.products.platform;
+  return {
+    ...product("platform"),
+    included: entry.included_everywhere,
+    billing: entry.billing,
+    auditNote: entry.audit_note,
+  };
+}
+
+export function services() {
+  return product("services").tiers;
+}
+
+export function freeResources() {
+  return product("free").tiers;
+}
+
+export function service(id) {
+  const found = services().find((tier) => tier.id === id);
+  if (!found) throw new Error(`pricing.yaml has no service "${id}"`);
+  return found;
 }
 
 const TIER_NAMES = { starter: "Starter", growth: "Growth", scale: "Scale" };
