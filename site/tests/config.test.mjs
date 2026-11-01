@@ -41,8 +41,8 @@ test("freeTier finds the zero-price tier", () => {
 test("reseller tiers and referral fee come from pricing.yaml", () => {
   const tiers = resellerTiers();
   assert.deepEqual(tiers.map((t) => t.name), ["Starter", "Growth", "Scale"]);
-  assert.deepEqual(tiers.map((t) => t.discount), ["20%", "30%", "40%"]);
-  assert.equal(tiers[2].clients, "21 or more");
+  assert.deepEqual(tiers.map((t) => t.discount), ["10%", "15%", "20%"]);
+  assert.equal(tiers[2].clients, "151 or more");
   assert.equal(partners().referral.feeText, "10%");
   assert.match(retainer().price, /^\$3,000 to \$6,000 a month$/);
 });

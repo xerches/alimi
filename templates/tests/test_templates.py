@@ -116,8 +116,8 @@ def test_reseller_outline_uses_the_tier_table_and_the_channel_principle():
     assert "{{pricing.partners.reseller.tiers_table}}" in body
     assert "{{pricing.partners.principle}}" in body
     rendered = render(BY_SLUG["reseller-agreement-outline"], PRICING)
-    assert "| Starter | 1 to 5 | 20% |" in rendered
-    assert "| Scale | 21 or more | 40% |" in rendered
+    assert "| Starter | 1 to 50 | 10% |" in rendered
+    assert "| Scale | 151 or more | 20% |" in rendered
 
 
 def test_referral_outline_states_the_fee_and_disclosure():
