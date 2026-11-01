@@ -55,7 +55,7 @@ sharing settings, less-secure app access, and audit log availability. Same findi
 same mock pattern, tests, README with exact scopes and the service account setup steps.
 ```
 
-**5. Insurer-ready report**
+**5. Insurer-ready report** (done Nov 1, 2026)
 ```
 Read /config/checks.yaml. In /tools/report, build a package `alimi_report` that takes findings
 JSON from the scanner and renders an HTML and PDF report: a one-page summary with an overall
