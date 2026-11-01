@@ -112,7 +112,7 @@ framework text; cite IDs only. The platform (prompt 13) and the AI policy kit (p
 import this folder. Show me the plan first.
 ```
 
-**8. Templates**
+**8. Templates** (done Nov 1, 2026)
 ```
 In /templates, create Markdown templates with the attorney-review header from CLAUDE.md for:
 a pilot authorization letter (one page: scope, read-only access, data handling, no fee, either
