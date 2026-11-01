@@ -2,7 +2,7 @@
   "name": "alimi-demo",
   "private": true,
   "version": "0.1.0",
-  "description": "alimi Policy Pack demo: a clickable sample company on static pages. Brand tokens, policies, controls and checks come from the repo at build time.",
+  "description": "alimi platform demo: a clickable sample company on static pages. Brand tokens, policies, controls and checks come from the repo at build time.",
   "type": "module",
   "engines": {
     "node": ">=22"

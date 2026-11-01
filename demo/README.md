@@ -1,6 +1,6 @@
 # alimi demo
 
-An unlisted, clickable demo of the alimi compliance platform, built around the Policy Pack. It is what the founder shows a prospect or a partner; it is never linked from the marketing site.
+An unlisted, clickable demo of the alimi platform, the compliance automation platform described on the marketing site. It is what the founder shows a prospect or a partner; it is never linked from the marketing site.
 
 The sample company is **Saltmarsh Payroll, Inc.**, a fictional 52-person payroll bureau in Quincy, Massachusetts, 75 days from its cyber insurance renewal. Every person, vendor, date and number is invented. What is real: the 23 policies in `/policies`, the 40 controls in `/config/controls.yaml`, the requirement IDs in `/policies/requirements.yaml`, and the 12 Microsoft 365 checks from `/tools/scanner`, which were run for real on a fictional tenant snapshot (`data/snapshot.json`) to produce `data/scan.json`.
 
@@ -26,7 +26,7 @@ Node 22 or newer. The build reads `config/brand.yaml`, `config/controls.yaml`, `
 | Home | `/` | Readiness tiles, compliance progress per framework, what needs attention, tasks due, last scan |
 | Compliance | `/frameworks`, `/frameworks/:id` | Insurer questionnaire, SOC 2, ISO 27001, HIPAA, ISO 42001: percent ready, one row per requirement ID with the controls and policies that satisfy it |
 | Compliance | `/controls`, `/controls/:id` | 40 controls with owner, status, frameworks, evidence and tests; a control page with tests and their history, evidence with renewal dates, the add-evidence form, policies, risks, requirements and activity |
-| Compliance | `/policies`, `/policies/:id` | The Policy Pack: status, owner, version, acknowledgements; the full rendered policy with its requirement mapping and the controls it sets rules for |
+| Compliance | `/policies`, `/policies/:id` | The policy library: status, owner, version, acknowledgements; the full rendered policy with its requirement mapping and the controls it sets rules for |
 | Compliance | `/evidence` | The evidence library with status (ready, upcoming renewal, needs renewal, needs artifact), owner and renewal filters |
 | Compliance | `/monitoring` | The 12 automated tests from the scanner, five weeks of history, the three attestation items, failing tests with the fix plan |
 | Risk | `/risks` | Risk register scored on a 4x4 scale with treatment, owner, review date and linked controls |
@@ -70,7 +70,7 @@ The demo must stay free to run: static files only, no server, no analytics.
 1. **Home.** "Renewal in 75 days, broker wants the pack in 44. Here is where we stand: 31 of 40 controls fine, three failing tests, 33 of 52 people compliant."
 2. **Monitoring.** The scanner's 12 checks on the tenant, read-only. Open the failing external-forwarding test: what it found, the plan, the owner, the due date.
 3. **Controls → CTL-09 (MFA).** One owner, one status. Tests set it where a tenant read can; evidence with a renewal date covers the rest. Show the add-evidence form.
-4. **Policies → Password and Authentication Policy.** The Policy Pack in place: owner, version, who has acknowledged, and the requirement IDs it answers.
+4. **Policies → Password and Authentication Policy.** The policy library in place: owner, version, who has acknowledged, and the requirement IDs it answers.
 5. **Frameworks → Insurer.** The 13 questions the broker will ask, each answered by a control and a policy. Then SOC 2 at 77% to show the same work counts twice.
 6. **People → Yara Castillo.** What a new hire sees on day one: policies to accept, training, MFA, device.
 7. **Vendors → Brightfile.** The breach alert, flagged as a finding, with the review that follows.

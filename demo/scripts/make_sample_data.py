@@ -1,4 +1,4 @@
-"""Writes the sample company behind the Policy Pack demo into demo/data/*.json.
+"""Writes the sample company behind the alimi platform demo into demo/data/*.json.
 
 Saltmarsh Payroll, Inc. is fictional: every person, vendor, date and number here is invented so that
 nothing on a demo screen implies a client. The policies, requirement IDs, controls and checks the
