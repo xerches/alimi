@@ -4,6 +4,7 @@ Newest first. One line per decision: date, what, why.
 
 | Date | Decision | Why |
 | --- | --- | --- |
+| 2026-11-01 | Payment fraud kit ships as five Markdown documents (procedure, callback scripts, poster, Massachusetts closing checklist, training script) with three fixed rules: verified callback to a number already on file, two people above a threshold and on every bank-detail change, 24-hour hold on new details | The rules match what the FBI and title insurers advise and what cyber insurers ask about funds-transfer fraud; documents only, so it ships on the $0 path and feeds the half-day workshop |
 | 2026-11-01 | Working name is alimi; denimi retired after one day | Founder prefers the sound; denimi risks the "denim" autocorrect in search; no security company or US trademark found under alimi on a first web check; MA entity, USPTO and domain checks still pending |
 | 2026-11-01 | Policy library in /policies mapped to SOC 2, ISO 27001 and ISO 42001 by criterion ID; sold as a policy pack and reused by the platform and the AI policy kit | Every compliance buyer needs policies first; writing them once feeds the services, the platform and the kits |
 | 2026-11-01 | Reseller program for MSPs: wholesale tiers of 20/30/40% by active client count, white-label, not-for-resale licence; 10% referral fee for brokers, CPAs and attorneys | Resellers need margin to sell on our behalf; starting numbers, confirm before the first partner conversation |
