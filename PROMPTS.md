@@ -86,7 +86,7 @@ without a definition. Show me the plan first.
 
 ## Phase 4: Policy library, templates and pilot runbook (weeks 13-16, before the first pilot)
 
-**7. Policy library**
+**7. Policy library** (done Nov 1, 2026)
 ```
 Read CLAUDE.md. In /policies, write a library of security and company policies sized for a
 10-200 person company, in Markdown with YAML front matter: id, title, version, owner role,
