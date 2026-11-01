@@ -2,7 +2,7 @@
 
 Run one prompt per session, in order. Review what it builds, commit, then move on. For anything bigger than a small change, the prompt already asks for a plan first; read the plan before saying go.
 
-Order changed Nov 1, 2026: the workspace scanner and insurer-ready report come first, the payment fraud kit second, and the hosted platform grows around the scanner from prompt 11. The reasoning and the phase plan are in https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a.
+Order changed Nov 1, 2026: the workspace scanner and insurer-ready report come first, the payment fraud kit second, and the hosted platform grows around the scanner from prompt 12. The reasoning and the phase plan are in https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a. Prompts that are documents only (6, 7, 8, 9) can run in parallel with code prompts in a separate session.
 
 ## Phase 1: Foundation (weeks 1-2)
 
@@ -43,7 +43,7 @@ assignments, external mailbox forwarding and inbox rules, anonymous sharing link
 audit log status, and Secure Score. Mock fixtures: one that triggers each check and one that
 passes. Output findings JSON to the git-ignored out/ folder. Write pytest tests. Document the
 exact Graph permissions and the app registration steps in a README. The package must be usable
-without the CLI, because the platform web app imports it in prompt 11. Show me the plan first.
+without the CLI, because the platform web app imports it in prompt 12. Show me the plan first.
 ```
 
 **4. Google Workspace connector**
@@ -63,8 +63,9 @@ score, a "what your insurer will ask" table mapping each underwriting question (
 backups, email security, admin access, incident response) to pass/fail/attestation-needed,
 top 5 fixes in plain English, a detailed findings appendix, and an evidence pack section
 listing screenshots or exports the client should attach. Brand from /config/brand.yaml. Add a
---free flag that renders only the one-page summary. Expose a render() function the platform
-can call, plus a CLI. Tests on the mock findings.
+--free flag that renders only the one-page summary, and a --reseller option that puts a
+partner's name and logo on the cover with a "powered by denimi" line. Expose a render()
+function the platform can call, plus a CLI. Tests on the mock findings.
 ```
 
 Gate: the scanner and report sell on their own before any platform code starts.
@@ -83,19 +84,47 @@ build script that renders each to PDF with pandoc or weasyprint. Plain English, 
 without a definition. Show me the plan first.
 ```
 
-## Phase 4: Templates and pilot runbook (weeks 13-14, before the first pilot)
+## Phase 4: Policy library, templates and pilot runbook (weeks 13-16, before the first pilot)
 
-**7. Templates**
+**7. Policy library**
+```
+Read CLAUDE.md. In /policies, write a library of security and company policies sized for a
+10-200 person company, in Markdown with YAML front matter: id, title, version, owner role,
+review cycle, and the requirements each policy satisfies by criterion ID only (SOC 2 trust
+services criteria such as CC6.1, ISO 27001:2022 clauses and Annex A controls such as A.5.15,
+ISO 42001:2023 clauses and Annex A controls, HIPAA Security Rule sections where relevant, and
+the cyber insurance question). Write as many as the frameworks call for; start with:
+information security policy, acceptable use, access control, asset management, data
+classification and handling, cryptography and key management, secure development and change
+management, vulnerability and patch management, logging and monitoring, backup and recovery,
+business continuity and disaster recovery, incident response, vendor and third-party risk,
+risk management, human resources security (screening, onboarding, offboarding, training),
+physical and environmental security, remote work and personal devices, password and
+authentication, network and endpoint security, data retention and disposal, privacy, AI
+acceptable use, and AI governance (AI policy, roles, impact assessment, AI system lifecycle,
+for ISO 42001). Each policy: purpose, scope, roles, numbered policy statements, exceptions,
+enforcement, review, revision history; 2-4 pages; plain English; {{Company}} placeholders.
+Header on every file: "TEMPLATE. Adapt before adopting. Sections marked [HR or legal review]
+need a human reviewer." Generate /policies/coverage.md, a matrix of requirement -> policy,
+from the front matter with a script, and flag requirements no policy covers. Add a build
+script to DOCX and PDF with pandoc, with a --fill option for the company name. Never copy
+framework text; cite IDs only. The platform (prompt 13) and the AI policy kit (prompt 15)
+import this folder. Show me the plan first.
+```
+
+**8. Templates**
 ```
 In /templates, create Markdown templates with the attorney-review header from CLAUDE.md for:
 a pilot authorization letter (one page: scope, read-only access, data handling, no fee, either
-side may stop), a Master Services Agreement outline, a Statement of Work for each of the three
-services, a one-page case-study template (problem, what we did, result, with permission line),
+side may stop), a Master Services Agreement outline, a Statement of Work for each of the
+services, a reseller agreement outline (wholesale tiers from /config/pricing.yaml, white-label
+terms, who invoices whom, data handling for the reseller's clients), a referral agreement
+outline, a one-page case-study template (problem, what we did, result, with permission line),
 and a referral partner one-pager. Use {{placeholders}}. Draft structure and plain-language
 clauses only; mark anything that needs a lawyer.
 ```
 
-**8. Pilot runbook**
+**9. Pilot runbook**
 ```
 In /docs, write a pilot runbook: how to onboard a free pilot in one hour (authorization letter,
 app registration or service account setup with read-only scopes, run the scanner, render the
@@ -103,82 +132,85 @@ report, debrief call script, case-study ask). Include a checklist for cleaning u
 the pilot. Extend the decisions log with a section where I record what partners and pilots said.
 ```
 
-## Phase 5: Marketing site (weeks 15-17)
+## Phase 5: Marketing site (weeks 17-19)
 
-**9. Marketing site**
+**10. Marketing site**
 ```
 Read CLAUDE.md and /config. In /site, build a fast static site with Astro. Pages: Home, the
-three product pages (Workspace Security Scan, Payment Fraud Kit, AI Policy Kit), For Partners
-(brokers, CPAs, attorneys, MSPs), About, Contact. Each product page has a waitlist form using
-Netlify Forms, a "how it works" section, and a pricing block read from /config/pricing.yaml at
-build time. The scanner page has a short "what comes next" block about the hosted platform.
-Pull brand tokens from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+.
-Placeholder copy marked TODO. Add a netlify.toml so it deploys with no settings. Show me the
-plan first.
+product pages (Workspace Security Scan, Policy Pack, Payment Fraud Kit, AI Policy Kit), For
+Partners (resellers: MSPs and IT consultancies; referrers: brokers, CPAs, attorneys), About,
+Contact. Each product page has a waitlist form using Netlify Forms, a "how it works" section,
+and a pricing block read from /config/pricing.yaml at build time. The For Partners page shows
+the reseller tiers and the referral fee from pricing.yaml and has its own sign-up form. The
+scanner page has a short "what comes next" block about the hosted platform. Pull brand tokens
+from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+. Placeholder copy marked
+TODO. Add a netlify.toml so it deploys with no settings. Show me the plan first.
 ```
 
-**10. Site copy**
+**11. Site copy**
 ```
 Read CLAUDE.md, /docs/research (I'll paste the three research summaries there first), and the
 site. Replace every TODO with final copy. Homepage headline leads with the outcome for a
 business owner, not the technology. Each product page states the complaint, what they get,
-what it costs, and what happens next. Resume metrics are attributed to employment per the
-Rules in CLAUDE.md. Write the About page in first person, 150 words.
+what it costs, and what happens next. The For Partners page states the margin a reseller
+keeps in one sentence. Resume metrics are attributed to employment per the Rules in
+CLAUDE.md. Write the About page in first person, 150 words.
 ```
 
-## Phase 6: Platform web app (weeks 18-27)
+## Phase 6: Platform web app (weeks 20-29)
 
-**11. Platform foundation**
+**12. Platform foundation**
 ```
 Read CLAUDE.md and the platform plan it links. In /platform, build a FastAPI app with HTMX
 server-rendered pages and Postgres. Models: Organization, User, Integration (a connected tenant
 with read-only scopes, an encrypted token, last sync), Framework, Requirement, Control, Test,
-Evidence (file or attestation with an expiry date), AuditLog. Login through a hosted auth
-provider with a free tier; recommend one and explain the choice. Row-level security on every
-table that holds customer data, keyed by organization. Tokens encrypted with a key from the
-environment, never logged. Import denimi_scanner: connect a tenant (mock by default), run the
-checks on demand and nightly from a worker, store each result as a Test against its Control.
-First framework: the insurer questionnaire, built from the insurer mapping in
-/config/checks.yaml, with criterion IDs and our own plain-English summaries only. One
-`docker compose up` runs app, database and worker on mock data; CI runs the tests on every PR.
-Show me the plan first.
+Evidence (file or attestation with an expiry date), AuditLog. A reseller is an Organization
+with child organizations and a multi-tenant view. Login through a hosted auth provider with a
+free tier; recommend one and explain the choice. Row-level security on every table that holds
+customer data, keyed by organization. Tokens encrypted with a key from the environment, never
+logged. Import denimi_scanner: connect a tenant (mock by default), run the checks on demand and
+nightly from a worker, store each result as a Test against its Control. First framework: the
+insurer questionnaire, built from the insurer mapping in /config/checks.yaml, with criterion
+IDs and our own plain-English summaries only. One `docker compose up` runs app, database and
+worker on mock data; CI runs the tests on every PR. Show me the plan first.
 ```
 
-**12. Policies and people**
+**13. Policies and people**
 ```
-Extend /platform. Policies: versioned Markdown templates (information security, acceptable use,
-access control, incident response, vendor management to start), an approver, and staff
-acceptance tracking with reminders. People: pull the staff list from the connected Microsoft 365
-or Google Workspace tenant, an onboarding and offboarding checklist per person, and training
-completion. Link policies and people to controls so the dashboard can score them. Mock data,
-tests, plain-English page copy.
+Extend /platform. Policies: import the /policies library (front matter becomes the framework
+mapping), versions, an approver, and staff acceptance tracking with reminders. People: pull
+the staff list from the connected Microsoft 365 or Google Workspace tenant, an onboarding and
+offboarding checklist per person, and training completion. Link policies and people to
+controls so the dashboard can score them. Mock data, tests, plain-English page copy.
 ```
 
-**13. Dashboard, reports and SOC 2**
+**14. Dashboard, reports and SOC 2**
 ```
 Extend /platform. A readiness dashboard per framework: overall score, each requirement with its
 controls and whether they pass, fail or need attestation, top fixes. Render the insurer-ready
-report by calling denimi_report inside the app, and build an export pack (zip of the report plus
-evidence files) for a broker or auditor. Add SOC 2 as the second framework: criterion IDs and our
-own summaries only, mapped onto the existing controls. Tests on mock data.
+report by calling denimi_report inside the app, with the reseller's branding when the
+organization belongs to one, and build an export pack (zip of the report plus evidence files
+and adopted policies) for a broker or auditor. Add SOC 2 as the second framework and ISO 27001
+as the third: criterion IDs and our own summaries only, mapped onto the existing controls and
+policies. Tests on mock data.
 ```
 
-## Phase 7: AI policy kit (weeks 28-30)
+## Phase 7: AI policy kit (weeks 30-32)
 
-**14. AI policy generator**
+**15. AI policy generator**
 ```
 Read CLAUDE.md. In /tools/ai-policy, build a static web app (no backend; plain HTML/JS or
 Astro island) with a ~20-question form: company size, industry, regulated data types, which AI
 tools are approved, whether customer data may be entered, review and logging expectations,
 and who owns AI decisions. From the answers generate (a) an AI acceptable use policy,
 (b) a one-page staff guide, (c) an AI tool inventory template, all downloadable as Markdown and
-DOCX. Questions and clause text live in a YAML file so I can edit them without touching code,
-and so the platform's policy module can import the same clauses later. Free tier generates
-everything; add a clearly marked "paid: find the AI apps your staff actually use" call to
-action that links to the scanner.
+DOCX. Questions and clause text live in a YAML file so I can edit them without touching code;
+the clauses start from the AI policies in /policies. Free tier generates everything; add a
+clearly marked "paid: find the AI apps your staff actually use" call to action that links to
+the scanner.
 ```
 
-**15. AI app inventory from audit logs**
+**16. AI app inventory from audit logs**
 ```
 Extend denimi_scanner with an `ai-inventory` command that reads sign-in and OAuth consent logs
 (Microsoft Graph) and token/OAuth audit events (Google Admin SDK) to list AI services in use
@@ -190,7 +222,7 @@ can import. --mock mode and tests.
 
 ## Phase 8: Growth basics (when the site has copy)
 
-**16. Technical SEO and analytics**
+**17. Technical SEO and analytics**
 ```
 Add per-page meta titles and descriptions, Open Graph tags, ProfessionalService schema,
 sitemap.xml, robots.txt, canonical URLs, and privacy-respecting analytics (Plausible or
@@ -201,7 +233,7 @@ AI policy? A 10-minute answer." Run Lighthouse and fix anything under 95.
 
 ## Later, only when a customer asks (no prompts yet)
 
-Vendor risk list with review dates, risk register, customer questionnaire answer library, public trust center, more integrations (AWS, GitHub, Intune, Jamf, HR systems), auditor portal. Write the prompt when the first customer asks for the module.
+Vendor risk list with review dates, risk register, customer questionnaire answer library, public trust center, more integrations (AWS, GitHub, Intune, Jamf, HR systems), auditor portal, reseller billing and usage reports. Write the prompt when the first customer or reseller asks for the module.
 
 ## Habits
 

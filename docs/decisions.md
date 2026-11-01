@@ -4,6 +4,8 @@ Newest first. One line per decision: date, what, why.
 
 | Date | Decision | Why |
 | --- | --- | --- |
+| 2026-11-01 | Policy library in /policies mapped to SOC 2, ISO 27001 and ISO 42001 by criterion ID; sold as a policy pack and reused by the platform and the AI policy kit | Every compliance buyer needs policies first; writing them once feeds the services, the platform and the kits |
+| 2026-11-01 | Reseller program for MSPs: wholesale tiers of 20/30/40% by active client count, white-label, not-for-resale licence; 10% referral fee for brokers, CPAs and attorneys | Resellers need margin to sell on our behalf; starting numbers, confirm before the first partner conversation |
 | 2026-11-01 | Build order: workspace scanner and insurer report first, payment fraud kit second, AI policy kit third | Founder wants a Vanta/Drata-style product; the scanner is its first module and sells on its own |
 | 2026-11-01 | The scanner grows into a hosted compliance platform (phases 3-4); stack is Python, FastAPI, HTMX, Postgres | One language, reuses the scanner package; plan at https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a |
 | 2026-11-01 | The hosted platform holds no customer data until LLC, insurance, a signed pilot letter and an outside security review exist | Storing other companies' tokens is the biggest liability a security company can take on |

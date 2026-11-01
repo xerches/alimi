@@ -12,10 +12,14 @@ The long-term product is a compliance automation platform in the style of Vanta 
 
 1. **Workspace security scanner, growing into the platform.**
    - *Phases 1 and 2 (the scanner):* read-only CLI for Microsoft 365 (Graph) and Google Workspace (Admin SDK) that runs the checks in `config/checks.yaml` (MFA coverage, legacy auth, admin count, external forwarding, sharing settings, audit logs) and renders an insurer-ready evidence report. Free summary, paid full report. Service: "Insurance-ready in 30 days" (fix findings, run a tabletop, deliver the evidence pack to the broker). Runs from the operator's laptop and stores no customer tokens, so it fits the pre-LLC rules.
-   - *Phases 3 and 4 (the platform):* a hosted web app that imports the same scanner package. Organizations and login, connected tenants with scheduled runs, controls proven by automated tests or uploaded evidence, policies with staff sign-off, a people list from the identity provider, a readiness dashboard per framework, and an export pack for a broker or auditor. First framework is the insurer questionnaire, SOC 2 second.
+   - *Phases 3 and 4 (the platform):* a hosted web app that imports the same scanner package. Organizations and login, connected tenants with scheduled runs, controls proven by automated tests or uploaded evidence, policies from the `/policies` library with staff sign-off, a people list from the identity provider, a readiness dashboard per framework, an export pack for a broker or auditor, and a multi-tenant view for resellers. First framework is the insurer questionnaire, then SOC 2, then ISO 27001.
    - *Later, only when a customer asks:* vendor risk, risk register, questionnaire answer library, trust center, more integrations (AWS, GitHub, Intune, Jamf, HR systems), auditor portal.
 2. **Payment fraud protection kit.** Digital kit: payment-change and wire verification procedure, callback scripts, staff poster, 20-minute training video, and a closing-day checklist for home buyers. Service: half-day workshop for finance teams and Massachusetts real estate closing attorneys, plus a yearly drill. Built right after the scanner ships.
 3. **AI usage policy and inventory kit.** Web app: ~20 questions produce an AI acceptable use policy, a one-page staff guide and an AI tool inventory. Paid tier adds a read-only scan of Microsoft 365 or Google Workspace audit logs to find AI apps actually in use. Service: fixed-fee implementation (policy adoption, access rules, staff training, ISO 42001 gap check). Later becomes the policy module inside the platform.
+
+Under all three sits the **policy library** in `/policies`: security and company policies (information security, acceptable use, access control, asset management, incident response, vendor risk, AI governance and the rest) written for a 10 to 200 person company and mapped by criterion ID to SOC 2, ISO 27001, ISO 42001, HIPAA where relevant, and the insurer questions. Sold on its own as a policy pack, included in the services, and imported by the platform and the AI policy kit.
+
+Two channels. **Direct:** owners who find the site or get a referral. **Resellers:** MSPs, IT consultancies and vCISO firms buy at wholesale (tiered discount by active client count in `config/pricing.yaml`), set their own client price, and get a white-label option on reports and policy packs, a not-for-resale licence for their own tenant, and the multi-tenant view once the platform exists. Brokers, CPAs and attorneys who refer but do not resell get a referral fee. denimi never sells direct to a reseller's client for less than the reseller pays.
 
 How denimi differs from Vanta and Drata: a published price in the low thousands a year instead of $20K+, insurer-facing outputs before audit-facing ones, plain English for an owner rather than an auditor, and the founder included as a fractional compliance lead who makes the scoping and policy calls those tools leave to the customer.
 
@@ -29,6 +33,7 @@ Suggested starting prices live in `config/pricing.yaml` so the site, proposals a
 /tools/report         findings JSON -> insurer-ready HTML/PDF report, also importable by the platform
 /platform             hosted web app (phase 3+): FastAPI, HTMX pages, Postgres; orgs, login, scheduled runs, controls, evidence, policies, people, dashboard
 /tools/ai-policy      static web app, generates policy + one-pager + inventory client-side (no backend)
+/policies             policy library: Markdown + YAML front matter mapped to SOC 2, ISO 27001, ISO 42001 criterion IDs; coverage matrix; build to DOCX/PDF
 /kits/payment-fraud   Markdown sources for the procedure, scripts, poster, checklist; build script to PDF
 /templates            MSA, SOW, pilot authorization letter, case-study template ({{placeholders}}, attorney-review header)
 /docs                 research summaries, decisions log, pilot runbook
@@ -47,6 +52,7 @@ Suggested starting prices live in `config/pricing.yaml` so the site, proposals a
 - **Framework text is never copied in.** SOC 2 criteria (AICPA) and ISO 27001 are copyrighted. Store criterion IDs and our own plain-English summaries only.
 - **No client data in the repo.** Pilot outputs go to a local, git-ignored `out/` folder.
 - **Legal templates carry a header:** "DRAFT. Not legal advice. Review by a Massachusetts attorney before use." Claude drafts structure and plain-language clauses; it does not invent legal text where a lawyer is required.
+- **Policies carry a header:** "TEMPLATE. Adapt before adopting. Sections marked [HR or legal review] need a human reviewer." A policy maps to requirements by criterion ID only.
 - **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not denimi clients. Site copy says "as Information Security Manager at..." and never implies consulting clients until there are case studies.
 - **Free to run.** Site and AI policy app must work on free static hosting with no server. Forms use Netlify Forms or Formspree free tier. The platform needs a server; keep it on free tiers until paying customers cover the bill.
 - **Accessible and fast.** Mobile-first, Lighthouse 95+ on every page.
@@ -61,13 +67,14 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | 2 | Scanner core and Microsoft 365 checks (prompt 3) | Dec 5, 2026 | not started |
 | 3 | Google Workspace checks and insurer-ready report (prompts 4-5) | Jan 9, 2027 | not started |
 | 4 | Payment fraud kit: docs, poster, checklist, video script (prompt 6) | Jan 30, 2027 | not started |
-| 5 | Templates and pilot runbook (prompts 7-8), needed before the first pilot | Feb 2027 | not started |
-| 6 | Marketing site and copy (prompts 9-10) | Feb 2027 | not started |
-| 7 | Platform web app: orgs, login, scheduled runs, controls, evidence (prompt 11) | Mar 2027 | not started |
-| 8 | Platform: policies, people, dashboard, SOC 2 framework (prompts 12-13) | Apr 2027 | not started |
-| 9 | AI policy generator and AI app inventory (prompts 14-15) | May 2027 | not started |
-| 10 | Technical SEO and analytics (prompt 16) | when the site has copy | not started |
-| 11 | 15 partner conversations, 3 free pilots, 3 case studies | from Jan 2027, alongside the build | not started |
+| 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | not started |
+| 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | not started |
+| 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | not started |
+| 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12) | Mar 2027 | not started |
+| 9 | Platform: policies, people, dashboard, SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
+| 10 | AI policy generator and AI app inventory (prompts 15-16) | May 2027 | not started |
+| 11 | Technical SEO and analytics (prompt 17) | when the site has copy | not started |
+| 12 | 15 partner conversations (incl. 5 MSPs on the reseller terms), 3 free pilots, 3 case studies | from Jan 2027, alongside the build | not started |
 
 Gate after #3: the scanner sells on its own (free summary, paid report) before any platform code starts.
 
