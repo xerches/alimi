@@ -84,7 +84,7 @@ Gate for the hosted platform to hold customer data: LLC formed, insurance in pla
 
 ## Tone and brand
 
-Plain English a business owner understands. No fear-mongering, no hooded-hacker imagery, no "cyber" clichés. Explain the term the first time it appears (MFA, EDR, BEC). Brand tokens live in `config/brand.yaml` (palette decided Nov 1, 2026: brick primary, the earlier dark teal as secondary, gold accent, warm off-white backgrounds); the site generates its CSS variables from that file and the report reads the same keys, so no component types a color.
+Plain English a business owner understands. No fear-mongering, no hooded-hacker imagery, no "cyber" clichés. Explain the term the first time it appears (MFA, EDR, BEC). Brand tokens live in `config/brand.yaml` (palette revised Nov 1, 2026 to "brick and slate": brick primary, blue-gray slate for dark bands, white and cool gray backgrounds, amber accent on dark surfaces only; the founder rejected the earlier beige and teal-green); the site generates its CSS variables from that file and the report reads the same keys, so no component types a color.
 
 ## Background
 

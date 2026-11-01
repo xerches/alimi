@@ -142,16 +142,16 @@ partners:
   reseller:
     who: MSPs, IT consultancies, vCISO firms
     buys_at: list price minus the tier discount; the reseller sets its own client price
-    tiers:
+    tiers:   # changed Nov 1, 2026 at the founder's request (was 1-5/20%, 6-20/30%, 21+/40%)
       - id: starter
-        active_clients: [1, 5]
-        discount: 0.20
+        active_clients: [1, 50]
+        discount: 0.10
       - id: growth
-        active_clients: [6, 20]
-        discount: 0.30
+        active_clients: [51, 150]
+        discount: 0.15
       - id: scale
-        active_clients: [21, null]
-        discount: 0.40
+        active_clients: [151, null]
+        discount: 0.20
     includes:
       - White-label option on the scanner report and the policy pack (reseller logo, "powered by alimi" line)
       - Not-for-resale licence for the reseller's own tenant

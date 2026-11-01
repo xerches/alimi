@@ -20,43 +20,44 @@ voice:
   - No fear, no hooded hackers, no "cyber" clichés.
   - Say what it costs and what happens next.
 
-# Palette decided Nov 1, 2026 (research in docs/decisions.md). Primary is "Boston brick", a deep
-# brick red-orange: warm and human for an owner, premium rather than alarming, almost unused in
-# security, and it says Boston without a map. The deep teal-slate of the earlier Caprius site
-# stays as the secondary for header, footer and dark bands. Gold is a small accent only.
+# Palette: "brick and slate", chosen Nov 1, 2026 after the founder rejected the first cut's
+# beige backgrounds and teal-green bands. Primary is "Boston brick", a deep brick red-orange:
+# warm and human for an owner, premium rather than alarming, almost unused in security, and it
+# says Boston without a map. Pages are white with a cool gray for alternate sections; header,
+# footer and dark bands are a blue-gray slate. Amber is a small accent on dark surfaces only.
 # Every text pairing below meets WCAG AA (4.5:1) on the surface it is meant for; the light
 # theme is the default and the *_on_dark / *_inverse / *_dark tokens serve the dark bands.
 colors:
   # Brand
-  primary: "#9A3B1E"            # brick: buttons, links, brand marks on light surfaces (6.5:1 on background)
+  primary: "#9A3B1E"            # brick: buttons, links, brand marks on light surfaces (6.9:1 on white)
   primary_hover: "#7E2F16"
   primary_active: "#66250F"
-  primary_soft: "#F6E7E0"       # tinted panel behind callouts and badges on light surfaces
-  primary_on_dark: "#E8906E"    # clay: links and buttons on dark bands (7.3:1 on background_dark)
-  primary_on_dark_hover: "#F0A98C"
-  secondary: "#15302E"          # deep teal-slate: header, footer, dark sections
-  secondary_soft: "#E4ECEA"     # light tint of the secondary for quiet panels
-  accent: "#E0B04A"             # gold: focus rings and small marks on dark surfaces, never body text
-  accent_deep: "#B8871F"        # gold for decoration on light surfaces (3:1, large or non-text only)
+  primary_soft: "#F8E9E2"       # tinted panel behind callouts and badges on light surfaces
+  primary_on_dark: "#EE9A74"    # clay: links and buttons on dark bands
+  primary_on_dark_hover: "#F4B092"
+  secondary: "#1F2630"          # slate: header, footer, dark sections
+  secondary_soft: "#E8EBEF"     # light cool tint of the slate for quiet panels
+  accent: "#F0B86B"             # amber: focus rings and small marks on dark surfaces, never body text
+  accent_deep: "#A8761D"        # amber for decoration on light surfaces (3:1, large or non-text only)
 
   # Backgrounds and surfaces
-  background: "#FAF7F1"         # page, warm off-white
-  background_alt: "#F1EBE0"     # alternate sections, sand
-  background_dark: "#141A1A"    # ink band (footer)
+  background: "#FFFFFF"         # page
+  background_alt: "#F4F5F7"     # alternate sections and the app canvas, cool gray
+  background_dark: "#141921"    # ink band (footer)
   surface: "#FFFFFF"            # cards and panels on light surfaces
-  surface_dark: "#1D2626"       # cards on dark bands
+  surface_dark: "#262E3A"       # cards on dark bands
 
   # Text
-  text: "#1B1F22"               # ink
-  text_secondary: "#444D4D"
-  text_muted: "#5F6B6B"         # 5.2:1 on background, 4.7:1 on background_alt
-  text_inverse: "#FAF7F1"       # on secondary and background_dark
-  text_inverse_muted: "#B7C0BE"
+  text: "#14181F"               # ink
+  text_secondary: "#3C4552"
+  text_muted: "#5B6573"         # 5.6:1 on white, 5.1:1 on background_alt
+  text_inverse: "#FFFFFF"       # on secondary and background_dark
+  text_inverse_muted: "#B4BCC8"
 
   # Borders and dividers
-  border: "#D9D0C1"             # hairlines and card edges (decorative)
-  border_strong: "#7C8686"      # form fields and controls that need a 3:1 edge
-  border_dark: "#2C4745"        # dividers on dark bands
+  border: "#DDE1E6"             # hairlines and card edges (decorative)
+  border_strong: "#6F7A88"      # form fields and controls that need a 3:1 edge
+  border_dark: "#343D4A"        # dividers on dark bands
 
   # Semantic feedback (text colors; *_soft are their tinted backgrounds)
   success: "#1F6B43"
@@ -70,7 +71,7 @@ colors:
 
   # Interactive states
   focus_ring: "#9A3B1E"         # on light surfaces
-  focus_ring_on_dark: "#E0B04A"
+  focus_ring_on_dark: "#F0B86B"
 
 typography:
   heading: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
