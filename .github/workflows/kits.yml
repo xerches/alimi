@@ -1,0 +1,19 @@
+name: kits
+on:
+  push:
+    paths: ["kits/**", ".github/workflows/kits.yml"]
+  pull_request:
+    paths: ["kits/**", ".github/workflows/kits.yml"]
+jobs:
+  payment-fraud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends pandoc
+      - run: pip install pyyaml pytest weasyprint
+      - run: pytest kits/payment-fraud
+      - run: python kits/payment-fraud/build/build.py --fill "Example Co" --out /tmp/kit-build

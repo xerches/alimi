@@ -72,7 +72,7 @@ Gate: the scanner and report sell on their own before any platform code starts.
 
 ## Phase 3: Payment fraud kit (weeks 11-13)
 
-**6. Payment fraud kit, documents**
+**6. Payment fraud kit, documents** (done Nov 1, 2026)
 ```
 Read CLAUDE.md. In /kits/payment-fraud, write Markdown sources for: (a) a payment-change and
 wire verification procedure for a company of 10-200 people, with a verified-callback rule using

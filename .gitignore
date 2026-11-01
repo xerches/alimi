@@ -40,5 +40,6 @@ site/dist/
 .DS_Store
 Thumbs.db
 
-# rendered kit PDFs are build artifacts
-kits/**/build/
+# rendered kit PDFs are build artifacts (the build scripts themselves are tracked)
+kits/**/build/out/
+!kits/payment-fraud/build/
