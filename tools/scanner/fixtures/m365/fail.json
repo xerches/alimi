@@ -1,0 +1,35 @@
+{
+  "tenant_display_name": "Risky Co (mock)",
+  "verified_domains": ["riskyco.example", "riskyco.onmicrosoft.com"],
+  "collected_at": "2026-11-01T00:00:00Z",
+  "users": [
+    {"id": "u-001", "upn": "ceo@riskyco.example", "display_name": "Chris Owner", "enabled": true, "user_type": "Member", "created": "2019-04-01T00:00:00Z", "last_sign_in": "2026-10-31T19:00:00Z", "has_mailbox": true, "mfa_registered": false, "mfa_methods": []},
+    {"id": "u-002", "upn": "ops@riskyco.example", "display_name": "Ollie Ops", "enabled": true, "user_type": "Member", "created": "2020-02-01T00:00:00Z", "last_sign_in": "2026-10-31T16:00:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["sms"]},
+    {"id": "u-003", "upn": "sales@riskyco.example", "display_name": "Sam Sales", "enabled": true, "user_type": "Member", "created": "2021-09-01T00:00:00Z", "last_sign_in": "2026-10-30T11:00:00Z", "has_mailbox": true, "mfa_registered": false, "mfa_methods": []},
+    {"id": "u-004", "upn": "finance@riskyco.example", "display_name": "Fin Books", "enabled": true, "user_type": "Member", "created": "2022-01-10T00:00:00Z", "last_sign_in": "2026-10-31T08:00:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["microsoftAuthenticatorPush"]},
+    {"id": "u-005", "upn": "intern@riskyco.example", "display_name": "Ivy Intern", "enabled": true, "user_type": "Member", "created": "2026-06-01T00:00:00Z", "last_sign_in": "2026-10-29T13:00:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["softwareOneTimePasscode"]},
+    {"id": "g-001", "upn": "oldvendor_vendor.example#EXT#@riskyco.onmicrosoft.com", "display_name": "Old Vendor (guest)", "enabled": true, "user_type": "Guest", "created": "2024-02-01T00:00:00Z", "last_sign_in": "2025-03-10T00:00:00Z", "has_mailbox": false, "mfa_registered": false, "mfa_methods": []},
+    {"id": "g-002", "upn": "auditor_firm.example#EXT#@riskyco.onmicrosoft.com", "display_name": "Auditor (guest)", "enabled": true, "user_type": "Guest", "created": "2025-01-01T00:00:00Z", "last_sign_in": null, "has_mailbox": false, "mfa_registered": null, "mfa_methods": []}
+  ],
+  "conditional_access_policies": [
+    {"id": "ca-001", "display_name": "MFA pilot (report only)", "state": "enabledForReportingButNotEnforced", "include_users": ["All"], "exclude_users": [], "include_applications": ["All"], "client_app_types": ["all"], "grant_controls": ["mfa"]}
+  ],
+  "security_defaults_enabled": false,
+  "legacy_auth_sign_ins_30d": 14,
+  "role_assignments": [
+    {"role_template_id": "62e90394-69f5-4237-9190-012177145e10", "role_name": "Global Administrator", "member_ids": ["u-001"]},
+    {"role_template_id": "fe930be7-5e62-47db-91af-98c3a49a38b1", "role_name": "User Administrator", "member_ids": ["u-003"]}
+  ],
+  "inbox_rules": [
+    {"user_upn": "ceo@riskyco.example", "name": "Copy", "enabled": true, "forward_to": ["c.owner.backup@gmail.example"], "redirect_to": []},
+    {"user_upn": "finance@riskyco.example", "name": ".", "enabled": true, "forward_to": [], "redirect_to": ["invoices-archive@mail-relay.example"]}
+  ],
+  "outbound_forwarding_blocked": false,
+  "email_auth": [
+    {"domain": "riskyco.example", "spf": null, "dkim_enabled": false, "dmarc": "v=DMARC1; p=none; rua=mailto:dmarc@riskyco.example"}
+  ],
+  "sharing": {"sharing_capability": "externalUserAndGuestSharing", "anonymous_link_expiration_days": null},
+  "audit": {"unified_audit_log_enabled": false, "retention_days": null, "directory_audit_available": true},
+  "secure_score": {"current": 31, "max": 100, "created": "2026-10-31T06:00:00Z"},
+  "notes": ["mock fixture: every automated check fails"]
+}

@@ -64,7 +64,7 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | # | Deliverable | Target | Status |
 | --- | --- | --- | --- |
 | 1 | Repo foundation, config files, CLAUDE.md | Nov 14, 2026 | done Oct 31, 2026 (prompts 1-2) |
-| 2 | Scanner core and Microsoft 365 checks (prompt 3) | Dec 5, 2026 | not started |
+| 2 | Scanner core and Microsoft 365 checks (prompt 3) | Dec 5, 2026 | done Nov 1, 2026, PR #2 |
 | 3 | Google Workspace checks and insurer-ready report (prompts 4-5) | Jan 9, 2027 | not started |
 | 4 | Payment fraud kit: docs, poster, checklist, video script (prompt 6) | Jan 30, 2027 | not started |
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | not started |
@@ -99,7 +99,7 @@ Founder background: Senior Cybersecurity Specialist at Rhythm Pharmaceuticals; p
 ## Working with Claude Code in this repo
 
 - Ask for a plan before anything larger than a small fix.
-- Write tests for the scanner checks; each check has a mock fixture that triggers it and one that passes.
+- Write tests for the scanner checks; each check has a mock fixture that triggers it and one that passes. Run `pytest tools/scanner` before every commit that touches the scanner.
 - Scanner and report code is a library first and a CLI second, so the platform can import it without the command line.
 - Explain anything the founder asks about; keeping his Python and API skills sharp is part of the point.
 - When a prompt in `PROMPTS.md` is done, update the status table above in the same commit.

@@ -30,7 +30,7 @@ question it maps to (MFA, EDR, backups, email security, admin access). Leave EDR
 
 ## Phase 2: Workspace scanner and insurer-ready report (weeks 3-10)
 
-**3. Scanner core and Microsoft 365 connector**
+**3. Scanner core and Microsoft 365 connector** (done Nov 1, 2026)
 ```
 Read CLAUDE.md and /config/checks.yaml. In /tools/scanner, build an installable Python package
 `alimi_scanner` with a thin typer CLI on top. The package has: a shared findings schema (check

@@ -13,6 +13,7 @@ service-account*.json
 out/
 **/out/
 *.findings.json
+*.snapshot.json
 
 # python
 __pycache__/
