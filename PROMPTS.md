@@ -1,4 +1,4 @@
-# denimi build prompts for Claude Code
+# alimi build prompts for Claude Code
 
 Run one prompt per session, in order. Review what it builds, commit, then move on. For anything bigger than a small change, the prompt already asks for a plan first; read the plan before saying go.
 
@@ -21,7 +21,7 @@ Read CLAUDE.md. Create /config/pricing.yaml with the three products, each with p
 (free, paid) and service tiers, using these starting prices: AI policy kit free to $99,
 implementation $2,500-$5,000; scanner summary free, full report $500-$1,500, 30-day service
 $4,000-$8,000; payment fraud kit $149-$299, workshop $1,500-$3,000. Create /config/brand.yaml
-with name "denimi", a placeholder tagline, and color tokens (dark teal, off-white, one accent).
+with name "alimi", a placeholder tagline, and color tokens (dark teal, off-white, one accent).
 Create /config/checks.yaml listing the scanner checks for Microsoft 365 and Google Workspace
 with an id, title, severity, plain-English explanation, remediation, and which cyber insurance
 question it maps to (MFA, EDR, backups, email security, admin access). Leave EDR and backups as
@@ -33,7 +33,7 @@ question it maps to (MFA, EDR, backups, email security, admin access). Leave EDR
 **3. Scanner core and Microsoft 365 connector**
 ```
 Read CLAUDE.md and /config/checks.yaml. In /tools/scanner, build an installable Python package
-`denimi_scanner` with a thin typer CLI on top. The package has: a shared findings schema (check
+`alimi_scanner` with a thin typer CLI on top. The package has: a shared findings schema (check
 id, status, severity, evidence, remediation, insurer mapping) as dataclasses or pydantic models;
 a checks engine that loads /config/checks.yaml and runs one check function per id; a connector
 interface; a mock connector that is the default; and a Microsoft 365 connector using Microsoft
@@ -48,7 +48,7 @@ without the CLI, because the platform web app imports it in prompt 12. Show me t
 
 **4. Google Workspace connector**
 ```
-Extend denimi_scanner with a Google Workspace connector using the Admin SDK with a read-only
+Extend alimi_scanner with a Google Workspace connector using the Admin SDK with a read-only
 service account and domain-wide delegation. Check: 2-Step Verification enforcement, super
 admin count, external forwarding, third-party OAuth apps and their scopes, external Drive
 sharing settings, less-secure app access, and audit log availability. Same findings schema,
@@ -57,14 +57,14 @@ same mock pattern, tests, README with exact scopes and the service account setup
 
 **5. Insurer-ready report**
 ```
-Read /config/checks.yaml. In /tools/report, build a package `denimi_report` that takes findings
+Read /config/checks.yaml. In /tools/report, build a package `alimi_report` that takes findings
 JSON from the scanner and renders an HTML and PDF report: a one-page summary with an overall
 score, a "what your insurer will ask" table mapping each underwriting question (MFA, EDR,
 backups, email security, admin access, incident response) to pass/fail/attestation-needed,
 top 5 fixes in plain English, a detailed findings appendix, and an evidence pack section
 listing screenshots or exports the client should attach. Brand from /config/brand.yaml. Add a
 --free flag that renders only the one-page summary, and a --reseller option that puts a
-partner's name and logo on the cover with a "powered by denimi" line. Expose a render()
+partner's name and logo on the cover with a "powered by alimi" line. Expose a render()
 function the platform can call, plus a CLI. Tests on the mock findings.
 ```
 
@@ -168,7 +168,7 @@ Evidence (file or attestation with an expiry date), AuditLog. A reseller is an O
 with child organizations and a multi-tenant view. Login through a hosted auth provider with a
 free tier; recommend one and explain the choice. Row-level security on every table that holds
 customer data, keyed by organization. Tokens encrypted with a key from the environment, never
-logged. Import denimi_scanner: connect a tenant (mock by default), run the checks on demand and
+logged. Import alimi_scanner: connect a tenant (mock by default), run the checks on demand and
 nightly from a worker, store each result as a Test against its Control. First framework: the
 insurer questionnaire, built from the insurer mapping in /config/checks.yaml, with criterion
 IDs and our own plain-English summaries only. One `docker compose up` runs app, database and
@@ -188,7 +188,7 @@ controls so the dashboard can score them. Mock data, tests, plain-English page c
 ```
 Extend /platform. A readiness dashboard per framework: overall score, each requirement with its
 controls and whether they pass, fail or need attestation, top fixes. Render the insurer-ready
-report by calling denimi_report inside the app, with the reseller's branding when the
+report by calling alimi_report inside the app, with the reseller's branding when the
 organization belongs to one, and build an export pack (zip of the report plus evidence files
 and adopted policies) for a broker or auditor. Add SOC 2 as the second framework and ISO 27001
 as the third: criterion IDs and our own summaries only, mapped onto the existing controls and
@@ -212,7 +212,7 @@ the scanner.
 
 **16. AI app inventory from audit logs**
 ```
-Extend denimi_scanner with an `ai-inventory` command that reads sign-in and OAuth consent logs
+Extend alimi_scanner with an `ai-inventory` command that reads sign-in and OAuth consent logs
 (Microsoft Graph) and token/OAuth audit events (Google Admin SDK) to list AI services in use
 (ChatGPT, Claude, Gemini, Copilot, Notion AI, Otter, Fireflies, etc. from a maintained
 /config/ai-apps.yaml), with user counts and whether access was via a personal or corporate

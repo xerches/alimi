@@ -1,4 +1,4 @@
-# denimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
+# alimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
 # Starting points inside the ranges from the Oct 2026 research. Raise after three case studies.
 # Prices in USD. "range" is what we quote; "list" is what the site shows.
 
@@ -132,7 +132,7 @@ terms:
 # Channel: resellers and referrers. Starting points proposed 2026-11-01; confirm before the first
 # partner conversation. Discounts apply to list prices and to the low end of service ranges.
 partners:
-  principle: denimi never sells direct to a reseller's client for less than the reseller pays.
+  principle: alimi never sells direct to a reseller's client for less than the reseller pays.
   reseller:
     who: MSPs, IT consultancies, vCISO firms
     buys_at: list price minus the tier discount; the reseller sets its own client price
@@ -147,15 +147,15 @@ partners:
         active_clients: [21, null]
         discount: 0.40
     includes:
-      - White-label option on the scanner report and the policy pack (reseller logo, "powered by denimi" line)
+      - White-label option on the scanner report and the policy pack (reseller logo, "powered by alimi" line)
       - Not-for-resale licence for the reseller's own tenant
       - Multi-tenant view in the platform once it exists (phase 3)
       - One 60-minute partner training session and a sales one-pager
       - Inbound leads in the reseller's area offered to them first
-    billing: denimi invoices the reseller monthly; the reseller invoices its client
+    billing: alimi invoices the reseller monthly; the reseller invoices its client
     review: tiers recalculated quarterly on active clients
   referral:
     who: insurance brokers, CPAs, attorneys who refer but do not resell
     fee: 0.10
     of: first-year product and service revenue from the referred client
-    paid: within 30 days of denimi being paid
+    paid: within 30 days of alimi being paid

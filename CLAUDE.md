@@ -1,8 +1,8 @@
-# denimi
+# alimi
 
-Working name for a security company founded by Alex Dennis (Boston, MA). Pre-LLC: everything here is a prototype until the entity, insurance and first signed SOW exist. This file is the project brief that Claude Code reads at the start of every session. Keep it current; when a decision changes, change it here first.
+Working name for a security company founded by Alex Dennis (Boston, MA). Renamed from denimi on Nov 1, 2026 because it sounds better and avoids the "denim" search-engine autocorrect. The GitHub repo is still `xerches/denimi` until Alex renames it in repo settings; the old URL will redirect. Pre-LLC: everything here is a prototype until the entity, insurance and first signed SOW exist. This file is the project brief that Claude Code reads at the start of every session. Keep it current; when a decision changes, change it here first.
 
-## What denimi is
+## What alimi is
 
 One buyer: the owner or operations lead of a 10 to 200 person company that cannot hire security staff. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
 
@@ -19,9 +19,9 @@ The long-term product is a compliance automation platform in the style of Vanta 
 
 Under all three sits the **policy library** in `/policies`: security and company policies (information security, acceptable use, access control, asset management, incident response, vendor risk, AI governance and the rest) written for a 10 to 200 person company and mapped by criterion ID to SOC 2, ISO 27001, ISO 42001, HIPAA where relevant, and the insurer questions. Sold on its own as a policy pack, included in the services, and imported by the platform and the AI policy kit.
 
-Two channels. **Direct:** owners who find the site or get a referral. **Resellers:** MSPs, IT consultancies and vCISO firms buy at wholesale (tiered discount by active client count in `config/pricing.yaml`), set their own client price, and get a white-label option on reports and policy packs, a not-for-resale licence for their own tenant, and the multi-tenant view once the platform exists. Brokers, CPAs and attorneys who refer but do not resell get a referral fee. denimi never sells direct to a reseller's client for less than the reseller pays.
+Two channels. **Direct:** owners who find the site or get a referral. **Resellers:** MSPs, IT consultancies and vCISO firms buy at wholesale (tiered discount by active client count in `config/pricing.yaml`), set their own client price, and get a white-label option on reports and policy packs, a not-for-resale licence for their own tenant, and the multi-tenant view once the platform exists. Brokers, CPAs and attorneys who refer but do not resell get a referral fee. alimi never sells direct to a reseller's client for less than the reseller pays.
 
-How denimi differs from Vanta and Drata: a published price in the low thousands a year instead of $20K+, insurer-facing outputs before audit-facing ones, plain English for an owner rather than an auditor, and the founder included as a fractional compliance lead who makes the scoping and policy calls those tools leave to the customer.
+How alimi differs from Vanta and Drata: a published price in the low thousands a year instead of $20K+, insurer-facing outputs before audit-facing ones, plain English for an owner rather than an auditor, and the founder included as a fractional compliance lead who makes the scoping and policy calls those tools leave to the customer.
 
 Suggested starting prices live in `config/pricing.yaml` so the site, proposals and this file never drift.
 
@@ -29,7 +29,7 @@ Suggested starting prices live in `config/pricing.yaml` so the site, proposals a
 
 ```
 /site                 static marketing site (Astro or plain HTML/CSS), deploys free to Netlify or Cloudflare Pages
-/tools/scanner        Python package denimi_scanner + thin typer CLI: findings schema, checks engine, m365 and gws connectors, mock connector. The platform imports it.
+/tools/scanner        Python package alimi_scanner + thin typer CLI: findings schema, checks engine, m365 and gws connectors, mock connector. The platform imports it.
 /tools/report         findings JSON -> insurer-ready HTML/PDF report, also importable by the platform
 /platform             hosted web app (phase 3+): FastAPI, HTMX pages, Postgres; orgs, login, scheduled runs, controls, evidence, policies, people, dashboard
 /tools/ai-policy      static web app, generates policy + one-pager + inventory client-side (no backend)
@@ -53,7 +53,7 @@ Suggested starting prices live in `config/pricing.yaml` so the site, proposals a
 - **No client data in the repo.** Pilot outputs go to a local, git-ignored `out/` folder.
 - **Legal templates carry a header:** "DRAFT. Not legal advice. Review by a Massachusetts attorney before use." Claude drafts structure and plain-language clauses; it does not invent legal text where a lawyer is required.
 - **Policies carry a header:** "TEMPLATE. Adapt before adopting. Sections marked [HR or legal review] need a human reviewer." A policy maps to requirements by criterion ID only.
-- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not denimi clients. Site copy says "as Information Security Manager at..." and never implies consulting clients until there are case studies.
+- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not alimi clients. Site copy says "as Information Security Manager at..." and never implies consulting clients until there are case studies.
 - **Free to run.** Site and AI policy app must work on free static hosting with no server. Forms use Netlify Forms or Formspree free tier. The platform needs a server; keep it on free tiers until paying customers cover the bill.
 - **Accessible and fast.** Mobile-first, Lighthouse 95+ on every page.
 

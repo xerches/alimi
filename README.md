@@ -1,8 +1,8 @@
-# denimi
+# alimi
 
 Security that insurers, customers and auditors accept, for companies too small for a security team.
 
-This repo holds everything denimi builds. Start with `CLAUDE.md` (the project brief Claude Code reads every session) and `PROMPTS.md` (the build prompts, in order).
+This repo holds everything alimi builds. Start with `CLAUDE.md` (the project brief Claude Code reads every session) and `PROMPTS.md` (the build prompts, in order).
 
 | Folder | What lives here |
 | --- | --- |
