@@ -14,3 +14,11 @@ Newest first. One line per decision: date, what, why.
 | 2026-10-31 | Build three products first: AI policy kit, workspace scanner, payment fraud kit | One buyer, one referral network, each has a free product tier and a paid service tier |
 | 2026-10-31 | Consulting and products first, MSP/MSSP later | Resume is GRC-heavy; a solo MSP needs ~210 seats to match 4-5 consulting clients |
 | 2026-10-31 | No LLC until one referrer and one paid pilot exist | Massachusetts LLC costs $500 to file and $500 a year; nothing to protect yet |
+
+## What partners and pilots said
+
+One row per conversation. Record what they said in their words, not what we concluded; the decisions that follow go in the table above. Partners and pilots are named by role unless they have agreed to be named. The pilot runbook (`docs/pilot-runbook.md`) says when to fill this in: the three questions at the end of every debrief, and every partner conversation.
+
+| Date | Who (role, size, sector) | About | What they said | Price reaction | What we did |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | |

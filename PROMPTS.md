@@ -124,7 +124,7 @@ and a referral partner one-pager. Use {{placeholders}}. Draft structure and plai
 clauses only; mark anything that needs a lawyer.
 ```
 
-**9. Pilot runbook**
+**9. Pilot runbook** (done Nov 1, 2026)
 ```
 In /docs, write a pilot runbook: how to onboard a free pilot in one hour (authorization letter,
 app registration or service account setup with read-only scopes, run the scanner, render the
