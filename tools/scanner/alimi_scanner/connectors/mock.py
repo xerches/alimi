@@ -2,7 +2,7 @@
 
 Fixtures live in tools/scanner/fixtures/<platform>/<name>.json and are plain
 M365Snapshot documents. "pass" is a tenant that passes every check, "fail" is
-one that trips every check. Tests mutate "pass" one field at a time to prove
+one that trips every check. The platform picks the snapshot model. Tests mutate "pass" one field at a time to prove
 each check fires on its own.
 """
 
@@ -12,7 +12,9 @@ import json
 from pathlib import Path
 
 from ..schema import Platform
-from ..snapshot import M365Snapshot
+from ..snapshot import BaseSnapshot, GWSSnapshot, M365Snapshot
+
+MODELS: dict[Platform, type[BaseSnapshot]] = {Platform.m365: M365Snapshot, Platform.gws: GWSSnapshot}
 
 FIXTURE_ROOT = Path(__file__).resolve().parents[2] / "fixtures"
 
@@ -28,12 +30,17 @@ def list_fixtures(platform: Platform | str = Platform.m365) -> list[str]:
     return sorted(p.stem for p in folder.glob("*.json"))
 
 
-def load_fixture(platform: Platform | str, name: str) -> M365Snapshot:
+def load_fixture(platform: Platform | str, name: str) -> BaseSnapshot:
     path = fixture_dir(platform) / f"{name}.json"
     if not path.is_file():
         available = ", ".join(list_fixtures(platform)) or "none"
         raise FileNotFoundError(f"no fixture '{name}' for {Platform(platform).value}; available: {available}")
-    return M365Snapshot.model_validate(json.loads(path.read_text(encoding="utf-8")))
+    return load_snapshot_file(platform, path)
+
+
+def load_snapshot_file(platform: Platform | str, path: Path) -> BaseSnapshot:
+    model = MODELS[Platform(platform)]
+    return model.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))
 
 
 class MockConnector:
@@ -43,7 +50,7 @@ class MockConnector:
         self.path = path
         self.source = f"mock:{path.name if path else fixture}"
 
-    def fetch(self) -> M365Snapshot:
+    def fetch(self) -> BaseSnapshot:
         if self.path:
-            return M365Snapshot.model_validate(json.loads(Path(self.path).read_text(encoding="utf-8")))
+            return load_snapshot_file(self.platform, self.path)
         return load_fixture(self.platform, self.fixture)

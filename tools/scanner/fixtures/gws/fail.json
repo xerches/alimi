@@ -1,0 +1,38 @@
+{
+  "tenant_display_name": "Risky Co (mock)",
+  "verified_domains": ["riskyco.example"],
+  "collected_at": "2026-11-01T00:00:00Z",
+  "users": [
+    {"id": "r-001", "email": "owner@riskyco.example", "display_name": "Olivia Owner", "suspended": false, "archived": false, "is_super_admin": true, "is_delegated_admin": false, "enrolled_2sv": false, "enforced_2sv": false, "created": "2022-05-01T00:00:00Z", "last_login": "2026-10-31T12:00:00Z", "org_unit_path": "/"},
+    {"id": "r-002", "email": "sam@riskyco.example", "display_name": "Sam Sales", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": false, "enforced_2sv": false, "created": "2023-02-01T00:00:00Z", "last_login": "2026-10-30T12:00:00Z", "org_unit_path": "/Sales"},
+    {"id": "r-003", "email": "pat@riskyco.example", "display_name": "Pat Sales", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": false, "created": "2024-08-01T00:00:00Z", "last_login": "2026-10-29T12:00:00Z", "org_unit_path": "/Sales"},
+    {"id": "r-004", "email": "lee@riskyco.example", "display_name": "Lee Ops", "suspended": false, "archived": false, "is_super_admin": false, "is_delegated_admin": false, "enrolled_2sv": true, "enforced_2sv": true, "created": "2024-01-01T00:00:00Z", "last_login": "2026-10-31T09:00:00Z", "org_unit_path": "/"}
+  ],
+  "policies": {
+    "two_sv_enforced_everywhere": false,
+    "two_sv_unenforced_org_units": ["/", "/Sales"],
+    "less_secure_apps_allowed": true,
+    "auto_forwarding_allowed": true,
+    "external_sharing_mode": "ALLOWED",
+    "allow_publishing_files": true,
+    "warn_for_external_sharing": false,
+    "marketplace_access_level": "ALLOW_ALL",
+    "third_party_access_restricted": false
+  },
+  "forwarding": [
+    {"user_email": "owner@riskyco.example", "auto_forwarding_enabled": true, "auto_forward_to": "olivia.personal@gmail.example", "filter_forward_to": []},
+    {"user_email": "sam@riskyco.example", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": ["sam.backup@yahoo.example"]},
+    {"user_email": "pat@riskyco.example", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []},
+    {"user_email": "lee@riskyco.example", "auto_forwarding_enabled": false, "auto_forward_to": null, "filter_forward_to": []}
+  ],
+  "email_auth": [
+    {"domain": "riskyco.example", "spf": null, "dkim_enabled": false, "dmarc": "v=DMARC1; p=none"}
+  ],
+  "third_party_apps": [
+    {"client_id": "200000000001-pdfconvert.apps.googleusercontent.com", "display_name": "Free PDF Converter", "client_type": "WEB", "scopes": ["https://mail.google.com/", "https://www.googleapis.com/auth/drive", "openid"], "user_count": 3, "last_authorized": "2026-10-20T08:00:00Z"},
+    {"client_id": "200000000002-aiwriter.apps.googleusercontent.com", "display_name": "AI Writer Assistant", "client_type": "WEB", "scopes": ["https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/contacts.readonly"], "user_count": 1, "last_authorized": "2026-10-25T16:45:00Z"}
+  ],
+  "approved_client_ids": [],
+  "audit": {"login_available": false, "admin_available": true, "retention_days": 180},
+  "notes": ["mock fixture: every automated check fails"]
+}
