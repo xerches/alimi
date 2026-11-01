@@ -2,6 +2,8 @@
 
 Run one prompt per session, in order. Review what it builds, commit, then move on. For anything bigger than a small change, the prompt already asks for a plan first; read the plan before saying go.
 
+Order changed Nov 1, 2026: the workspace scanner and insurer-ready report come first, the payment fraud kit second, and the hosted platform grows around the scanner from prompt 11. The reasoning and the phase plan are in https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a.
+
 ## Phase 1: Foundation (weeks 1-2)
 
 **1. Repo foundation** (done Oct 31, 2026)
@@ -26,9 +28,50 @@ question it maps to (MFA, EDR, backups, email security, admin access). Leave EDR
 "attestation" checks since they can't be read from the tenant.
 ```
 
-## Phase 2: Payment fraud kit and site (weeks 3-4)
+## Phase 2: Workspace scanner and insurer-ready report (weeks 3-10)
 
-**3. Payment fraud kit, documents**
+**3. Scanner core and Microsoft 365 connector**
+```
+Read CLAUDE.md and /config/checks.yaml. In /tools/scanner, build an installable Python package
+`denimi_scanner` with a thin typer CLI on top. The package has: a shared findings schema (check
+id, status, severity, evidence, remediation, insurer mapping) as dataclasses or pydantic models;
+a checks engine that loads /config/checks.yaml and runs one check function per id; a connector
+interface; a mock connector that is the default; and a Microsoft 365 connector using Microsoft
+Graph with a read-only app registration. The m365 checks: MFA registration coverage, Conditional
+Access policies, legacy authentication, Security Defaults, global admin count and role
+assignments, external mailbox forwarding and inbox rules, anonymous sharing links, guest users,
+audit log status, and Secure Score. Mock fixtures: one that triggers each check and one that
+passes. Output findings JSON to the git-ignored out/ folder. Write pytest tests. Document the
+exact Graph permissions and the app registration steps in a README. The package must be usable
+without the CLI, because the platform web app imports it in prompt 11. Show me the plan first.
+```
+
+**4. Google Workspace connector**
+```
+Extend denimi_scanner with a Google Workspace connector using the Admin SDK with a read-only
+service account and domain-wide delegation. Check: 2-Step Verification enforcement, super
+admin count, external forwarding, third-party OAuth apps and their scopes, external Drive
+sharing settings, less-secure app access, and audit log availability. Same findings schema,
+same mock pattern, tests, README with exact scopes and the service account setup steps.
+```
+
+**5. Insurer-ready report**
+```
+Read /config/checks.yaml. In /tools/report, build a package `denimi_report` that takes findings
+JSON from the scanner and renders an HTML and PDF report: a one-page summary with an overall
+score, a "what your insurer will ask" table mapping each underwriting question (MFA, EDR,
+backups, email security, admin access, incident response) to pass/fail/attestation-needed,
+top 5 fixes in plain English, a detailed findings appendix, and an evidence pack section
+listing screenshots or exports the client should attach. Brand from /config/brand.yaml. Add a
+--free flag that renders only the one-page summary. Expose a render() function the platform
+can call, plus a CLI. Tests on the mock findings.
+```
+
+Gate: the scanner and report sell on their own before any platform code starts.
+
+## Phase 3: Payment fraud kit (weeks 11-13)
+
+**6. Payment fraud kit, documents**
 ```
 Read CLAUDE.md. In /kits/payment-fraud, write Markdown sources for: (a) a payment-change and
 wire verification procedure for a company of 10-200 people, with a verified-callback rule using
@@ -37,90 +80,12 @@ bank details; (b) callback scripts for finance staff; (c) a one-page staff poste
 closing-day checklist for home buyers and sellers in a Massachusetts attorney-led closing;
 (e) a 20-minute training video script with slide notes. Use {{Company}} placeholders. Add a
 build script that renders each to PDF with pandoc or weasyprint. Plain English, no jargon
-without a definition.
+without a definition. Show me the plan first.
 ```
 
-**4. Marketing site**
-```
-Read CLAUDE.md and /config. In /site, build a fast static site with Astro. Pages: Home, the
-three product pages (AI Policy Kit, Workspace Security Scan, Payment Fraud Kit), For Partners
-(brokers, CPAs, attorneys, MSPs), About, Contact. Each product page has a waitlist form using
-Netlify Forms, a "how it works" section, and a pricing block read from /config/pricing.yaml at
-build time. Pull brand tokens from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+.
-Placeholder copy marked TODO. Add a netlify.toml so it deploys with no settings. Show me the
-plan first.
-```
+## Phase 4: Templates and pilot runbook (weeks 13-14, before the first pilot)
 
-**5. Site copy**
-```
-Read CLAUDE.md, /docs/research (I'll paste the three research summaries there first), and the
-site. Replace every TODO with final copy. Homepage headline leads with the outcome for a
-business owner, not the technology. Each product page states the complaint, what they get,
-what it costs, and what happens next. Resume metrics are attributed to employment per the
-Rules in CLAUDE.md. Write the About page in first person, 150 words.
-```
-
-## Phase 3: Workspace security scanner (weeks 5-8)
-
-**6. Scanner core and Microsoft 365 module**
-```
-Read CLAUDE.md and /config/checks.yaml. In /tools/scanner, build a Python CLI (typer) with a
-shared findings schema (check id, status, severity, evidence, remediation, insurer mapping).
-Implement the Microsoft 365 module with Microsoft Graph, read-only app registration, checking:
-MFA registration coverage, Conditional Access policies, legacy authentication, Security
-Defaults, global admin count and role assignments, external mailbox forwarding and inbox rules,
-anonymous sharing links, guest users, audit log status, and Secure Score. Include --mock mode
-with fixtures that trigger each check and fixtures that pass. Write tests. Document the exact
-Graph permissions in a README. Show me the plan first.
-```
-
-**7. Google Workspace module**
-```
-Extend /tools/scanner with a Google Workspace module using the Admin SDK with a read-only
-service account and domain-wide delegation. Check: 2-Step Verification enforcement, super
-admin count, external forwarding, third-party OAuth apps and their scopes, external Drive
-sharing settings, less-secure app access, and audit log availability. Same findings schema,
---mock mode, tests, README with exact scopes.
-```
-
-**8. Insurer-ready report**
-```
-Read /config/checks.yaml. In /tools/report, build a generator that takes findings JSON from the
-scanner and renders an HTML and PDF report: a one-page summary with an overall score, a
-"what your insurer will ask" table mapping each underwriting question (MFA, EDR, backups, email
-security, admin access, incident response) to pass/fail/attestation-needed, top 5 fixes in
-plain English, a detailed findings appendix, and an evidence pack section listing screenshots
-or exports the client should attach. Brand from /config/brand.yaml. Add a --free flag that
-renders only the one-page summary.
-```
-
-## Phase 4: AI policy kit (weeks 9-10)
-
-**9. AI policy generator**
-```
-Read CLAUDE.md. In /tools/ai-policy, build a static web app (no backend; plain HTML/JS or
-Astro island) with a ~20-question form: company size, industry, regulated data types, which AI
-tools are approved, whether customer data may be entered, review and logging expectations,
-and who owns AI decisions. From the answers generate (a) an AI acceptable use policy,
-(b) a one-page staff guide, (c) an AI tool inventory template, all downloadable as Markdown and
-DOCX. Questions and clause text live in a YAML file so I can edit them without touching code.
-Free tier generates everything; add a clearly marked "paid: find the AI apps your staff actually
-use" call to action that links to the scanner.
-```
-
-**10. AI app inventory from audit logs**
-```
-Extend /tools/scanner with an `ai-inventory` command that reads sign-in and OAuth consent logs
-(Microsoft Graph) and token/OAuth audit events (Google Admin SDK) to list AI services in use
-(ChatGPT, Claude, Gemini, Copilot, Notion AI, Otter, Fireflies, etc. from a maintained
-/config/ai-apps.yaml), with user counts and whether access was via a personal or corporate
-account where that can be inferred. Output a findings file the AI policy kit can import.
---mock mode and tests.
-```
-
-## Phase 5: Templates and pilots (weeks 9-13)
-
-**11. Templates**
+**7. Templates**
 ```
 In /templates, create Markdown templates with the attorney-review header from CLAUDE.md for:
 a pilot authorization letter (one page: scope, read-only access, data handling, no fee, either
@@ -130,17 +95,102 @@ and a referral partner one-pager. Use {{placeholders}}. Draft structure and plai
 clauses only; mark anything that needs a lawyer.
 ```
 
-**12. Pilot runbook**
+**8. Pilot runbook**
 ```
 In /docs, write a pilot runbook: how to onboard a free pilot in one hour (authorization letter,
 app registration or service account setup with read-only scopes, run the scanner, render the
 report, debrief call script, case-study ask). Include a checklist for cleaning up access after
-the pilot. Add a decisions log file where I record what partners and pilots said.
+the pilot. Extend the decisions log with a section where I record what partners and pilots said.
 ```
 
-## Phase 6: Growth basics (when the site has copy)
+## Phase 5: Marketing site (weeks 15-17)
 
-**13. Technical SEO and analytics**
+**9. Marketing site**
+```
+Read CLAUDE.md and /config. In /site, build a fast static site with Astro. Pages: Home, the
+three product pages (Workspace Security Scan, Payment Fraud Kit, AI Policy Kit), For Partners
+(brokers, CPAs, attorneys, MSPs), About, Contact. Each product page has a waitlist form using
+Netlify Forms, a "how it works" section, and a pricing block read from /config/pricing.yaml at
+build time. The scanner page has a short "what comes next" block about the hosted platform.
+Pull brand tokens from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+.
+Placeholder copy marked TODO. Add a netlify.toml so it deploys with no settings. Show me the
+plan first.
+```
+
+**10. Site copy**
+```
+Read CLAUDE.md, /docs/research (I'll paste the three research summaries there first), and the
+site. Replace every TODO with final copy. Homepage headline leads with the outcome for a
+business owner, not the technology. Each product page states the complaint, what they get,
+what it costs, and what happens next. Resume metrics are attributed to employment per the
+Rules in CLAUDE.md. Write the About page in first person, 150 words.
+```
+
+## Phase 6: Platform web app (weeks 18-27)
+
+**11. Platform foundation**
+```
+Read CLAUDE.md and the platform plan it links. In /platform, build a FastAPI app with HTMX
+server-rendered pages and Postgres. Models: Organization, User, Integration (a connected tenant
+with read-only scopes, an encrypted token, last sync), Framework, Requirement, Control, Test,
+Evidence (file or attestation with an expiry date), AuditLog. Login through a hosted auth
+provider with a free tier; recommend one and explain the choice. Row-level security on every
+table that holds customer data, keyed by organization. Tokens encrypted with a key from the
+environment, never logged. Import denimi_scanner: connect a tenant (mock by default), run the
+checks on demand and nightly from a worker, store each result as a Test against its Control.
+First framework: the insurer questionnaire, built from the insurer mapping in
+/config/checks.yaml, with criterion IDs and our own plain-English summaries only. One
+`docker compose up` runs app, database and worker on mock data; CI runs the tests on every PR.
+Show me the plan first.
+```
+
+**12. Policies and people**
+```
+Extend /platform. Policies: versioned Markdown templates (information security, acceptable use,
+access control, incident response, vendor management to start), an approver, and staff
+acceptance tracking with reminders. People: pull the staff list from the connected Microsoft 365
+or Google Workspace tenant, an onboarding and offboarding checklist per person, and training
+completion. Link policies and people to controls so the dashboard can score them. Mock data,
+tests, plain-English page copy.
+```
+
+**13. Dashboard, reports and SOC 2**
+```
+Extend /platform. A readiness dashboard per framework: overall score, each requirement with its
+controls and whether they pass, fail or need attestation, top fixes. Render the insurer-ready
+report by calling denimi_report inside the app, and build an export pack (zip of the report plus
+evidence files) for a broker or auditor. Add SOC 2 as the second framework: criterion IDs and our
+own summaries only, mapped onto the existing controls. Tests on mock data.
+```
+
+## Phase 7: AI policy kit (weeks 28-30)
+
+**14. AI policy generator**
+```
+Read CLAUDE.md. In /tools/ai-policy, build a static web app (no backend; plain HTML/JS or
+Astro island) with a ~20-question form: company size, industry, regulated data types, which AI
+tools are approved, whether customer data may be entered, review and logging expectations,
+and who owns AI decisions. From the answers generate (a) an AI acceptable use policy,
+(b) a one-page staff guide, (c) an AI tool inventory template, all downloadable as Markdown and
+DOCX. Questions and clause text live in a YAML file so I can edit them without touching code,
+and so the platform's policy module can import the same clauses later. Free tier generates
+everything; add a clearly marked "paid: find the AI apps your staff actually use" call to
+action that links to the scanner.
+```
+
+**15. AI app inventory from audit logs**
+```
+Extend denimi_scanner with an `ai-inventory` command that reads sign-in and OAuth consent logs
+(Microsoft Graph) and token/OAuth audit events (Google Admin SDK) to list AI services in use
+(ChatGPT, Claude, Gemini, Copilot, Notion AI, Otter, Fireflies, etc. from a maintained
+/config/ai-apps.yaml), with user counts and whether access was via a personal or corporate
+account where that can be inferred. Output a findings file the AI policy kit and the platform
+can import. --mock mode and tests.
+```
+
+## Phase 8: Growth basics (when the site has copy)
+
+**16. Technical SEO and analytics**
 ```
 Add per-page meta titles and descriptions, Open Graph tags, ProfessionalService schema,
 sitemap.xml, robots.txt, canonical URLs, and privacy-respecting analytics (Plausible or
@@ -148,6 +198,10 @@ Umami free tier, or none). Add a blog collection with two starter posts I'll pas
 "Cyber insurance renewal checklist for Massachusetts small businesses" and "Do you need an
 AI policy? A 10-minute answer." Run Lighthouse and fix anything under 95.
 ```
+
+## Later, only when a customer asks (no prompts yet)
+
+Vendor risk list with review dates, risk register, customer questionnaire answer library, public trust center, more integrations (AWS, GitHub, Intune, Jamf, HR systems), auditor portal. Write the prompt when the first customer asks for the module.
 
 ## Habits
 

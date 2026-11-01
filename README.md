@@ -7,8 +7,9 @@ This repo holds everything denimi builds. Start with `CLAUDE.md` (the project br
 | Folder | What lives here |
 | --- | --- |
 | `site/` | Static marketing site. Deploys free to Netlify or Cloudflare Pages. |
-| `tools/scanner/` | Read-only Python CLI that scores Microsoft 365 and Google Workspace security. `--mock` by default. |
+| `tools/scanner/` | Read-only Python package and CLI that scores Microsoft 365 and Google Workspace security. `--mock` by default. The platform imports it. |
 | `tools/report/` | Turns scanner findings into an insurer-ready HTML/PDF report. |
+| `platform/` | Hosted compliance platform (phase 3 and later): FastAPI, HTMX pages, Postgres. Orgs, login, scheduled runs, controls, evidence, policies, people, dashboard. |
 | `tools/ai-policy/` | Static web app that generates an AI acceptable use policy, staff guide and tool inventory. |
 | `kits/payment-fraud/` | Markdown sources for the payment-change and wire verification kit, rendered to PDF. |
 | `templates/` | MSA, SOW, pilot authorization letter, case study and partner one-pager. Drafts for attorney review. |
