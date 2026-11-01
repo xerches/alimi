@@ -1,5 +1,5 @@
 ---
-import { brand, decided, products } from "../lib/config.js";
+import { brand, decided } from "../lib/config.js";
 const email = decided(brand.contact_email);
 const linkedin = decided(brand.social?.linkedin);
 const year = new Date().getUTCFullYear();
@@ -9,11 +9,12 @@ const year = new Date().getUTCFullYear();
   <div class="container">
     <div class="site-footer__grid">
       <div>
-        <h2>Products</h2>
+        <h2>Product</h2>
         <ul>
-          {products().map((p) => (
-            <li><a href={p.href}>{p.name}</a></li>
-          ))}
+          <li><a href="/platform">The platform</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/pricing#services">Services</a></li>
+          <li><a href="/resources">Free resources</a></li>
         </ul>
       </div>
       <div>
@@ -35,7 +36,7 @@ const year = new Date().getUTCFullYear();
     </div>
     <div class="site-footer__bottom">
       <p>{brand.display_name}, {brand.location}. {brand.tagline}</p>
-      <p>Working name of a company in formation. Prices are published starting points and every scan is read-only.</p>
+      <p>Working name of a company in formation. Prices are published; every connection is read-only.</p>
       <p>&copy; {year} {brand.founder}</p>
     </div>
   </div>

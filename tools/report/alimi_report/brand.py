@@ -126,9 +126,9 @@ def find_pricing_file(path: Path | None = None) -> Path | None:
 
 
 class Offer(BaseModel):
-    """What the free summary points to: the paid report and the service, with their starting prices."""
+    """What the free summary points to: the paid assessment (the full report) and the service, with their starting prices."""
 
-    report_name: str = "Full insurer-ready report"
+    report_name: str = "Security assessment and insurer report"
     report_from: int | None = None
     report_includes: list[str] = Field(default_factory=list)
     service_name: str = "Insurance-ready in 30 days"
@@ -142,10 +142,12 @@ def load_offer(path: Path | None = None) -> Offer:
         return Offer()
     raw = yaml.safe_load(source.read_text(encoding="utf-8")) or {}
     offer = Offer(currency=raw.get("currency") or "USD")
-    tiers = ((raw.get("products") or {}).get("workspace_scan") or {}).get("tiers") or []
+    # pricing.yaml v2 (Nov 1, 2026): the paid report is the "assessment" service and the fix-it
+    # engagement is "insurance_ready_30", both under products.services.
+    tiers = ((raw.get("products") or {}).get("services") or {}).get("tiers") or []
     for tier in tiers:
         low = (tier.get("range") or [None])[0]
-        if tier.get("id") == "full_report":
+        if tier.get("id") == "assessment":
             offer.report_name = tier.get("name") or offer.report_name
             offer.report_from = low
             offer.report_includes = list(tier.get("includes") or [])

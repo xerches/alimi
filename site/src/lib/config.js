@@ -48,30 +48,50 @@ export function tierPrice(tier) {
 export function tierNote(tier) {
   if (tier.type === "service") return "Fixed fee, confirmed after a short call";
   if (tier.list === 0) return "No card and no account needed";
-  return "One-time purchase";
+  return "Billed yearly";
 }
 
-export const PRODUCT_ORDER = ["workspace_scan", "policy_pack", "payment_fraud_kit", "ai_policy_kit"];
+// One product (the platform), the fixed-fee services around it, and the free resources in front of it.
+export const PRODUCT_ORDER = ["platform", "services", "free"];
 
 export const PRODUCT_PAGES = {
-  workspace_scan: "/workspace-security-scan",
-  policy_pack: "/policy-pack",
-  payment_fraud_kit: "/payment-fraud-kit",
-  ai_policy_kit: "/ai-policy-kit",
+  platform: "/platform",
+  services: "/pricing#services",
+  free: "/resources",
 };
+
+export const FRAMEWORK_LABELS = {
+  insurer: "Cyber insurance questionnaire",
+  soc2: "SOC 2",
+  iso27001: "ISO 27001",
+  hipaa: "HIPAA",
+  iso42001: "ISO 42001",
+};
+
+function decorate(tier) {
+  const out = { ...tier, price: tierPrice(tier), note: tierNote(tier) };
+  if (typeof tier.people_up_to === "number") {
+    out.monthly = `${money(Math.round(tier.list / 12))} a month`;
+    out.yearly = `${money(tier.list)} a year`;
+    out.peopleLabel = `Up to ${tier.people_up_to} people`;
+    out.frameworkLabels = (tier.frameworks ?? []).map((id) => FRAMEWORK_LABELS[id] ?? id);
+    out.integrationsLabel =
+      tier.integrations === null || tier.integrations === undefined
+        ? "Unlimited integrations"
+        : `${tier.integrations} integration${tier.integrations === 1 ? "" : "s"}`;
+  }
+  return out;
+}
 
 export function product(key) {
   const entry = pricing.products[key];
   if (!entry) throw new Error(`pricing.yaml has no product "${key}"`);
-  const status = entry.status ? String(entry.status) : "";
   return {
     key,
     name: entry.name,
     tagline: entry.tagline,
     href: PRODUCT_PAGES[key],
-    tiers: entry.tiers.map((tier) => ({ ...tier, price: tierPrice(tier), note: tierNote(tier) })),
-    // A status that still says "confirm" keeps a visible draft banner on the page.
-    draft: /confirm/i.test(status) ? status : null,
+    tiers: entry.tiers.map(decorate),
   };
 }
 
@@ -79,8 +99,29 @@ export function products(order = PRODUCT_ORDER) {
   return order.map(product);
 }
 
-export function freeTier(key) {
-  return product(key).tiers.find((tier) => tier.list === 0) ?? null;
+/** The platform: tiers in price order plus what every tier includes. */
+export function platform() {
+  const entry = pricing.products.platform;
+  return {
+    ...product("platform"),
+    included: entry.included_everywhere,
+    billing: entry.billing,
+    auditNote: entry.audit_note,
+  };
+}
+
+export function services() {
+  return product("services").tiers;
+}
+
+export function freeResources() {
+  return product("free").tiers;
+}
+
+export function service(id) {
+  const found = services().find((tier) => tier.id === id);
+  if (!found) throw new Error(`pricing.yaml has no service "${id}"`);
+  return found;
 }
 
 const TIER_NAMES = { starter: "Starter", growth: "Growth", scale: "Scale" };

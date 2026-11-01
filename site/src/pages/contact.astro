@@ -2,15 +2,14 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-import Todo from "../components/Todo.astro";
-import { brand, decided, products } from "../lib/config.js";
+import { brand, decided } from "../lib/config.js";
 
 const email = decided(brand.contact_email);
 const formName = "contact";
 const id = (suffix) => `${formName}-${suffix}`;
 ---
 
-<Base title="Contact" description="Ask alimi about a cyber insurance renewal, a customer security questionnaire, the policy pack, payment fraud or a partnership. A reply within two business days." path="/contact">
+<Base title="Contact" description="Ask alimi about the platform, a cyber insurance renewal, a customer security questionnaire, a free scan summary or a partnership. A reply within two business days." path="/contact">
   <Hero eyebrow="Contact" title="Ask a question, or send the questionnaire">
     <p class="lede">A reply within two business days, from the founder. Attachments can wait for the reply; the form takes text only.</p>
   </Hero>
@@ -42,7 +41,11 @@ const id = (suffix) => `${formName}-${suffix}`;
               <label for={id("topic")}>About</label>
               <select id={id("topic")} name="topic">
                 <option value="">Choose one</option>
-                {products().map((p) => <option>{p.name}</option>)}
+                <option>The alimi platform</option>
+                <option>A free pilot</option>
+                <option>A cyber insurance renewal</option>
+                <option>A customer security questionnaire</option>
+                <option>A free scan summary</option>
                 <option>Partnering or referring</option>
                 <option>Something else</option>
               </select>
@@ -62,13 +65,13 @@ const id = (suffix) => `${formName}-${suffix}`;
         <div class="card">
           <h2 class="h3">Other ways</h2>
           <p>
-            {email ? <a href={`mailto:${email}`}>{email}</a> : <span>Email: arrives with the domain. <Todo note="contact email once the domain is bought" /></span>}
+            {email ? <a href={`mailto:${email}`}>{email}</a> : <span>An email address arrives with the domain. Until then the form is the fastest route.</span>}
           </p>
           <p>{brand.location}. Remote-first; on site in Greater Boston when a workshop needs a room.</p>
         </div>
         <div class="card">
           <h2 class="h3">Before you write</h2>
-          <p>Prices are on every product page, and the partner terms are on <a href="/for-partners">For partners</a>. If your insurer's questionnaire is already in hand, say which questions you cannot answer; that is usually the whole brief.</p>
+          <p>Prices are on the <a href="/pricing">pricing page</a>, and the partner terms are on <a href="/for-partners">For partners</a>. If your insurer's questionnaire is already in hand, say which questions you cannot answer; that is usually the whole brief.</p>
         </div>
       </div>
     </div>

@@ -2,10 +2,16 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-import { products } from "../lib/config.js";
+const pages = [
+  { href: "/platform", label: "The platform" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/resources", label: "Free resources" },
+  { href: "/for-partners", label: "For partners" },
+  { href: "/about", label: "About" },
+];
 ---
 
-<Base title="Page not found" description="That page does not exist on alimi. The products, partner terms and contact page are one click away." path="/404">
+<Base title="Page not found" description="That page does not exist on alimi. The platform, pricing, free resources, partner terms and contact page are one click away." path="/404">
   <Hero eyebrow="404" title="That page is not here">
     <p class="lede">The address may have changed while the site is in beta. Everything that exists is linked below.</p>
     <div class="actions">
@@ -15,11 +21,9 @@ import { products } from "../lib/config.js";
   </Hero>
   <Section id="links" tone="alt" title="Pages">
     <ul>
-      {products().map((p) => (
-        <li><a href={p.href}>{p.name}</a></li>
+      {pages.map((p) => (
+        <li><a href={p.href}>{p.label}</a></li>
       ))}
-      <li><a href="/for-partners">For partners</a></li>
-      <li><a href="/about">About</a></li>
     </ul>
   </Section>
 </Base>

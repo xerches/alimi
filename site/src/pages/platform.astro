@@ -1,0 +1,160 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import Callout from "../components/Callout.astro";
+import { brand, platform } from "../lib/config.js";
+import { policies, checkCounts, insurerQuestions, frameworks, controlSummary } from "../lib/content.js";
+
+const { tiers } = platform();
+const policyCount = policies().length;
+const checks = checkCounts();
+const questions = insurerQuestions();
+const automatedQuestions = questions.filter((q) => q.automated).length;
+const controls = controlSummary();
+const fws = frameworks();
+const requirementTotal = fws.reduce((sum, f) => sum + f.requirementCount, 0);
+
+const modules = [
+  {
+    id: "controls",
+    title: "Controls and monitoring",
+    text: `${controls.total} controls across ${controls.domains.length} areas, from governance and access to payments, devices, vendors and AI. Each has one owner, one status and one source of truth: ${controls.automated} are tested automatically on every scan of your tenant, the rest by evidence with a renewal date. A failing test becomes a task with a plain-English fix and a due date. Nothing is typed as a status; it is computed.`,
+    detail: `Today's scanner runs ${checks.total} checks on Microsoft 365 and Google Workspace: ${checks.m365} on Microsoft 365, ${checks.gws} on Google Workspace, ${checks.attestation} that need a dated screenshot because no API exposes the setting. They cover ${automatedQuestions} of the ${questions.length} questions insurers ask.`,
+  },
+  {
+    id: "evidence",
+    title: "Evidence",
+    text: "A library of screenshots, exports and reports, each filed against the control it proves, with an owner, a creation date and a renewal date. Four states, computed: ready, upcoming renewal, needs renewal, needs artifact. The export pack for a broker or an auditor is a filter, not a project.",
+  },
+  {
+    id: "policies",
+    title: "Policies",
+    text: `${policyCount} policies written for a company of 10 to 200 people, from information security and acceptable use to incident response, vendor risk and AI governance. Each is mapped by criterion ID to SOC 2, ISO 27001, ISO 42001, HIPAA and the insurer questions, carries a version, an owner and an approver, and tracks who has acknowledged it. Staff sign in the platform; the yearly review is a task like any other.`,
+  },
+  {
+    id: "people",
+    title: "People and training",
+    text: "Everyone from your identity provider, one row each: policies accepted, training current, MFA registered, device compliant, background check done. Onboarding is a checklist with due dates; offboarding is a check that access actually ended. Training courses have completion and a yearly cycle.",
+  },
+  {
+    id: "frameworks",
+    title: "Frameworks",
+    text: `${fws.length} frameworks, ${requirementTotal} requirement IDs, one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA and ISO 42001 are answered by the same controls and policies when a customer asks. Readiness is the share of mapped controls in order, per framework. The standards' own text is never copied in; you see the ID and our plain-English summary.`,
+  },
+  {
+    id: "vendors",
+    title: "Vendors and risks",
+    text: "Vendors found from sign-in logs, app consents and accounts payable, not from memory. Each gets an inherent-risk score on four factors (data types, business criticality, integration access, communication scope), a review on a schedule that matches the score, and a place for the contract, the SOC 2 report and the findings. A vendor breach notice becomes a finding with a review behind it. Risks live in a register written in plain sentences, scored, owned and linked to the controls that treat them.",
+  },
+  {
+    id: "ai",
+    title: "AI governance",
+    text: "An inventory of the AI tools in use, with the model, the risk level, who has access and whether the vendor trains on your data; a feed of what changed at each vendor; the AI acceptable use policy with acknowledgements; and the ISO 42001 mapping for companies that need it.",
+  },
+  {
+    id: "trust",
+    title: "Trust page and questionnaires",
+    text: "A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack. Security questionnaires are answered from the evidence you already have, with the draft marked for review.",
+  },
+  {
+    id: "assistant",
+    title: "The assistant",
+    text: "Ask in plain words: which policies answer the insurer's MFA question, what evidence is due before the renewal, who still owes a sign-off. It reads the same tables you see, nothing else, and shows its sources on every line. It suggests; a person accepts. It never changes a record on its own, and your data never leaves the platform to train a model. In preview; the prepared answers are already in the demo.",
+  },
+];
+
+const steps = [
+  { title: "Connect", text: "A read-only connection to Microsoft 365 or Google Workspace, with the exact permissions listed before you approve them. Nothing is read beyond settings and directory data. Intune, Jamf, GitHub, AWS and HR systems follow as customers need them." },
+  { title: "Watch", text: `${checks.total} checks run weekly and after every change you ask about. Every control shows its owner, its status and the evidence behind it; the home screen shows what needs attention and what is due in the next 30 days.` },
+  { title: "Fix", text: "A failing check or an expired piece of evidence is a task with an owner, a plain-English fix and a reminder on Monday and three days before it is due. Do it yourself, hand it to your IT provider, or have alimi do it for a fixed fee." },
+  { title: "Prove", text: "Readiness per framework, the export pack for the broker or auditor, the trust page for prospects, and questionnaire answers drafted from your own evidence. The CPA audit itself is a separate fee, as it is everywhere; alimi gets you to it and sits in the room." },
+];
+
+const trust = [
+  { title: "Read-only, documented", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. alimi never holds a password." },
+  { title: "Your tokens, encrypted", text: "Connection tokens are encrypted at rest with a key kept outside the database, and never written to logs or error reports." },
+  { title: "One company per query", text: "Every query is scoped to one organization, enforced in the database with row-level security, so a bug cannot show one company another's data." },
+  { title: "No customer data before the review", text: "The hosted platform holds no customer data until the company, its insurance and a signed pilot letter exist and an outside security review is done. Until then it runs on sample data and the founder's own tenants." },
+];
+---
+
+<Base title="The platform" description={`How the alimi platform works: read-only connections to Microsoft 365 and Google Workspace, ${controls.total} controls with automated tests and evidence, ${policyCount} policies with sign-off, people and training, ${fws.length} frameworks, vendors, AI governance, a trust page and an assistant.`} path="/platform">
+  <Hero eyebrow="The platform" title="One place that knows whether your security is in order, and can prove it">
+    <p class="lede">A compliance platform of the kind larger companies buy, sized and priced for companies of 10 to 200 people, with the founder as the compliance lead who makes the scoping and policy calls.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing">See pricing</a>
+      <a class="button button--secondary" href="/pricing#waitlist">Join the waitlist</a>
+    </div>
+  </Hero>
+
+  <Section id="numbers" tone="alt" tight>
+    <div class="stats">
+      <div class="stat"><span class="stat__value">{controls.total}</span><span class="stat__label">controls, {controls.automated} tested automatically</span></div>
+      <div class="stat"><span class="stat__value">{checks.total}</span><span class="stat__label">tenant checks on every scan</span></div>
+      <div class="stat"><span class="stat__value">{policyCount}</span><span class="stat__label">policies with sign-off tracking</span></div>
+      <div class="stat"><span class="stat__value">{fws.length}</span><span class="stat__label">frameworks, {requirementTotal} requirement IDs</span></div>
+    </div>
+  </Section>
+
+  <Section id="how" title="Connect, watch, fix, prove">
+    <Steps steps={steps} />
+  </Section>
+
+  <Section id="modules" tone="alt" title="What is inside" lede="Every module reads the same data, so a control fixed once counts for the insurer, the auditor and the customer at the same time.">
+    <div class="stack">
+      {modules.map((m) => (
+        <article class="card" id={m.id}>
+          <h3>{m.title}</h3>
+          <p>{m.text}</p>
+          {m.detail && <p class="muted">{m.detail}</p>}
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="frameworks" title="Frameworks and what they map to" lede="Requirement IDs and our own one-line summaries only; the standards' text stays with its owners.">
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Framework</th><th>Requirement IDs</th><th>From which tier</th></tr></thead>
+        <tbody>
+          {fws.map((f) => {
+            const tier = tiers.find((t) => t.frameworks.includes(f.id));
+            return (
+              <tr>
+                <td>{f.name}</td>
+                <td>{f.requirementCount}</td>
+                <td>{tier ? tier.name : "On request"}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="trust" tone="alt" title="Built to be trusted with your tenant" lede="The rules the platform is built under, written down before the first customer.">
+    <div class="grid grid--two">
+      {trust.map((t) => (
+        <article class="card">
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="status" tight>
+    <Callout label="Where it stands" tone="brand">
+      <p>The scanner, the policy library and the control catalogue are built and tested on sample data. The hosted platform comes next; pilots open in January 2027 under a signed authorization letter, and the waitlist is the queue. Until the platform holds customer data, {brand.display_name} runs the same work for you from the founder's side, with the same outputs.</p>
+    </Callout>
+  </Section>
+
+  <Section id="start" tone="dark" title="See the numbers" lede="Three tiers by company size, billed yearly, with the policies and the insurer questionnaire in every one.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing">Pricing</a>
+      <a class="button button--secondary" href="/contact">Ask a question</a>
+    </div>
+  </Section>
+</Base>

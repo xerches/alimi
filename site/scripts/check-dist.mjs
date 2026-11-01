@@ -1,4 +1,4 @@
-// Post-build checks on dist/: every page has lang, one h1, a title and a description; Netlify form
+// Post-build checks on every page in dist/ (subfolders included): lang, one h1, a title and a description; Netlify form
 // names are unique across the site; and no color is hardcoded anywhere outside the :root token block
 // that the layout inlines from brand.yaml. Prints the TODO count for prompt 11. Exits 1 on a failure.
 import { readdirSync, readFileSync } from "node:fs";
@@ -6,7 +6,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist");
-const pages = readdirSync(dist).filter((f) => f.endsWith(".html")).sort();
+// Every HTML file, including the generated document pages under dist/resources/.
+const pages = readdirSync(dist, { recursive: true })
+  .map(String)
+  .filter((f) => f.endsWith(".html"))
+  .sort();
 if (pages.length === 0) {
   console.error("check-dist: no HTML in dist/");
   process.exit(1);
@@ -46,12 +50,16 @@ for (const page of pages) {
     forms.set(name, where);
   }
 
-  // Strip the token block and the favicon link, then look for colors typed anywhere else.
-  const stripped = html
-    .replace(TOKEN_BLOCK, "")
-    .replace(/<meta name="theme-color" content="#[0-9A-Fa-f]{6}">/, "");
+  // Look for colors typed in any style context other than the token block: <style> blocks and
+  // style/fill/stroke/color attributes. Prose is left alone, so "Form #519" in a document is fine.
+  const styleContexts = [
+    ...html.replace(TOKEN_BLOCK, "").matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g),
+    ...html.matchAll(/\s(?:style|fill|stroke|color|bgcolor)="([^"]*)"/g),
+  ].map((m) => m[1]);
   // The CSS minifier rewrites the keyword `transparent` as #0000; it is the absence of a color.
-  const found = [...stripped.matchAll(HARDCODED)].map((m) => m[0]).filter((m) => m.toLowerCase() !== "#0000");
+  const found = styleContexts
+    .flatMap((css) => [...css.matchAll(HARDCODED)].map((m) => m[0]))
+    .filter((m) => m.toLowerCase() !== "#0000");
   if (found.length) failures.push(`${where}: hardcoded color(s): ${[...new Set(found)].join(", ")}`);
 }
 

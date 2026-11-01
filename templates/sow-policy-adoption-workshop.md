@@ -4,7 +4,7 @@ title: Statement of Work, Policy Adoption Workshop
 ---
 > **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.**
 
-# Statement of Work: {{pricing.products.policy_pack.adoption.name}}
+# Statement of Work: {{pricing.products.services.policy_adoption.name}}
 
 *Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
 
@@ -14,13 +14,13 @@ Leave {{Client}} with a set of security and company policies that fit how it act
 
 ## 2. Scope
 
-**In scope:** the full alimi policy library ({{pricing.products.policy_pack.full.name}}, normally {{pricing.products.policy_pack.full.price}} on its own, included here) filled with the Client's names and roles; a half-day workshop with the owner and the people who will own the policies to choose which policies apply, tailor the statements that do not fit, and decide the open points (thresholds, review cycles, who approves exceptions); a written list of the sections marked for HR or legal review and what each needs; final DOCX and PDF copies; the coverage matrix showing which SOC 2, ISO 27001, ISO 42001, HIPAA and insurer requirements each policy addresses; and acknowledgement tracking set up in {{Tenant}} (a form or document library with a sign-off record) or in the alimi platform when it exists.
+**In scope:** the full alimi policy library (included in every tier of the {{pricing.products.platform.product_name}}, provided here as documents) filled with the Client's names and roles; a half-day workshop with the owner and the people who will own the policies to choose which policies apply, tailor the statements that do not fit, and decide the open points (thresholds, review cycles, who approves exceptions); a written list of the sections marked for HR or legal review and what each needs; final DOCX and PDF copies; the coverage matrix showing which SOC 2, ISO 27001, ISO 42001, HIPAA and insurer requirements each policy addresses; and acknowledgement tracking set up in {{Tenant}} (a form or document library with a sign-off record) or in the alimi platform.
 
 **Out of scope:** legal review of the marked sections (the Client's attorney or HR adviser does this; alimi lists what they need to look at), writing procedures below the policy level, and technical configuration except the acknowledgement tracking itself.
 
 ## 3. Deliverables
 
-{{pricing.products.policy_pack.adoption.includes}}
+{{pricing.products.services.policy_adoption.includes}}
 
 Plus the HR and legal review list, the coverage matrix, and a one-page roll-out plan: who publishes what, when staff are told, and when the first acknowledgement round closes.
 
@@ -47,7 +47,7 @@ Up to 23 policies; one workshop; one revision round; the Client's own legal and 
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.policy_pack.adoption.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
+Fixed fee within alimi's published range of **{{pricing.products.services.policy_adoption.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
 
 ## 9. Acceptance
 

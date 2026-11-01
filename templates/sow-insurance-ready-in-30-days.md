@@ -4,7 +4,7 @@ title: Statement of Work, Insurance-Ready in 30 Days
 ---
 > **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.**
 
-# Statement of Work: {{pricing.products.workspace_scan.insurance_ready_30.name}}
+# Statement of Work: {{pricing.products.services.insurance_ready_30.name}}
 
 *Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
 
@@ -20,7 +20,7 @@ Within 30 days, take {{Client}}'s {{Tenant}} environment from its current state 
 
 ## 3. Deliverables
 
-{{pricing.products.workspace_scan.insurance_ready_30.includes}}
+{{pricing.products.services.insurance_ready_30.includes}}
 
 Plus: the fix plan with owners and dates; a change log of every setting changed, by whom and when; the tabletop summary with actions; the rescan report; and the evidence pack sent to the broker named by the Client.
 
@@ -48,7 +48,7 @@ alimi does not control the insurer's decision. The service produces answers and 
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.workspace_scan.insurance_ready_30.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; 50% on signing, 50% on delivery of the evidence pack. No expenses.
+Fixed fee within alimi's published range of **{{pricing.products.services.insurance_ready_30.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; 50% on signing, 50% on delivery of the evidence pack. No expenses.
 
 ## 9. Acceptance
 

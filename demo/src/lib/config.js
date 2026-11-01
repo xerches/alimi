@@ -38,7 +38,7 @@ export function money(amount) {
   return "$" + Number(amount).toLocaleString("en-US");
 }
 
-/** "Free", "$499" or "$500 to $1,500". `list` wins over `range`, as in templates/build/render.py. */
+/** "Free", "$3,900" or "$500 to $1,500". `list` wins over `range`, as in templates/build/render.py. */
 export function tierPrice(tier) {
   if (typeof tier.list === "number") return tier.list === 0 ? "Free" : money(tier.list);
   if (Array.isArray(tier.range) && tier.range.length === 2) return `${money(tier.range[0])} to ${money(tier.range[1])}`;
@@ -48,16 +48,16 @@ export function tierPrice(tier) {
 export function tierNote(tier) {
   if (tier.type === "service") return "Fixed fee, confirmed after a short call";
   if (tier.list === 0) return "No card and no account needed";
-  return "One-time purchase";
+  return "Billed yearly";
 }
 
-export const PRODUCT_ORDER = ["workspace_scan", "policy_pack", "payment_fraud_kit", "ai_policy_kit"];
+// pricing.yaml v2 (Nov 1, 2026): one platform, the services around it, and the free resources.
+export const PRODUCT_ORDER = ["platform", "services", "free"];
 
 export const PRODUCT_PAGES = {
-  workspace_scan: "/workspace-security-scan",
-  policy_pack: "/policy-pack",
-  payment_fraud_kit: "/payment-fraud-kit",
-  ai_policy_kit: "/ai-policy-kit",
+  platform: "/platform",
+  services: "/pricing#services",
+  free: "/resources",
 };
 
 export function product(key) {

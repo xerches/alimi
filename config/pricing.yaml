@@ -1,33 +1,106 @@
 # alimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
-# Starting points inside the ranges from the Oct 2026 research. Raise after three case studies.
-# Prices in USD. "range" is what we quote; "list" is what the site shows.
+# One product: the alimi platform, priced per company by size, with fixed-fee services around it and
+# free resources in front of it. The platform tiers were set on Nov 1, 2026 by the founder's rule
+# (average of comparable vendors' published prices, minus 5 to 15%); the comparables and the arithmetic
+# are in docs/research/platform-pricing.md. Raise after three case studies.
+# Prices in USD. "list" is what the site shows; "range" is what we quote for a fixed-fee service.
 
 currency: USD
 updated: 2026-11-01
 
 products:
-  ai_policy_kit:
-    name: AI Policy Kit
-    tagline: An AI acceptable use policy your staff will actually read, in 20 minutes.
+  platform:
+    name: alimi platform
+    tagline: Continuous security and compliance for companies too small for a security team.
+    billing: Billed yearly in advance; the monthly figure is the yearly price divided by twelve.
+    audit_note: CPA audit fees are separate, as with every platform on the market.
+    included_everywhere:
+      - The full policy library, 23 policies with staff acknowledgement tracking
+      - Read-only integrations; alimi never holds a password
+      - An owner, a status, tasks and reminders for every control
+      - A named compliance lead for the scoping and policy calls software leaves to you
     tiers:
-      - id: free
+      - id: starter
         type: product
-        name: Policy generator
-        list: 0
+        name: Starter
+        list: 3900
+        people_up_to: 25
+        frameworks: [insurer]
+        integrations: 1
+        rule: "Small-company floor: SecureSlate $2,688, TrustCloud $5,000, Trustero $5,000, Screenata $5,988; average $4,669, minus 15%"
         includes:
-          - AI acceptable use policy (Markdown and DOCX)
-          - One-page staff guide
-          - AI tool inventory template
-      - id: pro
+          - The cyber insurance questionnaire as the first framework
+          - One workspace integration (Microsoft 365 or Google Workspace), scanned weekly
+          - Controls with automated tests, evidence with renewal dates
+          - People, training records and onboarding checklists
+          - A public trust page
+      - id: growth
         type: product
-        name: Policy kit plus inventory scan
-        list: 99
-        range: [49, 99]
+        name: Growth
+        list: 7900
+        people_up_to: 100
+        frameworks: [insurer, soc2, iso27001]
+        integrations: 3
+        rule: "Thirteen published entry tiers (Vanta, Drata, Secureframe, Sprinto, Scytale, Thoropass, Carbide, Iru, Delve, Scrut, TrustCloud, Trustero, Screenata) average $9,361; minus 15%"
         includes:
-          - Everything in free
-          - Read-only scan of Microsoft 365 or Google Workspace logs for AI apps in use
-          - Personal-account vs company-account breakdown
-      - id: implementation
+          - Everything in Starter
+          - SOC 2 and ISO 27001 readiness, mapped by criterion ID
+          - Vendor inventory and reviews, risk register
+          - Security questionnaires drafted from the program's own data
+          - Three integrations
+      - id: scale
+        type: product
+        name: Scale
+        list: 15700
+        people_up_to: 200
+        frameworks: [insurer, soc2, iso27001, hipaa, iso42001]
+        integrations: null   # unlimited
+        rule: "Ten published mid tiers (Vanta Plus and Professional, Drata Advanced, Secureframe median, Carbide Advanced and Insights, Strike Graph Scale, Scrut, Trustero mid-market, Iru) average $18,550; minus 15%"
+        includes:
+          - Everything in Growth
+          - HIPAA and ISO 42001 (AI governance) frameworks
+          - Auditor and broker access with an export pack
+          - Unlimited integrations and API access
+          - Multi-tenant view for resellers
+
+  services:
+    name: Services
+    tagline: Fixed fees, delivered by the founder, around the platform.
+    tiers:
+      - id: assessment
+        type: service
+        name: Security assessment and insurer report
+        range: [500, 1500]
+        includes:
+          - Read-only scan of Microsoft 365 or Google Workspace under a signed letter
+          - Every finding with evidence and a plain-English fix
+          - Evidence pack checklist for the broker and a 30-minute debrief
+          - Credited against the first year of the platform
+      - id: insurance_ready_30
+        type: service
+        name: Insurance-ready in 30 days
+        range: [4000, 8000]
+        includes:
+          - Fix every finding from the assessment
+          - MFA, admin, forwarding and sharing hardening
+          - One incident response tabletop
+          - Evidence pack delivered to the broker from the platform
+      - id: policy_adoption
+        type: service
+        name: Policy adoption workshop
+        range: [1500, 3000]
+        includes:
+          - Half-day session to tailor, approve and roll out the policy library
+          - Staff acknowledgement tracking set up in the platform
+      - id: fraud_workshop
+        type: service
+        name: Payment fraud workshop and yearly drill
+        range: [1500, 3000]
+        includes:
+          - Half-day workshop for the finance team or closing office
+          - Verification procedure tailored to the firm
+          - One drill per year
+      - id: ai_policy_implementation
         type: service
         name: AI policy implementation
         range: [2500, 5000]
@@ -37,69 +110,27 @@ products:
           - 45-minute staff training
           - ISO 42001 gap check for companies that need it
 
-  workspace_scan:
-    name: Workspace Security Scan
-    tagline: The report your insurer and your customers are asking for.
+  free:
+    name: Free resources
+    tagline: Start with these. No card, no account.
     tiers:
-      - id: free
+      - id: scan_summary
         type: product
-        name: One-page summary
+        name: One-page security scan summary
         list: 0
         includes:
           - Overall score
-          - Pass/fail against the eight questions insurers ask
-      - id: full_report
+          - Pass or fail against the questions insurers ask
+      - id: fraud_procedure
         type: product
-        name: Full insurer-ready report
-        range: [500, 1500]
-        includes:
-          - Every finding with evidence and plain-English fix
-          - Evidence pack checklist for the broker
-          - 30-minute debrief call
-      - id: insurance_ready_30
-        type: service
-        name: Insurance-ready in 30 days
-        range: [4000, 8000]
-        includes:
-          - Fix every finding from the report
-          - MFA, admin, forwarding and sharing hardening
-          - One incident response tabletop
-          - Evidence pack delivered to the broker
-
-  payment_fraud_kit:
-    name: Payment Fraud Protection Kit
-    tagline: Verify before you pay. A procedure, not a product pitch.
-    tiers:
-      - id: kit
-        type: product
-        name: Digital kit
-        range: [149, 299]
+        name: Payment fraud procedure
+        list: 0
         includes:
           - Payment-change and wire verification procedure
           - Callback scripts for finance staff
           - One-page staff poster
-          - 20-minute training video
           - Closing-day checklist for home buyers and sellers
-      - id: workshop
-        type: service
-        name: Half-day workshop and yearly drill
-        range: [1500, 3000]
-        includes:
-          - Half-day workshop for the finance team or closing office
-          - Procedure tailored to the firm
-          - One drill per year
-
-  policy_pack:
-    name: Policy Pack
-    tagline: The policies SOC 2, ISO 27001 and your insurer expect, written for a company your size.
-    # Full library priced Nov 1, 2026 by Alex's rule (comparable average minus 5-15%): six small-business
-    # policy kits average $568 (High Table £97 and £297 editions, Riskprofs $499, Techno-PM $699,
-    # IT Governance $799, Advisera $897; ComplianceForge at $1,980 and $15-20 Gumroad packs excluded as
-    # not like-for-like). $499 is 12% under. No vendor publishes a like-for-like half-day adoption
-    # workshop, so that range is still a starting point.
-    status: full library priced Nov 1, 2026; adoption workshop range is a starting point, confirm before publishing
-    tiers:
-      - id: free
+      - id: core_policies
         type: product
         name: Three core policies
         list: 0
@@ -107,22 +138,13 @@ products:
           - Information security policy
           - Acceptable use policy
           - Incident response policy
-      - id: full
+      - id: ai_policy
         type: product
-        name: Full policy library
-        list: 499
-        range: [480, 540]
+        name: AI acceptable use policy
+        list: 0
         includes:
-          - Every policy in /policies, mapped to SOC 2, ISO 27001, ISO 42001 and insurer questions
-          - Coverage matrix showing which requirement each policy satisfies
-          - DOCX and PDF with the company name filled in
-      - id: adoption
-        type: service
-        name: Policy adoption workshop
-        range: [1500, 3000]
-        includes:
-          - Half-day session to tailor, approve and roll out the policies
-          - Staff acknowledgement tracking set up in Microsoft 365, Google Workspace or the platform
+          - AI acceptable use policy
+          - Mapped to ISO 42001 and the insurer's AI questions
 
 retainers:
   fractional_security_lead:
@@ -133,10 +155,9 @@ retainers:
 terms:
   minimum_monthly_retainer: 1500
   payment: "Monthly in advance by card or ACH"
-  discount_multi_product: 0.10
 
-# Channel: resellers and referrers. Starting points proposed 2026-11-01; confirm before the first
-# partner conversation. Discounts apply to list prices and to the low end of service ranges.
+# Channel: resellers and referrers. Tiers set by the founder Nov 1, 2026. Discounts apply to platform
+# list prices and to the low end of service ranges.
 partners:
   principle: alimi never sells direct to a reseller's client for less than the reseller pays.
   reseller:
@@ -153,9 +174,9 @@ partners:
         active_clients: [151, null]
         discount: 0.20
     includes:
-      - White-label option on the scanner report and the policy pack (reseller logo, "powered by alimi" line)
+      - White-label option on reports, policy packs and the trust page (reseller logo, "powered by alimi" line)
       - Not-for-resale licence for the reseller's own tenant
-      - Multi-tenant view in the platform once it exists (phase 3)
+      - Multi-tenant view in the platform (the Scale tier feature, included for resellers)
       - One 60-minute partner training session and a sales one-pager
       - Inbound leads in the reseller's area offered to them first
     billing: alimi invoices the reseller monthly; the reseller invoices its client
