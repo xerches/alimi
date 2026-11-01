@@ -1,0 +1,20 @@
+name: templates
+on:
+  push:
+    paths: ["templates/**", "config/pricing.yaml", ".github/workflows/templates.yml"]
+  pull_request:
+    paths: ["templates/**", "config/pricing.yaml", ".github/workflows/templates.yml"]
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends pandoc
+      - run: pip install pyyaml pytest
+      - run: python templates/build/render.py --check
+      - run: pytest templates
+      - run: python templates/build/render.py --out /tmp/templates-build

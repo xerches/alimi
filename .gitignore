@@ -25,6 +25,7 @@ venv/
 .ruff_cache/
 dist/
 build/
+!templates/build/
 !policies/build/
 *.egg-info/
 

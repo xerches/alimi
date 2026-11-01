@@ -1,0 +1,18 @@
+/* Compact print styles for the one-page templates (pilot letter, partner one-pager). */
+@page { size: letter; margin: 0.5in 0.6in; @bottom-center { content: "DRAFT · not legal advice · review by a Massachusetts attorney before use"; font-family: Inter, system-ui, sans-serif; font-size: 7.5pt; color: #6b7877; } }
+html { font-size: 9.5pt; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1c2a2a; line-height: 1.28; max-width: none; margin: 0; }
+h1 { font-size: 16pt; color: #0f1f1f; margin: 0 0 0.3em; line-height: 1.15; }
+h2 { font-size: 11pt; color: #0f1f1f; margin: 0.65em 0 0.2em; border-bottom: 1.5px solid #3fb8af; padding-bottom: 0.1em; page-break-after: avoid; }
+p { margin: 0.35em 0; }
+ul { margin: 0.2em 0 0.4em 1.1em; padding: 0; }
+li { margin: 0.12em 0; }
+blockquote { margin: 0 0 0.5em; padding: 0.3em 0.6em; background: #fbe9e4; border-left: 3px solid #e2654f; font-size: 8.5pt; }
+blockquote p { margin: 0; }
+table { border-collapse: collapse; width: 100%; margin: 0.4em 0 0.6em; font-size: 8.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #c9d3d2; padding: 0.22em 0.4em; vertical-align: top; text-align: left; }
+th { background: #e7f3f2; }
+em { color: #4d5c5b; }
+col:nth-child(1) { width: 24% !important; }
+col:nth-child(2) { width: 52% !important; }
+col:nth-child(3) { width: 24% !important; }
