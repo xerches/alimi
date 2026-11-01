@@ -58,7 +58,7 @@ Prices live in `config/pricing.yaml`; the site, the templates and this file read
 - **No client data in the repo.** Pilot outputs go to a local, git-ignored `out/` folder.
 - **Legal templates carry a header:** "DRAFT. Not legal advice. Review by a Massachusetts attorney before use." Claude drafts structure and plain-language clauses; it does not invent legal text where a lawyer is required.
 - **Policies carry a header:** "TEMPLATE. Adapt before adopting. Sections marked [HR or legal review] need a human reviewer." A policy maps to requirements by criterion ID only.
-- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not alimi clients. Site copy says "as Information Security Manager at..." and never implies consulting clients until there are case studies.
+- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not alimi clients, and the founder dropped them from the site on Nov 1, 2026; do not put them back. Site copy names past employers only ("as Information Security Manager at..."), leaves the current employer unnamed until the outside-work clause is checked, and never implies consulting clients until there are case studies.
 - **Free to run.** Site and AI policy app must work on free static hosting with no server. Forms use Netlify Forms or Formspree free tier. The platform needs a server; keep it on free tiers until paying customers cover the bill.
 - **Accessible and fast.** Mobile-first, Lighthouse 95+ on every page.
 
