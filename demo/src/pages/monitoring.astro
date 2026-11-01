@@ -1,0 +1,87 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { monitoring, testCounts, company, formatDate, formatDateTime, href, attestations, insurerQuestions, status as statusOf } from "../lib/data.js";
+const automated = monitoring.tests.filter((t) => t.kind === "automated");
+const failing = automated.filter((t) => t.status === "fail");
+const attest = monitoring.tests.filter((t) => t.status === "attestation_needed");
+const passing = automated.filter((t) => t.status === "pass").length;
+---
+
+<App title="Monitoring" path="/monitoring" section="monitoring" eyebrow="Compliance" crumbs={[{ label: "Monitoring" }]} wide
+  description="Automated tests from the read-only scan of the Microsoft 365 tenant: pass or fail per check, severity, the insurer question it answers, run history and the fix for each failure."
+  lead={`The scanner reads the tenant every week with read-only permissions and runs ${testCounts.automated} automated checks. A failing check turns its control red and opens a task; three items no API can read are confirmed by a person with evidence.`}>
+  <a slot="actions" class="button secondary" href="/integrations">What is read</a>
+  <a slot="actions" class="button" href="#failing">Failing tests ({failing.length})</a>
+
+  <div class="grid">
+    <Tile label="Last run" value={formatDate(monitoring.collectedAt)} note={`${formatDateTime(monitoring.collectedAt)}, ${company.scan.schedule.toLowerCase()}`} />
+    <Tile label="Passing" value={passing} unit={`of ${testCounts.automated}`} />
+    <Tile label="Failing" value={failing.length} note={`${testCounts.first} were failing on the first scan, ${formatDate(monitoring.runs[0].date)}`} />
+    <Tile label="Attestations" value={attest.length} note="Confirmed by a person with evidence" />
+  </div>
+
+  <div class="table-wrap">
+    <table id="tests">
+      <thead><tr><th>Test</th><th>Result</th><th>Severity</th><th>Insurer question</th><th>What the scan found</th><th>Controls</th><th>History</th></tr></thead>
+      <tbody>
+        {monitoring.tests.map((t) => (
+          <tr id={t.anchor} data-status={t.status}>
+            <td><strong>{t.title}</strong><span class="sub mono">{t.check_id}</span></td>
+            <td><Pill status={t.status} /></td>
+            <td>{t.severity}</td>
+            <td>{insurerQuestions[t.insurer_question] ? <span>{t.insurer_question}<span class="sub">{t.insurer_question_text}</span></span> : t.insurer_question}</td>
+            <td>{t.summary}</td>
+            <td>{t.controls.map((c) => <div><a href={href.control(c.id)}>{c.name}</a></div>)}</td>
+            <td><span class="history" aria-label={`Last ${t.history.length} runs: ${t.history.map((h) => h.status).join(", ")}`}>{t.history.map((h) => <span data-status={h.status} title={`${formatDate(h.date)}: ${h.status}`}></span>)}</span></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="failing">Failing tests and the fix</h2>
+  <div class="grid two">
+    {failing.map((t) => (
+      <div class="card" id={`fix-${t.anchor}`}>
+        <div class="card-head"><h3>{t.title}</h3><Pill status={t.status} /></div>
+        <p>{t.summary}</p>
+        <dl class="kv">
+          <dt>Fix</dt><dd>{t.remediation}</dd>
+          {t.remediation_plan && <><dt>Plan</dt><dd>{t.remediation_plan.action} <span class="muted">Owner {t.remediation_plan.owner ? <a href={href.person(t.remediation_plan.owner)}>{t.controls[0]?.ownerName}</a> : "unassigned"}, due {formatDate(t.remediation_plan.due)}.</span></dd></>}
+          <dt>Evidence read</dt><dd><code style="white-space:pre-wrap;word-break:break-word">{JSON.stringify(t.evidence, null, 1).replace(/[{}"]/g, "").trim()}</code></dd>
+          <dt>Control</dt><dd>{t.controls.map((c) => <a href={href.control(c.id)}>{c.name}</a>)}</dd>
+        </dl>
+      </div>
+    ))}
+  </div>
+
+  <h2>Attestations</h2>
+  <div class="card">
+    <p class="muted">These three insurer questions cannot be read from a Microsoft 365 tenant. The scan lists them so nothing is forgotten, and a person attaches the evidence that answers them; the evidence carries the renewal date.</p>
+    <div class="table-wrap plain">
+      <table>
+        <thead><tr><th>Question</th><th>Evidence that answers it</th><th>Status</th><th>Renewal</th></tr></thead>
+        <tbody>
+          {attest.map((t) => {
+            const items = attestations(t.check_id);
+            return (
+              <tr>
+                <td><strong>{t.title}</strong><span class="sub">{t.insurer_question_text}</span></td>
+                <td>{items.length ? items.map((e) => <div><a href={href.evidence(e.id)}>{e.name}</a></div>) : <span class="muted">Nothing attached</span>}</td>
+                <td>{items.length ? items.map((e) => <Pill status={e.status} />) : <Pill status="needs_artifact" />}</td>
+                <td>{items.map((e) => <div>{formatDate(e.renewal)}</div>)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Run history</h2>
+  <ul class="list">
+    {[...monitoring.runs].reverse().map((r) => <li><span class="when">{formatDate(r.date)}</span><span class="grow">{r.note}</span></li>)}
+  </ul>
+</App>

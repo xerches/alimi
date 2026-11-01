@@ -1,0 +1,69 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { risks, riskCounts, riskScale, formatDate, href } from "../lib/data.js";
+const sorted = [...risks].sort((a, b) => b.score - a.score);
+---
+
+<App title="Risks" path="/risks" section="risks" eyebrow="Risk" crumbs={[{ label: "Risks" }]} wide
+  description="The risk register: each risk with its source, likelihood and impact, rating, treatment, owner, linked controls and next review."
+  lead="Risks come from four places: the yearly workshop, the scanner, vendor reviews and the AI inventory. Each has an owner, a treatment and the controls that treat it, so the register and the control list never disagree.">
+  <a slot="actions" class="button secondary" href={href.policy("POL-15")}>Risk Management Policy</a>
+  <a slot="actions" class="button" href="#R-05">Open items ({riskCounts.open})</a>
+
+  <div class="grid">
+    <Tile label="Risks" value={riskCounts.total} note={`${riskCounts.open} open, awaiting a treatment decision`} />
+    <Tile label="Critical" value={riskCounts.byRating.Critical} />
+    <Tile label="High" value={riskCounts.byRating.High} />
+    <Tile label="Medium" value={riskCounts.byRating.Medium} />
+    <Tile label="Needs owner" value={riskCounts.needsOwner} />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="risk-filter">Filter risks</label>
+    <input id="risk-filter" type="search" placeholder="Filter by title, source or owner" data-filter="#risks" />
+    <div class="chips" data-chips="#risks" data-key="rating" role="group" aria-label="Filter by rating">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      {["Critical", "High", "Medium"].map((r) => <button class="chip" type="button" data-value={r} aria-pressed="false">{r}</button>)}
+    </div>
+    <div class="chips" data-chips="#risks" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Any status</button>
+      {["Open", "Treating", "Accepted"].map((s) => <button class="chip" type="button" data-value={s} aria-pressed="false">{s}</button>)}
+    </div>
+    <span class="muted" data-count-for="#risks"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="risks">
+      <thead><tr><th>Risk</th><th>Source</th><th class="num">Likelihood</th><th class="num">Impact</th><th>Rating</th><th>Treatment</th><th>Owner</th><th>Controls</th><th>Status</th><th>Next review</th></tr></thead>
+      <tbody>
+        {sorted.map((r) => (
+          <tr id={r.id} data-rating={r.rating} data-status={r.status}>
+            <td style="min-width:16rem"><strong>{r.title}</strong><span class="sub">{r.description}</span></td>
+            <td>{r.source}</td>
+            <td class="num">{r.likelihood}</td>
+            <td class="num">{r.impact}</td>
+            <td><Pill label={r.rating} /><span class="sub">{r.score}</span></td>
+            <td>{r.treatment}</td>
+            <td>{r.owner ? <a href={href.person(r.owner)}>{r.ownerName}</a> : <Pill status="needs_owner" />}</td>
+            <td>{r.controlRecords.map((c) => <div><a href={href.control(c.id)}>{c.id}</a></div>)}</td>
+            <td><Pill label={r.status} /></td>
+            <td>{formatDate(r.next_review)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>How risks are scored</h2>
+    <dl class="kv">
+      <dt>Likelihood</dt><dd>{riskScale.likelihood}</dd>
+      <dt>Impact</dt><dd>{riskScale.impact}</dd>
+      <dt>Rating</dt><dd>{riskScale.rating}</dd>
+      <dt>Treatments</dt><dd>Reduce (add or fix a control), Accept (the CEO signs off), Transfer (insurance or contract), Avoid (stop the activity)</dd>
+    </dl>
+    <p class="muted" style="margin:0">The register is reviewed in the yearly workshop and whenever a scan, a vendor alert or an AI change adds a risk. Scanner findings, vendor findings and AI reviews each open a risk automatically with a proposed owner.</p>
+  </div>
+</App>

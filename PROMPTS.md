@@ -157,6 +157,17 @@ keeps in one sentence. Resume metrics are attributed to employment per the Rules
 CLAUDE.md. Write the About page in first person, 150 words.
 ```
 
+**11a. Policy Pack demo** (added Nov 1, 2026 at the founder's request; done Nov 1, 2026)
+```
+Read CLAUDE.md, /policies, /config and the scanner. In /demo, build an unlisted static demo of
+the platform around the Policy Pack, modelled on how Vanta, Drata and Secureframe show their
+products: a sample company with a control list, owners, evidence per control, frameworks,
+policies, people and training, monitoring, assets, vendors, AI governance, a trust page,
+questionnaires and an assistant placeholder. Brand tokens from /config/brand.yaml. Fictional
+company labelled on every page, noindex everywhere, never linked from the marketing site,
+nothing saved. The pages and the status rules are the draft for the platform's screens.
+```
+
 ## Phase 6: Platform web app (weeks 20-29)
 
 **12. Platform foundation**

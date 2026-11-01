@@ -1,0 +1,52 @@
+// Progressive enhancement for tables: a text filter and chip filters. Every row is visible without
+// this script; it only hides rows. Served from the site's own origin, so it fits the CSP.
+function rowsOf(selector) {
+  const table = document.querySelector(selector);
+  return table ? [...table.querySelectorAll("tbody tr")] : [];
+}
+
+const state = new Map(); // table selector -> { text, chips: { key: value } }
+
+function apply(selector) {
+  const s = state.get(selector) ?? { text: "", chips: {} };
+  for (const row of rowsOf(selector)) {
+    let show = true;
+    if (s.text && !row.textContent.toLowerCase().includes(s.text)) show = false;
+    for (const [key, value] of Object.entries(s.chips)) {
+      if (value === "all") continue;
+      const own = (row.dataset[key] ?? "").split(" ");
+      if (!own.includes(value)) show = false;
+    }
+    row.classList.toggle("hidden-by-filter", !show);
+  }
+  const count = document.querySelector(`[data-count-for="${selector}"]`);
+  if (count) {
+    const visible = rowsOf(selector).filter((r) => !r.classList.contains("hidden-by-filter")).length;
+    count.textContent = `${visible} shown`;
+  }
+}
+
+for (const input of document.querySelectorAll("input[data-filter]")) {
+  const selector = input.dataset.filter;
+  input.addEventListener("input", () => {
+    const s = state.get(selector) ?? { text: "", chips: {} };
+    s.text = input.value.trim().toLowerCase();
+    state.set(selector, s);
+    apply(selector);
+  });
+}
+
+for (const group of document.querySelectorAll("[data-chips]")) {
+  const selector = group.dataset.chips;
+  const key = group.dataset.key;
+  const buttons = [...group.querySelectorAll("button[data-value]")];
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      for (const b of buttons) b.setAttribute("aria-pressed", String(b === button));
+      const s = state.get(selector) ?? { text: "", chips: {} };
+      s.chips[key] = button.dataset.value;
+      state.set(selector, s);
+      apply(selector);
+    });
+  }
+}

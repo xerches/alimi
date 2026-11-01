@@ -1,0 +1,1944 @@
+{
+  "as_of": "2026-11-01",
+  "people": [
+    {
+      "id": "P-01",
+      "name": "Dana Whitcomb",
+      "email": "dana.whitcomb@saltmarsh.example",
+      "title": "Chief Executive Officer",
+      "department": "Leadership",
+      "manager": null,
+      "start_date": "2014-03-03",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-20",
+          "due": "2027-10-20"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-23",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-07",
+          "due": "2027-09-07"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2014-02-13"
+      },
+      "mfa_registered": true,
+      "device": "D-01",
+      "device_issue": null
+    },
+    {
+      "id": "P-02",
+      "name": "Priya Natarajan",
+      "email": "priya.natarajan@saltmarsh.example",
+      "title": "Chief Operating Officer",
+      "department": "Leadership",
+      "manager": "P-01",
+      "start_date": "2018-09-10",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-14",
+          "due": "2027-10-14"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-25",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-17",
+          "due": "2027-08-17"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2018-09-04"
+      },
+      "mfa_registered": true,
+      "device": "D-02",
+      "device_issue": null
+    },
+    {
+      "id": "P-03",
+      "name": "Tom Brennan",
+      "email": "tom.brennan@saltmarsh.example",
+      "title": "Chief Financial Officer",
+      "department": "Leadership",
+      "manager": "P-01",
+      "start_date": "2016-01-11",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-12"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-27",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-21",
+          "due": "2027-08-21"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2015-12-22"
+      },
+      "mfa_registered": true,
+      "device": "D-03",
+      "device_issue": null
+    },
+    {
+      "id": "P-04",
+      "name": "Grace Lindqvist",
+      "email": "grace.lindqvist@saltmarsh.example",
+      "title": "General Counsel and Privacy Lead",
+      "department": "Leadership",
+      "manager": "P-01",
+      "start_date": "2021-06-01",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-20",
+          "due": "2027-09-20"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-16",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2021-05-25"
+      },
+      "mfa_registered": true,
+      "device": "D-04",
+      "device_issue": null
+    },
+    {
+      "id": "P-05",
+      "name": "Rosa Delgado",
+      "email": "rosa.delgado@saltmarsh.example",
+      "title": "Head of Payroll Operations",
+      "department": "Payroll operations",
+      "manager": "P-02",
+      "start_date": "2015-05-18",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-04",
+          "due": "2027-10-04"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-19",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-04",
+          "due": "2027-09-04"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2015-04-28"
+      },
+      "mfa_registered": true,
+      "device": "D-05",
+      "device_issue": null
+    },
+    {
+      "id": "P-06",
+      "name": "Noah Alvarez",
+      "email": "noah.alvarez@saltmarsh.example",
+      "title": "Senior Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2017-02-13",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-11",
+          "due": "2027-10-11"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-29",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-20",
+          "due": "2027-08-20"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-02-08"
+      },
+      "mfa_registered": true,
+      "device": "D-06",
+      "device_issue": null
+    },
+    {
+      "id": "P-07",
+      "name": "Camila Sato",
+      "email": "camila.sato@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2016-12-02",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-27",
+          "due": "2027-09-27"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-06",
+          "due": "2027-09-06"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2016-11-26"
+      },
+      "mfa_registered": true,
+      "device": "D-07",
+      "device_issue": null
+    },
+    {
+      "id": "P-08",
+      "name": "Owen Murphy",
+      "email": "owen.murphy@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2016-11-08",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-20",
+          "due": "2027-09-20"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-28",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-20",
+          "due": "2027-09-20"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2016-10-19"
+      },
+      "mfa_registered": true,
+      "device": "D-08",
+      "device_issue": null
+    },
+    {
+      "id": "P-09",
+      "name": "Zara Novak",
+      "email": "zara.novak@saltmarsh.example",
+      "title": "Implementation Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2020-06-05",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [
+        "POL-22"
+      ],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-06",
+          "due": "2027-10-06"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-28",
+          "due": "2027-09-28"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2020-05-17"
+      },
+      "mfa_registered": true,
+      "device": "D-09",
+      "device_issue": null
+    },
+    {
+      "id": "P-10",
+      "name": "Caleb Castillo",
+      "email": "caleb.castillo@saltmarsh.example",
+      "title": "Senior Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2018-08-18",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-23",
+          "due": "2027-09-23"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-26",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-05",
+          "due": "2027-08-05"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2018-08-11"
+      },
+      "mfa_registered": true,
+      "device": "D-10",
+      "device_issue": null
+    },
+    {
+      "id": "P-11",
+      "name": "Leila Reyes",
+      "email": "leila.reyes@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2023-02-05",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-20",
+          "due": "2027-10-20"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-11",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-07",
+          "due": "2027-09-07"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2023-01-30"
+      },
+      "mfa_registered": true,
+      "device": "D-11",
+      "device_issue": null
+    },
+    {
+      "id": "P-12",
+      "name": "Isaac Keane",
+      "email": "isaac.keane@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2025-01-12",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-27",
+          "due": "2027-09-27"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-01",
+          "due": "2027-08-01"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-12-24"
+      },
+      "mfa_registered": true,
+      "device": "D-12",
+      "device_issue": null
+    },
+    {
+      "id": "P-13",
+      "name": "Hana Haddad",
+      "email": "hana.haddad@saltmarsh.example",
+      "title": "Implementation Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2016-08-13",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-18",
+          "due": "2027-10-18"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-15",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-18",
+          "due": "2027-09-18"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2016-07-28"
+      },
+      "mfa_registered": true,
+      "device": "D-13",
+      "device_issue": null
+    },
+    {
+      "id": "P-14",
+      "name": "Miles Fischer",
+      "email": "miles.fischer@saltmarsh.example",
+      "title": "Senior Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2017-08-01",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-18",
+          "due": "2027-09-18"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-19",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-18",
+          "due": "2027-08-18"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-07-24"
+      },
+      "mfa_registered": true,
+      "device": "D-14",
+      "device_issue": "Windows update pending for 21 days"
+    },
+    {
+      "id": "P-15",
+      "name": "Ingrid Bello",
+      "email": "ingrid.bello@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2018-11-26",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-28",
+          "due": "2027-09-28"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-18",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-26",
+          "due": "2027-08-26"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2018-11-14"
+      },
+      "mfa_registered": true,
+      "device": "D-15",
+      "device_issue": null
+    },
+    {
+      "id": "P-16",
+      "name": "Theo Larsen",
+      "email": "theo.larsen@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2017-11-11",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [
+        "POL-22"
+      ],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-03",
+          "due": "2027-10-03"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-21",
+          "due": "2027-09-21"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-11-06"
+      },
+      "mfa_registered": true,
+      "device": "D-16",
+      "device_issue": null
+    },
+    {
+      "id": "P-17",
+      "name": "Amara Ferreira",
+      "email": "amara.ferreira@saltmarsh.example",
+      "title": "Implementation Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2019-03-10",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-11",
+          "due": "2027-10-11"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-17",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-05",
+          "due": "2027-08-05"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-03-04"
+      },
+      "mfa_registered": true,
+      "device": "D-17",
+      "device_issue": null
+    },
+    {
+      "id": "P-18",
+      "name": "Felix Donnelly",
+      "email": "felix.donnelly@saltmarsh.example",
+      "title": "Senior Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2021-01-06",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-21",
+          "due": "2027-09-21"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-23",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-06",
+          "due": "2027-09-06"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2020-12-31"
+      },
+      "mfa_registered": true,
+      "device": "D-18",
+      "device_issue": null
+    },
+    {
+      "id": "P-19",
+      "name": "Nina Cruz",
+      "email": "nina.cruz@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2019-07-10",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-22",
+          "due": "2027-09-22"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-28",
+          "due": "2027-09-28"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-06-23"
+      },
+      "mfa_registered": true,
+      "device": "D-19",
+      "device_issue": null
+    },
+    {
+      "id": "P-20",
+      "name": "Declan Iqbal",
+      "email": "declan.iqbal@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2021-04-15",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-26",
+          "due": "2027-09-26"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-11",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "overdue",
+          "completed": "2025-09-30",
+          "due": "2026-09-30"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2021-04-02"
+      },
+      "mfa_registered": true,
+      "device": "D-20",
+      "device_issue": null
+    },
+    {
+      "id": "P-21",
+      "name": "Yara Castillo",
+      "email": "yara.castillo@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2026-10-19",
+      "status": "onboarding",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": "all",
+      "training": {
+        "TR-01": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-18"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-18"
+        },
+        "TR-02": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-18"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2026-10-13"
+      },
+      "mfa_registered": false,
+      "device": "D-21",
+      "device_issue": null
+    },
+    {
+      "id": "P-22",
+      "name": "Omar Keane",
+      "email": "omar.keane@saltmarsh.example",
+      "title": "Payroll Specialist",
+      "department": "Payroll operations",
+      "manager": "P-05",
+      "start_date": "2026-10-26",
+      "status": "onboarding",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": "all",
+      "training": {
+        "TR-01": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-25"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-25"
+        },
+        "TR-02": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-25"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2026-10-11"
+      },
+      "mfa_registered": false,
+      "device": "D-22",
+      "device_issue": null
+    },
+    {
+      "id": "P-23",
+      "name": "Kwame Mensah",
+      "email": "kwame.mensah@saltmarsh.example",
+      "title": "Head of Client Services",
+      "department": "Client services",
+      "manager": "P-02",
+      "start_date": "2017-02-06",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-03",
+          "due": "2027-10-03"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-01-27"
+      },
+      "mfa_registered": true,
+      "device": "D-23",
+      "device_issue": null
+    },
+    {
+      "id": "P-24",
+      "name": "Omar Iqbal",
+      "email": "omar.iqbal@saltmarsh.example",
+      "title": "Client Success Manager",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2023-09-02",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-12"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-22",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2023-08-25"
+      },
+      "mfa_registered": true,
+      "device": "D-24",
+      "device_issue": null
+    },
+    {
+      "id": "P-25",
+      "name": "Sienna Romano",
+      "email": "sienna.romano@saltmarsh.example",
+      "title": "Support Specialist",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2017-08-15",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-23",
+          "due": "2027-09-23"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-07-26"
+      },
+      "mfa_registered": true,
+      "device": "D-25",
+      "device_issue": null
+    },
+    {
+      "id": "P-26",
+      "name": "Patrick Sullivan",
+      "email": "patrick.sullivan@saltmarsh.example",
+      "title": "Client Success Manager",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2019-06-21",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-18",
+          "due": "2027-09-18"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-11",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-06-15"
+      },
+      "mfa_registered": true,
+      "device": "D-26",
+      "device_issue": null
+    },
+    {
+      "id": "P-27",
+      "name": "Imani Park",
+      "email": "imani.park@saltmarsh.example",
+      "title": "Client Success Manager",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2024-03-16",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [
+        "POL-22"
+      ],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-12"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-03-09"
+      },
+      "mfa_registered": true,
+      "device": "D-27",
+      "device_issue": "No check-in for 12 days"
+    },
+    {
+      "id": "P-28",
+      "name": "Victor Medina",
+      "email": "victor.medina@saltmarsh.example",
+      "title": "Support Specialist",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2024-02-13",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-04",
+          "due": "2027-10-04"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-15",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-01-24"
+      },
+      "mfa_registered": true,
+      "device": "D-28",
+      "device_issue": null
+    },
+    {
+      "id": "P-29",
+      "name": "Esme Gallagher",
+      "email": "esme.gallagher@saltmarsh.example",
+      "title": "Client Success Manager",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2019-11-18",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-23",
+          "due": "2027-09-23"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-25",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-11-01"
+      },
+      "mfa_registered": true,
+      "device": "D-29",
+      "device_issue": null
+    },
+    {
+      "id": "P-30",
+      "name": "Ruben Diallo",
+      "email": "ruben.diallo@saltmarsh.example",
+      "title": "Client Success Manager",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2024-08-19",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-17",
+          "due": "2027-09-17"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-19",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-08-06"
+      },
+      "mfa_registered": true,
+      "device": "D-30",
+      "device_issue": null
+    },
+    {
+      "id": "P-31",
+      "name": "Tess Weber",
+      "email": "tess.weber@saltmarsh.example",
+      "title": "Support Specialist",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2017-12-04",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-26",
+          "due": "2027-09-26"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2017-11-17"
+      },
+      "mfa_registered": true,
+      "device": "D-31",
+      "device_issue": null
+    },
+    {
+      "id": "P-32",
+      "name": "Esme Donnelly",
+      "email": "esme.donnelly@saltmarsh.example",
+      "title": "Support Specialist",
+      "department": "Client services",
+      "manager": "P-23",
+      "start_date": "2026-10-26",
+      "status": "onboarding",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": "all",
+      "training": {
+        "TR-01": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-25"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-25"
+        }
+      },
+      "background_check": {
+        "status": "pending",
+        "date": null
+      },
+      "mfa_registered": false,
+      "device": "D-32",
+      "device_issue": null
+    },
+    {
+      "id": "P-33",
+      "name": "Maureen Fitzgerald",
+      "email": "maureen.fitzgerald@saltmarsh.example",
+      "title": "Controller",
+      "department": "Finance",
+      "manager": "P-03",
+      "start_date": "2019-04-01",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-26",
+          "due": "2027-09-26"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-27",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-05",
+          "due": "2027-09-05"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-03-27"
+      },
+      "mfa_registered": true,
+      "device": "D-33",
+      "device_issue": null
+    },
+    {
+      "id": "P-34",
+      "name": "Sean Castillo",
+      "email": "sean.castillo@saltmarsh.example",
+      "title": "Staff Accountant",
+      "department": "Finance",
+      "manager": "P-33",
+      "start_date": "2024-03-27",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-09",
+          "due": "2027-10-09"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-21",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "overdue",
+          "completed": "2025-09-30",
+          "due": "2026-09-30"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-03-12"
+      },
+      "mfa_registered": true,
+      "device": "D-34",
+      "device_issue": null
+    },
+    {
+      "id": "P-35",
+      "name": "Lucia Reyes",
+      "email": "lucia.reyes@saltmarsh.example",
+      "title": "Accounts Payable Specialist",
+      "department": "Finance",
+      "manager": "P-33",
+      "start_date": "2025-09-05",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-21",
+          "due": "2027-09-21"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-24",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-09-11",
+          "due": "2027-09-11"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2025-08-29"
+      },
+      "mfa_registered": true,
+      "device": "D-35",
+      "device_issue": null
+    },
+    {
+      "id": "P-36",
+      "name": "Kofi Keane",
+      "email": "kofi.keane@saltmarsh.example",
+      "title": "Staff Accountant",
+      "department": "Finance",
+      "manager": "P-33",
+      "start_date": "2025-10-16",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-12"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-10"
+        },
+        "TR-02": {
+          "status": "completed",
+          "completed": "2026-08-21",
+          "due": "2027-08-21"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2025-10-06"
+      },
+      "mfa_registered": true,
+      "device": "D-36",
+      "device_issue": null
+    },
+    {
+      "id": "P-37",
+      "name": "Derek Sullivan",
+      "email": "derek.sullivan@saltmarsh.example",
+      "title": "Head of Sales",
+      "department": "Sales and marketing",
+      "manager": "P-01",
+      "start_date": "2020-08-17",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-01",
+          "due": "2027-10-01"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-16",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2020-08-11"
+      },
+      "mfa_registered": true,
+      "device": "D-37",
+      "device_issue": null
+    },
+    {
+      "id": "P-38",
+      "name": "Mateo Sullivan",
+      "email": "mateo.sullivan@saltmarsh.example",
+      "title": "Account Executive",
+      "department": "Sales and marketing",
+      "manager": "P-37",
+      "start_date": "2021-08-15",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-27",
+          "due": "2027-09-27"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-21",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2021-07-30"
+      },
+      "mfa_registered": true,
+      "device": "D-38",
+      "device_issue": null
+    },
+    {
+      "id": "P-39",
+      "name": "Rhea Park",
+      "email": "rhea.park@saltmarsh.example",
+      "title": "Marketing Manager",
+      "department": "Sales and marketing",
+      "manager": "P-37",
+      "start_date": "2021-04-26",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [
+        "POL-22"
+      ],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-02",
+          "due": "2027-10-02"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2021-04-12"
+      },
+      "mfa_registered": true,
+      "device": "D-39",
+      "device_issue": null
+    },
+    {
+      "id": "P-40",
+      "name": "Connor Medina",
+      "email": "connor.medina@saltmarsh.example",
+      "title": "Account Executive",
+      "department": "Sales and marketing",
+      "manager": "P-37",
+      "start_date": "2024-01-06",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-18",
+          "due": "2027-10-18"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2023-12-22"
+      },
+      "mfa_registered": true,
+      "device": "D-40",
+      "device_issue": null
+    },
+    {
+      "id": "P-41",
+      "name": "Dalia Gallagher",
+      "email": "dalia.gallagher@saltmarsh.example",
+      "title": "Marketing Coordinator",
+      "department": "Sales and marketing",
+      "manager": "P-37",
+      "start_date": "2025-05-13",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-20",
+          "due": "2027-10-20"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-18",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2025-05-04"
+      },
+      "mfa_registered": true,
+      "device": "D-41",
+      "device_issue": null
+    },
+    {
+      "id": "P-42",
+      "name": "Elena Vasquez",
+      "email": "elena.vasquez@saltmarsh.example",
+      "title": "Head of People",
+      "department": "HR",
+      "manager": "P-02",
+      "start_date": "2019-10-07",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-04",
+          "due": "2027-10-04"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-17",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2019-10-01"
+      },
+      "mfa_registered": true,
+      "device": "D-42",
+      "device_issue": null
+    },
+    {
+      "id": "P-43",
+      "name": "Freya Lindgren",
+      "email": "freya.lindgren@saltmarsh.example",
+      "title": "HR Generalist",
+      "department": "HR",
+      "manager": "P-42",
+      "start_date": "2025-12-14",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-19",
+          "due": "2027-09-19"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-29",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2025-11-29"
+      },
+      "mfa_registered": true,
+      "device": "D-43",
+      "device_issue": null
+    },
+    {
+      "id": "P-44",
+      "name": "Jordan Costa",
+      "email": "jordan.costa@saltmarsh.example",
+      "title": "Recruiter",
+      "department": "HR",
+      "manager": "P-42",
+      "start_date": "2023-01-04",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-12",
+          "due": "2027-10-12"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2022-12-20"
+      },
+      "mfa_registered": true,
+      "device": "D-44",
+      "device_issue": null
+    },
+    {
+      "id": "P-45",
+      "name": "Lin Zhao",
+      "email": "lin.zhao@saltmarsh.example",
+      "title": "Head of Product",
+      "department": "Product and engineering",
+      "manager": "P-02",
+      "start_date": "2020-02-03",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-27",
+          "due": "2027-09-27"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-20",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2020-01-16"
+      },
+      "mfa_registered": true,
+      "device": "D-45",
+      "device_issue": null
+    },
+    {
+      "id": "P-46",
+      "name": "Ethan Alvarez",
+      "email": "ethan.alvarez@saltmarsh.example",
+      "title": "Software Engineer",
+      "department": "Product and engineering",
+      "manager": "P-45",
+      "start_date": "2021-05-10",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-26",
+          "due": "2027-09-26"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-29",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2021-05-04"
+      },
+      "mfa_registered": true,
+      "device": "D-46",
+      "device_issue": null
+    },
+    {
+      "id": "P-47",
+      "name": "Sofia Sato",
+      "email": "sofia.sato@saltmarsh.example",
+      "title": "Senior Software Engineer",
+      "department": "Product and engineering",
+      "manager": "P-45",
+      "start_date": "2025-06-01",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-29",
+          "due": "2027-09-29"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2025-05-15"
+      },
+      "mfa_registered": true,
+      "device": "D-47",
+      "device_issue": null
+    },
+    {
+      "id": "P-48",
+      "name": "Liam Murphy",
+      "email": "liam.murphy@saltmarsh.example",
+      "title": "Software Engineer",
+      "department": "Product and engineering",
+      "manager": "P-45",
+      "start_date": "2024-05-12",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [
+        "POL-22"
+      ],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-10-17",
+          "due": "2027-10-17"
+        },
+        "TR-03": {
+          "status": "due",
+          "completed": null,
+          "due": "2026-11-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-05-03"
+      },
+      "mfa_registered": true,
+      "device": "D-48",
+      "device_issue": null
+    },
+    {
+      "id": "P-49",
+      "name": "Aisha Novak",
+      "email": "aisha.novak@saltmarsh.example",
+      "title": "QA Engineer",
+      "department": "Product and engineering",
+      "manager": "P-45",
+      "start_date": "2022-08-28",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-24",
+          "due": "2027-09-24"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-15",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2022-08-14"
+      },
+      "mfa_registered": true,
+      "device": "D-49",
+      "device_issue": null
+    },
+    {
+      "id": "P-50",
+      "name": "Noah Castillo",
+      "email": "noah.castillo@saltmarsh.example",
+      "title": "Software Engineer",
+      "department": "Product and engineering",
+      "manager": "P-45",
+      "start_date": "2023-03-28",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-30",
+          "due": "2027-09-30"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-25",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2023-03-17"
+      },
+      "mfa_registered": true,
+      "device": "D-50",
+      "device_issue": null
+    },
+    {
+      "id": "P-51",
+      "name": "Nadia Haddad",
+      "email": "nadia.haddad@saltmarsh.example",
+      "title": "Compliance Analyst",
+      "department": "Compliance",
+      "manager": "P-04",
+      "start_date": "2022-11-14",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-24",
+          "due": "2027-09-24"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-15",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2022-11-08"
+      },
+      "mfa_registered": true,
+      "device": "D-51",
+      "device_issue": null
+    },
+    {
+      "id": "P-52",
+      "name": "Connor Byrne",
+      "email": "connor.byrne@saltmarsh.example",
+      "title": "Compliance Associate",
+      "department": "Compliance",
+      "manager": "P-04",
+      "start_date": "2024-07-08",
+      "status": "active",
+      "employment": "employee",
+      "external": false,
+      "counted": true,
+      "policies_pending": [],
+      "training": {
+        "TR-01": {
+          "status": "completed",
+          "completed": "2026-09-26",
+          "due": "2027-09-26"
+        },
+        "TR-03": {
+          "status": "completed",
+          "completed": "2026-10-20",
+          "due": "2027-10-10"
+        }
+      },
+      "background_check": {
+        "status": "completed",
+        "date": "2024-06-22"
+      },
+      "mfa_registered": true,
+      "device": "D-52",
+      "device_issue": null
+    },
+    {
+      "id": "X-01",
+      "name": "Marcus Okafor",
+      "email": "marcus.okafor@saltmarsh.example",
+      "title": "Account Lead, Bay State IT Partners (outside IT provider)",
+      "department": "IT provider",
+      "manager": "P-02",
+      "start_date": "2022-01-10",
+      "status": "active",
+      "employment": "provider",
+      "external": true,
+      "counted": false,
+      "policies_pending": [],
+      "training": {},
+      "background_check": {
+        "status": "not_required",
+        "date": null
+      },
+      "mfa_registered": true,
+      "device": null,
+      "device_issue": null
+    },
+    {
+      "id": "X-02",
+      "name": "Alex Dennis",
+      "email": "alex.dennis_alimi.example#EXT#@saltmarsh.example",
+      "title": "Fractional Security Lead, alimi",
+      "department": "Security (fractional)",
+      "manager": "P-01",
+      "start_date": "2026-09-22",
+      "status": "active",
+      "employment": "provider",
+      "external": true,
+      "counted": false,
+      "policies_pending": [],
+      "training": {},
+      "background_check": {
+        "status": "not_required",
+        "date": null
+      },
+      "mfa_registered": true,
+      "device": null,
+      "device_issue": null
+    },
+    {
+      "id": "X-03",
+      "name": "Nora Gomez",
+      "email": "adm-ngomez@saltmarsh.example",
+      "title": "Systems Engineer, Bay State IT Partners",
+      "department": "IT provider",
+      "manager": "X-01",
+      "start_date": "2023-05-02",
+      "status": "active",
+      "employment": "provider",
+      "external": true,
+      "counted": false,
+      "policies_pending": [],
+      "training": {},
+      "background_check": {
+        "status": "not_required",
+        "date": null
+      },
+      "mfa_registered": true,
+      "device": null,
+      "device_issue": null
+    },
+    {
+      "id": "X-04",
+      "name": "Sam Whitfield",
+      "email": "sam.whitfield_harborline.example#EXT#@saltmarsh.example",
+      "title": "Account Manager, Harborline Insurance Brokers",
+      "department": "Broker (guest)",
+      "manager": null,
+      "start_date": "2026-10-01",
+      "status": "active",
+      "employment": "guest",
+      "external": true,
+      "counted": false,
+      "policies_pending": [],
+      "training": {},
+      "background_check": {
+        "status": "not_required",
+        "date": null
+      },
+      "mfa_registered": true,
+      "device": null,
+      "device_issue": null
+    }
+  ]
+}

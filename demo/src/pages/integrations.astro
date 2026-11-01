@@ -1,0 +1,43 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import { integrations, company, control, formatDate, formatDateTime, href, personName } from "../lib/data.js";
+---
+
+<App title="Integrations" path="/integrations" section="integrations" eyebrow="Setup" crumbs={[{ label: "Integrations" }]}
+  description="What is connected, with which read-only permissions, what the connection reads and never reads, which controls it proves, and the connections available next."
+  lead="Connect a system once and its tests run every week. Every connection is read-only, the permissions are listed in full, and the connection never reads mail content, files or passwords.">
+  <a slot="actions" class="button" href="#available">Add a connection</a>
+
+  {integrations.connected.map((c) => (
+    <div class="card" id={c.id}>
+      <div class="card-head"><h2>{c.name}</h2><Pill label={c.status} /></div>
+      <dl class="kv">
+        <dt>Mode</dt><dd>{c.mode}. Connected {formatDate(c.connected_on)} by {personName(c.connected_by)} under the pilot authorization letter of {formatDate(company.pilot_letter.signed)}.</dd>
+        <dt>Last run</dt><dd>{formatDateTime(c.last_run)}; {c.runs} runs so far; {c.schedule.toLowerCase()}</dd>
+        <dt>Permissions</dt><dd>{c.permissions.map((p) => <code style="margin-right:.5rem">{p}</code>)}</dd>
+        <dt>Reads</dt><dd>{c.reads.join("; ")}</dd>
+        <dt>Never reads</dt><dd>{c.never_reads.join("; ")}</dd>
+        <dt>Proves</dt><dd>{c.proves.map((id) => <div><a href={href.control(id)}>{control(id)?.name}</a></div>)}</dd>
+      </dl>
+      <p class="muted" style="margin:0;font-size:.8125rem">Tokens are encrypted at rest with a key kept outside the database and never written to logs. Disconnecting deletes them.</p>
+    </div>
+  ))}
+
+  <h2 id="available">Available</h2>
+  <div class="grid wide">
+    {integrations.available.map((a) => (
+      <div class="card" style="margin:0">
+        <div class="card-head"><h3>{a.name}</h3><Pill label={a.status} /></div>
+        <p class="muted" style="font-size:.875rem">{a.note}</p>
+        <p style="font-size:.8125rem;margin:0">Would prove: {a.would_prove.map((id) => <a href={href.control(id)} style="margin-right:.4rem">{id}</a>)}</p>
+        <p style="margin:.75rem 0 0"><button class="button small secondary" type="button">Connect</button></p>
+      </div>
+    ))}
+  </div>
+
+  <h2>Later</h2>
+  <ul class="list">
+    {integrations.later.map((l) => <li><span class="grow"><strong>{l.name}</strong><span class="sub muted" style="display:block;font-size:.8125rem">{l.note}</span></span><Pill label="Later" tone="neutral" /></li>)}
+  </ul>
+</App>

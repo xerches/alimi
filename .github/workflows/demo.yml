@@ -1,0 +1,32 @@
+name: demo
+on:
+  push:
+    paths: ["demo/**", "config/**", "policies/**", "tools/scanner/**", ".github/workflows/demo.yml"]
+  pull_request:
+    paths: ["demo/**", "config/**", "policies/**", "tools/scanner/**", ".github/workflows/demo.yml"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ../tools/scanner
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: demo/package-lock.json
+      - run: npm ci
+      - name: Sample data matches the generator and the scanner
+        run: |
+          npm run data
+          npm run scan
+          git diff --exit-code -- data
+      - run: npm test
+      - run: npm run build
+      - run: npm run lighthouse

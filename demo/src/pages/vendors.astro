@@ -1,0 +1,81 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { vendors, vendorCounts, vendorRubric, formatDate, href } from "../lib/data.js";
+const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+const sorted = [...vendors].sort((a, b) => order[a.inherent_risk] - order[b.inherent_risk] || a.name.localeCompare(b.name));
+const alerts = vendors.filter((v) => v.alerts.length);
+---
+
+<App title="Vendors" path="/vendors" section="vendors" eyebrow="Risk" crumbs={[{ label: "Vendors" }]} wide
+  description="Third-party risk: vendors discovered from the tenant and accounts payable, each with the data it holds, an inherent-risk tier from a four-factor rubric, an owner, a review status and the evidence on file."
+  lead="Vendors are found, not typed: the tenant's app consents and sign-in logs plus the accounts-payable list. A four-factor rubric sets the tier, and the tier sets how deep the review goes.">
+  <a slot="actions" class="button secondary" href={href.policy("POL-14")}>Vendor policy</a>
+  <a slot="actions" class="button" href="#alerts">Alerts ({vendorCounts.alerts})</a>
+
+  <div class="grid">
+    <Tile label="Vendors" value={vendorCounts.total} note={`${vendorCounts.subprocessors.length} handle client data as subprocessors`} />
+    <Tile label="Critical" value={vendorCounts.byTier.Critical} note="Yearly review with a SOC 2 or ISO report" />
+    <Tile label="High" value={vendorCounts.byTier.High} />
+    <Tile label="Reviews to do" value={vendorCounts.needingAction} note={`${vendorCounts.needsOwner} without an owner`} />
+    <Tile label="Alerts" value={vendorCounts.alerts} note="Breach notices and material changes" />
+  </div>
+
+  {alerts.length > 0 && (
+    <div id="alerts">
+      {alerts.map((v) => v.alerts.map((a) => (
+        <div class="callout" data-tone="danger">
+          <p><strong>{v.name} had a security incident ({formatDate(a.date)}).</strong> {a.text} <a href={href.vendor(v.id)}>Open the review</a>{a.flagged_as_finding && <span class="muted"> · flagged as finding {a.flagged_as_finding}</span>}</p>
+        </div>
+      )))}
+    </div>
+  )}
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="vendor-filter">Filter vendors</label>
+    <input id="vendor-filter" type="search" placeholder="Filter by name, category or data" data-filter="#vendors" />
+    <div class="chips" data-chips="#vendors" data-key="tier" role="group" aria-label="Filter by tier">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Every tier</button>
+      {["Critical", "High", "Medium", "Low"].map((t) => <button class="chip" type="button" data-value={t} aria-pressed="false">{t}</button>)}
+    </div>
+    <div class="chips" data-chips="#vendors" data-key="review" role="group" aria-label="Filter by review status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Any status</button>
+      {["Reviewed", "Due", "In_progress", "Under_review", "Blocked", "Not_required"].map((s) => <button class="chip" type="button" data-value={s} aria-pressed="false">{s.replaceAll("_", " ")}</button>)}
+    </div>
+    <span class="muted" data-count-for="#vendors"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="vendors">
+      <thead><tr><th>Vendor</th><th>Category</th><th>Tier</th><th>Data shared</th><th class="num">People</th><th>Owner</th><th>Review</th><th>Next review</th><th class="num">Evidence</th></tr></thead>
+      <tbody>
+        {sorted.map((v) => (
+          <tr data-tier={v.inherent_risk} data-review={v.review_status.replaceAll(" ", "_")}>
+            <td><a href={href.vendor(v.id)}>{v.name}</a><span class="sub">{v.discovered_via}{v.fictional ? " · fictional vendor" : ""}{v.ai ? " · AI" : ""}</span></td>
+            <td>{v.category}</td>
+            <td><Pill label={v.inherent_risk} /><span class="sub">{v.rubricTotal} of 16</span></td>
+            <td>{v.data_shared.join(", ")}</td>
+            <td class="num">{v.users}</td>
+            <td>{v.owner ? <a href={href.person(v.owner)}>{v.ownerName}</a> : <Pill status="needs_owner" />}</td>
+            <td><Pill label={v.review_status} />{v.alerts.length ? <span class="sub">Alert</span> : null}</td>
+            <td>{v.next_review ? formatDate(v.next_review) : <span class="muted">—</span>}</td>
+            <td class="num">{v.evidence.length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>The rubric</h2>
+    <dl class="kv">
+      <dt>Data types</dt><dd>{vendorRubric.data_types}</dd>
+      <dt>Business criticality</dt><dd>{vendorRubric.business_criticality}</dd>
+      <dt>Integration access</dt><dd>{vendorRubric.integration_access}</dd>
+      <dt>Communication scope</dt><dd>{vendorRubric.communication_scope}</dd>
+      <dt>Tiers</dt><dd>{Object.entries(vendorRubric.tiers).map(([t, r]) => `${t} ${r}`).join("; ")}</dd>
+      <dt>Review rule</dt><dd>{vendorRubric.review_rule}</dd>
+    </dl>
+  </div>
+</App>

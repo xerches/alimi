@@ -1,0 +1,35 @@
+---
+import App from "../layouts/App.astro";
+import Bar from "../components/Bar.astro";
+import { readiness, formatDate, href, company } from "../lib/data.js";
+---
+
+<App title="Frameworks" path="/frameworks" section="frameworks" eyebrow="Compliance" crumbs={[{ label: "Frameworks" }]}
+  description="Readiness per framework: the cyber insurance questionnaire first, then SOC 2, ISO 27001, HIPAA and ISO 42001, each built from the same controls."
+  lead="One set of controls serves every framework. The insurer's questionnaire is a framework like the others: thirteen questions, each mapped to the controls and evidence that answer it.">
+  <a slot="actions" class="button secondary" href="/questionnaires">Answer the insurer</a>
+  <a slot="actions" class="button" href="/trust#pack">Export evidence pack</a>
+
+  <div class="grid wide">
+    {readiness.map((r) => (
+      <div class="card">
+        <div class="card-head"><h2><a href={href.framework(r.id)}>{r.short}</a></h2><span class="tag">{r.target?.label}</span></div>
+        <p class="muted" style="margin:0 0 .5rem">{r.name}</p>
+        <p style="font-size:2rem;font-weight:700;margin:0;font-family:var(--font-heading)">{r.percent}%</p>
+        <Bar percent={r.percent} label={`${r.short} readiness ${r.percent} percent`} />
+        <dl class="kv" style="margin-top:.5rem">
+          <dt>Controls Ok</dt><dd>{r.ok} of {r.controls.length}</dd>
+          <dt>Requirement IDs mapped</dt><dd>{r.mappedRequirements} of {r.total}</dd>
+          <dt>Target</dt><dd>{r.target?.date ? `${formatDate(r.target.date)} (${r.daysToTarget} days)` : "No date set"}</dd>
+        </dl>
+        <a href={href.framework(r.id)}>Requirements and controls</a>
+      </div>
+    ))}
+  </div>
+
+  <div class="card">
+    <h2>Available</h2>
+    <p>Frameworks the same controls can serve when a customer asks: PCI DSS SAQ A for card payments, NIST CSF 2.0 as a maturity picture for a board, CMMC Level 1 for federal subcontractors, and Massachusetts 201 CMR 17.00 as a written information security program. Framework text is never copied in; alimi stores requirement IDs and its own one-line summaries.</p>
+    <p class="muted" style="margin:0">Readiness counts a control as Ok when every linked test passes and every expected evidence item is current. A control without an owner never counts as Ok.</p>
+  </div>
+</App>

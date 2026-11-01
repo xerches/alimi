@@ -1,0 +1,328 @@
+{
+  "policy": "POL-22",
+  "governance_policy": "POL-23",
+  "controls": [
+    "CTL-38",
+    "CTL-39",
+    "CTL-40"
+  ],
+  "tools": [
+    {
+      "id": "AI-01",
+      "name": "Microsoft 365 Copilot",
+      "vendor": "Microsoft",
+      "vendor_id": "V-01",
+      "model": "GPT-4-class models run inside Microsoft's service boundary",
+      "kind": "assistant",
+      "discovered_via": "Microsoft 365 licence list",
+      "users": 31,
+      "data_allowed": [
+        "Internal documents",
+        "Email and Teams inside the tenant"
+      ],
+      "data_prohibited": [
+        "Client Social Security numbers outside Ledgerline"
+      ],
+      "risk": "Medium",
+      "status": "Approved",
+      "owner": "P-02",
+      "reviewed": "2026-10-10",
+      "rule": "Approved. Client data stays inside the tenant and the vendor does not train on it (contract terms).",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-02",
+      "name": "ChatGPT (Team plan)",
+      "vendor": "OpenAI",
+      "vendor_id": "V-15",
+      "model": "GPT-5 family",
+      "kind": "assistant",
+      "discovered_via": "Entra sign-in logs (Sign in with Microsoft)",
+      "users": 14,
+      "data_allowed": [
+        "Drafting",
+        "General research",
+        "Public information"
+      ],
+      "data_prohibited": [
+        "Client or employee personal data",
+        "Payroll files",
+        "Anything classified Confidential or Restricted"
+      ],
+      "risk": "Medium",
+      "status": "Approved",
+      "owner": "P-02",
+      "reviewed": "2026-10-10",
+      "rule": "Approved on the Team plan only; personal accounts are blocked at sign-in.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-03",
+      "name": "Claude",
+      "vendor": "Anthropic",
+      "vendor_id": null,
+      "model": "Claude",
+      "kind": "assistant",
+      "discovered_via": "Entra sign-in logs",
+      "users": 4,
+      "data_allowed": [
+        "Code and documentation without client data"
+      ],
+      "data_prohibited": [
+        "Client data",
+        "Production credentials"
+      ],
+      "risk": "Medium",
+      "status": "Under review",
+      "owner": "P-45",
+      "reviewed": null,
+      "rule": "Engineering asked for a team plan; contract terms under review by the Privacy Lead.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-04",
+      "name": "GitHub Copilot",
+      "vendor": "GitHub (Microsoft)",
+      "vendor_id": null,
+      "model": "Mixed",
+      "kind": "assistant",
+      "discovered_via": "Engineering licence list",
+      "users": 5,
+      "data_allowed": [
+        "Client portal source code"
+      ],
+      "data_prohibited": [
+        "Secrets",
+        "Production data"
+      ],
+      "risk": "Low",
+      "status": "Approved",
+      "owner": "P-45",
+      "reviewed": "2026-10-10",
+      "rule": "Approved for the portal repositories; secret scanning stays on.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-05",
+      "name": "Grammarly",
+      "vendor": "Grammarly",
+      "vendor_id": "V-14",
+      "model": "Vendor models",
+      "kind": "assistant",
+      "discovered_via": "Microsoft 365 app consent",
+      "users": 9,
+      "data_allowed": [
+        "Email and document text classified Public or Internal"
+      ],
+      "data_prohibited": [
+        "Documents classified Confidential or Restricted"
+      ],
+      "risk": "Medium",
+      "status": "Approved",
+      "owner": "P-02",
+      "reviewed": "2026-10-10",
+      "rule": "Approved; disabled in the payroll operations SharePoint site.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-06",
+      "name": "Otter.ai",
+      "vendor": "Otter.ai",
+      "vendor_id": "V-16",
+      "model": "Vendor models",
+      "kind": "assistant",
+      "discovered_via": "Entra sign-in logs",
+      "users": 3,
+      "data_allowed": [],
+      "data_prohibited": [
+        "Client call recordings"
+      ],
+      "risk": "High",
+      "status": "Blocked",
+      "owner": "P-23",
+      "reviewed": "2026-10-10",
+      "rule": "Blocked Oct 10: records client calls with no consent step and no retention rule. Teams recap is the approved alternative.",
+      "iso42001": [
+        "CTL-38"
+      ]
+    },
+    {
+      "id": "AI-07",
+      "name": "Zapier Agents",
+      "vendor": "Zapier",
+      "vendor_id": "V-17",
+      "model": "Vendor-selected models",
+      "kind": "agent",
+      "discovered_via": "Microsoft 365 app consent",
+      "users": 2,
+      "data_allowed": [
+        "Ticket creation from the payroll mailbox (proposed)"
+      ],
+      "data_prohibited": [
+        "Reading mail beyond the payroll@ mailbox",
+        "Sending mail to clients"
+      ],
+      "risk": "High",
+      "status": "Under review",
+      "owner": "P-05",
+      "reviewed": null,
+      "rule": "An agent reads the payroll inbox and creates tickets. Needs a scoped mailbox, a DPA addendum and a log of its actions before approval.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39",
+        "CTL-40"
+      ]
+    },
+    {
+      "id": "AI-08",
+      "name": "Ledgerline Assist",
+      "vendor": "Ledgerline (fictional)",
+      "vendor_id": "V-02",
+      "model": "Vendor models",
+      "kind": "feature",
+      "discovered_via": "Vendor change notice",
+      "users": 30,
+      "data_allowed": [
+        "Summaries of payroll runs (vendor default)"
+      ],
+      "data_prohibited": [],
+      "risk": "High",
+      "status": "Under review",
+      "owner": "P-05",
+      "reviewed": null,
+      "rule": "Vendor turned it on for all customers on Oct 20. Ask for the AI addendum to the DPA and confirm no training on client data; clients are told through the transparency notice (CTL-40).",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39",
+        "CTL-40"
+      ]
+    },
+    {
+      "id": "AI-09",
+      "name": "Fireflies.ai",
+      "vendor": "Fireflies",
+      "vendor_id": null,
+      "model": "Vendor models",
+      "kind": "assistant",
+      "discovered_via": "Entra sign-in logs",
+      "users": 1,
+      "data_allowed": [],
+      "data_prohibited": [
+        "Meeting recordings"
+      ],
+      "risk": "High",
+      "status": "Blocked",
+      "owner": "P-23",
+      "reviewed": "2026-10-10",
+      "rule": "Blocked for the same reasons as Otter.ai.",
+      "iso42001": [
+        "CTL-38"
+      ]
+    },
+    {
+      "id": "AI-10",
+      "name": "Canva Magic Studio",
+      "vendor": "Canva",
+      "vendor_id": "V-20",
+      "model": "Vendor models",
+      "kind": "feature",
+      "discovered_via": "Microsoft 365 app consent",
+      "users": 4,
+      "data_allowed": [
+        "Marketing images and copy"
+      ],
+      "data_prohibited": [
+        "Client names without consent"
+      ],
+      "risk": "Low",
+      "status": "Approved",
+      "owner": "P-37",
+      "reviewed": "2026-10-10",
+      "rule": "Approved for marketing material.",
+      "iso42001": [
+        "CTL-39"
+      ]
+    },
+    {
+      "id": "AI-11",
+      "name": "HubSpot Breeze",
+      "vendor": "HubSpot",
+      "vendor_id": "V-09",
+      "model": "Vendor models",
+      "kind": "feature",
+      "discovered_via": "Vendor change notice",
+      "users": 9,
+      "data_allowed": [
+        "Prospect contact details",
+        "Sales notes"
+      ],
+      "data_prohibited": [
+        "Client payroll data (never in the CRM)"
+      ],
+      "risk": "Medium",
+      "status": "Approved",
+      "owner": "P-37",
+      "reviewed": "2026-10-10",
+      "rule": "Approved; the CRM holds no payroll data by policy.",
+      "iso42001": [
+        "CTL-38",
+        "CTL-39"
+      ]
+    }
+  ],
+  "vendor_changes": [
+    {
+      "date": "2026-10-28",
+      "vendor": "Zapier",
+      "vendor_id": "V-17",
+      "change": "Agents turned on by default for the Team plan.",
+      "affects": [
+        "AI-07"
+      ],
+      "recommendation": "Restrict the feature to the two payroll automation owners and finish the review before any agent touches the payroll mailbox."
+    },
+    {
+      "date": "2026-10-20",
+      "vendor": "Ledgerline (fictional)",
+      "vendor_id": "V-02",
+      "change": "Ledgerline Assist (AI summaries of client payroll runs) enabled for all customers.",
+      "affects": [
+        "AI-08"
+      ],
+      "recommendation": "Request the AI addendum to the DPA, confirm no training on client data, and add the feature to the client transparency notice."
+    },
+    {
+      "date": "2026-10-12",
+      "vendor": "DocuSign",
+      "vendor_id": "V-07",
+      "change": "AI contract summaries added to envelopes.",
+      "affects": [],
+      "recommendation": "Confirm the setting is off for Saltmarsh envelopes, or add DocuSign to the AI inventory as a feature."
+    },
+    {
+      "date": "2026-10-03",
+      "vendor": "Grammarly",
+      "vendor_id": "V-14",
+      "change": "Updated data retention terms (text deleted after processing by default).",
+      "affects": [
+        "AI-05"
+      ],
+      "recommendation": "No action; the new terms still meet the AI Acceptable Use Policy."
+    }
+  ]
+}

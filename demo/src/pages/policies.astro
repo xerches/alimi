@@ -1,0 +1,69 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import Bar from "../components/Bar.astro";
+import { policies, policyCounts, frameworks, formatDate, href, company, staff } from "../lib/data.js";
+
+const totalAck = policies.reduce((n, p) => n + p.acknowledged, 0);
+const totalAudience = policies.reduce((n, p) => n + p.audience, 0);
+---
+
+<App title="Policies" path="/policies" section="policies" eyebrow="Compliance" crumbs={[{ label: "Policies" }]} wide
+  description="The twenty-three policies from the alimi library as adopted by the sample company: owner, version, status, acknowledgements, next review and framework mappings."
+  lead="Every policy has an owner, an approver, a version, a publish date and an acknowledgement count. Staff accept a policy once a year and again when a new version is published.">
+  <a slot="actions" class="button secondary" href="#pack">Download pack</a>
+  <a slot="actions" class="button" href={href.policy("POL-20")}>Review approvals ({policyCounts.needs_approval})</a>
+
+  <div class="grid">
+    <Tile label="Published" value={policyCounts.published} unit={`of ${policies.length}`} />
+    <Tile label="Renews soon" value={policyCounts.renews_soon} note="Yearly review inside 30 days" />
+    <Tile label="Past due" value={policyCounts.past_due} note="Review date passed" />
+    <Tile label="Needs approval" value={policyCounts.needs_approval} note="A new version awaits the CEO" />
+    <Tile label="Acknowledged" value={`${Math.round((100 * totalAck) / totalAudience)}%`} note={`${totalAck} of ${totalAudience} acknowledgements on file`} />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="policy-filter">Filter policies</label>
+    <input id="policy-filter" type="search" placeholder="Filter by title, owner or ID" data-filter="#policies" />
+    <div class="chips" data-chips="#policies" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-value="published" aria-pressed="false">Published</button>
+      <button class="chip" type="button" data-value="renews_soon" aria-pressed="false">Renews soon</button>
+      <button class="chip" type="button" data-value="past_due" aria-pressed="false">Past due</button>
+      <button class="chip" type="button" data-value="needs_approval" aria-pressed="false">Needs approval</button>
+      <button class="chip" type="button" data-value="draft" aria-pressed="false">Draft</button>
+    </div>
+    <div class="chips" data-chips="#policies" data-key="framework" role="group" aria-label="Filter by framework">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Every framework</button>
+      {frameworks.map((f) => <button class="chip" type="button" data-value={f.id} aria-pressed="false">{f.short}</button>)}
+    </div>
+    <span class="muted" data-count-for="#policies"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="policies">
+      <thead><tr><th>Policy</th><th>Version</th><th>Status</th><th>Owner</th><th>Acknowledged</th><th>Next review</th><th class="num">Requirement IDs</th><th class="num">Controls</th></tr></thead>
+      <tbody>
+        {policies.map((p) => (
+          <tr data-status={p.status} data-framework={Object.entries(p.requirements ?? {}).filter(([, ids]) => ids?.length).map(([f]) => f).join(" ")}>
+            <td><a href={href.policy(p.id)}>{p.title}</a><span class="sub mono">{p.id}</span></td>
+            <td>v{p.version}</td>
+            <td><Pill status={p.status} /></td>
+            <td><a href={href.person(p.owner)}>{p.ownerName}</a></td>
+            <td style="min-width:9rem">{p.acknowledged} of {p.audience}<Bar percent={Math.round((100 * p.acknowledged) / p.audience)} label={`${p.acknowledged} of ${p.audience} acknowledged`} /></td>
+            <td>{p.next_review ? formatDate(p.next_review) : <span class="muted">After approval</span>}</td>
+            <td class="num">{p.requirementCount}</td>
+            <td class="num">{p.controls.length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" id="pack">
+    <h2>Policy pack</h2>
+    <p>The pack is the {policies.length} policies as DOCX and PDF with {company.name}'s name, owners and dates filled in, plus the coverage matrix that shows which requirement IDs each policy answers. The broker, the bank and an auditor each get the same documents. Built from the alimi policy library; the three core policies are free, the full library is the paid Policy Pack.</p>
+    <a class="button secondary" href="/trust#pack">Download pack (DOCX and PDF)</a> <span class="muted" style="font-size:.8125rem">Demo: the public trust page shows what the recipient sees</span>
+  </div>
+</App>

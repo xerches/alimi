@@ -1,0 +1,669 @@
+{
+  "insurer": {
+    "id": "Q-INSURER-2027",
+    "name": "Cyber insurance renewal questionnaire",
+    "from": "Granite Harbor Mutual via Harborline Insurance Brokers (fictional)",
+    "due": "2026-12-15",
+    "status": "In progress",
+    "answered_by": "Controls and evidence",
+    "answers": [
+      {
+        "question_id": "mfa",
+        "answer": "Partial",
+        "controls": [
+          "CTL-09",
+          "CTL-10"
+        ],
+        "tests": [
+          "m365.conditional_access.present",
+          "m365.mfa.coverage",
+          "m365.legacy_auth.blocked"
+        ],
+        "evidence": [
+          "EV-11",
+          "EV-10"
+        ],
+        "confidence": "High",
+        "note": "Conditional Access requires MFA for every user and blocks legacy sign-in. 53 of 58 accounts have a second factor registered; the five without are three new hires and two shared mailboxes being converted to sign-in blocked by Nov 15."
+      },
+      {
+        "question_id": "admin_access",
+        "answer": "Yes",
+        "controls": [
+          "CTL-11",
+          "CTL-12"
+        ],
+        "tests": [
+          "m365.admins.global_count",
+          "m365.admins.mfa"
+        ],
+        "evidence": [
+          "EV-10",
+          "EV-12"
+        ],
+        "confidence": "High",
+        "note": "Three Global Administrator accounts, none with a mailbox, all with hardware keys; quarterly access review signed Oct 2."
+      },
+      {
+        "question_id": "email_security",
+        "answer": "Partial",
+        "controls": [
+          "CTL-14",
+          "CTL-15",
+          "CTL-16"
+        ],
+        "tests": [
+          "m365.email_auth.dmarc",
+          "m365.forwarding.external"
+        ],
+        "evidence": [
+          "EV-14",
+          "EV-16",
+          "EV-15"
+        ],
+        "confidence": "High",
+        "note": "SPF, DKIM and DMARC (quarantine or reject) on both domains; Defender anti-phishing on every mailbox. External auto-forwarding is not yet blocked at the tenant; change due Nov 7."
+      },
+      {
+        "question_id": "data_sharing",
+        "answer": "Partial",
+        "controls": [
+          "CTL-17",
+          "CTL-20"
+        ],
+        "tests": [
+          "m365.sharing.anonymous_links",
+          "m365.guests.review"
+        ],
+        "evidence": [
+          "EV-17",
+          "EV-20"
+        ],
+        "confidence": "Medium",
+        "note": "Guest access is reviewed quarterly and third-party apps are approved. Anyone links are still allowed without expiry; change scheduled for Nov 8."
+      },
+      {
+        "question_id": "logging",
+        "answer": "Yes",
+        "controls": [
+          "CTL-30"
+        ],
+        "tests": [
+          "m365.audit.enabled"
+        ],
+        "evidence": [
+          "EV-30"
+        ],
+        "confidence": "High",
+        "note": "Unified audit log on with 180-day retention and alerts on admin role changes and new forwarding rules."
+      },
+      {
+        "question_id": "edr",
+        "answer": "Yes",
+        "controls": [
+          "CTL-23"
+        ],
+        "tests": [
+          "att.edr.coverage"
+        ],
+        "evidence": [
+          "EV-23"
+        ],
+        "confidence": "High",
+        "note": "Defender for Business on 54 of 55 devices (98 percent); the conference room PC is being enrolled."
+      },
+      {
+        "question_id": "backups",
+        "answer": "Yes",
+        "controls": [
+          "CTL-31"
+        ],
+        "tests": [
+          "att.backups.tested"
+        ],
+        "evidence": [
+          "EV-31"
+        ],
+        "confidence": "High",
+        "note": "Immutable SaaS backups of mail and SharePoint; restore tested Sep 26, 2026 in 41 minutes."
+      },
+      {
+        "question_id": "incident_response",
+        "answer": "Partial",
+        "controls": [
+          "CTL-33",
+          "CTL-34"
+        ],
+        "tests": [
+          "att.ir_plan.tested"
+        ],
+        "evidence": [
+          "EV-33",
+          "EV-34"
+        ],
+        "confidence": "High",
+        "note": "Written plan v2.0 with roles, contacts and the carrier hotline. Last exercised August 2025; the 2026 tabletop is scheduled for Nov 20."
+      },
+      {
+        "question_id": "training",
+        "answer": "Yes",
+        "controls": [
+          "CTL-05"
+        ],
+        "tests": [],
+        "evidence": [
+          "EV-05",
+          "EV-06"
+        ],
+        "confidence": "High",
+        "note": "49 of 52 completed the yearly course; the other three started in the last two weeks. Phishing simulation each quarter."
+      },
+      {
+        "question_id": "patching",
+        "answer": "Yes",
+        "controls": [
+          "CTL-24"
+        ],
+        "tests": [],
+        "evidence": [
+          "EV-24"
+        ],
+        "confidence": "Medium",
+        "note": "Critical updates within 14 days on 53 of 55 devices; two laptops pending."
+      },
+      {
+        "question_id": "encryption",
+        "answer": "Yes",
+        "controls": [
+          "CTL-19"
+        ],
+        "tests": [],
+        "evidence": [
+          "EV-19"
+        ],
+        "confidence": "High",
+        "note": "All 55 managed devices encrypted; Microsoft 365 and Ledgerline encrypt data at rest and in transit."
+      },
+      {
+        "question_id": "vendor_risk",
+        "answer": "Partial",
+        "controls": [
+          "CTL-35"
+        ],
+        "tests": [],
+        "evidence": [
+          "EV-36",
+          "EV-37"
+        ],
+        "confidence": "Medium",
+        "note": "21 vendors in the register with tiers and owners; critical vendors under contract with SOC 2 reports on file. TaxBridge's yearly review is overdue and the Brightfile incident is open."
+      },
+      {
+        "question_id": "remote_access",
+        "answer": "Yes",
+        "controls": [
+          "CTL-28"
+        ],
+        "tests": [
+          "m365.conditional_access.present"
+        ],
+        "evidence": [
+          "EV-28",
+          "EV-11"
+        ],
+        "confidence": "High",
+        "note": "No VPN; access requires MFA and a compliant, company-managed device."
+      }
+    ]
+  },
+  "bank": {
+    "id": "Q-BANK-2026",
+    "name": "Vendor security questionnaire",
+    "from": "First Quincy Savings Bank (fictional), vendor management",
+    "opened": "2026-10-06",
+    "due": "2026-12-01",
+    "status": "Draft",
+    "answered_by": "Assistant (preview) from the controls and evidence; 16 of 30 drafted, 14 open",
+    "questions": [
+      {
+        "id": "B-01",
+        "section": "Organization",
+        "text": "Do you have a written information security program approved by management and reviewed at least annually?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-01"
+        ],
+        "evidence": [
+          "EV-01"
+        ],
+        "confidence": "High",
+        "note": "Information Security Policy v2.1, approved Mar 10, 2026; reviewed yearly.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-02",
+        "section": "Organization",
+        "text": "Is there a named individual responsible for information security?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-02"
+        ],
+        "evidence": [
+          "EV-02"
+        ],
+        "confidence": "High",
+        "note": "A fractional security lead (alimi) reports to the CEO; the RACI names every role.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-03",
+        "section": "Organization",
+        "text": "Do you perform a formal risk assessment at least annually?",
+        "answer": "Partial",
+        "controls": [
+          "CTL-03"
+        ],
+        "evidence": [
+          "EV-03"
+        ],
+        "confidence": "Medium",
+        "note": "Last workshop September 2025; the 2026 workshop is scheduled for Nov 18.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-04",
+        "section": "People",
+        "text": "Are background checks performed on employees with access to customer data?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-06"
+        ],
+        "evidence": [
+          "EV-07"
+        ],
+        "confidence": "High",
+        "note": "Every hire is screened before access, proportionate to the role.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-05",
+        "section": "People",
+        "text": "Do all employees complete security awareness training at least annually?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-05"
+        ],
+        "evidence": [
+          "EV-05"
+        ],
+        "confidence": "High",
+        "note": "49 of 52 complete; 3 new hires within their 30-day window.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-06",
+        "section": "People",
+        "text": "Do employees acknowledge your acceptable use and confidentiality policies?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-04"
+        ],
+        "evidence": [
+          "EV-04"
+        ],
+        "confidence": "High",
+        "note": "Acknowledgement tracked per policy; 49 of 52 on the latest versions.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-07",
+        "section": "Access",
+        "text": "Is multi-factor authentication required for all access to systems holding customer data?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-09"
+        ],
+        "evidence": [
+          "EV-11"
+        ],
+        "confidence": "High",
+        "note": "Conditional Access requires MFA for all users; legacy protocols are blocked.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-08",
+        "section": "Access",
+        "text": "Are user access rights reviewed periodically?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-12"
+        ],
+        "evidence": [
+          "EV-12"
+        ],
+        "confidence": "High",
+        "note": "Quarterly review signed by the COO; last on Oct 2, 2026.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-09",
+        "section": "Access",
+        "text": "Is access removed promptly when employment ends?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-07"
+        ],
+        "evidence": [
+          "EV-08"
+        ],
+        "confidence": "High",
+        "note": "Same-day removal, with ticket evidence for Q3 leavers.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-10",
+        "section": "Access",
+        "text": "Are privileged accounts separate from day-to-day accounts?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-11"
+        ],
+        "evidence": [
+          "EV-10"
+        ],
+        "confidence": "High",
+        "note": "Admin roles are held by dedicated accounts without mailboxes.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-11",
+        "section": "Data",
+        "text": "Is customer data encrypted at rest and in transit?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-19"
+        ],
+        "evidence": [
+          "EV-19"
+        ],
+        "confidence": "High",
+        "note": "Platform encryption in Microsoft 365 and Ledgerline; every laptop encrypted.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-12",
+        "section": "Data",
+        "text": "Do you have a data classification and handling standard?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-18"
+        ],
+        "evidence": [
+          "EV-18"
+        ],
+        "confidence": "High",
+        "note": "Four levels with handling rules.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-13",
+        "section": "Data",
+        "text": "Do you have a documented data retention and destruction schedule?",
+        "answer": "No",
+        "controls": [
+          "CTL-21"
+        ],
+        "evidence": [],
+        "confidence": "High",
+        "note": "The schedule is in POL-20 v1.1, awaiting approval; paper destruction is contracted.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-14",
+        "section": "Systems",
+        "text": "Is endpoint protection deployed on all workstations and servers?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-23"
+        ],
+        "evidence": [
+          "EV-23"
+        ],
+        "confidence": "High",
+        "note": "54 of 55 devices; the exception is being enrolled.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-15",
+        "section": "Systems",
+        "text": "Are security patches applied within a defined timeframe?",
+        "answer": "Yes",
+        "controls": [
+          "CTL-24"
+        ],
+        "evidence": [
+          "EV-24"
+        ],
+        "confidence": "Medium",
+        "note": "Critical within 14 days; October report attached.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-16",
+        "section": "Systems",
+        "text": "Do you perform vulnerability scanning and penetration testing?",
+        "answer": "Partial",
+        "controls": [
+          "CTL-25"
+        ],
+        "evidence": [
+          "EV-25"
+        ],
+        "confidence": "Medium",
+        "note": "Monthly scans; the last was August. No penetration test yet.",
+        "drafted_by": "assistant"
+      },
+      {
+        "id": "B-17",
+        "section": "Systems",
+        "text": "Are system changes authorized, tested and documented?",
+        "answer": null,
+        "controls": [
+          "CTL-29"
+        ],
+        "evidence": [
+          "EV-29"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-18",
+        "section": "Systems",
+        "text": "Are audit logs collected and retained? For how long?",
+        "answer": null,
+        "controls": [
+          "CTL-30"
+        ],
+        "evidence": [
+          "EV-30"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-19",
+        "section": "Email",
+        "text": "Do you enforce SPF, DKIM and DMARC on your sending domains?",
+        "answer": null,
+        "controls": [
+          "CTL-14"
+        ],
+        "evidence": [
+          "EV-14"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-20",
+        "section": "Email",
+        "text": "Do you have controls against business email compromise and payment fraud?",
+        "answer": null,
+        "controls": [
+          "CTL-08",
+          "CTL-16"
+        ],
+        "evidence": [
+          "EV-09"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-21",
+        "section": "Resilience",
+        "text": "Do you have a business continuity plan with defined recovery objectives?",
+        "answer": null,
+        "controls": [
+          "CTL-32"
+        ],
+        "evidence": [
+          "EV-32"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-22",
+        "section": "Resilience",
+        "text": "Are backups performed, protected from tampering and tested?",
+        "answer": null,
+        "controls": [
+          "CTL-31"
+        ],
+        "evidence": [
+          "EV-31"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-23",
+        "section": "Incidents",
+        "text": "Do you have an incident response plan, and when was it last tested?",
+        "answer": null,
+        "controls": [
+          "CTL-33"
+        ],
+        "evidence": [
+          "EV-33",
+          "EV-34"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-24",
+        "section": "Incidents",
+        "text": "Will you notify us of a security incident affecting our data, and within what timeframe?",
+        "answer": null,
+        "controls": [
+          "CTL-34"
+        ],
+        "evidence": [
+          "EV-35"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-25",
+        "section": "Vendors",
+        "text": "Do you assess the security of your own vendors and subprocessors?",
+        "answer": null,
+        "controls": [
+          "CTL-35"
+        ],
+        "evidence": [
+          "EV-36"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-26",
+        "section": "Vendors",
+        "text": "Please list subprocessors that handle our employees' data.",
+        "answer": null,
+        "controls": [
+          "CTL-35"
+        ],
+        "evidence": [],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-27",
+        "section": "Privacy",
+        "text": "Do you have a privacy notice and a process for data subject requests?",
+        "answer": null,
+        "controls": [
+          "CTL-36"
+        ],
+        "evidence": [
+          "EV-38"
+        ],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-28",
+        "section": "Privacy",
+        "text": "Do you comply with Massachusetts 201 CMR 17.00?",
+        "answer": null,
+        "controls": [
+          "CTL-01",
+          "CTL-36"
+        ],
+        "evidence": [],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-29",
+        "section": "Assurance",
+        "text": "Do you hold a SOC 2 report or ISO 27001 certificate? If not, what is your plan?",
+        "answer": null,
+        "controls": [],
+        "evidence": [],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      },
+      {
+        "id": "B-30",
+        "section": "Insurance",
+        "text": "Do you carry cyber liability insurance? Please state the limit.",
+        "answer": null,
+        "controls": [],
+        "evidence": [],
+        "confidence": null,
+        "note": null,
+        "drafted_by": null
+      }
+    ]
+  }
+}

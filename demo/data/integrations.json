@@ -1,0 +1,147 @@
+{
+  "connected": [
+    {
+      "id": "m365",
+      "name": "Microsoft 365",
+      "status": "Connected",
+      "mode": "Read-only",
+      "connected_on": "2026-09-29",
+      "connected_by": "X-01",
+      "last_run": "2026-10-30T22:15:00Z",
+      "schedule": "Weekly, Friday 18:00",
+      "runs": 5,
+      "permissions": [
+        "Organization.Read.All",
+        "User.Read.All",
+        "AuditLog.Read.All",
+        "Policy.Read.All",
+        "RoleManagement.Read.Directory",
+        "MailboxSettings.Read",
+        "SharePointTenantSettings.Read.All"
+      ],
+      "reads": [
+        "Users and MFA registration",
+        "Conditional Access policies and Security Defaults",
+        "Directory roles",
+        "Inbox rules",
+        "Sharing settings",
+        "Audit settings",
+        "Secure Score",
+        "Sign-in logs (legacy authentication, guest activity)"
+      ],
+      "never_reads": [
+        "Mail content",
+        "Files",
+        "Passwords or tokens"
+      ],
+      "proves": [
+        "CTL-09",
+        "CTL-10",
+        "CTL-11",
+        "CTL-12",
+        "CTL-14",
+        "CTL-15",
+        "CTL-17",
+        "CTL-20",
+        "CTL-27",
+        "CTL-30"
+      ]
+    }
+  ],
+  "available": [
+    {
+      "id": "gws",
+      "name": "Google Workspace",
+      "status": "Available",
+      "would_prove": [
+        "CTL-09",
+        "CTL-11",
+        "CTL-14",
+        "CTL-15",
+        "CTL-17",
+        "CTL-20",
+        "CTL-30"
+      ],
+      "note": "Same checks for Google tenants; read-only Admin SDK scopes."
+    },
+    {
+      "id": "intune",
+      "name": "Microsoft Intune",
+      "status": "Available",
+      "would_prove": [
+        "CTL-19",
+        "CTL-22",
+        "CTL-23",
+        "CTL-24",
+        "CTL-26"
+      ],
+      "note": "Device encryption, compliance, EDR and patch state straight from the device record, replacing the monthly exports."
+    },
+    {
+      "id": "jamf",
+      "name": "Jamf",
+      "status": "Available",
+      "would_prove": [
+        "CTL-19",
+        "CTL-22",
+        "CTL-24"
+      ],
+      "note": "The same for Macs managed outside Intune."
+    },
+    {
+      "id": "hr",
+      "name": "HR system (Gusto, BambooHR, Rippling)",
+      "status": "Available",
+      "would_prove": [
+        "CTL-06",
+        "CTL-07",
+        "CTL-04"
+      ],
+      "note": "The people list, start and end dates, so joiners and leavers never need a spreadsheet."
+    },
+    {
+      "id": "quickbooks",
+      "name": "QuickBooks Online",
+      "status": "Available",
+      "would_prove": [
+        "CTL-35"
+      ],
+      "note": "Vendor discovery from accounts payable."
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "status": "Available",
+      "would_prove": [
+        "CTL-29",
+        "CTL-25"
+      ],
+      "note": "Branch protection, reviews and secret scanning as change-management evidence."
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "status": "Available",
+      "would_prove": [
+        "CTL-19",
+        "CTL-30",
+        "CTL-31"
+      ],
+      "note": "For the client portal's hosting account."
+    }
+  ],
+  "later": [
+    {
+      "name": "AI agent activity monitoring",
+      "note": "Endpoint and gateway hooks that watch what an agent does, as Vanta describes. The inventory and the rules come first."
+    },
+    {
+      "name": "On-premises systems",
+      "note": "A collector for file servers and domain controllers, when a customer has them."
+    },
+    {
+      "name": "Auditor portal",
+      "note": "A read-only login for the CPA firm, when a customer goes for SOC 2."
+    }
+  ]
+}

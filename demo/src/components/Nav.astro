@@ -1,0 +1,82 @@
+---
+// Left navigation: the same groups and order Vanta, Drata and Secureframe use, so a prospect who
+// has sat through one of their demos finds everything where they expect it. Counts are computed.
+import { controlCounts, testCounts, vendorCounts, aiCounts, policyCounts, company } from "../lib/data.js";
+
+const { section } = Astro.props;
+const c = controlCounts();
+const groups = [
+  { label: null, items: [{ key: "home", label: "Home", href: "/" }] },
+  {
+    label: "Compliance",
+    items: [
+      { key: "frameworks", label: "Frameworks", href: "/frameworks" },
+      { key: "controls", label: "Controls", href: "/controls", badge: c.needs_attention + c.needs_evidence + c.needs_owner, tone: "neutral" },
+      { key: "policies", label: "Policies", href: "/policies", badge: policyCounts.needs_approval + policyCounts.past_due, tone: "neutral" },
+      { key: "evidence", label: "Evidence", href: "/evidence" },
+      { key: "monitoring", label: "Monitoring", href: "/monitoring", badge: testCounts.failing, tone: "danger" },
+    ],
+  },
+  {
+    label: "Risk",
+    items: [
+      { key: "risks", label: "Risks", href: "/risks" },
+      { key: "vendors", label: "Vendors", href: "/vendors", badge: vendorCounts.alerts, tone: "danger" },
+      { key: "ai", label: "AI governance", href: "/ai", badge: aiCounts.byStatus["Under review"], tone: "neutral" },
+    ],
+  },
+  {
+    label: "People",
+    items: [
+      { key: "people", label: "People", href: "/people" },
+      { key: "training", label: "Training", href: "/training" },
+      { key: "owners", label: "Owners", href: "/owners" },
+    ],
+  },
+  { label: "Assets", items: [{ key: "assets", label: "Assets", href: "/assets" }] },
+  {
+    label: "Trust",
+    items: [
+      { key: "trust", label: "Trust page", href: "/trust" },
+      { key: "questionnaires", label: "Questionnaires", href: "/questionnaires" },
+    ],
+  },
+  { label: null, items: [{ key: "assistant", label: "Assistant", href: "/assistant", preview: true }] },
+  {
+    label: "Setup",
+    items: [
+      { key: "integrations", label: "Integrations", href: "/integrations" },
+      { key: "settings", label: "Settings", href: "/settings" },
+    ],
+  },
+];
+---
+
+<nav class="sidebar" id="nav" aria-label="Main">
+  <div class="sidebar-inner">
+    <a class="nav-close" href="#main">Close menu</a>
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">a</span>alimi<span class="brand-tag">Demo</span></a>
+    <div class="company-switch">
+      <strong>{company.short_name}</strong>
+      <span>{company.location} · {company.headcount} people</span>
+    </div>
+    {
+      groups.map((group) => (
+        <div class="nav-group">
+          {group.label && <span>{group.label}</span>}
+          <ul>
+            {group.items.map((item) => (
+              <li>
+                <a href={item.href} aria-current={item.key === section ? "page" : undefined}>
+                  {item.label}
+                  {item.preview && <span class="nav-badge">Preview</span>}
+                  {item.badge ? <span class="nav-badge" data-tone={item.tone}>{item.badge}</span> : null}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</nav>

@@ -1,0 +1,1078 @@
+{
+  "tenant_display_name": "Saltmarsh Payroll",
+  "verified_domains": [
+    "saltmarsh.example",
+    "saltmarshpayroll.example",
+    "saltmarshpayroll.onmicrosoft.com"
+  ],
+  "collected_at": "2026-10-30T22:15:00Z",
+  "users": [
+    {
+      "id": "u-001",
+      "upn": "dana.whitcomb@saltmarsh.example",
+      "display_name": "Dana Whitcomb",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2014-03-03T00:00:00Z",
+      "last_sign_in": "2026-10-30T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-002",
+      "upn": "priya.natarajan@saltmarsh.example",
+      "display_name": "Priya Natarajan",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2018-09-10T00:00:00Z",
+      "last_sign_in": "2026-10-30T10:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-003",
+      "upn": "tom.brennan@saltmarsh.example",
+      "display_name": "Tom Brennan",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2016-01-11T00:00:00Z",
+      "last_sign_in": "2026-10-29T23:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-004",
+      "upn": "grace.lindqvist@saltmarsh.example",
+      "display_name": "Grace Lindqvist",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-06-01T00:00:00Z",
+      "last_sign_in": "2026-10-28T13:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-005",
+      "upn": "rosa.delgado@saltmarsh.example",
+      "display_name": "Rosa Delgado",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2015-05-18T00:00:00Z",
+      "last_sign_in": "2026-10-28T08:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-006",
+      "upn": "noah.alvarez@saltmarsh.example",
+      "display_name": "Noah Alvarez",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-02-13T00:00:00Z",
+      "last_sign_in": "2026-10-28T07:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-007",
+      "upn": "camila.sato@saltmarsh.example",
+      "display_name": "Camila Sato",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2016-12-02T00:00:00Z",
+      "last_sign_in": "2026-10-28T15:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-008",
+      "upn": "owen.murphy@saltmarsh.example",
+      "display_name": "Owen Murphy",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2016-11-08T00:00:00Z",
+      "last_sign_in": "2026-10-28T06:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-009",
+      "upn": "zara.novak@saltmarsh.example",
+      "display_name": "Zara Novak",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2020-06-05T00:00:00Z",
+      "last_sign_in": "2026-10-29T17:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-010",
+      "upn": "caleb.castillo@saltmarsh.example",
+      "display_name": "Caleb Castillo",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2018-08-18T00:00:00Z",
+      "last_sign_in": "2026-10-29T01:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-011",
+      "upn": "leila.reyes@saltmarsh.example",
+      "display_name": "Leila Reyes",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2023-02-05T00:00:00Z",
+      "last_sign_in": "2026-10-28T09:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-012",
+      "upn": "isaac.keane@saltmarsh.example",
+      "display_name": "Isaac Keane",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-01-12T00:00:00Z",
+      "last_sign_in": "2026-10-30T02:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-013",
+      "upn": "hana.haddad@saltmarsh.example",
+      "display_name": "Hana Haddad",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2016-08-13T00:00:00Z",
+      "last_sign_in": "2026-10-28T09:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-014",
+      "upn": "miles.fischer@saltmarsh.example",
+      "display_name": "Miles Fischer",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-08-01T00:00:00Z",
+      "last_sign_in": "2026-10-29T20:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-015",
+      "upn": "ingrid.bello@saltmarsh.example",
+      "display_name": "Ingrid Bello",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2018-11-26T00:00:00Z",
+      "last_sign_in": "2026-10-29T12:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-016",
+      "upn": "theo.larsen@saltmarsh.example",
+      "display_name": "Theo Larsen",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-11-11T00:00:00Z",
+      "last_sign_in": "2026-10-28T06:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-017",
+      "upn": "amara.ferreira@saltmarsh.example",
+      "display_name": "Amara Ferreira",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-03-10T00:00:00Z",
+      "last_sign_in": "2026-10-29T14:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-018",
+      "upn": "felix.donnelly@saltmarsh.example",
+      "display_name": "Felix Donnelly",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-01-06T00:00:00Z",
+      "last_sign_in": "2026-10-28T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-019",
+      "upn": "nina.cruz@saltmarsh.example",
+      "display_name": "Nina Cruz",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-07-10T00:00:00Z",
+      "last_sign_in": "2026-10-28T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-020",
+      "upn": "declan.iqbal@saltmarsh.example",
+      "display_name": "Declan Iqbal",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-04-15T00:00:00Z",
+      "last_sign_in": "2026-10-28T12:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-021",
+      "upn": "yara.castillo@saltmarsh.example",
+      "display_name": "Yara Castillo",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2026-10-19T00:00:00Z",
+      "last_sign_in": "2026-10-29T13:00:00Z",
+      "has_mailbox": true,
+      "mfa_registered": false,
+      "mfa_methods": []
+    },
+    {
+      "id": "u-022",
+      "upn": "omar.keane@saltmarsh.example",
+      "display_name": "Omar Keane",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2026-10-26T00:00:00Z",
+      "last_sign_in": "2026-10-31T13:00:00Z",
+      "has_mailbox": true,
+      "mfa_registered": false,
+      "mfa_methods": []
+    },
+    {
+      "id": "u-023",
+      "upn": "kwame.mensah@saltmarsh.example",
+      "display_name": "Kwame Mensah",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-02-06T00:00:00Z",
+      "last_sign_in": "2026-10-30T02:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-024",
+      "upn": "omar.iqbal@saltmarsh.example",
+      "display_name": "Omar Iqbal",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2023-09-02T00:00:00Z",
+      "last_sign_in": "2026-10-29T04:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-025",
+      "upn": "sienna.romano@saltmarsh.example",
+      "display_name": "Sienna Romano",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-08-15T00:00:00Z",
+      "last_sign_in": "2026-10-30T07:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-026",
+      "upn": "patrick.sullivan@saltmarsh.example",
+      "display_name": "Patrick Sullivan",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-06-21T00:00:00Z",
+      "last_sign_in": "2026-10-28T15:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-027",
+      "upn": "imani.park@saltmarsh.example",
+      "display_name": "Imani Park",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-03-16T00:00:00Z",
+      "last_sign_in": "2026-10-29T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-028",
+      "upn": "victor.medina@saltmarsh.example",
+      "display_name": "Victor Medina",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-02-13T00:00:00Z",
+      "last_sign_in": "2026-10-30T12:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-029",
+      "upn": "esme.gallagher@saltmarsh.example",
+      "display_name": "Esme Gallagher",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-11-18T00:00:00Z",
+      "last_sign_in": "2026-10-30T03:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-030",
+      "upn": "ruben.diallo@saltmarsh.example",
+      "display_name": "Ruben Diallo",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-08-19T00:00:00Z",
+      "last_sign_in": "2026-10-28T04:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-031",
+      "upn": "tess.weber@saltmarsh.example",
+      "display_name": "Tess Weber",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-12-04T00:00:00Z",
+      "last_sign_in": "2026-10-28T09:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-032",
+      "upn": "esme.donnelly@saltmarsh.example",
+      "display_name": "Esme Donnelly",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2026-10-26T00:00:00Z",
+      "last_sign_in": "2026-10-30T13:00:00Z",
+      "has_mailbox": true,
+      "mfa_registered": false,
+      "mfa_methods": []
+    },
+    {
+      "id": "u-033",
+      "upn": "maureen.fitzgerald@saltmarsh.example",
+      "display_name": "Maureen Fitzgerald",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-04-01T00:00:00Z",
+      "last_sign_in": "2026-10-30T14:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-034",
+      "upn": "sean.castillo@saltmarsh.example",
+      "display_name": "Sean Castillo",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-03-27T00:00:00Z",
+      "last_sign_in": "2026-10-30T02:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-035",
+      "upn": "lucia.reyes@saltmarsh.example",
+      "display_name": "Lucia Reyes",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-09-05T00:00:00Z",
+      "last_sign_in": "2026-10-28T01:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-036",
+      "upn": "kofi.keane@saltmarsh.example",
+      "display_name": "Kofi Keane",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-10-16T00:00:00Z",
+      "last_sign_in": "2026-10-28T17:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-037",
+      "upn": "derek.sullivan@saltmarsh.example",
+      "display_name": "Derek Sullivan",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2020-08-17T00:00:00Z",
+      "last_sign_in": "2026-10-29T22:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-038",
+      "upn": "mateo.sullivan@saltmarsh.example",
+      "display_name": "Mateo Sullivan",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-08-15T00:00:00Z",
+      "last_sign_in": "2026-10-28T20:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-039",
+      "upn": "rhea.park@saltmarsh.example",
+      "display_name": "Rhea Park",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-04-26T00:00:00Z",
+      "last_sign_in": "2026-10-28T01:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-040",
+      "upn": "connor.medina@saltmarsh.example",
+      "display_name": "Connor Medina",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-01-06T00:00:00Z",
+      "last_sign_in": "2026-10-29T18:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-041",
+      "upn": "dalia.gallagher@saltmarsh.example",
+      "display_name": "Dalia Gallagher",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-05-13T00:00:00Z",
+      "last_sign_in": "2026-10-29T02:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-042",
+      "upn": "elena.vasquez@saltmarsh.example",
+      "display_name": "Elena Vasquez",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2019-10-07T00:00:00Z",
+      "last_sign_in": "2026-10-29T21:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-043",
+      "upn": "freya.lindgren@saltmarsh.example",
+      "display_name": "Freya Lindgren",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-12-14T00:00:00Z",
+      "last_sign_in": "2026-10-30T18:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-044",
+      "upn": "jordan.costa@saltmarsh.example",
+      "display_name": "Jordan Costa",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2023-01-04T00:00:00Z",
+      "last_sign_in": "2026-10-30T15:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-045",
+      "upn": "lin.zhao@saltmarsh.example",
+      "display_name": "Lin Zhao",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2020-02-03T00:00:00Z",
+      "last_sign_in": "2026-10-30T07:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-046",
+      "upn": "ethan.alvarez@saltmarsh.example",
+      "display_name": "Ethan Alvarez",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2021-05-10T00:00:00Z",
+      "last_sign_in": "2026-10-29T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-047",
+      "upn": "sofia.sato@saltmarsh.example",
+      "display_name": "Sofia Sato",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2025-06-01T00:00:00Z",
+      "last_sign_in": "2026-10-29T19:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-048",
+      "upn": "liam.murphy@saltmarsh.example",
+      "display_name": "Liam Murphy",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-05-12T00:00:00Z",
+      "last_sign_in": "2026-10-28T03:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "sms"
+      ]
+    },
+    {
+      "id": "u-049",
+      "upn": "aisha.novak@saltmarsh.example",
+      "display_name": "Aisha Novak",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2022-08-28T00:00:00Z",
+      "last_sign_in": "2026-10-30T18:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-050",
+      "upn": "noah.castillo@saltmarsh.example",
+      "display_name": "Noah Castillo",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2023-03-28T00:00:00Z",
+      "last_sign_in": "2026-10-28T07:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-051",
+      "upn": "nadia.haddad@saltmarsh.example",
+      "display_name": "Nadia Haddad",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2022-11-14T00:00:00Z",
+      "last_sign_in": "2026-10-28T10:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-052",
+      "upn": "connor.byrne@saltmarsh.example",
+      "display_name": "Connor Byrne",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2024-07-08T00:00:00Z",
+      "last_sign_in": "2026-10-29T17:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-053",
+      "upn": "marcus.okafor@saltmarsh.example",
+      "display_name": "Marcus Okafor",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2022-01-10T00:00:00Z",
+      "last_sign_in": "2026-10-30T10:15:00Z",
+      "has_mailbox": true,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush",
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-054",
+      "upn": "adm-ngomez@saltmarsh.example",
+      "display_name": "Nora Gomez",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2023-05-02T00:00:00Z",
+      "last_sign_in": "2026-10-28T20:15:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "fido2",
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-055",
+      "upn": "adm-mokafor@saltmarsh.example",
+      "display_name": "Marcus Okafor (admin)",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2022-01-10T00:00:00Z",
+      "last_sign_in": "2026-10-29T16:15:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "fido2",
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-056",
+      "upn": "breakglass@saltmarsh.example",
+      "display_name": "Emergency access",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2022-01-10T00:00:00Z",
+      "last_sign_in": "2026-07-14T15:00:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "fido2"
+      ]
+    },
+    {
+      "id": "u-057",
+      "upn": "payroll@saltmarsh.example",
+      "display_name": "Payroll (shared mailbox)",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2015-06-01T00:00:00Z",
+      "last_sign_in": null,
+      "has_mailbox": true,
+      "mfa_registered": false,
+      "mfa_methods": []
+    },
+    {
+      "id": "u-058",
+      "upn": "support@saltmarsh.example",
+      "display_name": "Support (shared mailbox)",
+      "enabled": true,
+      "user_type": "Member",
+      "created": "2017-03-01T00:00:00Z",
+      "last_sign_in": null,
+      "has_mailbox": true,
+      "mfa_registered": false,
+      "mfa_methods": []
+    },
+    {
+      "id": "u-059",
+      "upn": "alex.dennis_alimi.example#EXT#@saltmarsh.example",
+      "display_name": "Alex Dennis (alimi)",
+      "enabled": true,
+      "user_type": "Guest",
+      "created": "2026-09-22T00:00:00Z",
+      "last_sign_in": "2026-10-29T20:15:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "microsoftAuthenticatorPush"
+      ]
+    },
+    {
+      "id": "u-060",
+      "upn": "sam.whitfield_harborline.example#EXT#@saltmarsh.example",
+      "display_name": "Sam Whitfield (Harborline)",
+      "enabled": true,
+      "user_type": "Guest",
+      "created": "2026-10-01T00:00:00Z",
+      "last_sign_in": "2026-10-12T16:00:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "sms"
+      ]
+    },
+    {
+      "id": "u-061",
+      "upn": "r.chen_meridiancpa.example#EXT#@saltmarsh.example",
+      "display_name": "R. Chen (Meridian CPA, 2025 audit)",
+      "enabled": false,
+      "user_type": "Guest",
+      "created": "2025-09-01T00:00:00Z",
+      "last_sign_in": "2025-11-20T18:00:00Z",
+      "has_mailbox": false,
+      "mfa_registered": true,
+      "mfa_methods": [
+        "sms"
+      ]
+    }
+  ],
+  "conditional_access_policies": [
+    {
+      "id": "ca-001",
+      "display_name": "Require MFA for all users",
+      "state": "enabled",
+      "include_users": [
+        "All"
+      ],
+      "exclude_users": [
+        "u-056"
+      ],
+      "include_applications": [
+        "All"
+      ],
+      "client_app_types": [
+        "browser",
+        "mobileAppsAndDesktopClients"
+      ],
+      "grant_controls": [
+        "mfa"
+      ]
+    },
+    {
+      "id": "ca-002",
+      "display_name": "Block legacy authentication",
+      "state": "enabled",
+      "include_users": [
+        "All"
+      ],
+      "exclude_users": [
+        "u-056"
+      ],
+      "include_applications": [
+        "All"
+      ],
+      "client_app_types": [
+        "exchangeActiveSync",
+        "other"
+      ],
+      "grant_controls": [
+        "block"
+      ]
+    },
+    {
+      "id": "ca-003",
+      "display_name": "Require a compliant device for Microsoft 365",
+      "state": "enabled",
+      "include_users": [
+        "All"
+      ],
+      "exclude_users": [
+        "u-056",
+        "u-059",
+        "u-060"
+      ],
+      "include_applications": [
+        "Office365"
+      ],
+      "client_app_types": [
+        "browser",
+        "mobileAppsAndDesktopClients"
+      ],
+      "grant_controls": [
+        "compliantDevice"
+      ]
+    },
+    {
+      "id": "ca-004",
+      "display_name": "Block sign-in from outside the United States (report only)",
+      "state": "enabledForReportingButNotEnforced",
+      "include_users": [
+        "All"
+      ],
+      "exclude_users": [
+        "u-056"
+      ],
+      "include_applications": [
+        "All"
+      ],
+      "client_app_types": [
+        "all"
+      ],
+      "grant_controls": [
+        "block"
+      ]
+    }
+  ],
+  "security_defaults_enabled": false,
+  "legacy_auth_sign_ins_30d": 0,
+  "role_assignments": [
+    {
+      "role_template_id": "62e90394-69f5-4237-9190-012177145e10",
+      "role_name": "Global Administrator",
+      "member_ids": [
+        "u-055",
+        "u-054",
+        "u-056"
+      ]
+    },
+    {
+      "role_template_id": "29232cdf-9323-42fd-ade2-1d097af3e4de",
+      "role_name": "Exchange Administrator",
+      "member_ids": [
+        "u-055"
+      ]
+    },
+    {
+      "role_template_id": "fe930be7-5e62-47db-91af-98c3a49a38b1",
+      "role_name": "User Administrator",
+      "member_ids": [
+        "u-054"
+      ]
+    },
+    {
+      "role_template_id": "f2ef992c-3afb-46b9-b7cf-a126ee74c451",
+      "role_name": "Global Reader",
+      "member_ids": [
+        "u-002",
+        "u-059"
+      ]
+    },
+    {
+      "role_template_id": "5d6b6bb7-de71-4623-b4af-96380a352509",
+      "role_name": "Security Reader",
+      "member_ids": [
+        "u-059"
+      ]
+    }
+  ],
+  "inbox_rules": [
+    {
+      "user_upn": "miles.fischer@saltmarsh.example",
+      "name": "Copy to home",
+      "enabled": true,
+      "forward_to": [
+        "miles.fischer.home@gmail.example"
+      ],
+      "redirect_to": []
+    },
+    {
+      "user_upn": "derek.sullivan@saltmarsh.example",
+      "name": "Newsletters to folder",
+      "enabled": true,
+      "forward_to": [],
+      "redirect_to": []
+    },
+    {
+      "user_upn": "rosa.delgado@saltmarsh.example",
+      "name": "Vacation cover (off)",
+      "enabled": false,
+      "forward_to": [
+        "kwame.mensah@saltmarsh.example"
+      ],
+      "redirect_to": []
+    }
+  ],
+  "outbound_forwarding_blocked": false,
+  "email_auth": [
+    {
+      "domain": "saltmarsh.example",
+      "spf": "v=spf1 include:spf.protection.outlook.com include:_spf.ledgerline.example -all",
+      "dkim_enabled": true,
+      "dmarc": "v=DMARC1; p=quarantine; rua=mailto:dmarc@saltmarsh.example; pct=100; adkim=s; aspf=s"
+    },
+    {
+      "domain": "saltmarshpayroll.example",
+      "spf": "v=spf1 -all",
+      "dkim_enabled": true,
+      "dmarc": "v=DMARC1; p=reject; rua=mailto:dmarc@saltmarsh.example"
+    }
+  ],
+  "sharing": {
+    "sharing_capability": "externalUserAndGuestSharing",
+    "anonymous_link_expiration_days": null
+  },
+  "audit": {
+    "unified_audit_log_enabled": true,
+    "retention_days": 180,
+    "directory_audit_available": true
+  },
+  "secure_score": {
+    "current": 66.5,
+    "max": 100,
+    "created": "2026-10-30T16:15:00Z"
+  },
+  "notes": [
+    "Sample tenant for the alimi demo. Fictional company; nothing here was read from a real tenant."
+  ]
+}

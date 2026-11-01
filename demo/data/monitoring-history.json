@@ -1,0 +1,356 @@
+{
+  "runs": [
+    {
+      "date": "2026-10-02",
+      "note": "First scan after the pilot letter: 7 of 12 automated checks failing."
+    },
+    {
+      "date": "2026-10-09",
+      "note": "Legacy authentication blocked, DMARC moved to quarantine, Secure Score up to 61."
+    },
+    {
+      "date": "2026-10-16",
+      "note": "Two daily-use Global Administrator accounts replaced by admin-only accounts; two stale guests removed."
+    },
+    {
+      "date": "2026-10-23",
+      "note": "Three new hires started without MFA registration; coverage check turned red."
+    },
+    {
+      "date": "2026-10-30",
+      "note": "No change; forwarding and sharing fixes scheduled for the first week of November."
+    }
+  ],
+  "history": {
+    "m365.mfa.coverage": [
+      {
+        "date": "2026-10-02",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "fail"
+      }
+    ],
+    "m365.conditional_access.present": [
+      {
+        "date": "2026-10-02",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.legacy_auth.blocked": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.security_defaults": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.admins.global_count": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.admins.mfa": [
+      {
+        "date": "2026-10-02",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.forwarding.external": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "fail"
+      }
+    ],
+    "m365.email_auth.dmarc": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.sharing.anonymous_links": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "fail"
+      }
+    ],
+    "m365.guests.review": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.audit.enabled": [
+      {
+        "date": "2026-10-02",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "m365.secure_score": [
+      {
+        "date": "2026-10-02",
+        "status": "fail"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "pass"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "pass"
+      }
+    ],
+    "att.edr.coverage": [
+      {
+        "date": "2026-10-02",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "attestation_needed"
+      }
+    ],
+    "att.backups.tested": [
+      {
+        "date": "2026-10-02",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "attestation_needed"
+      }
+    ],
+    "att.ir_plan.tested": [
+      {
+        "date": "2026-10-02",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-09",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-16",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "attestation_needed"
+      },
+      {
+        "date": "2026-10-30",
+        "status": "attestation_needed"
+      }
+    ]
+  }
+}

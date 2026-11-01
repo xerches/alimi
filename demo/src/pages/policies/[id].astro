@@ -1,0 +1,90 @@
+---
+import App from "../../layouts/App.astro";
+import Pill from "../../components/Pill.astro";
+import Bar from "../../components/Bar.astro";
+import { policies, policy, frameworks, requirementSummary, formatDate, href, personName, person } from "../../lib/data.js";
+
+export function getStaticPaths() {
+  return policies.map((p) => ({ params: { id: p.id } }));
+}
+const { id } = Astro.params;
+const p = policy(id);
+const index = policies.findIndex((x) => x.id === p.id);
+const prev = policies[index - 1];
+const next = policies[index + 1];
+const mapped = frameworks.filter((f) => (p.requirements?.[f.id] ?? []).length);
+---
+
+<App title={p.title} path={`/policies/${p.id}`} section="policies" eyebrow={`${p.id} · version ${p.version}`} crumbs={[{ label: "Policies", href: "/policies" }, { label: p.id }]}
+  description={`${p.title} as adopted by the sample company: the policy text, version history, requirement mappings, controls and acknowledgements.`}
+  lead={p.note ?? `Published ${formatDate(p.approved)}; next review ${formatDate(p.next_review)}.`}>
+  <Pill slot="actions" status={p.status} />
+  <a slot="actions" class="button secondary" href="#acknowledgements">Request acknowledgement</a>
+  <a slot="actions" class="button" href="#document">Read the policy</a>
+
+  <div class="section-nav" aria-label="Sections">
+    <a href="#details">Details</a><a href="#document">Document</a><a href="#requirements">Requirements</a><a href="#controls">Controls ({p.controls.length})</a><a href="#acknowledgements">Acknowledgements</a><a href="#versions">Versions</a>
+  </div>
+
+  <div class="grid two" id="details">
+    <div class="card">
+      <h2>Details</h2>
+      <dl class="kv">
+        <dt>Owner</dt><dd><a href={href.person(p.owner)}>{p.ownerName}</a> <span class="muted">({p.owner_role?.replace(/[{}]/g, "")})</span></dd>
+        <dt>Approver</dt><dd><a href={href.person(p.approver)}>{p.approverName}</a> <span class="muted">({p.approver_role?.replace(/[{}]/g, "")})</span></dd>
+        <dt>Status</dt><dd><Pill status={p.status} /></dd>
+        <dt>Approved</dt><dd>{p.approved ? formatDate(p.approved) : "Not yet"}</dd>
+        <dt>Review cycle</dt><dd>{p.review_cycle}; next {p.next_review ? formatDate(p.next_review) : "after approval"}</dd>
+        <dt>Applies to</dt><dd>{p.audienceName} ({p.audience} people)</dd>
+        <dt>Related</dt><dd>{(p.related ?? []).map((r) => <a href={href.policy(r)} style="margin-right:.5rem">{r}</a>)}</dd>
+      </dl>
+    </div>
+    <div class="card" id="acknowledgements">
+      <h2>Acknowledgements</h2>
+      <p style="font-size:1.5rem;font-weight:700;margin:0;font-family:var(--font-heading)">{p.acknowledged} of {p.audience}</p>
+      <Bar percent={Math.round((100 * p.acknowledged) / p.audience)} label={`${p.acknowledged} of ${p.audience} acknowledged`} />
+      {p.pendingPeople.length ? (
+        <>
+          <p class="muted" style="margin:.5rem 0 .25rem">Not yet accepted:</p>
+          <ul class="list">{p.pendingPeople.map((pid) => <li><span class="grow"><a href={href.person(pid)}>{personName(pid)}</a> <span class="muted">{person(pid)?.title}</span></span><span class="when">{person(pid)?.status === "onboarding" ? "Started this month" : "Reminder sent Monday"}</span></li>)}</ul>
+        </>
+      ) : <p class="muted" style="margin:.5rem 0 0">Everyone in scope has accepted this version.</p>}
+      <p style="margin:.75rem 0 0"><button class="button secondary small" type="button">Request acknowledgement</button> <span class="muted" style="font-size:.8125rem">Demo: sends nothing. In the platform each person gets an email and a task.</span></p>
+    </div>
+  </div>
+
+  <h2 id="document">Document</h2>
+  <div class="callout" data-tone="neutral"><p>Adapted from the alimi policy template on {formatDate(p.history[0]?.date ?? p.approved)}. Sections marked [HR or legal review] were reviewed by counsel for this sample company. The template text in the alimi library carries its own header until a company adopts it.</p></div>
+  <article class="document" set:html={p.html} />
+
+  <div class="card" id="requirements" style="margin-top:1.25rem">
+    <h2>Requirements this policy answers</h2>
+    {mapped.length ? mapped.map((f) => (
+      <div>
+        <h3><a href={href.framework(f.id)}>{f.short}</a></h3>
+        <dl class="kv">{(p.requirements[f.id] ?? []).map((rid) => <><dt class="mono">{rid}</dt><dd>{requirementSummary(f.id, rid)}</dd></>)}</dl>
+      </div>
+    )) : <p class="muted">No requirement mappings.</p>}
+  </div>
+
+  <div class="card" id="controls">
+    <h2>Controls that carry it out</h2>
+    {p.controls.length ? <ul class="list">{p.controls.map((c) => <li><span class="grow"><a href={href.control(c.id)}>{c.name}</a> <span class="muted mono">{c.id}</span></span><span class="muted">{c.ownerName}</span><Pill status={c.status} /></li>)}</ul> : <p class="muted" style="margin:0">No control maps to this policy yet.</p>}
+  </div>
+
+  <div class="card" id="versions">
+    <h2>Versions</h2>
+    <div class="table-wrap plain">
+      <table>
+        <thead><tr><th>Version</th><th>Date</th><th>Summary</th><th>Approved by</th></tr></thead>
+        <tbody>
+          {[...p.history].reverse().map((h) => <tr><td>v{h.version}</td><td>{formatDate(h.date)}</td><td>{h.summary}</td><td>{personName(h.approved_by)}</td></tr>)}
+          {p.status === "draft" && <tr><td>v{p.version}</td><td class="muted">Draft</td><td>{p.note}</td><td class="muted">Pending</td></tr>}
+          {p.status === "needs_approval" && <tr><td>v{p.version}</td><td class="muted">Submitted</td><td>{p.note}</td><td class="muted">Awaiting {p.approverName}</td></tr>}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="muted">{prev && <a href={href.policy(prev.id)}>← {prev.title}</a>}{prev && next && " · "}{next && <a href={href.policy(next.id)}>{next.title} →</a>}</p>
+</App>

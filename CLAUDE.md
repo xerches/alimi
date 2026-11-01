@@ -33,6 +33,7 @@ Suggested starting prices live in `config/pricing.yaml` so the site, proposals a
 /tools/report         findings JSON -> insurer-ready HTML/PDF report, also importable by the platform
 /platform             hosted web app (phase 3+): FastAPI, HTMX pages, Postgres; orgs, login, scheduled runs, controls, evidence, policies, people, dashboard
 /tools/ai-policy      static web app, generates policy + one-pager + inventory client-side (no backend)
+/demo                 unlisted Policy Pack demo (Astro, static): a fictional sample company on twenty screens built from /policies, /config and the scanner's output; its own noindex Netlify site, never linked from /site
 /policies             policy library: Markdown + YAML front matter mapped to SOC 2, ISO 27001, ISO 42001 criterion IDs; coverage matrix; build to DOCX/PDF
 /kits/payment-fraud   Markdown sources for the procedure, scripts, poster, checklist; build script to PDF
 /templates            MSA, SOW, pilot authorization letter, case-study template ({{placeholders}}, attorney-review header)
@@ -70,6 +71,7 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | done Nov 1, 2026: prompt 8 PR #7, prompt 9 PR #8 |
 | 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | prompt 10 done Nov 1, 2026, PR #9; prompt 11 not started |
+| 7a | Policy Pack demo for prospects: sample company, controls, evidence, policies, frameworks, people, vendors, AI, trust page, assistant placeholder (prompt 11a, added Nov 1, 2026) | Nov 2026 | built Nov 1, 2026 on branch feat/demo; PR open, palette decision pending |
 | 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12) | Mar 2027 | not started |
 | 9 | Platform: policies, people, dashboard, SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
 | 10 | AI policy generator and AI app inventory (prompts 15-16) | May 2027 | not started |

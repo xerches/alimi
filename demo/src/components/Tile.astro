@@ -1,0 +1,13 @@
+---
+// A number with its label and one line of context, the way every dashboard in this category
+// opens. value is the big figure, unit a smaller suffix such as "of 40".
+const { label, value, unit, note, href, linkText, percent, tone } = Astro.props;
+---
+
+<div class="tile">
+  <span class="label">{label}</span>
+  <span class="value">{value}{unit && <small> {unit}</small>}</span>
+  {percent !== undefined && <div class="bar" data-tone={tone} role="img" aria-label={`${percent} percent`}><span style={`width:${percent}%`}></span></div>}
+  {note && <span class="note">{note}</span>}
+  {href && <a href={href}>{linkText ?? "View"}</a>}
+</div>
