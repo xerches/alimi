@@ -46,7 +46,7 @@ exact Graph permissions and the app registration steps in a README. The package 
 without the CLI, because the platform web app imports it in prompt 12. Show me the plan first.
 ```
 
-**4. Google Workspace connector**
+**4. Google Workspace connector** (done Nov 1, 2026)
 ```
 Extend alimi_scanner with a Google Workspace connector using the Admin SDK with a read-only
 service account and domain-wide delegation. Check: 2-Step Verification enforcement, super
@@ -55,7 +55,7 @@ sharing settings, less-secure app access, and audit log availability. Same findi
 same mock pattern, tests, README with exact scopes and the service account setup steps.
 ```
 
-**5. Insurer-ready report**
+**5. Insurer-ready report** (done Nov 1, 2026)
 ```
 Read /config/checks.yaml. In /tools/report, build a package `alimi_report` that takes findings
 JSON from the scanner and renders an HTML and PDF report: a one-page summary with an overall
@@ -86,7 +86,7 @@ without a definition. Show me the plan first.
 
 ## Phase 4: Policy library, templates and pilot runbook (weeks 13-16, before the first pilot)
 
-**7. Policy library**
+**7. Policy library** (done Nov 1, 2026)
 ```
 Read CLAUDE.md. In /policies, write a library of security and company policies sized for a
 10-200 person company, in Markdown with YAML front matter: id, title, version, owner role,

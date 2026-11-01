@@ -14,3 +14,13 @@ jobs:
           cache: pip
       - run: pip install -e "tools/scanner[dev]"
       - run: pytest tools/scanner
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e "tools/scanner" -e "tools/report[dev,pdf]"
+      - run: pytest tools/report
