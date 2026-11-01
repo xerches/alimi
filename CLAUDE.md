@@ -65,9 +65,9 @@ Order changed Nov 1, 2026: scanner first, then the fraud kit, then the platform 
 | --- | --- | --- | --- |
 | 1 | Repo foundation, config files, CLAUDE.md | Nov 14, 2026 | done Oct 31, 2026 (prompts 1-2) |
 | 2 | Scanner core and Microsoft 365 checks (prompt 3) | Dec 5, 2026 | done Nov 1, 2026, PR #2 |
-| 3 | Google Workspace checks and insurer-ready report (prompts 4-5) | Jan 9, 2027 | not started |
-| 4 | Payment fraud kit: docs, poster, checklist, video script (prompt 6) | Jan 30, 2027 | not started |
-| 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | not started |
+| 3 | Google Workspace checks and insurer-ready report (prompts 4-5) | Jan 9, 2027 | done Nov 1, 2026: prompt 4 PR #3, prompt 5 PR #4 |
+| 4 | Payment fraud kit: docs, poster, checklist, video script (prompt 6) | Jan 30, 2027 | done Nov 1, 2026, PR #6 |
+| 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); documents only, can run in parallel with code | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | prompt 8 done Nov 1, 2026, PR #7; prompt 9 not started |
 | 7 | Marketing site and copy, with the For Partners page (prompts 10-11) | Mar 2027 | not started |
 | 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12) | Mar 2027 | not started |

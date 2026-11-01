@@ -1,0 +1,309 @@
+# The requirements the alimi policy library claims to address, by criterion ID.
+#
+# IDs only. Every summary is alimi's own one-line description of what the requirement is about,
+# written so the coverage matrix reads without the standard open. The standards themselves are
+# copyrighted (AICPA, ISO); buy them, and quote them only from your own licensed copy.
+#
+# policies/build/coverage.py reads this file and the YAML front matter of every policy and
+# writes coverage.md: requirement -> policies, with uncovered requirements flagged.
+
+frameworks:
+  soc2:
+    name: SOC 2 Trust Services Criteria (AICPA)
+    short: SOC 2
+    requirements:
+      CC1.1: Leadership shows commitment to integrity and ethical values.
+      CC1.2: The board or owners oversee the control environment independently of management.
+      CC1.3: Structures, reporting lines and authorities are defined.
+      CC1.4: People are hired, developed and kept with the right competence.
+      CC1.5: People are held accountable for their control responsibilities.
+      CC2.1: Relevant, quality information supports the controls.
+      CC2.2: Control responsibilities and objectives are communicated internally.
+      CC2.3: Security matters are communicated with customers, vendors and other outside parties.
+      CC3.1: Objectives are specific enough to identify risks to them.
+      CC3.2: Risks to objectives are identified and analysed, including fraud risk.
+      CC3.3: Fraud risk is considered in the risk assessment.
+      CC3.4: Changes that could affect the controls are identified and assessed.
+      CC4.1: Controls are monitored through ongoing and separate evaluations.
+      CC4.2: Control deficiencies are evaluated and reported to those who can act.
+      CC5.1: Control activities are chosen to reduce risks to acceptable levels.
+      CC5.2: Technology general controls support the objectives.
+      CC5.3: Controls are deployed through policies and procedures.
+      CC6.1: Logical access to systems and data is restricted to authorised people and processes.
+      CC6.2: Accounts are registered, authorised and removed on a defined process.
+      CC6.3: Access rights follow role, least privilege and separation of duties, and are reviewed.
+      CC6.4: Physical access to facilities and equipment is restricted.
+      CC6.5: Assets and data are disposed of or returned securely when no longer needed.
+      CC6.6: Access from outside the system boundary is protected.
+      CC6.7: Data in transit and on removable media is protected.
+      CC6.8: Unauthorised or malicious software is prevented and detected.
+      CC7.1: Vulnerabilities and configuration changes are detected and handled.
+      CC7.2: Systems are monitored for anomalies and security events.
+      CC7.3: Security events are evaluated and incidents are declared.
+      CC7.4: Incidents are responded to, contained and remediated.
+      CC7.5: Incidents are recovered from and lessons are applied.
+      CC8.1: Changes to systems are authorised, tested, approved and implemented in a controlled way.
+      CC9.1: Risk mitigation for business disruption is identified and implemented.
+      CC9.2: Risks from vendors and business partners are assessed and managed.
+      A1.1: Capacity is planned and monitored to meet availability commitments.
+      A1.2: Environmental protections, backups and recovery infrastructure are in place.
+      A1.3: Recovery plans are tested.
+      C1.1: Confidential information is identified and protected.
+      C1.2: Confidential information is disposed of when no longer needed.
+      P1.1: People are told about privacy practices in a clear notice.
+      P2.1: Consent and choice are handled where the notice promises them.
+      P3.1: Personal information is collected consistently with the notice.
+      P3.2: Explicit consent is obtained where required.
+      P4.1: Personal information is used only for the purposes stated.
+      P4.2: Personal information is retained only as long as needed.
+      P4.3: Personal information is disposed of securely.
+      P5.1: People can access their personal information.
+      P5.2: People can correct their personal information.
+      P6.1: Personal information is disclosed to third parties only with consent or as stated.
+      P6.2: Disclosures are recorded.
+      P6.3: Unauthorised disclosures are recorded and handled.
+      P6.4: Third parties receiving personal information are held to commitments.
+      P6.5: Third parties notify the company of unauthorised disclosures.
+      P6.6: Affected people and regulators are notified of breaches as required.
+      P6.7: People can get an account of disclosures of their information.
+      P7.1: Personal information is kept accurate and complete.
+      P8.1: Privacy complaints and questions are received and resolved.
+
+  iso27001:
+    name: ISO/IEC 27001:2022 (clauses and Annex A controls)
+    short: ISO 27001
+    requirements:
+      "4.1": The organisation understands the internal and external issues that affect security.
+      "4.2": Interested parties and their security expectations are identified.
+      "4.3": The scope of the security management system is defined.
+      "4.4": A security management system is established and maintained.
+      "5.1": Top management leads and supports security.
+      "5.2": A security policy is set, published and communicated.
+      "5.3": Security roles, responsibilities and authorities are assigned.
+      "6.1.1": Risks and opportunities to the management system are planned for.
+      "6.1.2": A repeatable security risk assessment process exists.
+      "6.1.3": A risk treatment process and a Statement of Applicability exist.
+      "6.2": Measurable security objectives are set and planned.
+      "6.3": Changes to the management system are planned.
+      "7.1": Resources for security are provided.
+      "7.2": People doing security work are competent.
+      "7.3": People are aware of the policy and their role in it.
+      "7.4": Internal and external security communication is planned.
+      "7.5.1": The management system is documented.
+      "7.5.2": Documents are created and updated with proper identification and approval.
+      "7.5.3": "Documents are controlled: available, protected, version-managed."
+      "8.1": Security processes are planned, run and controlled, including outsourced ones.
+      "8.2": Risk assessments are performed at planned intervals and on change.
+      "8.3": The risk treatment plan is implemented.
+      "9.1": Security performance is monitored, measured and evaluated.
+      "9.2.1": Internal audits are conducted at planned intervals.
+      "9.2.2": An audit programme defines scope, criteria and reporting.
+      "9.3": Management reviews the management system at planned intervals.
+      "10.1": The management system is continually improved.
+      "10.2": Nonconformities are corrected and their causes addressed.
+      A.5.1: Security policies exist, are approved, published and reviewed.
+      A.5.2: Security roles and responsibilities are defined and allocated.
+      A.5.3: Conflicting duties are separated.
+      A.5.4: Management requires everyone to apply security.
+      A.5.5: Contacts with authorities are maintained.
+      A.5.6: Contacts with security communities and special interest groups are maintained.
+      A.5.7: Threat information is collected and used.
+      A.5.8: Security is built into project management.
+      A.5.9: An inventory of information and assets with owners is kept.
+      A.5.10: Rules for acceptable use and handling of assets exist.
+      A.5.11: Assets are returned when people leave or contracts end.
+      A.5.12: Information is classified.
+      A.5.13: Information is labelled according to its classification.
+      A.5.14: Rules protect information transferred inside and outside the company.
+      A.5.15: Access control rules are set from business and security needs.
+      A.5.16: The full lifecycle of identities is managed.
+      A.5.17: Authentication information is issued and managed securely.
+      A.5.18: Access rights are provisioned, reviewed, adjusted and removed.
+      A.5.19: Security risks from supplier products and services are managed.
+      A.5.20: Security requirements are agreed with each supplier.
+      A.5.21: Security risks in the technology supply chain are managed.
+      A.5.22: Supplier services are monitored, reviewed and managed through change.
+      A.5.23: Cloud services are acquired, used and exited securely.
+      A.5.24: Incident management is planned and prepared.
+      A.5.25: Security events are assessed and classified as incidents or not.
+      A.5.26: Incidents are responded to by documented procedures.
+      A.5.27: Lessons from incidents improve controls.
+      A.5.28: Evidence is identified, collected and preserved.
+      A.5.29: Security is maintained during disruption.
+      A.5.30: Technology readiness for business continuity is planned and tested.
+      A.5.31: Legal, regulatory and contractual requirements are identified and met.
+      A.5.32: Intellectual property rights are protected.
+      A.5.33: Records are protected from loss, destruction and falsification.
+      A.5.34: Privacy and personal data protection requirements are met.
+      A.5.35: Security is reviewed independently at planned intervals.
+      A.5.36: Compliance with security policies and standards is checked.
+      A.5.37: Operating procedures are documented and available.
+      A.6.1: Candidates are screened before joining, proportionate to the role.
+      A.6.2: Employment terms state security responsibilities.
+      A.6.3: People receive security awareness, education and training.
+      A.6.4: A disciplinary process covers security violations.
+      A.6.5: Security duties that continue after leaving are defined and enforced.
+      A.6.6: Confidentiality agreements are in place and reviewed.
+      A.6.7: Remote working is secured.
+      A.6.8: People can report security events through a known channel.
+      A.7.1: Physical perimeters protect areas holding information and assets.
+      A.7.2: Physical entry is controlled.
+      A.7.3: Offices, rooms and facilities are physically secured.
+      A.7.4: Premises are monitored for unauthorised access.
+      A.7.5: Protection against physical and environmental threats is in place.
+      A.7.6: Working in secure areas follows rules.
+      A.7.7: Clear desk and clear screen rules apply.
+      A.7.8: Equipment is sited and protected appropriately.
+      A.7.9: Assets used off-premises are protected.
+      A.7.10: Storage media are managed through their lifecycle.
+      A.7.11: Supporting utilities such as power and cooling are protected.
+      A.7.12: Cabling is protected from interference and damage.
+      A.7.13: Equipment is maintained correctly.
+      A.7.14: Equipment is wiped or destroyed before disposal or reuse.
+      A.8.1: User devices are protected.
+      A.8.2: Privileged access is restricted and managed.
+      A.8.3: Access to information is restricted by the access policy.
+      A.8.4: Access to source code and tools is managed.
+      A.8.5: Secure authentication is enforced.
+      A.8.6: Capacity is monitored and planned.
+      A.8.7: Malware protection is in place with user awareness.
+      A.8.8: Technical vulnerabilities are identified and handled.
+      A.8.9: Configurations are defined, applied, monitored and reviewed.
+      A.8.10: Information is deleted when no longer required.
+      A.8.11: Data is masked where appropriate.
+      A.8.12: Data leakage is prevented on systems and networks.
+      A.8.13: Backups are taken and tested per the backup policy.
+      A.8.14: Processing facilities have enough redundancy for availability needs.
+      A.8.15: Logs of activities, exceptions and events are produced, kept and analysed.
+      A.8.16: Networks, systems and applications are monitored for anomalies.
+      A.8.17: Clocks are synchronised to an approved source.
+      A.8.18: Privileged utility programs are restricted and controlled.
+      A.8.19: Software installation on operational systems is controlled.
+      A.8.20: Networks are secured and managed.
+      A.8.21: Security of network services is identified and enforced.
+      A.8.22: Networks are segregated by groups of services, users and systems.
+      A.8.23: Access to external websites is managed to reduce exposure.
+      A.8.24: Cryptography, including keys, is used by defined rules.
+      A.8.25: Secure development rules cover the whole lifecycle.
+      A.8.26: Security requirements are set for applications.
+      A.8.27: Secure architecture and engineering principles are applied.
+      A.8.28: Secure coding principles are applied.
+      A.8.29: Security testing happens in development and acceptance.
+      A.8.30: Outsourced development is directed and monitored.
+      A.8.31: Development, test and production environments are separated.
+      A.8.32: Changes to systems are managed by a change procedure.
+      A.8.33: Test information is selected, protected and managed.
+      A.8.34: Audit testing on production systems is planned to limit disruption.
+
+  iso42001:
+    name: ISO/IEC 42001:2023 (clauses and Annex A controls)
+    short: ISO 42001
+    requirements:
+      "4.1": The organisation understands its context and role regarding AI.
+      "4.2": Interested parties and their AI expectations are identified.
+      "4.3": The scope of the AI management system is defined.
+      "4.4": An AI management system is established and maintained.
+      "5.1": Top management leads and supports responsible AI.
+      "5.2": An AI policy is set, published and communicated.
+      "5.3": AI roles, responsibilities and authorities are assigned.
+      "6.1.1": Risks and opportunities for the AI management system are planned for.
+      "6.1.2": A repeatable AI risk assessment process exists.
+      "6.1.3": An AI risk treatment process and a Statement of Applicability exist.
+      "6.1.4": An AI system impact assessment process exists.
+      "6.2": Measurable AI objectives are set and planned.
+      "6.3": Changes to the AI management system are planned.
+      "7.1": Resources for the AI management system are provided.
+      "7.2": People working on AI are competent.
+      "7.3": People are aware of the AI policy and their role in it.
+      "7.4": AI-related communication is planned.
+      "7.5": The AI management system is documented and controlled.
+      "8.1": AI processes are planned, run and controlled.
+      "8.2": AI risk assessments are performed at planned intervals and on change.
+      "8.3": The AI risk treatment plan is implemented.
+      "8.4": AI system impact assessments are performed at planned intervals and on change.
+      "9.1": AI performance is monitored, measured and evaluated.
+      "9.2": Internal audits of the AI management system are conducted.
+      "9.3": Management reviews the AI management system.
+      "10.1": The AI management system is continually improved.
+      "10.2": Nonconformities are corrected and their causes addressed.
+      A.2.2: A documented AI policy exists.
+      A.2.3: The AI policy is consistent with other company policies.
+      A.2.4: The AI policy is reviewed at planned intervals.
+      A.3.2: AI roles and responsibilities are defined and allocated.
+      A.3.3: People can report concerns about AI systems.
+      A.4.2: Resources for each AI system are identified and documented.
+      A.4.3: Data resources used by AI systems are documented.
+      A.4.4: Tooling resources used by AI systems are documented.
+      A.4.5: System and computing resources used by AI systems are documented.
+      A.4.6: Human resources and their competence for AI systems are documented.
+      A.5.2: A process assesses the impacts of AI systems.
+      A.5.3: AI impact assessments are documented and kept.
+      A.5.4: Impacts on individuals and groups are assessed.
+      A.5.5: Impacts on society are assessed.
+      A.6.1.2: Objectives for responsible AI development are set.
+      A.6.1.3: Processes for responsible AI design and development are defined.
+      A.6.2.2: Requirements and specifications for each AI system are documented.
+      A.6.2.3: AI system design and development are documented.
+      A.6.2.4: AI systems are verified and validated against requirements.
+      A.6.2.5: AI system deployment follows a defined plan.
+      A.6.2.6: AI systems are operated and monitored.
+      A.6.2.7: Technical documentation is provided to those who need it.
+      A.6.2.8: AI system events are logged.
+      A.7.2: Data used for AI development is managed.
+      A.7.3: Data acquisition for AI is controlled.
+      A.7.4: Data quality for AI is defined and checked.
+      A.7.5: Data provenance for AI is recorded.
+      A.7.6: Data preparation for AI is documented.
+      A.8.2: Users get the information they need about an AI system.
+      A.8.3: External reporting of adverse AI impacts is possible.
+      A.8.4: AI incidents are communicated to those affected.
+      A.8.5: Interested parties get the information they need about AI systems.
+      A.9.2: Processes for responsible AI use are defined.
+      A.9.3: Objectives for responsible AI use are set.
+      A.9.4: AI systems are used as intended.
+      A.10.2: Responsibilities with third parties for AI are allocated.
+      A.10.3: AI-related supplier risks are managed.
+      A.10.4: Customer expectations and obligations for AI are met.
+
+  hipaa:
+    name: HIPAA Security Rule (45 CFR Part 164, Subpart C), where the company handles protected health information
+    short: HIPAA
+    requirements:
+      "164.308(a)(1)": Security management process, including risk analysis, risk management, sanctions and activity review.
+      "164.308(a)(2)": A named security official is responsible for the security programme.
+      "164.308(a)(3)": Workforce access is authorised, supervised and ended properly.
+      "164.308(a)(4)": Access to protected health information is authorised and managed.
+      "164.308(a)(5)": Security awareness and training, including malware, log-in monitoring and passwords.
+      "164.308(a)(6)": Security incidents are identified, responded to and documented.
+      "164.308(a)(7)": "Contingency plan: backups, disaster recovery, emergency operation, testing."
+      "164.308(a)(8)": Periodic technical and non-technical evaluation.
+      "164.308(b)(1)": Business associate contracts provide satisfactory assurances.
+      "164.310(a)(1)": Facility access is controlled.
+      "164.310(b)": Workstation use is defined.
+      "164.310(c)": Workstations are physically safeguarded.
+      "164.310(d)(1)": Devices and media are controlled through receipt, movement, reuse and disposal.
+      "164.312(a)(1)": "Technical access control: unique IDs, emergency access, logoff, encryption."
+      "164.312(b)": Audit controls record and examine system activity.
+      "164.312(c)(1)": Integrity of protected health information is protected.
+      "164.312(d)": People and systems are authenticated.
+      "164.312(e)(1)": Transmissions are protected against unauthorised access.
+      "164.314(a)": Business associate contracts contain the required security terms.
+      "164.316": Policies, procedures and documentation are maintained and retained for six years.
+
+  insurer:
+    name: Cyber insurance application questions (the common ones across carriers)
+    short: Insurer
+    requirements:
+      mfa: Multi-factor authentication enforced for all users, email, remote access and admin accounts.
+      admin_access: Privileged accounts limited, separate from daily-use accounts and reviewed.
+      email_security: SPF, DKIM and DMARC in place, external auto-forwarding blocked, phishing filtering on.
+      data_sharing: External and anonymous file sharing controlled.
+      logging: Audit logs enabled and retained for at least 90 days.
+      edr: Endpoint detection and response on at least 95% of endpoints.
+      backups: Backups immutable or offline, restore-tested at least quarterly.
+      incident_response: A written incident response plan, tested in the last 12 months.
+      training: Security awareness and phishing training for all staff at least yearly.
+      patching: Critical patches applied within a defined window, typically 14 to 30 days.
+      encryption: Sensitive data encrypted at rest and in transit, laptops encrypted.
+      vendor_risk: Vendors with access to systems or data are assessed and under contract.
+      remote_access: Remote access only through MFA-protected, company-managed channels.
