@@ -1,7 +1,9 @@
-# The demo is its own Netlify site with base directory "demo" set in the Netlify UI; Netlify then
-# reads this file instead of the root one. Unlisted: noindex on every response, robots disallow,
-# no sitemap. Paths are relative to the base directory.
+# The demo is its own Netlify site (alimi-demo) with base directory "demo" set in the Netlify UI;
+# Netlify looks for netlify.toml in the base directory first, so it reads this file instead of the
+# root one. `base` is repeated here so the file says where it lives. Unlisted: noindex on every
+# response, robots disallow, no sitemap. publish is relative to the base directory.
 [build]
+  base = "demo"
   publish = "dist"
   command = "npm run build"
 
