@@ -1,8 +1,8 @@
-# denimi brand tokens. The site and reports read from here.
+# alimi brand tokens. The site and reports read from here.
 # Status: working name, formal checks pending (MA entity search, USPTO, .com).
 
-name: denimi
-display_name: denimi
+name: alimi
+display_name: alimi
 tagline: Security that insurers, customers and auditors accept.
 tagline_alt: Security for companies too small for a security team.
 founder: Alex Dennis
@@ -33,4 +33,4 @@ typography:
 
 social:
   linkedin: TODO
-  github: https://github.com/xerches/denimi
+  github: https://github.com/xerches/alimi
