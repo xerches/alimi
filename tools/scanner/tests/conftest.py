@@ -23,5 +23,15 @@ def fail_snapshot():
 
 
 @pytest.fixture
+def gws_pass_snapshot():
+    return load_fixture(Platform.gws, "pass")
+
+
+@pytest.fixture
+def gws_fail_snapshot():
+    return load_fixture(Platform.gws, "fail")
+
+
+@pytest.fixture
 def tenant():
     return TenantInfo(display_name="Test", primary_domain="example.com", source="test")

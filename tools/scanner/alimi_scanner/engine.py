@@ -28,9 +28,9 @@ from .schema import (
     Summary,
     TenantInfo,
 )
-from .snapshot import M365Snapshot
+from .snapshot import BaseSnapshot
 
-CheckFunc = Callable[[M365Snapshot, CheckDefinition], CheckOutcome]
+CheckFunc = Callable[[BaseSnapshot, CheckDefinition], CheckOutcome]
 
 _REGISTRY: dict[str, CheckFunc] = {}
 
@@ -58,7 +58,7 @@ def _load_check_modules() -> None:
 
 
 def run_checks(
-    snapshot: M365Snapshot,
+    snapshot: BaseSnapshot,
     catalog: Catalog,
     platform: Platform,
     tenant: TenantInfo,

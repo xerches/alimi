@@ -8,12 +8,12 @@ guessing.
 
 from __future__ import annotations
 
-import re
 from datetime import timedelta
 
 from ..engine import check
 from ..schema import CheckDefinition, CheckOutcome, Status
 from ..snapshot import M365Snapshot, User
+from ._email_auth import evaluate_email_auth
 
 GLOBAL_ADMIN_TEMPLATE = "62e90394-69f5-4237-9190-012177145e10"
 
@@ -337,55 +337,9 @@ def forwarding_external(snapshot: M365Snapshot, definition: CheckDefinition) -> 
     )
 
 
-_DMARC_POLICY = re.compile(r"(?:^|;)\s*p\s*=\s*(none|quarantine|reject)", re.IGNORECASE)
-
-
 @check("m365.email_auth.dmarc")
 def email_auth(snapshot: M365Snapshot, definition: CheckDefinition) -> CheckOutcome:
-    records = snapshot.email_auth
-    if records is None:
-        return CheckOutcome(
-            status=Status.error,
-            summary="DNS lookups for SPF, DKIM and DMARC did not run, so the sending domains could not be checked.",
-            notes=["missing data: DNS records for the verified domains"],
-        )
-    if not records:
-        return CheckOutcome(
-            status=Status.not_applicable,
-            summary="The tenant has no custom domain; mail only uses the onmicrosoft.com address.",
-        )
-    per_domain = []
-    failing = []
-    for record in records:
-        spf_ok = bool(record.spf and record.spf.lower().startswith("v=spf1"))
-        policy_match = _DMARC_POLICY.search(record.dmarc or "")
-        dmarc_policy = policy_match.group(1).lower() if policy_match else None
-        dmarc_ok = dmarc_policy in ("quarantine", "reject")
-        dkim_ok = record.dkim_enabled is True
-        per_domain.append(
-            {"domain": record.domain, "spf": spf_ok, "dkim": record.dkim_enabled, "dmarc_policy": dmarc_policy}
-        )
-        gaps = []
-        if not spf_ok:
-            gaps.append("no SPF")
-        if not dkim_ok:
-            gaps.append("DKIM not enabled")
-        if not dmarc_ok:
-            gaps.append(f"DMARC {dmarc_policy or 'missing'}")
-        if gaps:
-            failing.append(f"{record.domain} ({', '.join(gaps)})")
-    evidence = {"domains": per_domain}
-    if failing:
-        return CheckOutcome(
-            status=Status.failed,
-            summary=f"{len(failing)} of {len(records)} sending domains are not fully protected: {'; '.join(failing)}.",
-            evidence=evidence,
-        )
-    return CheckOutcome(
-        status=Status.passed,
-        summary=f"SPF, DKIM and an enforcing DMARC policy are in place on all {len(records)} sending domains.",
-        evidence=evidence,
-    )
+    return evaluate_email_auth(snapshot.email_auth, provider_default="the onmicrosoft.com address")
 
 
 @check("m365.sharing.anonymous_links")

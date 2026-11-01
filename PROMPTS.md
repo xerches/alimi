@@ -46,7 +46,7 @@ exact Graph permissions and the app registration steps in a README. The package 
 without the CLI, because the platform web app imports it in prompt 12. Show me the plan first.
 ```
 
-**4. Google Workspace connector**
+**4. Google Workspace connector** (done Nov 1, 2026)
 ```
 Extend alimi_scanner with a Google Workspace connector using the Admin SDK with a read-only
 service account and domain-wide delegation. Check: 2-Step Verification enforcement, super
