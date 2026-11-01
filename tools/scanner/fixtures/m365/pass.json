@@ -1,0 +1,36 @@
+{
+  "tenant_display_name": "Example Co (mock)",
+  "verified_domains": ["example.com", "exampleco.onmicrosoft.com"],
+  "collected_at": "2026-11-01T00:00:00Z",
+  "users": [
+    {"id": "u-001", "upn": "ava@example.com", "display_name": "Ava Example", "enabled": true, "user_type": "Member", "created": "2024-03-01T00:00:00Z", "last_sign_in": "2026-10-31T14:00:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["microsoftAuthenticatorPush"]},
+    {"id": "u-002", "upn": "ben@example.com", "display_name": "Ben Example", "enabled": true, "user_type": "Member", "created": "2024-03-01T00:00:00Z", "last_sign_in": "2026-10-30T09:00:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["microsoftAuthenticatorPush", "fido2"]},
+    {"id": "u-003", "upn": "chloe@example.com", "display_name": "Chloe Example", "enabled": true, "user_type": "Member", "created": "2025-01-15T00:00:00Z", "last_sign_in": "2026-10-29T17:30:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["softwareOneTimePasscode"]},
+    {"id": "u-004", "upn": "dan@example.com", "display_name": "Dan Example", "enabled": true, "user_type": "Member", "created": "2025-06-01T00:00:00Z", "last_sign_in": "2026-10-31T08:15:00Z", "has_mailbox": true, "mfa_registered": true, "mfa_methods": ["microsoftAuthenticatorPush"]},
+    {"id": "u-005", "upn": "former@example.com", "display_name": "Former Employee", "enabled": false, "user_type": "Member", "created": "2023-01-01T00:00:00Z", "last_sign_in": "2025-12-01T00:00:00Z", "has_mailbox": true, "mfa_registered": false, "mfa_methods": []},
+    {"id": "u-adm-1", "upn": "adm-ava@example.com", "display_name": "Ava Example (admin)", "enabled": true, "user_type": "Member", "created": "2024-03-01T00:00:00Z", "last_sign_in": "2026-10-28T10:00:00Z", "has_mailbox": false, "mfa_registered": true, "mfa_methods": ["fido2"]},
+    {"id": "u-adm-2", "upn": "adm-ben@example.com", "display_name": "Ben Example (admin)", "enabled": true, "user_type": "Member", "created": "2024-03-01T00:00:00Z", "last_sign_in": "2026-10-20T10:00:00Z", "has_mailbox": false, "mfa_registered": true, "mfa_methods": ["fido2"]},
+    {"id": "g-001", "upn": "partner_contoso.com#EXT#@exampleco.onmicrosoft.com", "display_name": "Partner (guest)", "enabled": true, "user_type": "Guest", "created": "2026-05-01T00:00:00Z", "last_sign_in": "2026-10-25T12:00:00Z", "has_mailbox": false, "mfa_registered": true, "mfa_methods": ["microsoftAuthenticatorPush"]}
+  ],
+  "conditional_access_policies": [
+    {"id": "ca-001", "display_name": "Require MFA for all users", "state": "enabled", "include_users": ["All"], "exclude_users": ["u-breakglass"], "include_applications": ["All"], "client_app_types": ["all"], "grant_controls": ["mfa"]},
+    {"id": "ca-002", "display_name": "Block legacy authentication", "state": "enabled", "include_users": ["All"], "exclude_users": [], "include_applications": ["All"], "client_app_types": ["exchangeActiveSync", "other"], "grant_controls": ["block"]}
+  ],
+  "security_defaults_enabled": false,
+  "legacy_auth_sign_ins_30d": 0,
+  "role_assignments": [
+    {"role_template_id": "62e90394-69f5-4237-9190-012177145e10", "role_name": "Global Administrator", "member_ids": ["u-adm-1", "u-adm-2"]},
+    {"role_template_id": "29232cdf-9323-42fd-ade2-1d097af3e4de", "role_name": "Exchange Administrator", "member_ids": ["u-adm-2"]}
+  ],
+  "inbox_rules": [
+    {"user_upn": "ava@example.com", "name": "Invoices to finance", "enabled": true, "forward_to": ["finance@example.com"], "redirect_to": []}
+  ],
+  "outbound_forwarding_blocked": true,
+  "email_auth": [
+    {"domain": "example.com", "spf": "v=spf1 include:spf.protection.outlook.com -all", "dkim_enabled": true, "dmarc": "v=DMARC1; p=reject; rua=mailto:dmarc@example.com"}
+  ],
+  "sharing": {"sharing_capability": "externalUserSharingOnly", "anonymous_link_expiration_days": null},
+  "audit": {"unified_audit_log_enabled": true, "retention_days": 180, "directory_audit_available": true},
+  "secure_score": {"current": 72.5, "max": 100, "created": "2026-10-31T06:00:00Z"},
+  "notes": ["mock fixture: every automated check passes"]
+}
