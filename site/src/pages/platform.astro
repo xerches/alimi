@@ -4,7 +4,7 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Steps from "../components/Steps.astro";
 import Callout from "../components/Callout.astro";
-import { brand, platform, frameworkCatalog } from "../lib/config.js";
+import { brand, decided, platform, frameworkCatalog, questionnaireAllowances } from "../lib/config.js";
 import { policies, checkCounts, insurerQuestions, mappedFrameworks, controlSummary } from "../lib/content.js";
 
 const plat = platform();
@@ -18,6 +18,9 @@ const choosable = catalog.filter((f) => !f.always_included);
 const mapped = mappedFrameworks();
 const requirementTotal = mapped.reduce((sum, f) => sum + f.requirementCount, 0);
 const requirementCount = (id) => mapped.find((f) => f.id === id)?.requirementCount ?? null;
+const posture = catalog.find((f) => f.always_included);
+const demo = decided(brand.demo_url);
+const allowances = questionnaireAllowances();
 
 const modules = [
   {
@@ -49,7 +52,7 @@ const modules = [
   {
     id: "frameworks",
     title: "Frameworks",
-    text: `${choosable.length} frameworks in the catalog, one included in every plan and the rest as add-ons, all answered by one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the others are answered by the same controls and policies when a customer or a regulator asks. Readiness is the share of mapped controls in order, per framework. Alongside them, in every plan, the Alimi Security Posture Score scores the controls that go beyond what any standard asks, because compliance is not security. The standards' own text is never copied in; you see the ID and our plain-English summary. ${requirementTotal} requirement IDs are mapped to the policy library so far, across ${mapped.length} frameworks; the rest are being mapped before launch.`,
+    text: `${choosable.length} frameworks in the catalog, one included in every plan (chosen today from the ${mapped.length} that are mapped; the pricing page names them) and the rest as add-ons, all answered by one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the others are answered by the same controls and policies when a customer or a regulator asks. Readiness is the share of mapped controls in order, per framework. Alongside them, in every plan, the ${posture.name} scores the controls security teams recommend beyond what any standard asks, because compliance is not security; it is Alimi's own and not an accreditation. The standards' own text is never copied in; you see the ID and our plain-English summary. ${requirementTotal} requirement IDs are mapped to the policy library so far, across ${mapped.length} frameworks; the rest are being mapped before launch.`,
   },
   {
     id: "vendors",
@@ -64,12 +67,12 @@ const modules = [
   {
     id: "trust",
     title: "Trust page and questionnaires",
-    text: "A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack. Security questionnaires are answered from the evidence you already have, with the draft marked for review.",
+    text: `A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack, from the ${plat.tiers[1].name} tier. Security questionnaires are answered from the evidence you already have, with the draft marked for review and every answer pointing at its source: ${allowances}. A questionnaire is one customer's or insurer's form, however long.`,
   },
   {
     id: "assistant",
     title: "The assistant",
-    text: "Ask in plain words: which policies answer the insurer's MFA question, what evidence is due before the renewal, who still owes a sign-off. It reads the same tables you see, nothing else, and shows its sources on every line. It suggests; a person accepts. It never changes a record on its own, and your data never leaves the platform to train a model. In preview; the prepared answers are already in the demo.",
+    text: "Ask in plain words: which policies answer the insurer's MFA question, what evidence is due before the renewal, who still owes a sign-off. It reads the same tables you see, nothing else, and shows its sources on every line. It suggests; a person accepts. When it finds nothing it says so, and says what it searched. It never changes a record on its own, and your data never leaves the platform to train a model. In preview; the prepared answers are already in the demo.",
   },
 ];
 
@@ -88,12 +91,13 @@ const trust = [
 ];
 ---
 
-<Base title="The platform" description={`How the Alimi platform works: read-only connections to Microsoft 365 and Google Workspace, ${controls.total} controls with automated tests and evidence, ${policyCount} policies with sign-off, people and training, ${choosable.length} frameworks plus Alimi's own security posture score, vendors, AI governance, a trust page and an assistant.`} path="/platform">
+<Base title="The platform" description={`How the Alimi platform works: read-only connections to Microsoft 365 and Google Workspace, ${controls.total} controls with automated tests and evidence, ${policyCount} policies with sign-off, people and training, ${choosable.length} frameworks plus the ${posture.name}, vendors, AI governance, a trust page and an assistant.`} path="/platform">
   <Hero eyebrow="The platform" title="One place that knows whether your security is in order, and can prove it">
     <p class="lede">A compliance platform of the kind larger companies buy, sized and priced for companies of 10 to 200 people, with the founder as the compliance lead who makes the scoping and policy calls.</p>
     <div class="actions">
       <a class="button button--primary" href="/pricing">See pricing</a>
       <a class="button button--secondary" href="/pricing#waitlist">Join the waitlist</a>
+      {demo && <a class="button button--secondary" href={demo} rel="noopener">See the product</a>}
     </div>
   </Hero>
 
@@ -132,7 +136,7 @@ const trust = [
               <th scope="row">{f.name}</th>
               <td>{f.summary}</td>
               <td>{f.audience}</td>
-              <td>{f.always_included ? "Alimi's own controls, in every plan" : f.mapped ? `Yes, ${requirementCount(f.id)} requirement IDs` : "Before launch"}</td>
+              <td>{f.always_included ? "Alimi's own recommended controls, in every plan" : f.mapped ? `Yes, ${requirementCount(f.id)} requirement IDs` : "Before launch"}</td>
             </tr>
           ))}
         </tbody>

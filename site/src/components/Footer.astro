@@ -2,6 +2,7 @@
 import { brand, decided } from "../lib/config.js";
 const email = decided(brand.contact_email);
 const github = decided(brand.social?.github);
+const demo = decided(brand.demo_url);
 const linkedin = decided(brand.social?.linkedin);
 const year = new Date().getUTCFullYear();
 ---
@@ -16,6 +17,7 @@ const year = new Date().getUTCFullYear();
           <li><a href="/pricing">Pricing</a></li>
           <li><a href="/pricing#services">Services</a></li>
           <li><a href="/compare">Compare with Vanta and Drata</a></li>
+          {demo && <li><a href={demo} rel="noopener">See the product</a></li>}
         </ul>
       </div>
       <div>

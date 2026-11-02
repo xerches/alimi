@@ -142,7 +142,7 @@ def framework_terms(frameworks: dict) -> str:
         f"with {d['from_total']} or more frameworks every added framework is {percent(d['discount'])} off" for d in frameworks["discounts"]
     )
     return (
-        f"{lead} included in every plan, and so is the Alimi Security Posture Score. Each further framework is "
+        f"{lead} included in every plan, and so is the Alimi Recommended Security Posture Score. Each further framework is "
         f"{money(frameworks['addon_per_user_month'])} per user a month; {discounts}. Up to {frameworks['max']} frameworks on one account."
     )
 

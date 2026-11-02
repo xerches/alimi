@@ -48,6 +48,10 @@ Each lesson follows the same shape: the scene (90 seconds), why it works on busy
 
 **8. Role lessons.** Admins (10 minutes): separate admin accounts without mailboxes, least privilege and reviews, MFA that cannot be bypassed, logging on and read the alerts, change control. Finance (20 minutes): the full PFK-05 training with the drill. Managers (8 minutes): the day-one checklist for a hire, the same-day checklist for a leaver, approving access, acknowledging policies for the team.
 
+## What the frameworks require, and the review before building
+
+The founder reviews the eight lessons against each framework's training requirement before prompt 18 runs (agenda item of Nov 2, 2026). The table of requirement IDs, our one-line summaries and the lessons that answer each is in `docs/agenda.md` under "The training review"; once verified it moves here and the lessons' front matter carries the IDs, so a completion record lands on the right requirement of every framework the customer holds.
+
 ## Build (prompt 18, after prompt 13)
 
 - Content lives in `/training` as Markdown with YAML front matter: id, title, audience, minutes, policies, controls, version, script, slide list, quiz (questions, choices, answer, explanation). The platform imports it the way it imports `/policies`.

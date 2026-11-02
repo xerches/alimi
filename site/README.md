@@ -25,7 +25,7 @@ Node 22 or newer. Lighthouse needs a Chrome; set `CHROME_PATH` if it is not on t
 | Insurer questions, check counts, the sample finding | `config/checks.yaml` | `src/lib/content.js` |
 | Control counts, framework requirement counts | `config/controls.yaml`, `policies/requirements.yaml` | `src/lib/content.js` (`controlSummary()`, `mappedFrameworks()`) |
 | Policy titles and count (front matter only, never the body) | `/policies/*.md` | `src/lib/content.js` (`policies()`) |
-| Name, tagline, founder, site URL, GitHub | `config/brand.yaml` | layout, header, footer, About |
+| Name, tagline, founder, site URL, demo URL (`demo_url`, the "See the product" links) | `config/brand.yaml` | layout, header, footer, home, platform, About |
 
 A value of `TODO` in brand.yaml (domain, contact email, LinkedIn) renders as absent, so nothing fake ships. Placeholder copy, if any is ever needed again, goes in the `<Todo>` component, visible on purpose; the build prints how many remain (zero since prompt 11).
 
