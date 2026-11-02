@@ -1,11 +1,11 @@
-# alimi brand tokens: the single source of truth for name, voice, colors and type.
+# Alimi brand tokens: the single source of truth for name, voice, colors and type.
 # The site generates its CSS custom properties from `colors` (one --color-<key> per entry,
 # underscores become hyphens), and the report package reads the same keys. Change a value here
 # and every page and report follows; never type a hex value into a component.
 # Status: working name, formal checks pending (MA entity search, USPTO, .com).
 
-name: alimi
-display_name: alimi
+name: Alimi
+display_name: Alimi
 tagline: Security that insurers, customers and auditors accept.
 tagline_alt: Security for companies too small for a security team.
 founder: Alex Dennis
@@ -20,57 +20,59 @@ voice:
   - No fear, no hooded hackers, no "cyber" clichés.
   - Say what it costs and what happens next.
 
-# Palette: "brick and slate", chosen Nov 1, 2026 after the founder rejected the first cut's
-# beige backgrounds and teal-green bands. Primary is "Boston brick", a deep brick red-orange:
-# warm and human for an owner, premium rather than alarming, almost unused in security, and it
-# says Boston without a map. Pages are white with a cool gray for alternate sections; header,
-# footer and dark bands are a blue-gray slate. Amber is a small accent on dark surfaces only.
-# Every text pairing below meets WCAG AA (4.5:1) on the surface it is meant for; the light
-# theme is the default and the *_on_dark / *_inverse / *_dark tokens serve the dark bands.
+# Palette: "indigo and ink", chosen Nov 2, 2026 after the founder asked for "some blue or purple,
+# something that stands out in a lightweight way" (it replaces the brick-and-slate palette of
+# Nov 1). Primary is a deep indigo: it reads as blue-violet, carries well on white without shouting,
+# and is rare enough among security vendors (who favour navy and teal) to stand out. Pages stay white
+# with a faintly lavender cool gray for alternate sections; header, footer and dark bands are a
+# deep indigo ink; links and buttons on dark surfaces are a pale periwinkle. Amber stays as the
+# small accent on dark surfaces only. Every text pairing below meets WCAG AA (4.5:1) on the surface
+# it is meant for (site/tests/contrast.test.mjs proves it); the light theme is the default and the
+# *_on_dark / *_inverse / *_dark tokens serve the dark bands.
 colors:
   # Brand
-  primary: "#9A3B1E"            # brick: buttons, links, brand marks on light surfaces (6.9:1 on white)
-  primary_hover: "#7E2F16"
-  primary_active: "#66250F"
-  primary_soft: "#F8E9E2"       # tinted panel behind callouts and badges on light surfaces
-  primary_on_dark: "#EE9A74"    # clay: links and buttons on dark bands
-  primary_on_dark_hover: "#F4B092"
-  secondary: "#1F2630"          # slate: header, footer, dark sections
-  secondary_soft: "#E8EBEF"     # light cool tint of the slate for quiet panels
+  primary: "#4338CA"            # indigo: buttons, links, brand marks on light surfaces (7.9:1 on white)
+  primary_hover: "#3730A3"
+  primary_active: "#2E2A86"
+  primary_soft: "#EEF0FD"       # tinted panel behind callouts and badges on light surfaces
+  primary_on_dark: "#A5B4FC"    # periwinkle: links and buttons on dark bands (7.7:1 on secondary)
+  primary_on_dark_hover: "#C7D2FE"
+  secondary: "#1E2340"          # indigo ink: header, footer, dark sections
+  secondary_soft: "#E6E8F4"     # light tint of the ink for quiet panels
   accent: "#F0B86B"             # amber: focus rings and small marks on dark surfaces, never body text
   accent_deep: "#A8761D"        # amber for decoration on light surfaces (3:1, large or non-text only)
 
   # Backgrounds and surfaces
   background: "#FFFFFF"         # page
-  background_alt: "#F4F5F7"     # alternate sections and the app canvas, cool gray
-  background_dark: "#141921"    # ink band (footer)
+  background_alt: "#F5F6FB"     # alternate sections and the app canvas, cool gray with a hint of lavender
+  background_dark: "#151833"    # deepest ink band (footer)
   surface: "#FFFFFF"            # cards and panels on light surfaces
-  surface_dark: "#262E3A"       # cards on dark bands
+  surface_dark: "#2B3159"       # cards on dark bands
 
   # Text
   text: "#14181F"               # ink
   text_secondary: "#3C4552"
   text_muted: "#5B6573"         # 5.6:1 on white, 5.1:1 on background_alt
   text_inverse: "#FFFFFF"       # on secondary and background_dark
-  text_inverse_muted: "#B4BCC8"
+  text_inverse_muted: "#B7BCD6"
 
   # Borders and dividers
   border: "#DDE1E6"             # hairlines and card edges (decorative)
   border_strong: "#6F7A88"      # form fields and controls that need a 3:1 edge
-  border_dark: "#343D4A"        # dividers on dark bands
+  border_dark: "#3A4170"        # dividers on dark bands
 
   # Semantic feedback (text colors; *_soft are their tinted backgrounds)
   success: "#1F6B43"
   success_soft: "#E3F1E8"
   warning: "#8A5A00"
   warning_soft: "#FBF0D9"
-  danger: "#B01E2B"             # a cooler crimson than the brick, so an error never looks like the brand
+  danger: "#B01E2B"             # crimson, so an error never looks like the brand
   danger_soft: "#F9E3E4"
   info: "#2A5F7F"
   info_soft: "#E3EEF4"
 
   # Interactive states
-  focus_ring: "#9A3B1E"         # on light surfaces
+  focus_ring: "#4338CA"         # on light surfaces
   focus_ring_on_dark: "#F0B86B"
 
 typography:
@@ -80,4 +82,4 @@ typography:
 
 social:
   linkedin: TODO
-  github: https://github.com/xerches/alimi
+  github: TODO   # the repository is private since Nov 2, 2026 (founder's decision); TODO hides the footer link

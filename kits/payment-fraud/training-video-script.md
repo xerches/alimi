@@ -4,7 +4,7 @@ slug: training-video-script
 title: Verify Before You Pay, a 20-minute training
 kind: script
 ---
-> Part of the alimi Payment Fraud Protection Kit. Adapt the names, numbers and threshold to your company before recording.
+> Part of the Alimi Payment Fraud Protection Kit. Adapt the names, numbers and threshold to your company before recording.
 
 # Verify Before You Pay: 20-minute training video script
 

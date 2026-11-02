@@ -1,5 +1,6 @@
-// Reads config/brand.yaml and config/pricing.yaml at build time. Plain JavaScript so the Node test
-// runner can import it without a build step. Nothing here runs in the browser.
+// Reads config/brand.yaml, config/pricing.yaml and config/frameworks.yaml at build time. Plain
+// JavaScript so the Node test runner can import it without a build step. Nothing here runs in the
+// browser except the small pricing calculator, which receives the numbers it needs as data attributes.
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,6 +27,7 @@ function load(name) {
 
 export const brand = load("brand.yaml");
 export const pricing = load("pricing.yaml");
+const catalog = load("frameworks.yaml").frameworks;
 
 /** TODO in a config value means "not decided yet"; treat it as absent. */
 export function decided(value) {
@@ -34,12 +36,19 @@ export function decided(value) {
   return text === "" || text.toUpperCase() === "TODO" ? null : text;
 }
 
+/** "$13", "$1,560" or "$16.80": whole dollars unless the amount has cents. */
 export function money(amount) {
-  return "$" + Number(amount).toLocaleString("en-US");
+  const n = Math.round(Number(amount) * 100) / 100;
+  return "$" + n.toLocaleString("en-US", Number.isInteger(n) ? { maximumFractionDigits: 0 } : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-/** "Free", "$499" or "$500 to $1,500". `list` wins over `range`, as in templates/build/render.py. */
+export function percent(fraction) {
+  return `${Math.round(Number(fraction) * 100)}%`;
+}
+
+/** "$13 per user a month", "$500 to $1,500" or "Quoted". Mirrors templates/build/render.py. */
 export function tierPrice(tier) {
+  if (typeof tier.per_user_month === "number") return `${money(tier.per_user_month)} per user a month`;
   if (typeof tier.list === "number") return tier.list === 0 ? "Free" : money(tier.list);
   if (Array.isArray(tier.range) && tier.range.length === 2) return `${money(tier.range[0])} to ${money(tier.range[1])}`;
   return "Quoted";
@@ -47,38 +56,128 @@ export function tierPrice(tier) {
 
 export function tierNote(tier) {
   if (tier.type === "service") return "Fixed fee, confirmed after a short call";
-  if (tier.list === 0) return "No card and no account needed";
-  return "Billed yearly";
+  return "Paid monthly";
 }
 
-// One product (the platform), the fixed-fee services around it, and the free resources in front of it.
-export const PRODUCT_ORDER = ["platform", "services", "free"];
+/** The platform's billing terms from pricing.yaml, as plain English. */
+export function billingText(b = pricing.products.platform.billing) {
+  return (
+    `Every plan is paid monthly: a ${b.term_months}-month term at the list price, or month to month for ${percent(b.monthly_premium)} more. ` +
+    `No automatic increase at renewal, and your price is locked for ${b.price_lock_months} months.`
+  );
+}
+
+// One product (the platform) and the fixed-fee services around it.
+export const PRODUCT_ORDER = ["platform", "services"];
 
 export const PRODUCT_PAGES = {
   platform: "/platform",
   services: "/pricing#services",
-  free: "/resources",
 };
 
-export const FRAMEWORK_LABELS = {
-  insurer: "Cyber insurance questionnaire",
-  soc2: "SOC 2",
-  iso27001: "ISO 27001",
-  hipaa: "HIPAA",
-  iso42001: "ISO 42001",
-};
+// ----- frameworks: the catalog in config/frameworks.yaml and how they are priced -----
+
+/** Every framework in the catalog, in order. IDs, names and our own summaries only. */
+export function frameworkCatalog() {
+  return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included) }));
+}
+
+/** The frameworks a customer picks from: the catalog without Alimi's own posture score, which every plan carries. */
+export function choosableFrameworks() {
+  return frameworkCatalog().filter((f) => !f.always_included);
+}
+
+/** The frameworks in every plan regardless of tier (Alimi's security posture score). */
+export function alwaysIncludedFrameworks() {
+  return frameworkCatalog().filter((f) => f.always_included);
+}
+
+export function framework(id) {
+  const found = catalog.find((f) => f.id === id);
+  if (!found) throw new Error(`frameworks.yaml has no framework "${id}"`);
+  return { ...found };
+}
+
+/** id -> name, for pages that print a framework by its ID. */
+export const FRAMEWORK_LABELS = Object.fromEntries(catalog.map((f) => [f.id, f.name]));
+
+/** The add-on price, the included count, the volume discounts and the cap, with text for the page. */
+export function frameworkPricing() {
+  const f = pricing.products.platform.frameworks;
+  const discounts = [...f.discounts].sort((a, b) => a.from_total - b.from_total);
+  return {
+    included: f.included,
+    addon: f.addon_per_user_month,
+    addonText: `${money(f.addon_per_user_month)} per user a month`,
+    discounts: discounts.map((d) => ({ fromTotal: d.from_total, off: d.discount, offText: percent(d.discount) })),
+    max: f.max,
+    rule: f.rule,
+    text:
+      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, and so is the Alimi Security Posture Score. Each further framework is ${money(f.addon_per_user_month)} per user a month. ` +
+      discounts.map((d) => `With ${d.from_total} or more frameworks, every added framework is ${percent(d.discount)} off`).join("; ") +
+      `. Up to ${f.max} frameworks on one account, not counting the posture score.`,
+  };
+}
+
+/** The discount on add-on frameworks for an account holding `total` frameworks (the included one counts). */
+export function frameworkDiscount(total) {
+  const f = pricing.products.platform.frameworks;
+  let off = 0;
+  for (const d of f.discounts) if (total >= d.from_total && d.discount > off) off = d.discount;
+  return off;
+}
+
+/**
+ * A quote for one tier: `users` people, `frameworks` frameworks on the account (1 to max), on the
+ * 12-month term or month to month. Seats never drop below the plan minimum. The same arithmetic runs
+ * in the browser calculator on the pricing page; keep the two in step (tests compare fixed cases).
+ */
+export function quote({ tierId, users, frameworks: total = 1, monthToMonth = false }) {
+  const plat = pricing.products.platform;
+  const tier = plat.tiers.find((t) => t.id === tierId);
+  if (!tier) throw new Error(`pricing.yaml has no platform tier "${tierId}"`);
+  const f = plat.frameworks;
+  const held = Math.min(Math.max(1, Math.round(Number(total) || 1)), f.max);
+  const seats = Math.max(Math.round(Number(users) || 0), plat.minimum_users);
+  const addons = Math.max(0, held - f.included);
+  const discount = frameworkDiscount(held);
+  const addonRate = f.addon_per_user_month * (1 - discount);
+  let perUser = tier.per_user_month + addons * addonRate;
+  if (monthToMonth) perUser *= 1 + plat.billing.monthly_premium;
+  perUser = Math.round(perUser * 100) / 100;
+  const monthly = Math.round(perUser * seats);
+  return {
+    tier: tier.name,
+    seats,
+    frameworks: held,
+    addons,
+    discount,
+    perUser,
+    monthly,
+    yearly: monthly * 12,
+    perUserText: `${money(perUser)} per user a month`,
+    monthlyText: `${money(monthly)} a month`,
+    yearlyText: `${money(monthly * 12)} a year`,
+  };
+}
+
+/** Company sizes the pricing page shows worked examples for. */
+export const EXAMPLE_SIZES = [10, 25, 50, 100, 200];
 
 function decorate(tier) {
   const out = { ...tier, price: tierPrice(tier), note: tierNote(tier) };
-  if (typeof tier.people_up_to === "number") {
-    out.monthly = `${money(Math.round(tier.list / 12))} a month`;
-    out.yearly = `${money(tier.list)} a year`;
-    out.peopleLabel = `Up to ${tier.people_up_to} people`;
-    out.frameworkLabels = (tier.frameworks ?? []).map((id) => FRAMEWORK_LABELS[id] ?? id);
+  if (typeof tier.per_user_month === "number") {
+    const plat = pricing.products.platform;
+    const b = plat.billing;
+    out.perUser = money(tier.per_user_month);
+    out.perUserMonthToMonth = money(Math.round(tier.per_user_month * (1 + b.monthly_premium)));
+    out.termLabel = `${b.term_months}-month term`;
+    out.minimumUsers = plat.minimum_users;
     out.integrationsLabel =
       tier.integrations === null || tier.integrations === undefined
         ? "Unlimited integrations"
         : `${tier.integrations} integration${tier.integrations === 1 ? "" : "s"}`;
+    out.examples = EXAMPLE_SIZES.map((users) => ({ users, ...quote({ tierId: tier.id, users }) }));
   }
   return out;
 }
@@ -99,13 +198,16 @@ export function products(order = PRODUCT_ORDER) {
   return order.map(product);
 }
 
-/** The platform: tiers in price order plus what every tier includes. */
+/** The platform: tiers in price order, what every tier includes, how frameworks are priced, the billing terms. */
 export function platform() {
   const entry = pricing.products.platform;
   return {
     ...product("platform"),
     included: entry.included_everywhere,
-    billing: entry.billing,
+    minimumUsers: entry.minimum_users,
+    frameworks: frameworkPricing(),
+    billing: billingText(entry.billing),
+    billingTerms: entry.billing,
     auditNote: entry.audit_note,
   };
 }
@@ -114,32 +216,25 @@ export function services() {
   return product("services").tiers;
 }
 
-export function freeResources() {
-  return product("free").tiers;
-}
-
 export function service(id) {
   const found = services().find((tier) => tier.id === id);
   if (!found) throw new Error(`pricing.yaml has no service "${id}"`);
   return found;
 }
 
-const TIER_NAMES = { starter: "Starter", growth: "Growth", scale: "Scale" };
+const RESELLER_TIER_NAMES = { partner: "Partner", preferred: "Preferred", premier: "Premier" };
 
 function clientsLabel([low, high]) {
   return high === null || high === undefined ? `${low} or more` : `${low} to ${high}`;
 }
 
-export function percent(fraction) {
-  return `${Math.round(Number(fraction) * 100)}%`;
-}
-
 export function resellerTiers() {
   return pricing.partners.reseller.tiers.map((tier) => ({
     id: tier.id,
-    name: TIER_NAMES[tier.id] ?? tier.id,
+    name: RESELLER_TIER_NAMES[tier.id] ?? tier.id,
     clients: clientsLabel(tier.active_clients),
     discount: percent(tier.discount),
+    discountFraction: tier.discount,
   }));
 }
 
@@ -147,7 +242,7 @@ export function partners() {
   const { reseller, referral, principle } = pricing.partners;
   return {
     principle,
-    reseller: { ...reseller, tiers: resellerTiers() },
+    reseller: { ...reseller, tiers: resellerTiers(), incentives: reseller.incentives ?? [] },
     referral: { ...referral, feeText: percent(referral.fee) },
   };
 }

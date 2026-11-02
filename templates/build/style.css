@@ -1,4 +1,4 @@
-/* Print styles for the alimi templates. */
+/* Print styles for the Alimi templates. */
 @page { size: letter; margin: 1in 1in; @bottom-center { content: "DRAFT · page " counter(page) " of " counter(pages); font-family: Inter, system-ui, sans-serif; font-size: 8.5pt; color: #6b7877; } }
 html { font-size: 10.5pt; }
 body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1c2a2a; line-height: 1.45; max-width: none; margin: 0; }

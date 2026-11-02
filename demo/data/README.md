@@ -8,7 +8,7 @@ Everything in this folder describes **Saltmarsh Payroll, Inc.**, a fictional com
 | `snapshot.json` | A fictional Microsoft 365 tenant in the scanner's snapshot format: 61 accounts, four Conditional Access policies, inbox rules, sharing settings, audit retention, secure score. Input to the scanner, never output from one |
 | `scan.json` | The scanner's real output on that snapshot: 12 checks, 9 pass, 3 fail, 3 attestation items, insurer answers |
 | `monitoring-history.json` | Five weekly runs of the same checks, Oct 2 to Oct 30, 2026 |
-| `people.json` | 52 staff and 4 external accounts (IT provider, alimi, an admin-only account, the broker's guest) with department, manager, start date, groups, MFA, device, training and acknowledgement state |
+| `people.json` | 52 staff and 4 external accounts (IT provider, Alimi, an admin-only account, the broker's guest) with department, manager, start date, groups, MFA, device, training and acknowledgement state |
 | `assignments.json` | Which role owns what: owner roles map to people here and nowhere else |
 | `policies.json` | Adoption data per policy: version, status, owner, approver, dates, who has acknowledged |
 | `evidence.json` | 42 evidence items with type, owner, created and renewal dates, and the controls or attestations they support |

@@ -6,7 +6,7 @@ title: Statement of Work, Payment Fraud Workshop and Yearly Drill
 
 # Statement of Work: {{pricing.products.services.fraud_workshop.name}}
 
-*Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
+*Under the Master Services Agreement between {{Alimi Entity}} ("Alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from Alimi's price list at signing.*
 
 ## 1. Objective
 
@@ -14,7 +14,7 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 ## 2. Scope
 
-**In scope:** a half-day (three and a half hour) workshop for the finance team, or for a closing office its attorneys, paralegals and closers, up to twelve people, on site in the Boston area or remote; the Payment Verification Procedure tailored to the Client's payment systems, approval limits and roles; the callback scripts, poster and training materials from alimi's Payment Fraud Protection Kit filled in for the Client; and one drill within twelve months of the workshop.
+**In scope:** a half-day (three and a half hour) workshop for the finance team and anyone who can approve a payment or change bank details, up to twelve people, on site in the Boston area or remote; the Payment Verification Procedure tailored to the Client's payment systems, approval limits and roles; the callback scripts, poster and training materials from Alimi's Payment Fraud Protection Kit filled in for the Client; and one drill within twelve months of the workshop.
 
 **Out of scope:** changes to banking products or accounting software, insurance claims, recovery of funds already lost, and legal advice on client funds or trust accounting.
 
@@ -22,7 +22,7 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 {{pricing.products.services.fraud_workshop.includes}}
 
-In detail: the free {{pricing.products.free.fraud_procedure.name}} with its callback scripts, poster and closing-day checklist; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
+In detail: the Payment Verification Procedure from the Alimi policy library with its callback scripts and poster; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
 
 ## 4. Approach and timeline
 
@@ -39,7 +39,7 @@ The owner or managing partner attends the first hour and signs the procedure; th
 
 ## 6. Access and data
 
-No system access is needed. alimi receives the Client's payment process description and approval limits, treated as Confidential Information under the Master Services Agreement, and does not receive bank account numbers.
+No system access is needed. Alimi receives the Client's payment process description and approval limits, treated as Confidential Information under the Master Services Agreement, and does not receive bank account numbers.
 
 ## 7. Assumptions
 
@@ -47,11 +47,11 @@ Up to twelve participants; one workshop; one drill; travel within the Boston are
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.services.fraud_workshop.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
+Fixed fee within Alimi's published range of **{{pricing.products.services.fraud_workshop.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
 
 ## 9. Acceptance
 
-The Client accepts a deliverable by email, or by not objecting within five business days of delivery. Objections name the clause of this SOW the deliverable fails to meet; alimi re-performs at no charge.
+The Client accepts a deliverable by email, or by not objecting within five business days of delivery. Objections name the clause of this SOW the deliverable fails to meet; Alimi re-performs at no charge.
 
 ## 10. Changes
 
@@ -59,8 +59,8 @@ Scope, timeline or fee change only by a signed change order under section 11 of 
 
 ## Signatures
 
-| | alimi | {{Client}} |
+| | Alimi | {{Client}} |
 | --- | --- | --- |
-| Name | {{alimi Signatory}} | {{Client Signatory}} |
+| Name | {{Alimi Signatory}} | {{Client Signatory}} |
 | Title | | {{Client Title}} |
 | Date | | |

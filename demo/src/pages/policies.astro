@@ -10,7 +10,7 @@ const totalAudience = policies.reduce((n, p) => n + p.audience, 0);
 ---
 
 <App title="Policies" path="/policies" section="policies" eyebrow="Compliance" crumbs={[{ label: "Policies" }]} wide
-  description="The twenty-three policies from the alimi library as adopted by the sample company: owner, version, status, acknowledgements, next review and framework mappings."
+  description="The twenty-three policies from the Alimi library as adopted by the sample company: owner, version, status, acknowledgements, next review and framework mappings."
   lead="Every policy has an owner, an approver, a version, a publish date and an acknowledgement count. Staff accept a policy once a year and again when a new version is published.">
   <a slot="actions" class="button secondary" href="#pack">Download pack</a>
   <a slot="actions" class="button" href={href.policy("POL-20")}>Review approvals ({policyCounts.needs_approval})</a>
@@ -63,7 +63,7 @@ const totalAudience = policies.reduce((n, p) => n + p.audience, 0);
 
   <div class="card" id="pack">
     <h2>Policy library export</h2>
-    <p>The export is the {policies.length} policies as DOCX and PDF with {company.name}'s name, owners and dates filled in, plus the coverage matrix that shows which requirement IDs each policy answers. The broker, the bank and an auditor each get the same documents. Built from the alimi policy library; the three core policies are free, the full library is the paid Policy Pack.</p>
+    <p>The export is the {policies.length} policies as DOCX and PDF with {company.name}'s name, owners and dates filled in, plus the coverage matrix that shows which requirement IDs each policy answers. The broker, the bank and an auditor each get the same documents. Built from the Alimi policy library; the three core policies are free, the full library is the paid Policy Pack.</p>
     <a class="button secondary" href="/trust#pack">Download pack (DOCX and PDF)</a> <span class="muted" style="font-size:.8125rem">Demo: the public trust page shows what the recipient sees</span>
   </div>
 </App>

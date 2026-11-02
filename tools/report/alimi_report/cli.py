@@ -16,7 +16,7 @@ from .render import write_report
 app = typer.Typer(
     no_args_is_help=True,
     add_completion=False,
-    help="alimi report: turn scanner findings into an insurer-ready HTML and PDF report.",
+    help="Alimi report: turn scanner findings into an insurer-ready HTML and PDF report.",
 )
 console = Console()
 

@@ -1,7 +1,11 @@
 ---
 import App from "../layouts/App.astro";
 import Bar from "../components/Bar.astro";
-import { readiness, formatDate, href, company } from "../lib/data.js";
+import { readiness, formatDate, href, company, frameworkCatalog } from "../lib/data.js";
+
+const active = new Set(readiness.map((r) => r.id));
+const posture = frameworkCatalog.find((f) => f.always_included);
+const available = frameworkCatalog.filter((f) => !f.always_included && !active.has(f.id));
 ---
 
 <App title="Frameworks" path="/frameworks" section="frameworks" eyebrow="Compliance" crumbs={[{ label: "Frameworks" }]}
@@ -28,8 +32,14 @@ import { readiness, formatDate, href, company } from "../lib/data.js";
   </div>
 
   <div class="card">
-    <h2>Available</h2>
-    <p>Frameworks the same controls can serve when a customer asks: PCI DSS SAQ A for card payments, NIST CSF 2.0 as a maturity picture for a board, CMMC Level 1 for federal subcontractors, and Massachusetts 201 CMR 17.00 as a written information security program. Framework text is never copied in; alimi stores requirement IDs and its own one-line summaries.</p>
+    <h2>{posture.name}</h2>
+    <p>{posture.summary} It is in every plan and does not count toward the framework total; the score and its controls arrive with the readiness dashboard.</p>
+  </div>
+
+  <div class="card">
+    <h2>Available to add</h2>
+    <p>The same controls serve {available.length} more frameworks from the catalog, each an add-on per user a month. Framework text is never copied in; Alimi stores requirement IDs and its own one-line summaries.</p>
+    <ul class="list">{available.map((f) => <li><span class="grow"><strong>{f.name}</strong> <span class="muted">{f.summary}</span></span><span class="muted">{f.audience}</span></li>)}</ul>
     <p class="muted" style="margin:0">Readiness counts a control as Ok when every linked test passes and every expected evidence item is current. A control without an owner never counts as Ok.</p>
   </div>
 </App>

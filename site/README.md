@@ -1,6 +1,6 @@
-# alimi marketing site
+# Alimi marketing site
 
-Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No client JavaScript, no webfonts, no server. One offer, the alimi platform. Prices, partner terms, the insurer questions, the control counts and the free documents are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/checks.yaml`, `config/controls.yaml`, `/policies` or `/kits`.
+Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No webfonts, no server, and no client JavaScript except the pricing calculator, which is a progressive enhancement (the page shows worked examples without it). One offer, the Alimi platform. Prices, the framework catalog, partner terms, the insurer questions, the control counts and the policy titles are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/frameworks.yaml`, `config/checks.yaml`, `config/controls.yaml` or `/policies`. No policy text is rendered anywhere (Nov 2, 2026).
 
 ## Run it
 
@@ -20,10 +20,11 @@ Node 22 or newer. Lighthouse needs a Chrome; set `CHROME_PATH` if it is not on t
 | What | Source | Read by |
 | --- | --- | --- |
 | Colors and fonts | `config/brand.yaml` `colors`, `typography` | `src/lib/tokens.js` turns them into `--color-*` and `--font-*` custom properties, inlined in `<head>` by `src/layouts/Base.astro` |
-| Platform tiers, services, free resources, partner terms | `config/pricing.yaml` | `src/lib/config.js` (`platform()`, `services()`, `freeResources()`, `partners()`, `retainer()`) |
+| Per-user tiers, framework add-on pricing, billing terms, services, partner and reseller terms and incentives | `config/pricing.yaml` | `src/lib/config.js` (`platform()`, `quote()`, `frameworkPricing()`, `services()`, `partners()`, `resellerTiers()`, `retainer()`) |
+| Framework catalog (23 entries, the Alimi Security Posture Score first) | `config/frameworks.yaml` | `src/lib/config.js` (`frameworkCatalog()`, `choosableFrameworks()`, `alwaysIncludedFrameworks()`) |
 | Insurer questions, check counts, the sample finding | `config/checks.yaml` | `src/lib/content.js` |
-| Control counts, framework requirement counts | `config/controls.yaml`, `policies/requirements.yaml` | `src/lib/content.js` (`controlSummary()`, `frameworks()`) |
-| Free documents (three core policies, the AI policy, the payment fraud procedure) as pages | `/policies/*.md`, `/kits/payment-fraud/*.md` (front matter + body, rendered with `marked`) | `src/lib/content.js` (`freeDocs()`, `freeDoc()`), `src/pages/resources/[slug].astro` |
+| Control counts, framework requirement counts | `config/controls.yaml`, `policies/requirements.yaml` | `src/lib/content.js` (`controlSummary()`, `mappedFrameworks()`) |
+| Policy titles and count (front matter only, never the body) | `/policies/*.md` | `src/lib/content.js` (`policies()`) |
 | Name, tagline, founder, site URL, GitHub | `config/brand.yaml` | layout, header, footer, About |
 
 A value of `TODO` in brand.yaml (domain, contact email, LinkedIn) renders as absent, so nothing fake ships. Placeholder copy, if any is ever needed again, goes in the `<Todo>` component, visible on purpose; the build prints how many remain (zero since prompt 11).
@@ -43,16 +44,16 @@ Two checks keep it honest:
 | --- | --- | --- |
 | Home | `/` | |
 | Platform | `/platform` | |
-| Pricing | `/pricing` | `waitlist` |
-| Free resources | `/resources` | `resources` |
-| A free document | `/resources/<slug>` (eight pages from `FREE_DOCS` in `content.js`) | |
+| Pricing (catalog, add-on bands, calculator, worked examples, FAQ) | `/pricing` | `waitlist` |
+| Compare (Alimi, Vanta, Drata; sourced) | `/compare` | |
 | For partners | `/for-partners` | `partners` |
+| For resellers (tiers, margin examples, incentives) | `/for-resellers` | |
 | About | `/about` | |
 | Contact | `/contact` | `contact` |
 | Thank you | `/thank-you` | |
 | Not found | `/404` | |
 
-The old product URLs (`/workspace-security-scan`, `/policy-pack`, `/payment-fraud-kit`, `/ai-policy-kit`) redirect in `netlify.toml`. Forms are plain HTML with `data-netlify="true"`, a `bot-field` honeypot and a redirect to `/thank-you`. Netlify detects them from the built HTML; form detection is enabled on the site. Submissions arrive in the Netlify dashboard and by email notification, which is set there, not here.
+The old product URLs (`/workspace-security-scan`, `/policy-pack`, `/payment-fraud-kit`, `/ai-policy-kit`) and the former Free resources pages (`/resources`, `/resources/*`) redirect in `netlify.toml`. Forms are plain HTML with `data-netlify="true"`, a `bot-field` honeypot and a redirect to `/thank-you`. Netlify detects them from the built HTML; form detection is enabled on the site. Submissions arrive in the Netlify dashboard and by email notification, which is set there, not here.
 
 ## Deploy
 

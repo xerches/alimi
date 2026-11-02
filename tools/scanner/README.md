@@ -1,4 +1,4 @@
-# alimi scanner
+# Alimi scanner
 
 Read-only security checks for Microsoft 365 and Google Workspace. It reads a tenant through Microsoft Graph or the Google Admin SDK, runs the checks listed in `config/checks.yaml`, and writes a findings file that the report generator and, later, the platform consume.
 
@@ -24,7 +24,7 @@ Output goes to `./out/` (or `$ALIMI_OUTPUT_DIR`), which is git-ignored. Each run
 
 Only tenants you own or that are covered by a signed pilot authorization letter from `/templates`.
 
-1. **Create the app registration.** Entra admin center, App registrations, New registration. Name it `alimi scanner (read-only)`, single tenant, no redirect URI.
+1. **Create the app registration.** Entra admin center, App registrations, New registration. Name it `Alimi scanner (read-only)`, single tenant, no redirect URI.
 2. **Add application permissions** (API permissions, Add a permission, Microsoft Graph, *Application permissions*), then click **Grant admin consent**. All of them are read-only:
 
 | Permission | Used for | Graph calls |

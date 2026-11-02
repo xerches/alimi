@@ -1,6 +1,6 @@
-# alimi templates
+# Alimi templates
 
-Drafts of the documents alimi needs before its first pilot and its first paid work, written as structure and plain-language clauses for a Massachusetts attorney to turn into agreements. Every file starts with **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.** and marks the clauses that need legal text with `[Attorney review]`. alimi drafts intent; it does not invent legal language.
+Drafts of the documents Alimi needs before its first pilot and its first paid work, written as structure and plain-language clauses for a Massachusetts attorney to turn into agreements. Every file starts with **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.** and marks the clauses that need legal text with `[Attorney review]`. Alimi drafts intent; it does not invent legal language.
 
 Prices never appear in the templates as numbers. They are read from `config/pricing.yaml` through `{{pricing.*}}` tokens when a document is rendered, so a proposal cannot contradict the price list. A test fails if a dollar amount is typed into a template.
 
@@ -8,7 +8,7 @@ Prices never appear in the templates as numbers. They are read from `config/pric
 
 | File | Use it when |
 | --- | --- |
-| `pilot-authorization-letter.md` | Before any scan of a tenant alimi does not own. One page, no fee, read-only, either side may stop. Required by CLAUDE.md. |
+| `pilot-authorization-letter.md` | Before any scan of a tenant Alimi does not own. One page, no fee, read-only, either side may stop. Required by CLAUDE.md. |
 | `master-services-agreement-outline.md` | The first paid engagement. Sets the terms every SOW sits under. |
 | `sow-workspace-scan-and-report.md` | Selling the full insurer-ready report. |
 | `sow-insurance-ready-in-30-days.md` | Selling the fix-it service with the tabletop and the evidence pack to the broker. |
@@ -23,9 +23,9 @@ Prices never appear in the templates as numbers. They are read from `config/pric
 
 ## Placeholders
 
-`{{Client}}`, `{{Client Address}}`, `{{Client Contact}}`, `{{Client Signatory}}`, `{{Client Title}}`, `{{alimi Entity}}` (the legal name once the LLC exists; before that, the attorney advises what to write), `{{alimi Signatory}}`, `{{alimi Address}}`, `{{Effective Date}}`, `{{Start Date}}`, `{{End Date}}`, `{{Tenant}}` (Microsoft 365 or Google Workspace), `{{Tenant Domain}}`, `{{Reseller}}`, `{{Partner}}`, `{{Partner Firm}}`, `{{Fee}}` (an hourly rate agreed per client), `{{Quoted Price}}` (the number inside the published range), `{{Contact Email}}`, `{{Contact Phone}}`, `{{Website}}`.
+`{{Client}}`, `{{Client Address}}`, `{{Client Contact}}`, `{{Client Signatory}}`, `{{Client Title}}`, `{{Alimi Entity}}` (the legal name once the LLC exists; before that, the attorney advises what to write), `{{Alimi Signatory}}`, `{{Alimi Address}}`, `{{Effective Date}}`, `{{Start Date}}`, `{{End Date}}`, `{{Tenant}}` (Microsoft 365 or Google Workspace), `{{Tenant Domain}}`, `{{Reseller}}`, `{{Partner}}`, `{{Partner Firm}}`, `{{Fee}}` (an hourly rate agreed per client), `{{Quoted Price}}` (the number inside the published range), `{{Contact Email}}`, `{{Contact Phone}}`, `{{Website}}`.
 
-Pricing tokens, resolved from `config/pricing.yaml`: `{{pricing.products.<product>.<tier>.price|name|includes|product_name}}`, `{{pricing.retainers.<retainer>.price|hours|name}}`, `{{pricing.partners.reseller.tiers_table|includes|who|buys_at|billing|review}}`, `{{pricing.partners.reseller.discount.<tier>}}`, `{{pricing.partners.referral.fee|of|paid|who}}`, `{{pricing.partners.principle}}`, `{{pricing.terms.payment|minimum_monthly_retainer}}`; `<product>` is `platform`, `services` or `free`.
+Pricing tokens, resolved from `config/pricing.yaml`: `{{pricing.products.<product>.<tier>.price|name|includes|product_name}}`, `{{pricing.retainers.<retainer>.price|hours|name}}`, `{{pricing.partners.reseller.tiers_table|includes|incentives|who|buys_at|billing|review}}`, `{{pricing.partners.reseller.discount.<tier>}}`, `{{pricing.partners.referral.fee|of|paid|who}}`, `{{pricing.partners.principle}}`, `{{pricing.terms.payment|minimum_monthly_retainer}}`, `{{pricing.products.platform.minimum_users}}`, `{{pricing.products.platform.frameworks.addon_price|terms}}`, `{{pricing.products.platform.billing.terms}}`; `<product>` is `platform` or `services`.
 
 ## Rendering
 

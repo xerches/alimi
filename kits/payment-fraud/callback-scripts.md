@@ -4,7 +4,7 @@ slug: callback-scripts
 title: Callback Scripts for Finance Staff
 kind: scripts
 ---
-> Part of the alimi Payment Fraud Protection Kit. Adapt the names and numbers to your company before adopting.
+> Part of the Alimi Payment Fraud Protection Kit. Adapt the names and numbers to your company before adopting.
 
 # {{Company}} Callback Scripts for Finance Staff
 

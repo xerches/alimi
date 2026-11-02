@@ -1,0 +1,124 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import PartnerTiers from "../components/PartnerTiers.astro";
+import Callout from "../components/Callout.astro";
+import { brand, partners, platform, quote, money, percent } from "../lib/config.js";
+
+const { reseller, principle } = partners();
+const plat = platform();
+const [first, second, third] = reseller.tiers;
+const silver25 = quote({ tierId: "silver", users: 25 });
+const gold50 = quote({ tierId: "gold", users: 50, frameworks: 2 });
+const examples = [
+  { label: `${silver25.tier}, 25 users, one framework`, list: silver25.yearly },
+  { label: `${gold50.tier}, 50 users, two frameworks`, list: gold50.yearly },
+].map((e) => ({
+  ...e,
+  tiers: reseller.tiers.map((t) => ({ name: t.name, wholesale: Math.round(e.list * (1 - t.discountFraction)), margin: e.list - Math.round(e.list * (1 - t.discountFraction)) })),
+}));
+
+const steps = [
+  { title: "Apply", text: "A short form and a 30-minute call. You sign the reseller agreement, which carries the same published terms as this page." },
+  { title: "Learn it", text: "Partner training with a certificate for your account managers and your technicians, a sales one-pager under your name, and a not-for-resale tenant so your own company runs on the platform." },
+  { title: "Sell it", text: "Register a prospect and it is protected for 90 days. Quote your own price; your invoice to the client is yours." },
+  { title: "Run it", text: `Create the client in the multi-tenant view, connect the read-only integration you already administer, and watch every client's readiness, failing tests and due dates on one screen. ${brand.display_name} invoices you monthly at wholesale.` },
+];
+
+const whiteLabel = [
+  "Your name and logo on the insurer report, the policy pack and the client's trust page, with a small \"powered by Alimi\" line.",
+  "Findings, scores, evidence and policy statements stay as the platform produced them; your commentary goes in a clearly separate section.",
+  "No claims about insurance outcomes, audit results or breach prevention that Alimi does not make itself.",
+];
+
+const faq = [
+  { q: "Who supports the client?", a: `You do, first. You know their tenant and they know your number. ${brand.display_name} takes the second-line questions from you, not from them, and never markets to your clients.` },
+  { q: "Can I set any price I like?", a: `Yes. You buy at list minus your tier discount and set the client's price. ${principle}` },
+  { q: "Does the discount apply to add-on frameworks and services?", a: "To the platform list price and every add-on framework, yes. On the fixed-fee services it applies to the low end of the published range, or you deliver the service yourself and keep the whole fee." },
+  { q: "What does the client sign?", a: "Your agreement with the client, with Alimi's data-handling terms passed through, and a one-page read-only authorization for each tenant Alimi watches. The templates are provided." },
+  { q: "How is the tier worked out?", a: `${reseller.review}. A new reseller buys at the ${second.name} discount for its first six months, whatever the count.` },
+];
+---
+
+<Base title="For resellers" description={`The Alimi reseller programme for MSPs, IT consultancies and vCISO firms: wholesale discounts of ${first.discount} to ${third.discount}, a launch tier, deal registration, white-label reports and a multi-tenant view.`} path="/for-resellers">
+  <Hero eyebrow="For resellers" title="A compliance layer you sell under your own name">
+    <p class="lede">For {reseller.who}. You buy the {brand.display_name} platform at wholesale, set your own client price, and run every client from one screen. The discount rises with your client count, and the incentives below are published so you can plan on them.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Apply</a>
+      <a class="button button--secondary" href="#terms">The terms</a>
+    </div>
+  </Hero>
+
+  <Section id="terms" tone="alt" title="Wholesale tiers" lede={reseller.buys_at.charAt(0).toUpperCase() + reseller.buys_at.slice(1) + "."}>
+    <PartnerTiers />
+    <h3 style="margin-top:2rem">What a client is worth to you</h3>
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th>Client</th><th>List, a year</th>{reseller.tiers.map((t) => <th>{t.name} buys at</th>)}<th>Your margin at list</th></tr></thead>
+        <tbody>
+          {examples.map((e) => (
+            <tr>
+              <th scope="row">{e.label}</th>
+              <td>{money(e.list)}</td>
+              {e.tiers.map((t) => <td>{money(t.wholesale)}</td>)}
+              <td>{money(e.tiers[0].margin)} to {money(e.tiers[2].margin)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">Margin at list price; most resellers bundle their own monitoring, help desk or vCISO hours and price the whole thing. Figures from the published price list; they move when it does.</p>
+  </Section>
+
+  <Section id="incentives" title="Incentives" lede="Published so you can plan on them, and recalculated with your tier every quarter.">
+    <div class="grid grid--two">
+      {reseller.incentives.map((item) => (
+        <article class="card">
+          <h3>{item.name}</h3>
+          <p>{item.text}.</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="includes" tone="alt" title="What the programme includes">
+    <ul class="checklist">
+      {reseller.includes.map((item) => <li>{item}</li>)}
+    </ul>
+    <h3 style="margin-top:2rem">White label, with three rules</h3>
+    <ul class="checklist">
+      {whiteLabel.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="how" title="How it works">
+    <Steps steps={steps} />
+    <p class="muted" style="margin-top:1rem">{reseller.billing}. Referral partners who do not resell, such as brokers, CPAs and attorneys, have their own terms on <a href="/for-partners#referrers">the partners page</a>.</p>
+  </Section>
+
+  <Section id="faq" tone="alt" title="Questions resellers ask">
+    <div class="grid grid--two">
+      {faq.map((f) => (
+        <article class="card">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="principle" tight>
+    <Callout label="One rule" tone="brand">
+      <p>{principle} If a client of yours comes to {brand.display_name} directly, we send them back to you.</p>
+    </Callout>
+  </Section>
+
+  <Section id="apply" tone="dark" title="Apply" lede="Tell us about your client base. A reply within two business days, from the founder.">
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Start the conversation</a>
+      <a class="button button--secondary" href="/pricing">The published prices</a>
+    </div>
+  </Section>
+</Base>

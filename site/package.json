@@ -2,7 +2,7 @@
   "name": "alimi-site",
   "private": true,
   "version": "0.1.0",
-  "description": "alimi marketing site. Static Astro build; prices and brand tokens come from ../config at build time.",
+  "description": "Alimi marketing site. Static Astro build; prices and brand tokens come from ../config at build time.",
   "type": "module",
   "engines": {
     "node": ">=22"

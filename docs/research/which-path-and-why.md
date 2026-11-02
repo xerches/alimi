@@ -2,7 +2,7 @@
 
 Oct 31, 2026 · Alex
 
-Source: Claude Docs, https://claude.ai/artifact/W82aBf1gnAxyVXQuXXFhZX. Written before the rename, so "Caprius" means alimi.
+Source: Claude Docs, https://claude.ai/artifact/W82aBf1gnAxyVXQuXXFhZX. Written before the rename, so "Caprius" means Alimi.
 
 ## Bottom line
 

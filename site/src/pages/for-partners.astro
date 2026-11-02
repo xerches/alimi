@@ -4,20 +4,19 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import PartnerTiers from "../components/PartnerTiers.astro";
 import Callout from "../components/Callout.astro";
-import { brand, partners, platform, money } from "../lib/config.js";
+import { brand, partners, quote, money } from "../lib/config.js";
 
 const { reseller, referral, principle } = partners();
-const starterPlan = platform().tiers[0];
-const starter = reseller.tiers[0];
-const starterDiscount = Number(starter.discount.replace("%", "")) / 100;
-const wholesale = Math.round(starterPlan.list * (1 - starterDiscount));
-const margin = starterPlan.list - wholesale;
+const first = reseller.tiers[0];
+const example = quote({ tierId: "silver", users: 25 });
+const wholesale = Math.round(example.yearly * (1 - first.discountFraction));
+const margin = example.yearly - wholesale;
 const formName = "partners";
 const id = (suffix) => `${formName}-${suffix}`;
 ---
 
-<Base title="For partners" description="Resell the alimi platform under your own name with a wholesale discount, or refer clients and receive a fee. Reseller tiers and the referral fee are published here." path="/for-partners">
-  <Hero eyebrow="For partners" title="Sell or refer alimi to the clients who already ask you about security">
+<Base title="For partners" description="Resell the Alimi platform under your own name with a wholesale discount, or refer clients and receive a fee. Reseller tiers and the referral fee are published here." path="/for-partners">
+  <Hero eyebrow="For partners" title="Sell or refer Alimi to the clients who already ask you about security">
     <p class="lede">Two ways to work together. IT providers and consultancies resell the platform under their own name at a wholesale discount, with a multi-tenant view across their clients. Brokers, CPAs and attorneys refer and receive a fee, or pass it to their client.</p>
     <div class="actions">
       <a class="button button--primary" href="#partner-form">Start the conversation</a>
@@ -25,16 +24,16 @@ const id = (suffix) => `${formName}-${suffix}`;
     </div>
   </Hero>
 
-  <Section id="resellers" tone="alt" title="Resellers" eyebrow={reseller.who} lede="You buy at list price minus your tier discount and set your own client price. The tier follows your active client count.">
+  <Section id="resellers" tone="alt" title="Resellers" eyebrow={reseller.who} lede="You buy at list price minus your tier discount and set your own client price. The tier follows your active client count, and new resellers start one tier up.">
     <PartnerTiers />
     <p class="measure">
-      A {starter.name} reseller buys the {money(starterPlan.list)} {starterPlan.name} plan at {money(wholesale)} a year and keeps everything above that at its own client price: {money(margin)} a client at list, more if you bundle your own service around it.
+      A {first.name} reseller buys a 25-person {example.tier} client at {money(wholesale)} a year instead of {money(example.yearly)} and keeps everything above that at its own client price: {money(margin)} a client at list, more with your own service around it, and the same discount on every add-on framework the client takes.
     </p>
-    <h3>What the program includes</h3>
+    <h3>Incentives</h3>
     <ul class="checklist">
-      {reseller.includes.map((item) => <li>{item}</li>)}
+      {reseller.incentives.map((item) => <li><strong>{item.name}.</strong> {item.text}</li>)}
     </ul>
-    <p class="muted">{reseller.billing}.</p>
+    <p><a class="button button--secondary" href="/for-resellers">The full reseller programme</a></p>
   </Section>
 
   <Section id="referrers" title="Referrers" eyebrow={referral.who} lede="Introduce us by email with the client copied. We respond within two business days, keep you informed, and never market to your other clients.">

@@ -109,4 +109,4 @@ POL-10 Logging and Monitoring · POL-11 Backup and Recovery · POL-12 Business C
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |

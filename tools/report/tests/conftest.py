@@ -39,7 +39,7 @@ def gws_pass() -> ScanResult:
 
 @pytest.fixture
 def brand() -> Brand:
-    return Brand(display_name="alimi", tagline="Security that insurers accept.", contact_email="hello@example.com", location="Boston, MA")
+    return Brand(display_name="Alimi", tagline="Security that insurers accept.", contact_email="hello@example.com", location="Boston, MA")
 
 
 @pytest.fixture

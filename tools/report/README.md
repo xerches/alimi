@@ -1,4 +1,4 @@
-# alimi report
+# Alimi report
 
 Turns a findings file from the scanner into the report a client hands to their insurance broker, a customer or an auditor: an HTML page that prints cleanly, and a PDF when WeasyPrint is installed.
 
@@ -41,7 +41,7 @@ Output goes to `./out/` (or `$ALIMI_OUTPUT_DIR`), git-ignored, named `<tenant>-<
 
 ## Reseller (white-label) mode
 
-`--reseller-name`, `--reseller-logo` and `--reseller-contact` put the partner on the cover ("Prepared for Acme by Northside IT"), embed the logo in the HTML as a data URI so the file stays self-contained, and keep a "powered by alimi" line under it, as the partner terms in `config/pricing.yaml` describe. `Reseller(powered_by=False)` exists in the library for a future tier; the CLI always shows the line.
+`--reseller-name`, `--reseller-logo` and `--reseller-contact` put the partner on the cover ("Prepared for Acme by Northside IT"), embed the logo in the HTML as a data URI so the file stays self-contained, and keep a "powered by Alimi" line under it, as the partner terms in `config/pricing.yaml` describe. `Reseller(powered_by=False)` exists in the library for a future tier; the CLI always shows the line.
 
 ## Library use
 

@@ -103,4 +103,4 @@ POL-11 Backup and Recovery · POL-13 Incident Response · POL-14 Vendor and Thir
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |

@@ -1,4 +1,4 @@
-# alimi controls catalogue: the plain-English controls a 10 to 200 person company runs, each mapped
+# Alimi controls catalogue: the plain-English controls a 10 to 200 person company runs, each mapped
 # to the policies that set the rule, the requirement IDs it satisfies (IDs only; the summaries live in
 # policies/requirements.yaml and no framework text is copied in), the scanner checks that test it
 # (config/checks.yaml) and the kind of evidence that proves it. The demo and the platform read this

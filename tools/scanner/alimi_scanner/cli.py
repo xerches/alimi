@@ -22,7 +22,7 @@ from .snapshot import GWSSnapshot
 app = typer.Typer(
     no_args_is_help=True,
     add_completion=False,
-    help="alimi scanner: read-only security checks for Microsoft 365 and Google Workspace. Mock mode is the default.",
+    help="Alimi scanner: read-only security checks for Microsoft 365 and Google Workspace. Mock mode is the default.",
 )
 console = Console()
 
