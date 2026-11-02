@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Pick a sample user{% endblock %}
+{% block content %}
+<h1>Pick a sample user</h1>
+<p class="lead">Real sign-in arrives in the next build step. In mock mode you choose who to be. Each company only ever sees its own data: the database enforces it, not this page.</p>
+<div class="cards">
+  {% for org in orgs %}
+  <section class="card">
+    <h2>{{ org.name }}</h2>
+    <p class="muted">{{ "Microsoft 365" if org.platform == "m365" else "Google Workspace" }} · sample tenant</p>
+    <ul class="plain">
+      {% for user in org.users %}
+      <li>
+        <form method="post" action="/login">
+          <input type="hidden" name="org_id" value="{{ org.id }}">
+          <input type="hidden" name="user_id" value="{{ user.id }}">
+          <button type="submit">{{ user.display_name }} <span class="muted">({{ user.role }})</span></button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_status.html" import result_badge %}
+{% block title %}Scan results{% endblock %}
+{% block content %}
+<h1>Scan of {{ run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</h1>
+<p class="muted">Source {{ run.source }} · scanner {{ run.scanner_version }}{% if run.score_percent is not none %} · checks passed, weighted by severity: {{ run.score_percent }}%{% endif %}</p>
+{% for r in results %}
+<details class="card result">
+  <summary>{{ result_badge(r.status) }} <strong>{{ r.title }}</strong> <span class="muted">{{ r.severity }}</span></summary>
+  <p>{{ r.summary }}</p>
+  <dl>
+    <dt>Rule</dt><dd>{{ r.rule }}</dd>
+    <dt>Controls</dt><dd>{% for c in r.control_ids %}<a href="/controls/{{ c }}">{{ c }}</a>{% if not loop.last %}, {% endif %}{% else %}none{% endfor %}</dd>
+    <dt>Criterion IDs</dt><dd>{{ r.criterion_ids | join(", ") }}</dd>
+    <dt>Check version</dt><dd><code>{{ r.test_id }} {{ r.check_version }}</code></dd>
+  </dl>
+  <h4>What the check read</h4>
+  <pre>{{ r.raw_evidence | tojson(indent=2) }}</pre>
+</details>
+{% endfor %}
+{% endblock %}

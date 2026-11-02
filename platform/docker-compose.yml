@@ -1,0 +1,49 @@
+# Local mock-mode platform: `docker compose up` from this folder, then open http://localhost:8000
+#
+# Two services: Postgres 16 and the app. The database creates two roles on first start
+# (db/init-roles.sql): alimi_owner runs migrations and the sample seed, alimi_app is what the
+# web server uses and cannot bypass row-level security. Every value below is a local, mock-mode
+# default; nothing here is a real credential. Override with a .env file next to this one.
+name: alimi-platform
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_local_only}
+      POSTGRES_DB: postgres
+    volumes:
+      - ./db/init-roles.sql:/docker-entrypoint-initdb.d/00-init-roles.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"   # localhost only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d alimi"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build:
+      context: ..
+      dockerfile: platform/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ALIMI_MODE: mock
+      ALIMI_DATABASE_URL: postgresql+psycopg://alimi_app:alimi_app_local@db:5432/alimi
+      ALIMI_OWNER_DATABASE_URL: postgresql+psycopg://alimi_owner:alimi_owner_local@db:5432/alimi
+      # The token key and session secret are generated on first start into their own volume,
+      # outside the database (manage.py ensure-keys). Nothing secret is written in this file.
+      ALIMI_TOKEN_KEY_FILE: /var/lib/alimi/token.key
+      ALIMI_SESSION_SECRET_FILE: /var/lib/alimi/session.secret
+    volumes:
+      - keys:/var/lib/alimi
+    ports:
+      - "127.0.0.1:8000:8000"
+
+volumes:
+  pgdata:
+  keys:

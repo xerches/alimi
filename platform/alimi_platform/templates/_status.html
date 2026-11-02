@@ -1,0 +1,7 @@
+{% macro badge(status) -%}
+<span class="badge s-{{ status }}">{{ STATUSES.get(status, status) }}</span>
+{%- endmacro %}
+{% macro result_badge(status) -%}
+{%- set labels = {"pass": "Passed", "fail": "Failed", "attestation_needed": "Needs attestation", "error": "Could not run", "not_applicable": "Not applicable"} -%}
+<span class="badge r-{{ status }}">{{ labels.get(status, status) }}</span>
+{%- endmacro %}

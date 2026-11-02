@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alimi-platform"
+version = "0.1.0"
+description = "The Alimi compliance platform web app. Prompt 12a foundation: mock mode only."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+dependencies = [
+  "alimi-scanner",            # installed from ../tools/scanner (pip install -e ../tools/scanner)
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "jinja2>=3.1",
+  "python-multipart>=0.0.9",
+  "itsdangerous>=2.1",
+  "sqlalchemy>=2.0",
+  "psycopg[binary]>=3.2",
+  "cryptography>=42",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "httpx>=0.27"]
+
+[tool.setuptools.packages.find]
+include = ["alimi_platform*"]
+
+[tool.setuptools.package-data]
+alimi_platform = ["migrations/*.sql", "templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -180,7 +180,7 @@ nothing saved. The pages and the status rules are the draft for the platform's s
 
 ## Phase 6: Platform web app (weeks 20-29)
 
-**12a. Platform foundation: data model, tenancy, mock scans**
+**12a. Platform foundation: data model, tenancy, mock scans** (done Nov 2, 2026, mock mode; see platform/README.md)
 ```
 Read CLAUDE.md and the plan at https://claude.ai/artifact/VjN79aEaY6paZNPDxAwdoS. In /platform,
 build a FastAPI app with HTMX server-rendered pages and Postgres. Models: Organization (with an
