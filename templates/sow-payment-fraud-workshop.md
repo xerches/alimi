@@ -4,7 +4,7 @@ title: Statement of Work, Payment Fraud Workshop and Yearly Drill
 ---
 > **DRAFT. Not legal advice. Review by a Massachusetts attorney before use.**
 
-# Statement of Work: {{pricing.products.payment_fraud_kit.workshop.name}}
+# Statement of Work: {{pricing.products.services.fraud_workshop.name}}
 
 *Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
 
@@ -20,9 +20,9 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 ## 3. Deliverables
 
-{{pricing.products.payment_fraud_kit.workshop.includes}}
+{{pricing.products.services.fraud_workshop.includes}}
 
-In detail: the digital kit ({{pricing.products.payment_fraud_kit.kit.name}}) included; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
+In detail: the free {{pricing.products.free.fraud_procedure.name}} with its callback scripts, poster and closing-day checklist; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
 
 ## 4. Approach and timeline
 
@@ -47,7 +47,7 @@ Up to twelve participants; one workshop; one drill; travel within the Boston are
 
 ## 8. Fee and payment
 
-Fixed fee within alimi's published range of **{{pricing.products.payment_fraud_kit.workshop.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
+Fixed fee within alimi's published range of **{{pricing.products.services.fraud_workshop.price}}**, quoted for this engagement at **{{Quoted Price}}**. Payment: {{pricing.terms.payment}}; invoiced on signing.
 
 ## 9. Acceptance
 

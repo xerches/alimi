@@ -1,0 +1,46 @@
+# Netlify deploys the static site in /site with no settings in the UI. Paths are relative to base.
+[build]
+  base = "site"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Security headers for every page. Styles allow inline because Astro inlines small stylesheets
+# and the brand tokens; there is no client-side JavaScript to allow.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The four product pages became the platform and the free resources on Nov 1, 2026.
+[[redirects]]
+  from = "/workspace-security-scan"
+  to = "/platform"
+  status = 301
+
+[[redirects]]
+  from = "/policy-pack"
+  to = "/resources"
+  status = 301
+
+[[redirects]]
+  from = "/payment-fraud-kit"
+  to = "/resources"
+  status = 301
+
+[[redirects]]
+  from = "/ai-policy-kit"
+  to = "/resources"
+  status = 301

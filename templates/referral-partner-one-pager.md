@@ -17,12 +17,15 @@ Your clients run 10 to 200 person companies. Their insurer sends a questionnaire
 
 | Product or service | What the client gets | Price |
 | --- | --- | --- |
-| {{pricing.products.workspace_scan.product_name}}, {{pricing.products.workspace_scan.free.name}} | Score and pass/fail on the insurer questions, from a read-only scan of Microsoft 365 or Google Workspace | {{pricing.products.workspace_scan.free.price}} |
-| {{pricing.products.workspace_scan.full_report.name}} | Every finding with evidence and the fix, an evidence pack for the broker, a debrief call | {{pricing.products.workspace_scan.full_report.price}} |
-| {{pricing.products.workspace_scan.insurance_ready_30.name}} | Findings fixed, one incident tabletop, evidence pack delivered to the broker | {{pricing.products.workspace_scan.insurance_ready_30.price}} |
-| {{pricing.products.payment_fraud_kit.product_name}} | Verification procedure, callback scripts, poster, training, closing-day checklist; half-day workshop and yearly drill | {{pricing.products.payment_fraud_kit.kit.price}} kit; {{pricing.products.payment_fraud_kit.workshop.price}} workshop |
-| {{pricing.products.policy_pack.product_name}} | Policies written for a small company, mapped to SOC 2, ISO 27001 and the insurer questions; half-day adoption workshop | {{pricing.products.policy_pack.full.price}} pack; {{pricing.products.policy_pack.adoption.price}} workshop |
-| {{pricing.products.ai_policy_kit.product_name}} | AI acceptable use policy, staff guide, inventory of AI tools in use; implementation and training | {{pricing.products.ai_policy_kit.pro.price}} kit; {{pricing.products.ai_policy_kit.implementation.price}} implementation |
+| {{pricing.products.platform.product_name}}, {{pricing.products.platform.starter.name}} (up to 25 people) | Insurer questionnaire, controls with automated tests, policies with staff sign-off, people, evidence, trust page | {{pricing.products.platform.starter.price}} a year |
+| {{pricing.products.platform.growth.name}} (up to 100 people) | Adds SOC 2 and ISO 27001 readiness, vendors, risk register, questionnaires | {{pricing.products.platform.growth.price}} a year |
+| {{pricing.products.platform.scale.name}} (up to 200 people) | Adds HIPAA and ISO 42001, auditor access, API, multi-tenant view | {{pricing.products.platform.scale.price}} a year |
+| {{pricing.products.services.assessment.name}} | Read-only scan, every finding with the fix, evidence pack checklist, debrief; credited against the platform | {{pricing.products.services.assessment.price}} |
+| {{pricing.products.services.insurance_ready_30.name}} | Findings fixed, one incident tabletop, evidence pack delivered to the broker | {{pricing.products.services.insurance_ready_30.price}} |
+| {{pricing.products.services.fraud_workshop.name}} | Half-day workshop, verification procedure tailored to the firm, yearly drill | {{pricing.products.services.fraud_workshop.price}} |
+| {{pricing.products.services.policy_adoption.name}} | Half-day session to tailor, approve and roll out the policy library | {{pricing.products.services.policy_adoption.price}} |
+| {{pricing.products.services.ai_policy_implementation.name}} | AI policy adoption, access rules, staff training, ISO 42001 gap check | {{pricing.products.services.ai_policy_implementation.price}} |
+| {{pricing.products.free.product_name}} | {{pricing.products.free.scan_summary.name}}; {{pricing.products.free.fraud_procedure.name}}; {{pricing.products.free.core_policies.name}}; {{pricing.products.free.ai_policy.name}} | {{pricing.products.free.scan_summary.price}} |
 | {{pricing.retainers.fractional_security_lead.name}} | A named security lead, {{pricing.retainers.fractional_security_lead.hours}}, who owns the programme and answers insurers and customers | {{pricing.retainers.fractional_security_lead.price}} |
 
 Prices are published and fixed in advance. Everything runs read-only; alimi never holds your client's passwords.

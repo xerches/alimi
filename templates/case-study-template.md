@@ -18,7 +18,7 @@ Two or three sentences in the client's words. What prompted the work: an insuran
 
 ## What we did
 
-- The service, named as in the price list (for example, {{pricing.products.workspace_scan.insurance_ready_30.name}}).
+- The service, named as in the price list (for example, {{pricing.products.services.insurance_ready_30.name}}).
 - Three to five concrete actions, in plain English: "turned on multi-factor authentication for all 38 accounts", "blocked external email forwarding", "wrote and adopted the payment verification procedure", "ran a 45-minute training".
 - How long it took and how much of the client's time it needed.
 

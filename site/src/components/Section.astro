@@ -1,0 +1,27 @@
+---
+// A page band. tone: "default" | "alt" | "dark"; tight trims the vertical padding.
+const { id, title, eyebrow, lede, tone = "default", tight = false } = Astro.props;
+const classes = [
+  "section",
+  tone === "alt" && "section--alt",
+  tone === "dark" && "dark",
+  tight && "section--tight",
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<section class={classes} id={id} aria-labelledby={title ? `${id}-title` : undefined}>
+  <div class="container">
+    {
+      title && (
+        <div class="section__heading">
+          {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+          <h2 id={`${id}-title`}>{title}</h2>
+          {lede && <p class="lede">{lede}</p>}
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>

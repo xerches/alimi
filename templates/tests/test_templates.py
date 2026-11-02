@@ -100,11 +100,11 @@ def test_pilot_letter_is_one_page_and_says_the_essentials():
 
 def test_sows_name_their_price_from_pricing():
     expected = {
-        "sow-workspace-scan-and-report": "products.workspace_scan.full_report.price",
-        "sow-insurance-ready-in-30-days": "products.workspace_scan.insurance_ready_30.price",
-        "sow-payment-fraud-workshop": "products.payment_fraud_kit.workshop.price",
-        "sow-policy-adoption-workshop": "products.policy_pack.adoption.price",
-        "sow-ai-policy-implementation": "products.ai_policy_kit.implementation.price",
+        "sow-workspace-scan-and-report": "products.services.assessment.price",
+        "sow-insurance-ready-in-30-days": "products.services.insurance_ready_30.price",
+        "sow-payment-fraud-workshop": "products.services.fraud_workshop.price",
+        "sow-policy-adoption-workshop": "products.services.policy_adoption.price",
+        "sow-ai-policy-implementation": "products.services.ai_policy_implementation.price",
         "sow-fractional-security-lead": "retainers.fractional_security_lead.price",
     }
     for slug, token in expected.items():
@@ -116,8 +116,8 @@ def test_reseller_outline_uses_the_tier_table_and_the_channel_principle():
     assert "{{pricing.partners.reseller.tiers_table}}" in body
     assert "{{pricing.partners.principle}}" in body
     rendered = render(BY_SLUG["reseller-agreement-outline"], PRICING)
-    assert "| Starter | 1 to 5 | 20% |" in rendered
-    assert "| Scale | 21 or more | 40% |" in rendered
+    assert "| Starter | 1 to 50 | 10% |" in rendered
+    assert "| Scale | 151 or more | 20% |" in rendered
 
 
 def test_referral_outline_states_the_fee_and_disclosure():
@@ -133,10 +133,10 @@ def test_case_study_has_a_permission_line_and_honest_claims_note():
 
 
 def test_resolver_formats():
-    assert resolve("products.workspace_scan.product_name", PRICING) == "Workspace Security Scan"
-    assert resolve("products.workspace_scan.full_report.price", PRICING) == "$500 to $1,500"
-    assert resolve("products.workspace_scan.free.price", PRICING) == "free"
-    assert resolve("products.ai_policy_kit.pro.price", PRICING) == "$99"
+    assert resolve("products.platform.product_name", PRICING) == "alimi platform"
+    assert resolve("products.platform.starter.price", PRICING) == "$3,900"
+    assert resolve("products.services.assessment.price", PRICING) == "$500 to $1,500"
+    assert resolve("products.free.scan_summary.price", PRICING) == "free"
     assert resolve("retainers.fractional_security_lead.price", PRICING) == "$3,000 to $6,000 a month"
     assert resolve("partners.referral.fee", PRICING) == "10%"
     assert resolve("terms.minimum_monthly_retainer", PRICING) == "$1,500 a month"

@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Tiers from "../components/Tiers.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+import { brand, pricing, platform, services, retainer, terms, resellerTiers } from "../lib/config.js";
+import { formatDate } from "../lib/content.js";
+
+const plat = platform();
+const starter = plat.tiers[0];
+const scale = plat.tiers[plat.tiers.length - 1];
+const lead = retainer();
+const starterReseller = resellerTiers()[0];
+const faq = [
+  { q: "Is the audit included?", a: `No, and it is not included anywhere else either. A SOC 2 or ISO 27001 audit is done by a licensed firm for its own fee. ${brand.display_name} gets you ready, hands over the evidence pack and sits in the room.` },
+  { q: "What happens when we grow past the tier?", a: "You move to the next tier at the next renewal, or sooner if you want the extra frameworks. Nothing is switched off in between." },
+  { q: "Can we pay monthly?", a: `${plat.billing} ${terms.payment}.` },
+  { q: "How were the prices set?", a: "Against the published prices of the compliance platforms we compared in October 2026: the average entry price for a company our size, minus 15%. The method and the sources are written down and shared on request." },
+  { q: "What if we only need the insurer questionnaire?", a: `That is the Starter tier. It is the full platform with one framework and one integration, for companies of up to ${starter.people_up_to} people.` },
+  { q: "Do you resell through IT providers?", a: `Yes. A reseller buys at list price minus ${starterReseller.discount} to begin with and sets its own client price; brokers, CPAs and attorneys who refer receive a fee. The terms are on the partners page.` },
+];
+---
+
+<Base title="Pricing" description={`alimi platform pricing: ${plat.tiers.map((t) => `${t.name} ${t.price} a year for up to ${t.people_up_to} people`).join(", ")}. Policies and the insurer questionnaire in every tier; fixed-fee services and free resources alongside.`} path="/pricing">
+  <Hero eyebrow="Pricing" title="Published prices, so nobody has to ask">
+    <p class="lede">Three tiers by company size, from {starter.price} to {scale.price} a year. {plat.billing} {plat.auditNote}</p>
+    <div class="actions">
+      <a class="button button--primary" href="#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="#services">Services</a>
+    </div>
+  </Hero>
+
+  <Section id="tiers" tone="alt" title="The platform" lede="Pick the tier by headcount. Every tier starts with the cyber insurance questionnaire and includes the whole policy library.">
+    <Tiers />
+    <h3 style="margin-top:2rem">Included at every tier</h3>
+    <ul class="checklist">
+      {plat.included.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="price-updated small">Prices in {pricing.currency}, updated {formatDate(pricing.updated)}. Resellers buy at a discount; see <a href="/for-partners">For partners</a>.</p>
+  </Section>
+
+  <Section id="services" title="Services" lede="Fixed fees, delivered by the founder. Each one leaves the platform in better shape than it found it.">
+    <div class="grid grid--two">
+      {services().map((s) => (
+        <article class="card tier" aria-labelledby={`service-${s.id}`}>
+          <span class="badge badge--service">Service</span>
+          <h3 class="tier__name" id={`service-${s.id}`} style="margin-top:0.75rem">{s.name}</h3>
+          <p class="tier__price">{s.price}</p>
+          <p class="tier__note">{s.note}</p>
+          <ul class="checklist">
+            {s.includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      ))}
+      <article class="card tier" aria-labelledby="service-retainer">
+        <span class="badge badge--service">Retainer</span>
+        <h3 class="tier__name" id="service-retainer" style="margin-top:0.75rem">{lead.name}</h3>
+        <p class="tier__price">{lead.price}</p>
+        <p class="tier__note">{lead.hours}; minimum retainer {terms.minimum_monthly_retainer.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })} a month</p>
+        <ul class="checklist">
+          <li>A named security and compliance lead who owns the program</li>
+          <li>Answers insurers, customers and auditors on your behalf</li>
+          <li>Runs the platform with you: owners, evidence, reviews, renewals</li>
+        </ul>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="faq" tone="alt" title="Questions people ask before they ask for a quote">
+    <div class="grid grid--two">
+      {faq.map((f) => (
+        <article class="card">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="waitlist" title="Join the waitlist" lede="Pilots open in January 2027 under a signed authorization letter. One email when your turn comes, and nothing else.">
+    <WaitlistForm name="waitlist" title="Reserve a place" intro="Tell us the size of the company and which framework is pressing. The founder replies personally." interest="platform" button="Join the waitlist" />
+  </Section>
+</Base>

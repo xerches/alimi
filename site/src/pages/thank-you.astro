@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+const pages = [
+  { href: "/platform", label: "The platform" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/resources", label: "Free resources" },
+  { href: "/for-partners", label: "For partners" },
+  { href: "/about", label: "About" },
+];
+---
+
+<Base title="Thank you" description="Your message reached alimi. A reply within two business days." path="/thank-you">
+  <Hero eyebrow="Received" title="Thank you. It is in.">
+    <p class="lede">A reply within two business days. Waitlist sign-ups get one email when the product opens, and nothing else.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/">Back to the home page</a>
+    </div>
+  </Hero>
+  <Section id="meanwhile" tone="alt" title="Meanwhile">
+    <ul>
+      {pages.map((p) => (
+        <li><a href={p.href}>{p.label}</a></li>
+      ))}
+    </ul>
+  </Section>
+</Base>

@@ -4,6 +4,8 @@ Run one prompt per session, in order. Review what it builds, commit, then move o
 
 Order changed Nov 1, 2026: the workspace scanner and insurer-ready report come first, the payment fraud kit second, and the hosted platform grows around the scanner from prompt 12. The reasoning and the phase plan are in https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a. Prompts that are documents only (6, 7, 8, 9) can run in parallel with code prompts in a separate session.
 
+Later on Nov 1, 2026 the founder made the platform the only product (see CLAUDE.md, "What alimi is"). Prompt 11 became the one-platform site rework and is done; prompts 15 and 16 build the AI governance module of the platform rather than a separate kit; the payment fraud kit and the policy library are free content and platform modules, not products.
+
 ## Phase 1: Foundation (weeks 1-2)
 
 **1. Repo foundation** (done Oct 31, 2026)
@@ -134,7 +136,7 @@ the pilot. Extend the decisions log with a section where I record what partners 
 
 ## Phase 5: Marketing site (weeks 17-19)
 
-**10. Marketing site**
+**10. Marketing site** (done Nov 1, 2026)
 ```
 Read CLAUDE.md and /config. In /site, build a fast static site with Astro. Pages: Home, the
 product pages (Workspace Security Scan, Policy Pack, Payment Fraud Kit, AI Policy Kit), For
@@ -147,14 +149,18 @@ from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+. Placeholder c
 TODO. Add a netlify.toml so it deploys with no settings. Show me the plan first.
 ```
 
-**11. Site copy**
+**11. Site copy and the one-platform rework** (done Nov 1, 2026, PR #9)
 ```
-Read CLAUDE.md, /docs/research (I'll paste the three research summaries there first), and the
-site. Replace every TODO with final copy. Homepage headline leads with the outcome for a
-business owner, not the technology. Each product page states the complaint, what they get,
-what it costs, and what happens next. The For Partners page states the margin a reseller
-keeps in one sentence. Resume metrics are attributed to employment per the Rules in
-CLAUDE.md. Write the About page in first person, 150 words.
+Read CLAUDE.md, docs/research/platform-pricing.md and the site. Rebuild the site around one
+offer, the alimi platform. Pages: Home (headline leads with the outcome for an owner, the
+modules, how it works, the published tiers, why not the big platforms, the founder, free
+resources), Platform (modules, frameworks table, trust rules, where it stands), Pricing (three
+tiers read from pricing.yaml with the monthly equivalent, services, retainer, FAQ, waitlist
+form), Free resources (the three core policies, the AI policy and the payment fraud procedure
+rendered from /policies and /kits as pages, plus a form for the editable files), For partners
+(reseller tiers and the margin a reseller keeps in one sentence), About (first person; no
+metric until it is attributed to the employer it came from), Contact. The old product URLs
+redirect. Every TODO replaced; check-dist counts them and the build fails on a typed color.
 ```
 
 ## Phase 6: Platform web app (weeks 20-29)
@@ -195,7 +201,9 @@ as the third: criterion IDs and our own summaries only, mapped onto the existing
 policies. Tests on mock data.
 ```
 
-## Phase 7: AI policy kit (weeks 30-32)
+## Phase 7: AI governance module (weeks 30-32; was "AI policy kit")
+
+Since Nov 1, 2026 these two prompts build a module of the platform: the generator feeds the policy module's AI policy flow and the inventory is a platform integration. A static generator in /tools/ai-policy may still ship first as free content, with no paid tier of its own.
 
 **15. AI policy generator**
 ```
@@ -206,8 +214,8 @@ and who owns AI decisions. From the answers generate (a) an AI acceptable use po
 (b) a one-page staff guide, (c) an AI tool inventory template, all downloadable as Markdown and
 DOCX. Questions and clause text live in a YAML file so I can edit them without touching code;
 the clauses start from the AI policies in /policies. Free tier generates everything; add a
-clearly marked "paid: find the AI apps your staff actually use" call to action that links to
-the scanner.
+clearly marked "find the AI apps your staff actually use" call to action that links to the
+platform's AI governance module.
 ```
 
 **16. AI app inventory from audit logs**

@@ -1,0 +1,663 @@
+# alimi controls catalogue: the plain-English controls a 10 to 200 person company runs, each mapped
+# to the policies that set the rule, the requirement IDs it satisfies (IDs only; the summaries live in
+# policies/requirements.yaml and no framework text is copied in), the scanner checks that test it
+# (config/checks.yaml) and the kind of evidence that proves it. The demo and the platform read this
+# file; the report will map findings to it. Owner roles use the same placeholders as the policies.
+#
+# status in the demo and the platform is computed, never typed here:
+#   a control with tests is Ok when every linked test passes;
+#   a control without tests is Ok when every expected evidence item is present and not past renewal;
+#   a control with no owner is Needs owner whatever its evidence.
+
+version: 1
+updated: 2026-11-01
+
+domains:
+  governance: Governance and risk
+  people: People
+  payments: Payments
+  access: Access and identity
+  email_data: Email and data
+  devices: Devices and systems
+  resilience: Logging, backup and incidents
+  vendors_privacy: Vendors and privacy
+  physical: Premises
+  ai: AI
+
+frequencies:
+  continuous: Checked by an automated test on every scan
+  monthly: Evidence renewed every month
+  quarterly: Evidence renewed every quarter
+  annual: Evidence renewed every year
+  on_change: Evidence produced each time the event happens
+
+evidence_types:
+  policy: An approved policy or plan with its version history
+  report: A scanner report or automated test result
+  export: A dated export or screenshot from the system that runs the control
+  record: A dated record of an activity, such as a review, a test or a drill
+  register: A maintained list, such as assets, vendors, risks or AI tools
+  contract: A signed agreement
+
+controls:
+  # ---------- Governance and risk ----------
+  - id: CTL-01
+    name: Information security policy approved and reviewed yearly
+    domain: governance
+    description: The company has a written information security policy, approved by the CEO, published to staff and reviewed at least once a year.
+    implementation: The Security Lead reviews the policy each autumn, the CEO approves it, and the approved version is published in the policy library with its version history.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-01]
+    requirements:
+      soc2: [CC1.1, CC5.3]
+      iso27001: ["5.1", "5.2", "7.5.2", "A.5.1"]
+      hipaa: ["164.316"]
+    tests: []
+    evidence: [policy, record]
+
+  - id: CTL-02
+    name: Security roles assigned and known
+    domain: governance
+    description: A named person leads security, and every control, policy and system has an owner who knows it.
+    implementation: The owners list in the platform names the owner of each control; the Security Lead reviews it every quarter and the CEO confirms the security lead role in writing.
+    owner_role: "{{CEO}}"
+    frequency: quarterly
+    policies: [POL-01]
+    requirements:
+      soc2: [CC1.3, CC1.5]
+      iso27001: ["5.3", "7.1", "A.5.2"]
+      hipaa: ["164.308(a)(2)"]
+    tests: []
+    evidence: [register]
+
+  - id: CTL-03
+    name: Risk assessment yearly with a treatment plan
+    domain: governance
+    description: Risks to the company's information, including fraud and vendor risk, are listed, rated and given an owner and a treatment once a year and after a big change.
+    implementation: The Security Lead runs the assessment with the leadership team, records it in the risk register, and tracks the treatment plan to closure.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-15]
+    requirements:
+      soc2: [CC3.1, CC3.2, CC3.4, CC5.1]
+      iso27001: ["6.1.2", "6.1.3", "8.2", "8.3"]
+      iso42001: ["6.1.2"]
+      hipaa: ["164.308(a)(1)"]
+    tests: []
+    evidence: [register, record]
+
+  # ---------- People ----------
+  - id: CTL-04
+    name: Policies acknowledged by all staff yearly
+    domain: people
+    description: Every employee and contractor reads and acknowledges the policies that apply to them when they join and once a year after that.
+    implementation: HR assigns the policy set at onboarding; the platform tracks acknowledgements and reminds people; the export is the evidence.
+    owner_role: "{{HR Lead}}"
+    frequency: annual
+    policies: [POL-01, POL-02]
+    requirements:
+      soc2: [CC1.4, CC2.2, CC5.3]
+      iso27001: ["7.3", "A.5.4", "A.6.2"]
+      hipaa: ["164.308(a)(5)"]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-05
+    name: Security awareness training yearly, with phishing practice
+    domain: people
+    description: Everyone completes security awareness training within 30 days of joining and every year, and takes part in phishing practice.
+    implementation: HR assigns the course; completion is tracked per person; the yearly completion report and the phishing results are kept.
+    owner_role: "{{HR Lead}}"
+    frequency: annual
+    policies: [POL-16, POL-02]
+    requirements:
+      soc2: [CC1.4, CC2.2]
+      iso27001: ["7.2", "7.3", "A.6.3", "A.8.7"]
+      hipaa: ["164.308(a)(5)"]
+      insurer: [training]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-06
+    name: Background checks before hire, proportionate to the role
+    domain: people
+    description: People are screened before they start, to the degree the role and the law allow.
+    implementation: HR orders the check through the screening provider before the start date and keeps the completion record, not the report.
+    owner_role: "{{HR Lead}}"
+    frequency: on_change
+    policies: [POL-16]
+    requirements:
+      soc2: [CC1.4]
+      iso27001: ["A.6.1"]
+      hipaa: ["164.308(a)(3)"]
+    tests: []
+    evidence: [record]
+    notes: Needs HR or legal review of what may be checked in each state.
+
+  - id: CTL-07
+    name: Joiners, movers and leavers handled by checklist; access removed within one business day
+    domain: people
+    description: Accounts and devices are set up from a checklist when someone joins, adjusted when their role changes, and removed within one business day of leaving.
+    implementation: HR opens the ticket; the IT provider works the checklist; the closed ticket with the removal time is the evidence.
+    owner_role: "{{HR Lead}}"
+    frequency: on_change
+    policies: [POL-16, POL-03]
+    requirements:
+      soc2: [CC6.2, CC6.3]
+      iso27001: ["A.5.11", "A.5.16", "A.5.18", "A.6.5"]
+      hipaa: ["164.308(a)(3)"]
+    tests: []
+    evidence: [record]
+
+  # ---------- Payments ----------
+  - id: CTL-08
+    name: Payments and bank-detail changes verified by callback, with two approvers
+    domain: payments
+    description: No payment above the threshold and no change of bank details goes out without a callback to a number already on file and a second approver.
+    implementation: Finance follows the written verification procedure from the payment fraud kit, keeps the callback log, and runs a drill once a year.
+    owner_role: "{{Finance Lead}}"
+    frequency: annual
+    policies: [POL-15]
+    requirements:
+      soc2: [CC3.3, CC5.1]
+      iso27001: ["A.5.37", "A.6.3"]
+    tests: []
+    evidence: [policy, record]
+
+  # ---------- Access and identity ----------
+  - id: CTL-09
+    name: MFA enforced for all users, including email and remote access
+    domain: access
+    description: Every account needs a second factor to sign in, with no exceptions for executives, shared mailboxes or remote access.
+    implementation: The IT provider enforces it through Conditional Access or Security Defaults; the scanner reads registration coverage and the policy on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-04, POL-18]
+    requirements:
+      soc2: [CC6.1, CC6.6]
+      iso27001: ["A.5.17", "A.8.5"]
+      hipaa: ["164.312(d)"]
+      insurer: [mfa, remote_access]
+    tests: [m365.mfa.coverage, m365.conditional_access.present, m365.security_defaults, gws.2sv.enforced]
+    evidence: [report, export]
+
+  - id: CTL-10
+    name: Legacy sign-in protocols blocked
+    domain: access
+    description: Older sign-in methods that skip MFA (POP, IMAP, SMTP AUTH and similar) are turned off.
+    implementation: Blocked by policy in the tenant; the scanner checks the policy and the sign-in logs for the last 30 days.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-04, POL-19]
+    requirements:
+      soc2: [CC6.6]
+      iso27001: ["A.8.5", "A.8.20"]
+      insurer: [mfa]
+    tests: [m365.legacy_auth.blocked, gws.lsa.disabled]
+    evidence: [report]
+
+  - id: CTL-11
+    name: Administrator accounts limited, separate from daily accounts and MFA-protected
+    domain: access
+    description: Two to four people hold global administrator rights, on dedicated accounts without a mailbox, each protected by MFA.
+    implementation: The IT provider keeps the admin list; the scanner counts privileged roles and checks their MFA on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-03]
+    requirements:
+      soc2: [CC6.1, CC6.3]
+      iso27001: ["A.5.3", "A.5.15", "A.8.2"]
+      hipaa: ["164.308(a)(4)"]
+      insurer: [admin_access]
+    tests: [m365.admins.global_count, m365.admins.mfa, gws.admins.super_count]
+    evidence: [report]
+
+  - id: CTL-12
+    name: Access reviewed quarterly, including guests and shared accounts
+    domain: access
+    description: Each quarter an owner confirms who should still have access to each system, and removes guests and accounts nobody claims.
+    implementation: The Security Lead sends the review from the platform; owners sign off; the signed review is the record. The scanner flags inactive guests between reviews.
+    owner_role: "{{Security Lead}}"
+    frequency: quarterly
+    policies: [POL-03]
+    requirements:
+      soc2: [CC6.2, CC6.3]
+      iso27001: ["A.5.18", "A.8.2"]
+      hipaa: ["164.308(a)(4)"]
+      insurer: [admin_access]
+    tests: [m365.guests.review]
+    evidence: [record, report]
+
+  - id: CTL-13
+    name: One account per person and a password manager for every shared secret
+    domain: access
+    description: Nobody shares a login; the few secrets that must be shared live in the company password manager.
+    implementation: The IT provider issues accounts and password manager seats; the seat report is the evidence.
+    owner_role: "{{IT Lead}}"
+    frequency: annual
+    policies: [POL-04]
+    requirements:
+      soc2: [CC6.1]
+      iso27001: ["A.5.16", "A.5.17"]
+      hipaa: ["164.312(a)(1)"]
+    tests: []
+    evidence: [export]
+
+  # ---------- Email and data ----------
+  - id: CTL-14
+    name: SPF, DKIM and DMARC enforced on every sending domain
+    domain: email_data
+    description: Mail that pretends to come from the company is rejected by the receiving side, because the three records are published and DMARC is set to quarantine or reject.
+    implementation: The IT provider publishes the records; the scanner reads them for every verified domain on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-19]
+    requirements:
+      soc2: [CC6.7, CC6.8]
+      iso27001: ["A.5.14", "A.8.20"]
+      insurer: [email_security]
+    tests: [m365.email_auth.dmarc, gws.email_auth.dmarc]
+    evidence: [report]
+
+  - id: CTL-15
+    name: External automatic forwarding blocked and inbox rules reviewed
+    domain: email_data
+    description: Mail cannot be forwarded outside the company automatically, and inbox rules that forward or redirect are reviewed, because this is how a mailbox is read silently after a break-in.
+    implementation: Blocked in the outbound mail policy; the scanner lists every forwarding rule on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-19]
+    requirements:
+      soc2: [CC6.7, CC7.2]
+      iso27001: ["A.5.14", "A.8.16"]
+      insurer: [email_security]
+    tests: [m365.forwarding.external, gws.forwarding.external]
+    evidence: [report]
+
+  - id: CTL-16
+    name: Phishing and malware filtering on for every mailbox
+    domain: email_data
+    description: Incoming mail is filtered for phishing, malicious links and attachments, with the filter policy applied to every mailbox.
+    implementation: The IT provider sets the filter policies; a dated export of the policy is the evidence.
+    owner_role: "{{IT Lead}}"
+    frequency: annual
+    policies: [POL-19]
+    requirements:
+      soc2: [CC6.8]
+      iso27001: ["A.8.7", "A.8.23"]
+      hipaa: ["164.308(a)(5)"]
+      insurer: [email_security]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-17
+    name: External and anonymous file sharing controlled
+    domain: email_data
+    description: Files cannot be shared with anyone who has the link; sharing outside the company goes to named people or approved domains and expires.
+    implementation: Set at the tenant level; the scanner reads the sharing settings on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-06, POL-02]
+    requirements:
+      soc2: [CC6.1, C1.1]
+      iso27001: ["A.5.10", "A.5.14", "A.8.3", "A.8.12"]
+      hipaa: ["164.312(a)(1)"]
+      insurer: [data_sharing]
+    tests: [m365.sharing.anonymous_links, gws.drive.external_sharing]
+    evidence: [report]
+
+  - id: CTL-18
+    name: Information classified, with handling rules for each level
+    domain: email_data
+    description: Information is sorted into a few levels (public, internal, confidential, restricted) and each level has rules for storing, sharing and disposing of it.
+    implementation: The classification scheme and the handling rules are in the data classification policy; staff learn them in training.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-06]
+    requirements:
+      soc2: [C1.1, CC6.1]
+      iso27001: ["A.5.10", "A.5.12", "A.5.13"]
+    tests: []
+    evidence: [policy]
+
+  - id: CTL-19
+    name: Sensitive data encrypted at rest and in transit; every laptop encrypted
+    domain: email_data
+    description: Laptops and phones are encrypted, connections use TLS, and sensitive data at rest is encrypted by the platform that holds it.
+    implementation: Device encryption is enforced by the device management tool; its compliance report is the evidence. Cloud platforms are confirmed from their documentation.
+    owner_role: "{{IT Lead}}"
+    frequency: quarterly
+    policies: [POL-07, POL-19]
+    requirements:
+      soc2: [CC6.1, CC6.7]
+      iso27001: ["A.8.1", "A.8.24"]
+      hipaa: ["164.312(a)(1)", "164.312(e)(1)"]
+      insurer: [encryption]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-20
+    name: Third-party apps connected to company data approved and reviewed
+    domain: email_data
+    description: Apps that staff connect to the company's Microsoft 365 or Google Workspace are approved before they get access to mail, files or contacts, and reviewed each quarter.
+    implementation: The Security Lead keeps the approved list; the scanner lists apps granted sensitive access in the last 180 days.
+    owner_role: "{{Security Lead}}"
+    frequency: quarterly
+    policies: [POL-14, POL-02]
+    requirements:
+      soc2: [CC6.1, CC9.2]
+      iso27001: ["A.5.19", "A.5.23"]
+      insurer: [vendor_risk]
+    tests: [gws.oauth.third_party]
+    evidence: [register, report]
+
+  - id: CTL-21
+    name: Retention schedule applied; data, devices and media disposed of securely
+    domain: email_data
+    description: Records are kept as long as the schedule says and no longer; devices and media are wiped or destroyed before they leave the company.
+    implementation: The retention schedule is in the policy; the IT provider records each wipe or destruction with the asset tag.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-20, POL-05]
+    requirements:
+      soc2: [C1.2, CC6.5, P4.2, P4.3]
+      iso27001: ["A.5.33", "A.7.10", "A.7.14", "A.8.10"]
+      hipaa: ["164.310(d)(1)"]
+    tests: []
+    evidence: [policy, record]
+
+  # ---------- Devices and systems ----------
+  - id: CTL-22
+    name: Every company device managed, with screen lock, encryption and automatic updates
+    domain: devices
+    description: Laptops and phones that touch company data are enrolled in device management, which enforces a screen lock, encryption and automatic updates.
+    implementation: The IT provider enrols devices at setup; the management tool's compliance report is exported each quarter.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-05, POL-18]
+    requirements:
+      soc2: [CC6.1, CC6.7, CC7.1]
+      iso27001: ["A.5.9", "A.7.9", "A.8.1"]
+      hipaa: ["164.310(b)", "164.310(c)"]
+      insurer: [encryption, patching]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-23
+    name: Endpoint detection and response on at least 95 percent of devices
+    domain: devices
+    description: Endpoint detection and response (EDR, the software that watches each device for attacks) runs on nearly every device, and someone responds to its alerts.
+    implementation: The IT provider deploys the EDR; the coverage export from its console is the evidence the insurer asks for.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-19, POL-05]
+    requirements:
+      soc2: [CC6.8, CC7.1]
+      iso27001: ["A.8.7"]
+      hipaa: ["164.308(a)(5)"]
+      insurer: [edr]
+    tests: [att.edr.coverage]
+    evidence: [export]
+
+  - id: CTL-24
+    name: Critical patches within 14 days, the rest within 30
+    domain: devices
+    description: Security updates rated critical are installed within 14 days of release and all others within 30, on devices and on the systems the company runs.
+    implementation: Automatic updates on devices; the IT provider's monthly patch report shows compliance by device.
+    owner_role: "{{IT Lead}}"
+    frequency: monthly
+    policies: [POL-09]
+    requirements:
+      soc2: [CC7.1]
+      iso27001: ["A.8.8"]
+      insurer: [patching]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-25
+    name: Vulnerability scans monthly, findings tracked to closure
+    domain: devices
+    description: Systems and the public website are scanned for known weaknesses every month, and each finding has an owner and a due date.
+    implementation: The IT provider runs the scan; the report and the tracker of open findings are kept.
+    owner_role: "{{IT Lead}}"
+    frequency: monthly
+    policies: [POL-09]
+    requirements:
+      soc2: [CC4.2, CC7.1]
+      iso27001: ["A.8.8"]
+      hipaa: ["164.308(a)(8)"]
+    tests: []
+    evidence: [export, record]
+
+  - id: CTL-26
+    name: Asset inventory current, with an owner for every device, app and data store
+    domain: devices
+    description: The company knows which devices, cloud apps and data stores it has, who owns each one, and what data it holds.
+    implementation: The IT provider maintains the device list from the management tool; the Security Lead adds SaaS and data stores; reviewed quarterly.
+    owner_role: "{{IT Lead}}"
+    frequency: quarterly
+    policies: [POL-05]
+    requirements:
+      soc2: [CC5.2, CC6.1]
+      iso27001: ["A.5.9", "A.5.10", "A.5.23"]
+      hipaa: ["164.310(d)(1)"]
+    tests: []
+    evidence: [register]
+
+  - id: CTL-27
+    name: Microsoft 365 or Google Workspace kept to a secure baseline
+    domain: devices
+    description: The tenant's security settings follow a baseline and its security score stays above the agreed bar.
+    implementation: The IT provider works the baseline; the scanner reads the score and the key settings on every scan.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-19]
+    requirements:
+      soc2: [CC5.2, CC7.1]
+      iso27001: ["A.8.9"]
+    tests: [m365.secure_score]
+    evidence: [report]
+
+  - id: CTL-28
+    name: Remote access only through company-managed, MFA-protected channels
+    domain: devices
+    description: People reach company systems from outside only through managed devices and MFA-protected services, never through an open remote desktop or a shared VPN login.
+    implementation: The IT provider configures the remote access path; the configuration export is the evidence.
+    owner_role: "{{IT Lead}}"
+    frequency: annual
+    policies: [POL-18]
+    requirements:
+      soc2: [CC6.6]
+      iso27001: ["A.6.7", "A.8.20", "A.8.21"]
+      hipaa: ["164.312(e)(1)"]
+      insurer: [remote_access]
+    tests: []
+    evidence: [export]
+
+  - id: CTL-29
+    name: System changes approved, tested and recorded
+    domain: devices
+    description: Changes to production systems, including the payroll platform and the tenant, are approved by someone other than the person making them, tested, and written down.
+    implementation: Changes go through the ticket system; the change log is the evidence.
+    owner_role: "{{IT Lead}}"
+    frequency: on_change
+    policies: [POL-08]
+    requirements:
+      soc2: [CC8.1]
+      iso27001: ["A.8.31", "A.8.32"]
+    tests: []
+    evidence: [record]
+
+  # ---------- Logging, backup and incidents ----------
+  - id: CTL-30
+    name: Audit logs on, kept at least 90 days, with alerts on admin changes
+    domain: resilience
+    description: Sign-ins, admin actions and mail and file activity are logged and kept for at least 90 days, and changes to admin roles raise an alert.
+    implementation: Logging is on in the tenant; the scanner confirms it and the retention on every scan; alerts go to the IT provider.
+    owner_role: "{{IT Lead}}"
+    frequency: continuous
+    policies: [POL-10]
+    requirements:
+      soc2: [CC4.1, CC7.2]
+      iso27001: ["A.8.15", "A.8.16"]
+      hipaa: ["164.312(b)"]
+      insurer: [logging]
+    tests: [m365.audit.enabled, gws.audit.available]
+    evidence: [report]
+
+  - id: CTL-31
+    name: Backups immutable or offline and restore-tested quarterly
+    domain: resilience
+    description: Company data, including mail and files in the tenant, is backed up to a copy an attacker cannot delete, and a restore is tested every quarter.
+    implementation: The IT provider runs the backup tool; the job report and the dated restore test record are the evidence the insurer asks for.
+    owner_role: "{{IT Lead}}"
+    frequency: quarterly
+    policies: [POL-11]
+    requirements:
+      soc2: [A1.2, A1.3]
+      iso27001: ["A.8.13"]
+      hipaa: ["164.308(a)(7)"]
+      insurer: [backups]
+    tests: [att.backups.tested]
+    evidence: [export, record]
+
+  - id: CTL-32
+    name: Business continuity plan with recovery targets, reviewed yearly
+    domain: resilience
+    description: The company knows how it keeps paying clients' staff if its systems or office are unavailable, how fast each system must come back, and who does what.
+    implementation: The CEO owns the plan; it is reviewed and walked through once a year with the leadership team.
+    owner_role: "{{CEO}}"
+    frequency: annual
+    policies: [POL-12]
+    requirements:
+      soc2: [CC9.1, A1.3]
+      iso27001: ["A.5.29", "A.5.30"]
+      hipaa: ["164.308(a)(7)"]
+    tests: []
+    evidence: [policy, record]
+
+  - id: CTL-33
+    name: Incident response plan written, with roles and contacts, tested yearly
+    domain: resilience
+    description: There is a written plan for a security incident, with who decides, who calls the insurer, the IT provider and the lawyer, and it is tested in a tabletop exercise every year.
+    implementation: The Security Lead keeps the plan and runs the tabletop; the dated notes are the evidence.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-13]
+    requirements:
+      soc2: [CC7.3, CC7.4, CC7.5]
+      iso27001: ["A.5.24", "A.5.26", "A.5.27", "A.6.8"]
+      hipaa: ["164.308(a)(6)"]
+      insurer: [incident_response]
+    tests: [att.ir_plan.tested]
+    evidence: [policy, record]
+
+  - id: CTL-34
+    name: Breaches reported to customers and regulators within legal deadlines
+    domain: resilience
+    description: When personal data is exposed, affected people, customers under contract and the regulators are told within the deadlines the law and the contracts set.
+    implementation: The notification steps and contacts are in the incident response and privacy policies; counsel reviews them yearly.
+    owner_role: "{{Privacy Lead}}"
+    frequency: on_change
+    policies: [POL-13, POL-21]
+    requirements:
+      soc2: [CC2.3, P6.6]
+      iso27001: ["A.5.5", "A.5.31"]
+      hipaa: ["164.308(a)(6)"]
+    tests: []
+    evidence: [policy]
+    notes: Needs legal review; Massachusetts has its own breach notice law.
+
+  # ---------- Vendors and privacy ----------
+  - id: CTL-35
+    name: Vendors with access to systems or data assessed before use, under contract, reviewed yearly
+    domain: vendors_privacy
+    description: Before a vendor gets access to company systems or data, someone checks its security, signs a contract with security terms, and reviews it each year.
+    implementation: The Security Lead keeps the vendor register with the review date and the contract; critical vendors supply a SOC 2 report or a questionnaire.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-14]
+    requirements:
+      soc2: [CC9.2]
+      iso27001: ["A.5.19", "A.5.20", "A.5.21", "A.5.22"]
+      hipaa: ["164.308(b)(1)", "164.314(a)"]
+      insurer: [vendor_risk]
+    tests: []
+    evidence: [register, contract]
+
+  - id: CTL-36
+    name: Privacy notice published and personal data handled as it says
+    domain: vendors_privacy
+    description: The company tells people what personal data it collects and why, and uses it only for that.
+    implementation: The Privacy Lead owns the notice and the privacy policy; counsel reviews them yearly.
+    owner_role: "{{Privacy Lead}}"
+    frequency: annual
+    policies: [POL-21]
+    requirements:
+      soc2: [P1.1, P3.1, P4.1]
+      iso27001: ["A.5.34"]
+    tests: []
+    evidence: [policy]
+    notes: Needs legal review.
+
+  # ---------- Premises ----------
+  - id: CTL-37
+    name: Physical access to offices and equipment restricted; visitors logged
+    domain: physical
+    description: Only staff can enter the office unescorted, visitors sign in, and screens and desks are clear of client data when unattended.
+    implementation: Badge access and a visitor log at reception; the log and the badge holder list are the evidence.
+    owner_role: "{{Security Lead}}"
+    frequency: annual
+    policies: [POL-17]
+    requirements:
+      soc2: [CC6.4]
+      iso27001: ["A.7.1", "A.7.2", "A.7.7"]
+      hipaa: ["164.310(a)(1)"]
+    tests: []
+    evidence: [record]
+
+  # ---------- AI ----------
+  - id: CTL-38
+    name: AI tools approved before use; no confidential or personal data in unapproved tools
+    domain: ai
+    description: Staff use AI tools from an approved list, and client, employee and payroll data go only into tools the company has approved for that data.
+    implementation: The AI Lead keeps the approved list in the AI acceptable use policy; the tenant's app list is checked each quarter for AI tools in use.
+    owner_role: "{{AI Lead}}"
+    frequency: quarterly
+    policies: [POL-22]
+    requirements:
+      soc2: [CC2.2, CC6.1]
+      iso27001: ["A.5.10", "A.5.23"]
+      iso42001: ["A.2.2", "A.9.2", "A.9.4"]
+      insurer: [data_sharing]
+    tests: []
+    evidence: [policy, register]
+
+  - id: CTL-39
+    name: AI tool inventory kept, with owner, data used and risk level
+    domain: ai
+    description: Every AI tool in use is listed with who owns it, what data goes in, what it is used for and how risky that is.
+    implementation: The AI Lead maintains the inventory and reviews it each quarter; new tools are added through the approval step.
+    owner_role: "{{AI Lead}}"
+    frequency: quarterly
+    policies: [POL-23]
+    requirements:
+      iso27001: ["A.5.9"]
+      iso42001: ["A.4.2", "A.4.3", "A.4.4", "A.5.2"]
+    tests: []
+    evidence: [register]
+
+  - id: CTL-40
+    name: People told when AI affects them, with a way to raise concerns
+    domain: ai
+    description: Staff and clients are told when an AI system makes or shapes a decision about them, and they have a named way to question it.
+    implementation: The AI governance policy sets the disclosure and the concern channel; the AI Lead reviews both yearly.
+    owner_role: "{{AI Lead}}"
+    frequency: annual
+    policies: [POL-23]
+    requirements:
+      soc2: [CC2.3]
+      iso42001: ["A.3.3", "A.8.2", "A.8.5"]
+    tests: []
+    evidence: [policy]

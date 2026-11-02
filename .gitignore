@@ -44,3 +44,6 @@ Thumbs.db
 # rendered kit PDFs are build artifacts (the build scripts themselves are tracked)
 kits/**/build/out/
 !kits/payment-fraud/build/
+
+# Lighthouse CI reports
+.lighthouseci/

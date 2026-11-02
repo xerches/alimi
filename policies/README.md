@@ -97,5 +97,5 @@ A mapping means the policy contains statements that address the requirement, not
 
 - The scanner's insurer-ready report names the policy that answers each failed insurer question.
 - The platform's policy module (prompt 13) reads the front matter for its policy list, versions, owners, review dates and the control mapping; staff sign-off is tracked against the `id` and `version`.
-- The AI policy kit (prompt 15) generates a company-specific POL-22 and POL-23 from this source.
+- The platform's AI governance module (prompt 15) generates a company-specific POL-22 and POL-23 from this source.
 - The reseller white-label option replaces the alimi name in the revision history and the pack cover; the policy text itself does not mention alimi.
