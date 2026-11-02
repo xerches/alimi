@@ -110,4 +110,4 @@ POL-06 Data Classification and Handling · POL-14 Vendor and Third-Party Risk ·
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{IT Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{IT Lead}} |

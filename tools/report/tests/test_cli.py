@@ -22,7 +22,7 @@ def test_demo_gws_free_with_reseller(tmp_path):
     )
     assert result.exit_code == 0, result.output
     html = list(tmp_path.glob("*-summary-*.html"))[0].read_text(encoding="utf-8")
-    assert "Northside IT" in html and "powered by alimi" in html and ">Every finding</h2>" not in html
+    assert "Northside IT" in html and "powered by Alimi" in html and ">Every finding</h2>" not in html
 
 
 def test_render_from_a_findings_file(tmp_path):

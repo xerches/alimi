@@ -1,14 +1,14 @@
-# alimi
+# Alimi
 
 Working name for a security company founded by Alex Dennis (Boston, MA). Renamed from denimi on Nov 1, 2026 because it sounds better and avoids the "denim" search-engine autocorrect. The GitHub repo is `xerches/alimi` (renamed from denimi; the old URL redirects). Pre-LLC: everything here is a prototype until the entity, insurance and first signed SOW exist. This file is the project brief that Claude Code reads at the start of every session. Keep it current; when a decision changes, change it here first.
 
-## What alimi is
+## What Alimi is
 
 One buyer: the owner or operations lead of a 10 to 200 person company that cannot hire security staff. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
 
 Positioning line (draft): **Security that insurers, customers and auditors accept, for companies too small for a security team.**
 
-**One product: the alimi platform.** A compliance automation platform of the kind Vanta and Drata sell (continuous control monitoring, evidence collection, policies with sign-off, people, vendors, risks, frameworks, a trust page), sized and priced for the companies those tools quote out of reach. Direction fixed Nov 1, 2026 after the founder's correction: anything a company can do with an AI chat or an IT contractor (a policy pack, a kit) is not a product; the platform is. The phase plan still holds (Claude Docs, Nov 1, 2026: https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a); the packaging below replaces its "three products".
+**One product: the Alimi platform.** A compliance automation platform of the kind Vanta and Drata sell (continuous control monitoring, evidence collection, policies with sign-off, people, vendors, risks, frameworks, a trust page), sized and priced for the companies those tools quote out of reach. Direction fixed Nov 1, 2026 after the founder's correction: anything a company can do with an AI chat or an IT contractor (a policy pack, a kit) is not a product; the platform is. The phase plan still holds (Claude Docs, Nov 1, 2026: https://claude.ai/artifact/VDceUWrZQPkL2Gorc7798a); the packaging below replaces its "three products".
 
 What the platform is made of, and where each piece lives today:
 
@@ -21,11 +21,11 @@ What the platform is made of, and where each piece lives today:
 
 **The former kits are modules or free content, not products.** The payment fraud kit (`/kits/payment-fraud`) is free content on the site and the procedure inside the policy module; the AI policy kit (prompts 15 and 16) becomes the AI governance module (policy generator plus the AI app inventory scan). The policy library is not sold on its own. **Services** (`products.services` in `config/pricing.yaml`) are fixed-fee work delivered by the founder that lands the customer in the platform: security assessment and insurer report, insurance-ready in 30 days, policy adoption workshop, payment fraud workshop and yearly drill, AI policy implementation, plus the fractional security lead retainer.
 
-**Published prices**, by the founder's rule (average of comparable vendors minus 5 to 15%, applied at 15%; comparables and arithmetic in `docs/research/platform-pricing.md`): Starter $3,900 a year (up to 25 people, insurer framework, one integration), Growth $7,900 (up to 100 people, adds SOC 2 and ISO 27001, vendors, risks, questionnaires, three integrations), Scale $15,700 (up to 200 people, adds HIPAA and ISO 42001, auditor access, API, unlimited integrations, the multi-tenant view). Billed yearly; the CPA audit fee is separate, as everywhere. The policy library, read-only integrations, an owner and tasks per control and a named compliance lead are in every tier.
+**Published prices**, by the founder's rule (average of comparable vendors minus 5 to 15%, applied at 15%; comparables and arithmetic in `docs/research/platform-pricing.md`): Starter $3,900 a year (up to 25 people, insurer framework, one integration), Growth $7,900 (up to 100 people, adds SOC 2 and ISO 27001, vendors, risks, questionnaires, three integrations), Scale $15,700 (up to 200 people, adds HIPAA and ISO 42001, auditor access, API, unlimited integrations, the multi-tenant view). Paid monthly (Nov 2, 2026): a 12-month term at the list price, or month to month at 15% more; no automatic increase at renewal, price locked for 24 months, and a customer can export every policy, test result and piece of evidence at any time. The CPA audit fee is separate, as everywhere. The policy library, read-only integrations, an owner and tasks per control and a named compliance lead are in every tier.
 
-Two channels. **Direct:** owners who find the site or get a referral. **Resellers:** MSPs, IT consultancies and vCISO firms buy at wholesale (10% off at 1 to 50 active clients, 15% at 51 to 150, 20% at 151 or more, in `config/pricing.yaml`), set their own client price, and get a white-label option on reports, policy packs and the trust page, a not-for-resale licence for their own tenant, and the multi-tenant view. Brokers, CPAs and attorneys who refer but do not resell get a 10% referral fee. alimi never sells direct to a reseller's client for less than the reseller pays.
+Two channels. **Direct:** owners who find the site or get a referral. **Resellers:** MSPs, IT consultancies and vCISO firms buy at wholesale (10% off at 1 to 50 active clients, 15% at 51 to 150, 20% at 151 or more, in `config/pricing.yaml`), set their own client price, and get a white-label option on reports, policy packs and the trust page, a not-for-resale licence for their own tenant, and the multi-tenant view. Brokers, CPAs and attorneys who refer but do not resell get a 10% referral fee. Alimi never sells direct to a reseller's client for less than the reseller pays.
 
-How alimi differs from Vanta and Drata: a published price in the low thousands a year where those platforms quote $12,000 to $25,000 by sales call, insurer-facing outputs before audit-facing ones, plain English for an owner rather than an auditor, and the founder included as a compliance lead who makes the scoping and policy calls those tools leave to the customer.
+How Alimi differs from Vanta and Drata: a published price in the low thousands a year where those platforms quote $12,000 to $25,000 by sales call, insurer-facing outputs before audit-facing ones, plain English for an owner rather than an auditor, and the founder included as a compliance lead who makes the scoping and policy calls those tools leave to the customer.
 
 Prices live in `config/pricing.yaml`; the site, the templates and this file read or quote that file so they never drift.
 
@@ -58,13 +58,13 @@ Prices live in `config/pricing.yaml`; the site, the templates and this file read
 - **No client data in the repo.** Pilot outputs go to a local, git-ignored `out/` folder.
 - **Legal templates carry a header:** "DRAFT. Not legal advice. Review by a Massachusetts attorney before use." Claude drafts structure and plain-language clauses; it does not invent legal text where a lawyer is required.
 - **Policies carry a header:** "TEMPLATE. Adapt before adopting. Sections marked [HR or legal review] need a human reviewer." A policy maps to requirements by criterion ID only.
-- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not alimi clients, and the founder dropped them from the site on Nov 1, 2026; do not put them back. Site copy names past employers only ("as Information Security Manager at..."), leaves the current employer unnamed until the outside-work clause is checked, and never implies consulting clients until there are case studies.
+- **Honest claims.** Resume metrics ($1M revenue unblocked, premiums cut 15-30%, phishing down 85%) are from employment, not Alimi clients, and the founder dropped them from the site on Nov 1, 2026; do not put them back. Site copy names past employers only ("as Information Security Manager at..."), leaves the current employer unnamed until the outside-work clause is checked, and never implies consulting clients until there are case studies.
 - **Free to run.** Site and AI policy app must work on free static hosting with no server. Forms use Netlify Forms or Formspree free tier. The platform needs a server; keep it on free tiers until paying customers cover the bill.
 - **Accessible and fast.** Mobile-first, Lighthouse 95+ on every page.
 
 ## Build order and status
 
-Order changed Nov 1, 2026: scanner first, then the documents and kits, and from here the hosted platform around the scanner. Later the same day the founder made the platform the only product: the kits became modules and free content, and the site was rebuilt around one offer. Dates are targets for evenings and weekends; the CISSP exam on Nov 30 slows November.
+Order changed Nov 1, 2026: scanner first, then the documents and kits, and from here the hosted platform around the scanner. Later the same day the founder made the platform the only product: the kits became modules and free content, and the site was rebuilt around one offer. On Nov 2, 2026 prompt 12 was split in three (12a, 12b, 12c) and the insurer dashboard and export pack moved ahead of prompt 13, so the first framework is sellable end to end before policies and people arrive; the plan is https://claude.ai/artifact/VjN79aEaY6paZNPDxAwdoS. Dates are targets for evenings and weekends; the CISSP exam on Nov 30 slows November.
 
 | # | Deliverable | Target | Status |
 | --- | --- | --- | --- |
@@ -74,10 +74,12 @@ Order changed Nov 1, 2026: scanner first, then the documents and kits, and from 
 | 4 | Payment fraud procedure, scripts, poster, checklist, training script (prompt 6); now free content and a policy-module document | Jan 30, 2027 | done Nov 1, 2026, PR #6 |
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); the platform's policy module | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | done Nov 1, 2026: prompt 8 PR #7, prompt 9 PR #8 |
-| 7 | Marketing site (prompt 10), then the one-platform rework with final copy, published tiers and free resources (prompt 11) | Mar 2027 | done Nov 1, 2026, PR #9 (both prompts; awaiting merge) |
-| 7a | Platform demo for prospects (`/demo`): sample company, every module, from the real scanner and policy data | | done Nov 1, 2026, PR #10 (awaiting merge) |
-| 8 | Platform web app: orgs, login, scheduled runs, controls, evidence, reseller view (prompt 12); the demo is the spec | Mar 2027 | next |
-| 9 | Platform: policies, people, dashboard, SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
+| 7 | Marketing site (prompt 10), then the one-platform rework with final copy, published tiers and free resources (prompt 11) | Mar 2027 | done Nov 1, 2026, PR #9 (both prompts), merged Nov 2 |
+| 7a | Platform demo for prospects (`/demo`): sample company, every module, from the real scanner and policy data | | done Nov 1, 2026, PR #10, merged Nov 2 |
+| 8 | Platform foundation (prompt 12a): models, row-level security, mock scans with evidence on every test; the demo is the spec | Mar 2027 | next |
+| 8a | Platform: login, nightly worker, reseller view, evidence with renewal dates, recurring tasks, false-positive notes (prompt 12b) | Mar 2027 | not started |
+| 8b | Platform: insurer readiness dashboard with two scores, in-app report, export pack, data-quality page (prompt 12c, pulled forward from prompt 14) | Apr 2027 | not started |
+| 9 | Platform: policies, people, then SOC 2 and ISO 27001 frameworks (prompts 13-14) | Apr 2027 | not started |
 | 10 | AI governance module: AI policy generator and AI app inventory (prompts 15-16), inside the platform | May 2027 | not started |
 | 11 | Technical SEO and analytics (prompt 17) | when the site has copy | not started |
 | 12 | 15 partner conversations (incl. 5 MSPs on the reseller terms), 3 free pilots, 3 case studies | from Jan 2027, alongside the build | not started |
@@ -89,6 +91,8 @@ Gate to form the LLC: one partner has agreed to refer, one pilot wants the paid 
 Gate for the hosted platform to hold customer data: LLC formed, insurance in place, signed pilot letter, outside security review done.
 
 ## Tone and brand
+
+The name is written **Alimi**, with a capital A, in every sentence, title and brand field (decided Nov 2, 2026). Code identifiers, package names, commands, paths and URLs stay lowercase because Python and npm conventions expect it: `alimi_scanner`, `alimi_report`, `alimi-scan`, `alimi-report`, `xerches/alimi`.
 
 Plain English a business owner understands. No fear-mongering, no hooded-hacker imagery, no "cyber" clichés. Explain the term the first time it appears (MFA, EDR, BEC). Brand tokens live in `config/brand.yaml` (palette revised Nov 1, 2026 to "brick and slate": brick primary, blue-gray slate for dark bands, white and cool gray backgrounds, amber accent on dark surfaces only; the founder rejected the earlier beige and teal-green); the site generates its CSS variables from that file and the report reads the same keys, so no component types a color.
 

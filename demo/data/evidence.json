@@ -143,11 +143,11 @@
         "kind": "file",
         "name": "callback-log-2026-q3.xlsx"
       },
-      "description": "The verify-before-you-pay procedure from the alimi kit and the quarter's callback log: 31 bank-detail changes, 31 callbacks."
+      "description": "The verify-before-you-pay procedure from the Alimi kit and the quarter's callback log: 31 bank-detail changes, 31 callbacks."
     },
     {
       "id": "EV-10",
-      "name": "alimi scan report, Oct 30, 2026",
+      "name": "Alimi scan report, Oct 30, 2026",
       "type": "report",
       "controls": [
         "CTL-09",
@@ -165,7 +165,7 @@
       "renewal": "2026-11-30",
       "artifact": {
         "kind": "scan",
-        "name": "alimi scan, Oct 30, 2026",
+        "name": "Alimi scan, Oct 30, 2026",
         "ref": "scan.json"
       },
       "description": "The weekly read-only scan of the Microsoft 365 tenant: 12 automated checks, 3 attestations."
@@ -442,7 +442,7 @@
       "renewal": "2026-11-28",
       "artifact": {
         "kind": "scan",
-        "name": "alimi scan, Oct 30, 2026",
+        "name": "Alimi scan, Oct 30, 2026",
         "ref": "scan.json"
       },
       "description": "66.5 of 100 on Oct 30; up from 48 in June."

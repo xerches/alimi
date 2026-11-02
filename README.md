@@ -1,12 +1,12 @@
-# alimi
+# Alimi
 
 Security that insurers, customers and auditors accept, for companies too small for a security team.
 
-This repo holds everything alimi builds. Start with `CLAUDE.md` (the project brief Claude Code reads every session) and `PROMPTS.md` (the build prompts, in order).
+This repo holds everything Alimi builds. Start with `CLAUDE.md` (the project brief Claude Code reads every session) and `PROMPTS.md` (the build prompts, in order).
 
 | Folder | What lives here |
 | --- | --- |
-| `site/` | Static marketing site for the one offer, the alimi platform: published tiers, services, free resources, partner terms. Deploys free to Netlify. |
+| `site/` | Static marketing site for the one offer, the Alimi platform: published tiers, services, free resources, partner terms. Deploys free to Netlify. |
 | `tools/scanner/` | Read-only Python package and CLI that scores Microsoft 365 and Google Workspace security. `--mock` by default. The platform imports it. |
 | `tools/report/` | Turns scanner findings into an insurer-ready HTML/PDF report. |
 | `platform/` | Hosted compliance platform (phase 3 and later): FastAPI, HTMX pages, Postgres. Orgs, login, scheduled runs, controls, evidence, policies, people, dashboard. |

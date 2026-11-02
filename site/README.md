@@ -1,6 +1,6 @@
-# alimi marketing site
+# Alimi marketing site
 
-Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No client JavaScript, no webfonts, no server. One offer, the alimi platform. Prices, partner terms, the insurer questions, the control counts and the free documents are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/checks.yaml`, `config/controls.yaml`, `/policies` or `/kits`.
+Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No client JavaScript, no webfonts, no server. One offer, the Alimi platform. Prices, partner terms, the insurer questions, the control counts and the free documents are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/checks.yaml`, `config/controls.yaml`, `/policies` or `/kits`.
 
 ## Run it
 

@@ -5,7 +5,7 @@
       "name": "Security awareness",
       "minutes": 35,
       "frequency": "Yearly, plus a phishing simulation each quarter",
-      "source": "alimi",
+      "source": "Alimi",
       "assigned_to": "All staff",
       "description": "Phishing, passwords and MFA, handling client data, reporting an incident. Written for a payroll office, not an IT team."
     },
@@ -14,7 +14,7 @@
       "name": "Verify before you pay",
       "minutes": 20,
       "frequency": "Yearly, with a drill",
-      "source": "alimi payment fraud kit",
+      "source": "Alimi payment fraud kit",
       "assigned_to": "Money movers",
       "description": "The callback procedure for bank-detail changes and wires, the scripts, and the closing-day checklist."
     },
@@ -23,7 +23,7 @@
       "name": "AI acceptable use",
       "minutes": 15,
       "frequency": "Yearly",
-      "source": "alimi AI policy kit",
+      "source": "Alimi AI policy kit",
       "assigned_to": "All staff",
       "description": "Which AI tools are approved, what may never be pasted into one, and how to ask for a new tool."
     }

@@ -129,11 +129,11 @@ def test_referral_outline_states_the_fee_and_disclosure():
 def test_case_study_has_a_permission_line_and_honest_claims_note():
     body = BY_SLUG["case-study-template"].body
     assert "permission" in body.lower()
-    assert "employment" in body.lower() or "not from alimi clients" in body.lower()
+    assert "employment" in body.lower() or "not from Alimi clients" in body.lower()
 
 
 def test_resolver_formats():
-    assert resolve("products.platform.product_name", PRICING) == "alimi platform"
+    assert resolve("products.platform.product_name", PRICING) == "Alimi platform"
     assert resolve("products.platform.starter.price", PRICING) == "$3,900"
     assert resolve("products.services.assessment.price", PRICING) == "$500 to $1,500"
     assert resolve("products.free.scan_summary.price", PRICING) == "free"

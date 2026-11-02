@@ -25,7 +25,7 @@ const modules = [
   { title: "An assistant that knows your program", text: "Ask in plain words which policy answers a question or what is due before the renewal. It reads your own data and shows its sources. In preview." },
 ];
 const steps = [
-  { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. alimi reads settings, never mail or files, and never holds a password." },
+  { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. Alimi reads settings, never mail or files, and never holds a password." },
   { title: "Watch and fix", text: `${checks.total} checks run every week: MFA coverage, legacy sign-in, admin accounts, mail forwarding, sharing links, audit logs. A failing check becomes a task with an owner, a plain-English fix and a due date.` },
   { title: "Prove it", text: "Readiness per framework, an export pack for the broker or the auditor, a trust page for prospects, and questionnaire answers drafted from your own evidence." },
 ];
@@ -37,7 +37,7 @@ const differences = [
 ];
 ---
 
-<Base title={brand.display_name} description={`${brand.tagline} alimi watches your Microsoft 365 or Google Workspace, keeps policies signed and evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from ${starter.price} a year.`} path="/">
+<Base title={brand.display_name} description={`${brand.tagline} Alimi watches your Microsoft 365 or Google Workspace, keeps policies signed and evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from ${starter.price} a year.`} path="/">
   <Hero eyebrow="For companies that want a partner in security and compliance" title={brand.tagline}>
     <p class="lede">
       {brand.display_name} watches your Microsoft 365 or Google Workspace, keeps your policies signed and your evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from {starter.price} a year, and a named compliance lead who makes the calls software leaves to you.
@@ -65,7 +65,7 @@ const differences = [
     <Steps steps={steps} />
   </Section>
 
-  <Section id="pricing" tone="alt" title="Published prices" lede="Three tiers by company size, billed yearly. Policies, people, evidence and the insurer questionnaire are in every one.">
+  <Section id="pricing" tone="alt" title="Published prices" lede="Three tiers by company size, paid monthly on a 12-month term or month to month. Policies, people, evidence and the insurer questionnaire are in every one.">
     <Tiers compact />
     <div class="actions" style="margin-top:1.5rem">
       <a class="button button--primary" href="/pricing">Full pricing and services</a>
@@ -73,7 +73,7 @@ const differences = [
     </div>
   </Section>
 
-  <Section id="why" title="Why not one of the big platforms?" lede="They are good products for companies with a security owner and a budget to match. alimi is built for the companies they quote out of reach.">
+  <Section id="why" title="Why not one of the big platforms?" lede="They are good products for companies with a security owner and a budget to match. Alimi is built for the companies they quote out of reach.">
     <div class="grid grid--two">
       {differences.map((d) => (
         <article class="card">

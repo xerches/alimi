@@ -101,4 +101,4 @@ POL-05 Asset Management · POL-06 Data Classification and Handling · POL-10 Log
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |

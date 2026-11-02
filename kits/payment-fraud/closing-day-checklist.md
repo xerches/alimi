@@ -4,7 +4,7 @@ slug: closing-day-checklist
 title: Closing-Day Checklist for Massachusetts Home Buyers and Sellers
 kind: checklist
 ---
-> Part of the alimi Payment Fraud Protection Kit. General guidance, not legal advice. Your closing attorney's written instructions come first.
+> Part of the Alimi Payment Fraud Protection Kit. General guidance, not legal advice. Your closing attorney's written instructions come first.
 
 # Closing-Day Checklist for Massachusetts Home Buyers and Sellers
 

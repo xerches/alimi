@@ -96,4 +96,4 @@ POL-03 Access Control · POL-04 Password and Authentication · POL-05 Asset Mana
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |

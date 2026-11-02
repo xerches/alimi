@@ -1,6 +1,6 @@
 # Pilot runbook: a free pilot in one hour
 
-How alimi onboards a free pilot: one company, one tenant, read-only, no fee, the full report in exchange for honest feedback and, if it goes well, a case study. Written for the operator (Alex) and kept short enough to follow live on a call. The rules in `CLAUDE.md` apply throughout: test tenants or a signed pilot letter only, read-only scopes, no customer tokens stored, no client data in the repo.
+How Alimi onboards a free pilot: one company, one tenant, read-only, no fee, the full report in exchange for honest feedback and, if it goes well, a case study. Written for the operator (Alex) and kept short enough to follow live on a call. The rules in `CLAUDE.md` apply throughout: test tenants or a signed pilot letter only, read-only scopes, no customer tokens stored, no client data in the repo.
 
 The scanner and report commands below are the ones in `tools/scanner/README.md` and `tools/report/README.md`; if those change, change this file in the same commit.
 
@@ -21,7 +21,7 @@ The scanner and report commands below are the ones in `tools/scanner/README.md` 
      --set "Client Signatory=Sam Ortiz" --set "Client Title=CEO" \
      --set "Tenant=Microsoft 365" --set "Tenant Domain=acme.example" \
      --set "Start Date=2027-01-20" --set "End Date=2027-02-03" \
-     --set "alimi Entity=..." --set "alimi Signatory=Alex Dennis" --set "alimi Address=..." \
+     --set "Alimi Entity=..." --set "Alimi Signatory=Alex Dennis" --set "Alimi Address=..." \
      --set "Contact Email=..." --set "Contact Phone=..." --set "Effective Date=2027-01-15"
    ```
 
@@ -45,7 +45,7 @@ The scanner and report commands below are the ones in `tools/scanner/README.md` 
 
 **Microsoft 365.** Follow "Scan a real Microsoft 365 tenant" in the scanner README on the shared screen:
 
-1. App registration named `alimi scanner (read-only)`, single tenant, no redirect URI.
+1. App registration named `Alimi scanner (read-only)`, single tenant, no redirect URI.
 2. API permissions, Microsoft Graph, *Application permissions*: the list from `alimi-scan permissions`. Grant admin consent. Point out on screen that every one ends in `Read`.
 3. Client secret, 90 days or the pilot's length. The admin reads the secret aloud once while you type it into your `.env`, or sends it through a one-time secret link. Never by email or chat, and the admin can delete it the moment the scan is done.
 4. The admin reads out the tenant ID and client ID; you fill `M365_TENANT_ID`, `M365_CLIENT_ID`, `M365_CLIENT_SECRET`.
@@ -125,8 +125,8 @@ Run this at the end of every pilot, whether or not it went well, and record the 
 
 **On the client's side (their admin does it, you confirm on a call or by screenshot):**
 
-- [ ] Microsoft 365: delete the `alimi scanner (read-only)` app registration (or at minimum delete its client secret), and confirm it no longer appears under Enterprise applications.
-- [ ] Google Workspace: remove the alimi client ID from Manage Domain Wide Delegation.
+- [ ] Microsoft 365: delete the `Alimi scanner (read-only)` app registration (or at minimum delete its client secret), and confirm it no longer appears under Enterprise applications.
+- [ ] Google Workspace: remove the Alimi client ID from Manage Domain Wide Delegation.
 - [ ] Any screenshots or exports they made for the evidence pack are kept by them; you keep only what the letter allows.
 
 **On your side:**

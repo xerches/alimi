@@ -1,4 +1,4 @@
-# alimi policy library
+# Alimi policy library
 
 Twenty-three security and company policies for a 10 to 200 person company, written in plain English for an owner rather than an auditor, and mapped by criterion ID to SOC 2, ISO 27001:2022, ISO 42001:2023, the HIPAA Security Rule and the cyber insurance questionnaire. The library is sold on its own as a policy pack, included in the services, and read by the platform (prompt 13) and the AI policy kit (prompt 15).
 
@@ -93,9 +93,9 @@ The tests assert that there are 23 policies, that each has the header, the secti
 
 A mapping means the policy contains statements that address the requirement, not that an auditor has agreed. Add a requirement by adding its ID and a one-line summary in our own words to `requirements.yaml`, then mapping at least one policy to it; the coverage check will tell you if you forgot.
 
-## How the rest of alimi uses this folder
+## How the rest of Alimi uses this folder
 
 - The scanner's insurer-ready report names the policy that answers each failed insurer question.
 - The platform's policy module (prompt 13) reads the front matter for its policy list, versions, owners, review dates and the control mapping; staff sign-off is tracked against the `id` and `version`.
 - The platform's AI governance module (prompt 15) generates a company-specific POL-22 and POL-23 from this source.
-- The reseller white-label option replaces the alimi name in the revision history and the pack cover; the policy text itself does not mention alimi.
+- The reseller white-label option replaces the Alimi name in the revision history and the pack cover; the policy text itself does not mention Alimi.

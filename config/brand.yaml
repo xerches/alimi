@@ -1,11 +1,11 @@
-# alimi brand tokens: the single source of truth for name, voice, colors and type.
+# Alimi brand tokens: the single source of truth for name, voice, colors and type.
 # The site generates its CSS custom properties from `colors` (one --color-<key> per entry,
 # underscores become hyphens), and the report package reads the same keys. Change a value here
 # and every page and report follows; never type a hex value into a component.
 # Status: working name, formal checks pending (MA entity search, USPTO, .com).
 
-name: alimi
-display_name: alimi
+name: Alimi
+display_name: Alimi
 tagline: Security that insurers, customers and auditors accept.
 tagline_alt: Security for companies too small for a security team.
 founder: Alex Dennis

@@ -6,7 +6,7 @@ title: Case Study Template
 
 # Case study: {{Client}}
 
-*One page. Written after a pilot or engagement, published only with the signed permission at the bottom. Rules from CLAUDE.md: results come from this client's own engagement, measured, with the evidence kept on file; nothing is implied beyond what happened. Metrics from the founder's employment are not alimi client results and are never used here.*
+*One page. Written after a pilot or engagement, published only with the signed permission at the bottom. Rules from CLAUDE.md: results come from this client's own engagement, measured, with the evidence kept on file; nothing is implied beyond what happened. Metrics from the founder's employment are not Alimi client results and are never used here.*
 
 **Who:** {{Client}}, a [size]-person [industry] company in [place]. *Or, if anonymised: "A 40-person accounting firm in the Boston area."*
 
@@ -44,6 +44,6 @@ One line: ongoing retainer, yearly rescan, workshop booked, or nothing further.
 
 ## Permission to publish
 
-{{Client}} gives alimi permission to publish this case study **[ ] with our company name and the quote above / [ ] anonymised as described in the "Who" line**, on alimi's website, in proposals and in partner materials. We have read the final text. We may withdraw this permission by email at any time, and alimi will remove the case study from its own materials within 30 days of the request. **[Attorney review]** Publicity release wording.
+{{Client}} gives Alimi permission to publish this case study **[ ] with our company name and the quote above / [ ] anonymised as described in the "Who" line**, on Alimi's website, in proposals and in partner materials. We have read the final text. We may withdraw this permission by email at any time, and Alimi will remove the case study from its own materials within 30 days of the request. **[Attorney review]** Publicity release wording.
 
 Signed: ______________________ {{Client Signatory}}, {{Client Title}} Date: ____________

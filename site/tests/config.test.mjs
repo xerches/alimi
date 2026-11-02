@@ -15,7 +15,7 @@ test("tierPrice renders list, range, free and quoted", () => {
 test("tierNote tells the platform, services and free resources apart", () => {
   assert.match(tierNote({ type: "service" }), /Fixed fee/);
   assert.match(tierNote({ type: "product", list: 0 }), /No card/);
-  assert.match(tierNote({ type: "product", list: 3900 }), /yearly/);
+  assert.match(tierNote({ type: "product", list: 3900 }), /monthly/);
 });
 
 test("one product: the platform, then services, then free resources, each with a page", () => {
@@ -38,6 +38,9 @@ test("platform tiers rise with company size and carry the pricing rule", () => {
     assert.equal(t.type, "product");
     assert.match(t.rule, /minus 15%/, `${t.id} records how its price was set`);
     assert.match(t.monthly, /^\$[\d,]+ a month$/);
+    assert.match(t.monthToMonth, /^\$[\d,]+ a month$/);
+    assert.ok(Number(t.monthToMonth.replace(/\D/g, "")) > Number(t.monthly.replace(/\D/g, "")), "month to month costs more than the term");
+    assert.equal(t.termLabel, "12-month term");
     assert.match(t.peopleLabel, /^Up to \d+ people$/);
     assert.ok(t.frameworkLabels.includes("Cyber insurance questionnaire"), "every tier starts with the insurer questionnaire");
     assert.ok(t.includes.length >= 4);
@@ -45,7 +48,10 @@ test("platform tiers rise with company size and carry the pricing rule", () => {
   assert.equal(tiers[0].integrationsLabel, "1 integration");
   assert.equal(tiers[2].integrationsLabel, "Unlimited integrations");
   assert.ok(included.some((line) => /policy library/i.test(line)), "policies are included at every tier");
-  assert.match(billing, /yearly/);
+  assert.match(billing, /paid monthly/);
+  assert.match(billing, /No automatic increase/);
+  assert.match(billing, /locked for 24 months/);
+  assert.match(billing, /[Ee]xport/);
   assert.match(auditNote, /audit/i);
 });
 

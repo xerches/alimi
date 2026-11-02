@@ -1,6 +1,6 @@
-# alimi demo
+# Alimi demo
 
-An unlisted, clickable demo of the alimi platform, the compliance automation platform described on the marketing site. It is what the founder shows a prospect or a partner; it is never linked from the marketing site.
+An unlisted, clickable demo of the Alimi platform, the compliance automation platform described on the marketing site. It is what the founder shows a prospect or a partner; it is never linked from the marketing site.
 
 The sample company is **Saltmarsh Payroll, Inc.**, a fictional 52-person payroll bureau in Quincy, Massachusetts, 75 days from its cyber insurance renewal. Every person, vendor, date and number is invented. What is real: the 23 policies in `/policies`, the 40 controls in `/config/controls.yaml`, the requirement IDs in `/policies/requirements.yaml`, and the 12 Microsoft 365 checks from `/tools/scanner`, which were run for real on a fictional tenant snapshot (`data/snapshot.json`) to produce `data/scan.json`.
 

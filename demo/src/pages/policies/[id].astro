@@ -54,7 +54,7 @@ const mapped = frameworks.filter((f) => (p.requirements?.[f.id] ?? []).length);
   </div>
 
   <h2 id="document">Document</h2>
-  <div class="callout" data-tone="neutral"><p>Adapted from the alimi policy template on {formatDate(p.history[0]?.date ?? p.approved)}. Sections marked [HR or legal review] were reviewed by counsel for this sample company. The template text in the alimi library carries its own header until a company adopts it.</p></div>
+  <div class="callout" data-tone="neutral"><p>Adapted from the Alimi policy template on {formatDate(p.history[0]?.date ?? p.approved)}. Sections marked [HR or legal review] were reviewed by counsel for this sample company. The template text in the Alimi library carries its own header until a company adopts it.</p></div>
   <article class="document" set:html={p.html} />
 
   <div class="card" id="requirements" style="margin-top:1.25rem">

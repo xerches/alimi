@@ -115,4 +115,4 @@ POL-01 Information Security · POL-04 Password and Authentication · POL-08 Secu
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |
