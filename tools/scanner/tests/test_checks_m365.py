@@ -191,6 +191,30 @@ def test_security_defaults_alone_passes_mfa_baseline(pass_snapshot, catalog, ten
     assert any("Security Defaults" in note for note in ca.notes)
 
 
+def test_unreadable_conditional_access_with_security_defaults_off_is_an_error(pass_snapshot, catalog, tenant):
+    # Policy.Read.All missing and Security Defaults off: nothing proves legacy auth is blocked, and nothing proves
+    # it is not. That is an error naming the permission, never a failure the owner has to argue with.
+    pass_snapshot.conditional_access_policies = None
+    pass_snapshot.security_defaults_enabled = False
+    pass_snapshot.legacy_auth_sign_ins_30d = None
+    result = run_checks(pass_snapshot, catalog, Platform.m365, tenant)
+    for check_id in ("m365.legacy_auth.blocked", "m365.security_defaults", "m365.conditional_access.present"):
+        f = finding(result, check_id)
+        assert f.status == Status.error, (check_id, f.summary)
+        assert "Policy.Read.All" in f.summary
+
+
+def test_unreadable_conditional_access_but_legacy_sign_ins_seen_is_a_failure(pass_snapshot, catalog, tenant):
+    pass_snapshot.conditional_access_policies = None
+    pass_snapshot.security_defaults_enabled = False
+    pass_snapshot.legacy_auth_sign_ins_30d = 7
+    result = run_checks(pass_snapshot, catalog, Platform.m365, tenant)
+    f = finding(result, "m365.legacy_auth.blocked")
+    assert f.status == Status.failed
+    assert "7 legacy sign-ins" in f.summary
+    assert f.evidence["legacy_sign_ins_30d"] == 7
+
+
 def test_no_custom_domain_is_not_applicable(pass_snapshot, catalog, tenant):
     pass_snapshot.email_auth = []
     result = run_checks(pass_snapshot, catalog, Platform.m365, tenant)

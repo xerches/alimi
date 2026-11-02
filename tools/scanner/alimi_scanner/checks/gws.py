@@ -48,6 +48,11 @@ def _active_users(snapshot: GWSSnapshot) -> list[GWSUser]:
     return [u for u in snapshot.users or [] if u.active]
 
 
+def _sentence(text: str) -> str:
+    """Upper-case the first letter only. str.capitalize() would lower-case the rest, including org unit names."""
+    return text[:1].upper() + text[1:]
+
+
 def risky_scopes(app: OAuthApp) -> list[str]:
     out = []
     for scope in app.scopes:
@@ -86,7 +91,7 @@ def two_step_enforced(snapshot: GWSSnapshot, definition: CheckDefinition) -> Che
     if not_enrolled:
         problems.append(f"{len(not_enrolled)} active users have not enrolled")
     if problems:
-        return CheckOutcome(status=Status.failed, summary="; ".join(problems).capitalize() + ".", evidence=evidence, notes=notes)
+        return CheckOutcome(status=Status.failed, summary=_sentence("; ".join(problems)) + ".", evidence=evidence, notes=notes)
     return CheckOutcome(
         status=Status.passed,
         summary=f"2-Step Verification is enforced for all {len(users)} active users and every one of them is enrolled.",
@@ -100,12 +105,17 @@ def super_admin_count(snapshot: GWSSnapshot, definition: CheckDefinition) -> Che
     if snapshot.users is None:
         return _missing("the user list", SCOPE_USERS)
     supers = [u for u in _active_users(snapshot) if u.is_super_admin]
-    without_2sv = [u for u in supers if not u.enrolled_2sv]
+    without_2sv = [u for u in supers if u.enrolled_2sv is False]
+    unknown_2sv = [u for u in supers if u.enrolled_2sv is None]
     evidence = {
         "super_admins": len(supers),
         "accounts": [u.email for u in supers],
         "without_2sv": [u.email for u in without_2sv],
+        "unknown_2sv": [u.email for u in unknown_2sv],
     }
+    notes = []
+    if unknown_2sv:
+        notes.append(f"{len(unknown_2sv)} super admin(s) had no 2-Step Verification enrollment value and were not counted either way.")
     problems = []
     if len(supers) < 2:
         problems.append(f"only {len(supers)} super admin (no second break-glass account)")
@@ -114,11 +124,12 @@ def super_admin_count(snapshot: GWSSnapshot, definition: CheckDefinition) -> Che
     if without_2sv:
         problems.append(f"{len(without_2sv)} super admin(s) not enrolled in 2-Step Verification")
     if problems:
-        return CheckOutcome(status=Status.failed, summary="Found " + "; ".join(problems) + ".", evidence=evidence)
+        return CheckOutcome(status=Status.failed, summary="Found " + "; ".join(problems) + ".", evidence=evidence, notes=notes)
     return CheckOutcome(
         status=Status.passed,
         summary=f"{len(supers)} super admins, all enrolled in 2-Step Verification.",
         evidence=evidence,
+        notes=notes,
     )
 
 
@@ -275,7 +286,11 @@ def audit_available(snapshot: GWSSnapshot, definition: CheckDefinition) -> Check
     if audit is None or (audit.login_available is None and audit.admin_available is None):
         return _missing("the login and admin audit logs", SCOPE_REPORTS)
     evidence = audit.model_dump()
-    missing = [name for name, ok in (("login", audit.login_available), ("admin", audit.admin_available)) if not ok]
+    logs = (("login", audit.login_available), ("admin", audit.admin_available))
+    missing = [name for name, ok in logs if ok is False]
+    unknown = [name for name, ok in logs if ok is None]
+    if unknown and not missing:
+        return _missing(f"the {' and '.join(unknown)} audit log(s)", SCOPE_REPORTS)
     if missing:
         return CheckOutcome(
             status=Status.failed,

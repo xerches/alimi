@@ -133,11 +133,18 @@ class GraphConnector:
         return {"Authorization": f"Bearer {self._token}", "ConsistencyLevel": "eventual"}
 
     def _request(self, url: str, params: dict[str, Any] | None = None) -> httpx.Response:
+        refreshed = False
         for attempt in range(4):
             response = self._client.get(url, params=params, headers=self._headers())
             if response.status_code in (429, 503) and attempt < 3:
                 wait = float(response.headers.get("Retry-After", 2 ** attempt))
                 time.sleep(min(wait, 30))
+                continue
+            if response.status_code == 401 and not refreshed:
+                # A token lasts about an hour; a scan over hundreds of mailboxes can outlive it. Get a new one
+                # once, so an expired token is not reported as a missing permission.
+                self._token = None
+                refreshed = True
                 continue
             return response
         return response  # pragma: no cover - loop always returns
