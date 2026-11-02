@@ -108,7 +108,7 @@ products:
         name: Payment fraud workshop and yearly drill
         range: [1500, 3000]
         includes:
-          - Half-day workshop for the finance team or closing office
+          - Half-day workshop for the finance team and anyone who approves a payment
           - Verification procedure tailored to the firm
           - One drill per year
       - id: ai_policy_implementation
@@ -140,7 +140,6 @@ products:
           - Payment-change and wire verification procedure
           - Callback scripts for finance staff
           - One-page staff poster
-          - Closing-day checklist for home buyers and sellers
       - id: core_policies
         type: product
         name: Three core policies

@@ -34,7 +34,7 @@ Prices are published and fixed in advance. Everything runs read-only; Alimi neve
 
 - **Brokers:** applications come back complete, with evidence; clients with fixed findings are easier to place and keep.
 - **CPAs:** clients stop losing money to invoice fraud, and the controls you are asked about at year end exist.
-- **Attorneys:** clients can meet the security clauses in their contracts; closing offices stop being the weak link in wire fraud.
+- **Attorneys:** clients can meet the security clauses in their contracts and answer a customer's security questionnaire with evidence.
 - **IT providers:** a compliance layer you can resell under your own name; ask about the reseller programme.
 
 ## How referring works

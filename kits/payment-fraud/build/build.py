@@ -40,8 +40,6 @@ ALLOWED_PLACEHOLDERS = {
     "{{Bank Fraud Line}}",
     "{{Effective Date}}",
     "{{Your Name}}",
-    "{{Firm}}",
-    "{{Firm Phone}}",
 }
 DEFAULTS = {"Threshold": "$10,000"}
 
