@@ -157,6 +157,30 @@ def test_throttling_is_retried(monkeypatch):
     assert calls["n"] == 2
 
 
+def test_expired_token_is_refreshed_once_not_reported_as_denied():
+    tokens = iter(["old", "new"])
+    seen: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        auth = request.headers["Authorization"]
+        seen.append(auth)
+        if request.url.path.endswith("/organization") and auth == "Bearer old":
+            return _json({"error": {"code": "InvalidAuthenticationToken"}}, 401)
+        return fake_graph().handler(request)
+
+    connector = GraphConnector(
+        "t", "c", "s",
+        client=httpx.Client(base_url=GRAPH_BASE, transport=httpx.MockTransport(handler)),
+        token_provider=lambda: next(tokens),
+        dns=False,
+        now=NOW,
+    )
+    snapshot = connector.fetch()
+    assert snapshot.tenant_display_name == "Fake Co"
+    assert seen[:2] == ["Bearer old", "Bearer new"]
+    assert not any("permission denied" in note for note in snapshot.notes)
+
+
 def test_from_env_requires_all_three_variables():
     import pytest
 

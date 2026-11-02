@@ -133,7 +133,17 @@ def conditional_access_present(snapshot: M365Snapshot, definition: CheckDefiniti
 @check("m365.legacy_auth.blocked")
 def legacy_auth_blocked(snapshot: M365Snapshot, definition: CheckDefinition) -> CheckOutcome:
     policies = snapshot.conditional_access_policies
-    if policies is None and snapshot.security_defaults_enabled is None:
+    count = snapshot.legacy_auth_sign_ins_30d
+    if policies is None and not snapshot.security_defaults_enabled:
+        # Security Defaults is off (or unknown) and the policies could not be read, so nothing proves either way.
+        # The one exception: successful legacy sign-ins in the logs are a fact, whatever the policies say.
+        if count:
+            return CheckOutcome(
+                status=Status.failed,
+                summary=f"{count} legacy sign-ins succeeded in the last 30 days, so legacy authentication is not blocked.",
+                evidence={"blocked_by": [], "legacy_sign_ins_30d": count},
+                notes=["Conditional Access policies could not be read (Policy.Read.All); the count comes from the sign-in logs."],
+            )
         return _missing("Conditional Access policies", "Policy.Read.All")
     blocked_by: list[str] = []
     if snapshot.security_defaults_enabled:
@@ -141,7 +151,6 @@ def legacy_auth_blocked(snapshot: M365Snapshot, definition: CheckDefinition) -> 
     for policy in policies or []:
         if policy.enabled and policy.covers_all_users and policy.blocks_legacy_auth:
             blocked_by.append(policy.display_name)
-    count = snapshot.legacy_auth_sign_ins_30d
     evidence = {"blocked_by": blocked_by, "legacy_sign_ins_30d": count}
     notes = []
     if count is None:
@@ -181,6 +190,9 @@ def security_defaults(snapshot: M365Snapshot, definition: CheckDefinition) -> Ch
     policies = snapshot.conditional_access_policies
     if enabled is None and policies is None:
         return _missing("the Security Defaults setting", "Policy.Read.All")
+    if not enabled and policies is None:
+        # Security Defaults is off, and whether Conditional Access covers the same ground could not be read.
+        return _missing("Conditional Access policies", "Policy.Read.All")
     if enabled:
         return CheckOutcome(
             status=Status.passed,

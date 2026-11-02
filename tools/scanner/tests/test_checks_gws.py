@@ -270,6 +270,37 @@ def test_external_sharing_allowed_with_warning_passes_with_a_note(gws_pass_snaps
     assert any("Allowlisting" in note for note in f.notes)
 
 
+def test_super_admin_with_unknown_2sv_is_noted_not_failed(gws_pass_snapshot, catalog, tenant):
+    _user(gws_pass_snapshot, "adm-ava@example.com").enrolled_2sv = None
+    result = run_checks(gws_pass_snapshot, catalog, Platform.gws, tenant)
+    f = finding(result, "gws.admins.super_count")
+    assert f.status == Status.passed, f.summary
+    assert f.evidence["unknown_2sv"] == ["adm-ava@example.com"]
+    assert any("not counted" in note for note in f.notes)
+
+
+def test_one_unknown_audit_log_is_an_error_not_a_failure(gws_pass_snapshot, catalog, tenant):
+    gws_pass_snapshot.audit.login_available = None
+    result = run_checks(gws_pass_snapshot, catalog, Platform.gws, tenant)
+    f = finding(result, "gws.audit.available")
+    assert f.status == Status.error
+    assert "login" in f.summary and "admin.reports.audit.readonly" in f.summary
+    gws_pass_snapshot.audit.admin_available = False
+    result = run_checks(gws_pass_snapshot, catalog, Platform.gws, tenant)
+    assert finding(result, "gws.audit.available").status == Status.failed
+
+
+def test_2sv_failure_summary_keeps_org_unit_names_as_written(gws_pass_snapshot, catalog, tenant):
+    _user(gws_pass_snapshot, "ben@example.com").enforced_2sv = False
+    gws_pass_snapshot.policies.two_sv_enforced_everywhere = False
+    gws_pass_snapshot.policies.two_sv_unenforced_org_units = ["/Staff/Sales Team"]
+    result = run_checks(gws_pass_snapshot, catalog, Platform.gws, tenant)
+    f = finding(result, "gws.2sv.enforced")
+    assert f.status == Status.failed
+    assert "/Staff/Sales Team" in f.summary, f.summary
+    assert "2-Step Verification" in f.summary, f.summary
+
+
 def test_suspended_users_do_not_count(gws_pass_snapshot, catalog, tenant):
     # "former" is suspended and not enrolled; the pass fixture passes, so suspension is already ignored.
     # Suspending a super admin, though, drops the count below two.
