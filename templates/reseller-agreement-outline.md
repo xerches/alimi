@@ -34,6 +34,10 @@ The Reseller buys at {{pricing.partners.reseller.buys_at}}. The discount depends
 
 {{pricing.partners.reseller.includes}}
 
+Incentives, as published on the resellers page of Alimi's site; changes to them follow the same notice as the price list:
+
+{{pricing.partners.reseller.incentives}}
+
 ## 6. White-label terms
 
 - The Reseller may put its own name and logo on the scanner report and the policy pack, with the "powered by Alimi" line kept, and may present them as its own service to its clients.

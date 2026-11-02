@@ -22,7 +22,7 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 {{pricing.products.services.fraud_workshop.includes}}
 
-In detail: the free {{pricing.products.free.fraud_procedure.name}} with its callback scripts and poster; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
+In detail: the Payment Verification Procedure from the Alimi policy library with its callback scripts and poster; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
 
 ## 4. Approach and timeline
 

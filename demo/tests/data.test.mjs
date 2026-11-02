@@ -62,8 +62,10 @@ test("every policy in the repo has adoption data and an acknowledgement count th
   for (const p of d.policies) {
     assert.ok(p.version && p.status_label, `${p.id} lacks adoption data`);
     assert.ok(p.acknowledged >= 0 && p.acknowledged <= p.audience, `${p.id} acknowledged ${p.acknowledged} of ${p.audience}`);
-    assert.ok(p.html.includes("<h3"), `${p.id} did not render`);
-    assert.ok(!p.html.includes("{{"), `${p.id} has an unfilled placeholder`);
+    assert.ok(p.outline.length >= 3, `${p.id} has no section outline`);
+    assert.ok(p.words > 200 && p.summary.length > 20, `${p.id} did not render`);
+    assert.ok(!p.summary.includes("{{") && !p.outline.join().includes("{{"), `${p.id} has an unfilled placeholder`);
+    assert.equal(p.html, undefined, `${p.id} carries policy text; the demo publishes none`);
   }
 });
 

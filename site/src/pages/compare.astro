@@ -1,0 +1,168 @@
+---
+// Alimi against Vanta and Drata, on the things their own customers complain about. Every statement
+// about either vendor is a reported figure or a reviewer's complaint with its source in the list at
+// the end; nothing here is our own measurement. Alimi has no customers yet, so its column describes
+// how the platform is built, not results. Re-check the sources before each quarter's update.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, platform, quote, choosableFrameworks, money } from "../lib/config.js";
+
+const plat = platform();
+const silver50 = quote({ tierId: "silver", users: 50 });
+const addon50 = quote({ tierId: "silver", users: 50, frameworks: 2 });
+const addonYear = addon50.yearly - silver50.yearly;
+const catalog = choosableFrameworks();
+const checked = "October and November 2026";
+
+const themes = [
+  {
+    id: "renewal",
+    title: "The renewal that costs more than the first year",
+    reviews: "The most repeated complaint in low-rated reviews of both platforms. Buyers describe first-year discounts of 20 to 70% that are not locked in, renewal quotes 30 to 50% above year one, and contracts with 5 to 10% yearly escalators (UnderDefense on Vanta; about 8% at Drata, negotiable to 3%). One Capterra reviewer was charged a $15,600 renewal without a clear notice; another paid for a two-year contract after stopping use.",
+    alimi: `${plat.billing} The price is on this site, per user, and the invoice follows your headcount each month, so there is no quote to negotiate and no cliff in year two.`,
+  },
+  {
+    id: "contract",
+    title: "Cancellation and auto-renewal",
+    reviews: "Low-rated Capterra and Trustpilot reviews of Vanta describe refused early termination, a 60 to 90 day notice window that auto-renews the contract if missed, and a customer who lost access to an auto-renewed year they had paid for. Drata's terms are reported as annual, paid up front, renewing unless cancelled 30 to 60 days ahead.",
+    alimi: `A 12-month term paid monthly, or month to month for ${Math.round(plat.billingTerms.monthly_premium * 100)}% more that ends at any month's end. Renewal is a conversation, not a clause; the price cannot rise in it for 24 months.`,
+  },
+  {
+    id: "addons",
+    title: "A framework, a trust page and a vendor list each cost extra",
+    reviews: "Reported add-on prices: each additional framework about $5,000 a year at Vanta and $3,000 to $10,000 at Drata; vendor risk management $11,200 to $13,600 a year; a trust page $6,000 to $10,000; questionnaire automation $10,000 to $16,000; access reviews $5,000 to $12,000. A Capterra reviewer calls it being charged for features that should be standard.",
+    alimi: `Vendors, risks, questionnaires and the trust page are inside the ${plat.tiers[1].name} tier at a per-user price, not modules. A second framework is ${money(plat.frameworks.addon)} per user a month: ${money(addonYear)} a year for a 50-person company, with every added framework discounted from the fifth.`,
+  },
+  {
+    id: "support",
+    title: "Small customers get the sales call, then the queue",
+    reviews: "Trustpilot reviewers of Vanta (3.1 out of 5 overall) describe aggressive sales outreach followed by no onboarding, generic support replies and no human response to a cancellation; Gartner Peer Insights reviewers name limited support and cost as the reasons they consider switching. A Drata reviewer on Gartner reports far more internal security, IT and policy effort than expected.",
+    alimi: `${brand.display_name} is built for companies of 10 to 200 people and nobody else. A named compliance lead is in every tier, with a quarterly call on ${plat.tiers[0].name} and a monthly one from ${plat.tiers[1].name}; the founder answers the support address.`,
+  },
+  {
+    id: "noise",
+    title: "Noisy tests and false positives",
+    reviews: "Capterra reviewers of Vanta report alarm fatigue from frequent failing-test notifications and too many alerts for minor issues. In a set of 23 Drata user interviews, a power user scoring it 2 out of 5 cites \"too many false positives, intermittent integrations and workflow quirks for what we're paying\"; others say finding the resource behind a failed test is painful and that \"a green dashboard does not mean a control is well designed\".",
+    alimi: "Every test shows the raw evidence it read and the rule it applied, so you can see why it failed. A false positive gets a note with a reason that stays in the audit log, and the checks are the ones an insurer or an auditor asks about, not every setting a cloud exposes.",
+  },
+  {
+    id: "integrations",
+    title: "Integrations that quietly stop syncing",
+    reviews: "A healthcare security officer in the Drata interview set: \"when one quietly stops syncing, confidence in the dashboard drops fast.\" G2 and Capterra reviewers of both products ask for deeper integrations and report that custom setups need manual work; a 2024 Reddit thread lists connector and multi-framework frustrations.",
+    alimi: "Two integrations done properly first, Microsoft 365 and Google Workspace, with a data-quality page that shows when each one last read your tenant and what it could not read. A silent gap is shown as an error naming the permission, never as a pass.",
+  },
+  {
+    id: "agent",
+    title: "An agent on every laptop",
+    reviews: "Capterra reviewers of Vanta say the required endpoint agent is hard to roll out to remote teams and object to it not being open source; reports of high CPU use on older machines and of staff worrying the agent watches them appear in review summaries. Drata's documentation has the agent override the device-management tool when both report a device.",
+    alimi: "No agent. Device compliance comes from what you already run, Intune or Google endpoint management, read through the same read-only connection. Nothing is installed on anyone's computer.",
+  },
+  {
+    id: "templates",
+    title: "Generic policies and a product written for auditors",
+    reviews: "Capterra reviewers of Vanta say the policy templates need updating and that the policy generator loses its automation once a document is edited outside it. Interviewed Drata users warn that compliance looks \"deceptively simple during a demo\" and that someone still has to make the scope and remediation decisions.",
+    alimi: `${brand.display_name}'s 23 policies are written for a company of your size and tailored with you in a workshop; versions, approvals and sign-offs live in the platform. The scoping and policy calls that software leaves to you are made with a person, in plain English, with every term explained the first time.`,
+  },
+];
+
+const facts = [
+  { label: "Price published", vanta: "No; quote by sales call", drata: "No; quote by sales call", alimi: `Yes, per user a month, on this site` },
+  { label: "Entry plan, 50 people, one framework", vanta: "$7,500 to $12,000 a year reported (Essentials); $14,000 for 1 to 20 people on AWS Marketplace", drata: "$15,000 a year for 1 to 50 people (Foundation, AWS Marketplace); $7,500 to $15,000 reported", alimi: `${money(silver50.yearly)} a year (${plat.tiers[0].name}, ${silver50.perUserText})` },
+  { label: "Each additional framework", vanta: "About $5,000 a year reported", drata: "$3,000 to $10,000 a year reported", alimi: `${money(plat.frameworks.addon)} per user a month; ${money(addonYear)} a year at 50 people` },
+  { label: "Renewal", vanta: "5 to 10% yearly escalators and 30 to 50% year-two increases reported", drata: "About 8% escalator; 10 to 30% increases reported", alimi: "No automatic increase; price locked for 24 months" },
+  { label: "Term", vanta: "Annual, paid up front; auto-renews unless cancelled 60 to 90 days ahead", drata: "Annual, paid up front; renews unless cancelled 30 to 60 days ahead", alimi: "12-month term paid monthly, or month to month" },
+  { label: "Device checks", vanta: "Agent on each computer", drata: "Agent on each computer", alimi: "Read from Intune or Google endpoint management; no agent" },
+  { label: "Who makes the scoping and policy calls", vanta: "You, or a paid implementation partner", drata: "You, or a paid implementation partner", alimi: "A named compliance lead, in every tier" },
+  { label: "Frameworks", vanta: "35 and more", drata: "About 30 pre-mapped", alimi: `${catalog.length} in the catalog, one included, the rest add-ons; plus Alimi's own security posture score in every plan` },
+  { label: "Integrations", vanta: "300 and more", drata: "200 and more", alimi: "Microsoft 365 and Google Workspace today; more as customers ask" },
+  { label: "Reviews", vanta: "G2 4.6 of 5; Capterra 4.2 (33); Trustpilot 3.1 (33)", drata: "G2 4.7 of 5 (1,399); Capterra 4.8 (6); Gartner 4.1 (17)", alimi: "None yet; pilots open in January 2027" },
+];
+
+const stronger = [
+  "Hundreds of integrations each, where Alimi has two. A company running AWS, GitHub, Okta and a dozen SaaS tools gets more automated evidence from either of them today.",
+  "Years of audits behind them, large auditor networks and a SOC 2 report of their own. Alimi is a company in formation with no customers yet.",
+  "Enterprise features Alimi does not plan to build: multiple business units, hundreds of custom tests, SCIM provisioning at scale.",
+];
+
+const sources = [
+  { text: "Vanta reviews on Capterra, 4.2 of 5 from 33 reviews, read " + checked, href: "https://www.capterra.com/p/211459/Vanta/reviews/" },
+  { text: "Vanta reviews on Trustpilot, 3.1 of 5 from 33 reviews, read " + checked, href: "https://ca.trustpilot.com/review/vanta.com" },
+  { text: "Vanta pricing breakdown (UnderDefense, a competitor's blog citing Vendr data)", href: "https://underdefense.com/blog/vanta-pricing/" },
+  { text: "Vanta pricing 2026 (Orbiq, a competitor)", href: "https://www.orbiqhq.com/comparisons/vanta-pricing" },
+  { text: "Vanta AWS Marketplace prices as reported (Tutorsbot)", href: "https://tutorsbot.com/blog/vanta-pricing-2026-soc-2-cost-per-employee" },
+  { text: "Vanta review themes and billing complaints (ComplyJet, a competitor)", href: "https://www.complyjet.com/blog/vanta-reviews" },
+  { text: "Vanta framework coverage (Comparedge)", href: "https://comparedge.com/tools/vanta/framework-coverage" },
+  { text: "Drata review with 23 user interviews and public review sources (SOC2Auditors.org)", href: "https://soc2auditors.org/insights/drata-review/" },
+  { text: "Drata reviews on G2, 4.7 of 5 from 1,399 reviews, read " + checked, href: "https://www.g2.com/products/drata/reviews" },
+  { text: "Drata reviews on Capterra, 4.8 of 5 from 6 reviews, read " + checked, href: "https://www.capterra.com/p/218441/Drata/" },
+  { text: "Drata pricing guide (UnderDefense, citing Vendr data)", href: "https://underdefense.com/blog/drata-pricing/" },
+  { text: "Drata pricing 2026 (Costbench)", href: "https://costbench.com/software/compliance-management/drata/" },
+  { text: "Drata supported frameworks (Drata help centre)", href: "https://help.drata.com/en/articles/5329593-frameworks" },
+  { text: "Vanta vs Drata pricing 2026 (Ciphers Security)", href: "https://cipherssecurity.com/vanta-vs-drata-pricing-2026/" },
+];
+---
+
+<Base title="Compare" description={`Alimi compared with Vanta and Drata on what their own customers complain about in reviews rated below four stars: renewal increases, auto-renewal, add-on fees, support for small customers, noisy tests, silent integrations and laptop agents, with sources.`} path="/compare">
+  <Hero eyebrow="Compare" title="Alimi, Vanta and Drata, on what their customers complain about">
+    <p class="lede">Vanta and Drata are good products for companies with a compliance owner and a budget to match; most of their reviews are four and five stars. We read the rest, the reviews rated below four, and the pricing reports behind them, and built {brand.display_name} around what those customers wanted changed. Every figure here is a reported one, with its source at the end.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing">Alimi's prices</a>
+      <a class="button button--secondary" href="#facts">The side-by-side table</a>
+    </div>
+  </Hero>
+
+  <Section id="complaints" tone="alt" title="Eight complaints, and what Alimi does about each" lede={`From Capterra, Trustpilot, G2, Gartner Peer Insights, Reddit and a published set of Drata user interviews, read in ${checked}.`}>
+    <div class="compare-grid">
+      {themes.map((t) => (
+        <article class="card" id={t.id}>
+          <h3>{t.title}</h3>
+          <p><strong>What reviewers say.</strong> {t.reviews}</p>
+          <p><strong>What {brand.display_name} does.</strong> {t.alimi}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="facts" title="Side by side" lede="Vendor figures are as reported by the sources below; neither vendor publishes a price list. Alimi's are from its own published price list.">
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th scope="col"></th><th scope="col">Vanta</th><th scope="col">Drata</th><th scope="col">{brand.display_name}</th></tr></thead>
+        <tbody>
+          {facts.map((f) => (
+            <tr>
+              <th scope="row">{f.label}</th>
+              <td>{f.vanta}</td>
+              <td>{f.drata}</td>
+              <td>{f.alimi}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="stronger" tone="alt" title="Where Vanta and Drata are stronger" lede="A fair comparison names these too.">
+    <ul class="checklist">
+      {stronger.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="measure">If your company is above 200 people, runs a dozen cloud systems, or needs an audit next month, one of them is probably the right choice. If you are between 10 and 200 people, have one insurer and one or two customers asking, and nobody whose job this is, {brand.display_name} was built for you.</p>
+  </Section>
+
+  <Section id="sources" title="Sources" lede={`Read in ${checked}. Several are published by competitors of Vanta and Drata and cite third-party transaction data rather than contracts; treat the dollar figures as ranges, not quotes.`}>
+    <ol class="sources">
+      {sources.map((s) => <li><a href={s.href} rel="noopener nofollow">{s.text}</a></li>)}
+    </ol>
+    <Callout label="Fair use" tone="brand">
+      <p>Vanta and Drata are trademarks of their owners, and {brand.display_name} is not affiliated with either. Review quotations are short excerpts cited for comparison. If you are a reviewer or a vendor and something here is out of date or wrong, <a href="/contact">tell us</a> and it will be corrected within a week.</p>
+    </Callout>
+  </Section>
+
+  <Section id="next" tone="dark" title="See the price for your company" lede="Per user a month, with one framework included and the whole policy library.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#calculator">Work out your price</a>
+      <a class="button button--secondary" href="/platform">How the platform works</a>
+    </div>
+  </Section>
+</Base>

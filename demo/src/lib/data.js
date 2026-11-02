@@ -133,6 +133,7 @@ for (const p of people) {
 
 // ------------------------------------------------------------------ frameworks and requirements
 
+export const frameworkCatalog = yaml(path.join(REPO_DIR, "config", "frameworks.yaml")).frameworks;
 const FRAMEWORK_ORDER = company.frameworks;
 export const frameworks = FRAMEWORK_ORDER.map((id) => {
   const fw = requirementsFile.frameworks[id];
@@ -245,11 +246,15 @@ export const policies = readdirSync(policyDir)
     // banner is replaced by an adoption note on the page.
     body = body.replace(/^>\s*\*\*TEMPLATE\.[^\n]*\n+/, "");
     body = fillPlaceholders(body, meta);
-    // The page supplies the h1, so the document's own title goes and every heading steps down one level.
-    const html = marked
-      .parse(body, { gfm: true })
-      .replace(/<h1>[\s\S]*?<\/h1>\s*/, "")
-      .replace(/<(\/?)h([2-5])>/g, (_, slash, level) => `<${slash}h${Number(level) + 1}>`);
+    // Policy text is never published (founder's rule, Nov 2, 2026): the page shows the outline, the
+    // opening paragraph and the word count, and the full document stays inside the platform.
+    const outline = [...body.matchAll(/^##\s+(.+)$/gm)].map((m) => m[1].trim());
+    const opening = body
+      .split(/\n\s*\n/)
+      .map((s) => s.trim())
+      .find((s) => s && !/^(#|>|\||[-*]\s|\d+\.\s)/.test(s));
+    const summary = marked.parseInline(opening ?? "", { gfm: true });
+    const words = body.split(/\s+/).filter(Boolean).length;
     const groupName = meta.applies_to === "all" ? "All staff" : meta.applies_to;
     const audience = groups[groupName] ?? [];
     const pending = audience.filter((pid) => {
@@ -267,7 +272,9 @@ export const policies = readdirSync(policyDir)
       acknowledged: audience.length - pending.length,
       pendingPeople: pending,
       requirementCount: Object.values(front.requirements ?? {}).reduce((n, ids) => n + (ids?.length ?? 0), 0),
-      html,
+      outline,
+      summary,
+      words,
       controls: [],
     };
   });
