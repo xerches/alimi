@@ -15,7 +15,7 @@ const okRows = mapped.filter((r) => r.status === "ok").length;
 ---
 
 <App title={fw.short} path={`/frameworks/${id}`} section="frameworks" eyebrow="Framework" crumbs={[{ label: "Frameworks", href: "/frameworks" }, { label: fw.short }]}
-  description={`${fw.name}: every requirement ID with alimi's one-line summary, the controls that satisfy it and their status.`}
+  description={`${fw.name}: every requirement ID with Alimi's one-line summary, the controls that satisfy it and their status.`}
   lead={fw.name}>
   <a slot="actions" class="button secondary" href={`/controls?framework=${id}`}>Controls in scope</a>
 
@@ -53,5 +53,5 @@ const okRows = mapped.filter((r) => r.status === "ok").length;
       </tbody>
     </table>
   </div>
-  <p class="muted">Requirement IDs come from the framework; the one-line summaries are alimi's own words. No framework text is reproduced here.</p>
+  <p class="muted">Requirement IDs come from the framework; the one-line summaries are Alimi's own words. No framework text is reproduced here.</p>
 </App>

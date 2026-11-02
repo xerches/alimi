@@ -109,4 +109,4 @@ POL-01 Information Security Â· POL-08 Secure Development and Change Management Â
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{AI Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{AI Lead}} |

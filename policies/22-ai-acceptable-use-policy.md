@@ -99,4 +99,4 @@ POL-02 Acceptable Use · POL-06 Data Classification and Handling · POL-08 Secur
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{AI Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{AI Lead}} |

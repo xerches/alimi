@@ -1,4 +1,4 @@
-/* alimi site. Every color comes from config/brand.yaml, inlined as --color-* custom properties in
+/* Alimi site. Every color comes from config/brand.yaml, inlined as --color-* custom properties in
    <head> by the layout. No hex, rgb or named colors live in this file or in any component. */
 
 *,

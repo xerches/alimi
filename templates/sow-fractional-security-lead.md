@@ -6,7 +6,7 @@ title: Statement of Work, Fractional Security and Compliance Lead
 
 # Statement of Work: {{pricing.retainers.fractional_security_lead.name}}
 
-*Under the Master Services Agreement between {{alimi Entity}} ("alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from alimi's price list at signing.*
+*Under the Master Services Agreement between {{Alimi Entity}} ("Alimi") and {{Client}} dated {{Effective Date}}. SOW number: ______. Prices are read from Alimi's price list at signing.*
 
 ## 1. Objective
 
@@ -37,15 +37,15 @@ A standing 30-minute call with the owner every two weeks; a shared tracker of ac
 
 ## 5. Client responsibilities
 
-An owner or operations lead who meets alimi every two weeks and makes decisions; an administrator or managed service provider who makes changes alimi recommends; staff who complete training and acknowledgements; prompt reporting of incidents and business changes (new systems, new offices, new data types).
+An owner or operations lead who meets Alimi every two weeks and makes decisions; an administrator or managed service provider who makes changes Alimi recommends; staff who complete training and acknowledgements; prompt reporting of incidents and business changes (new systems, new offices, new data types).
 
 ## 6. Access and data
 
-Read-only access to {{Tenant}} for the monthly scan and reviews, created by the Client's administrator; access to the policy and tracker documents; no standing administrative access. Data handling follows section 5 of the Master Services Agreement. alimi's access is reviewed with the Client every six months and removed at the end of the retainer.
+Read-only access to {{Tenant}} for the monthly scan and reviews, created by the Client's administrator; access to the policy and tracker documents; no standing administrative access. Data handling follows section 5 of the Master Services Agreement. Alimi's access is reviewed with the Client every six months and removed at the end of the retainer.
 
 ## 7. Assumptions
 
-Up to 200 staff and one primary tenant; the Client has, or buys under separate SOWs, the scan, policies and procedures the programme runs on; alimi acts as adviser and coordinator, and the Client remains responsible for its systems and decisions.
+Up to 200 staff and one primary tenant; the Client has, or buys under separate SOWs, the scan, policies and procedures the programme runs on; Alimi acts as adviser and coordinator, and the Client remains responsible for its systems and decisions.
 
 ## 8. Fee and payment
 
@@ -53,7 +53,7 @@ Up to 200 staff and one primary tenant; the Client has, or buys under separate S
 
 ## 9. Acceptance
 
-The Client accepts a deliverable by email, or by not objecting within five business days of delivery. Objections name the clause of this SOW the deliverable fails to meet; alimi re-performs at no charge.
+The Client accepts a deliverable by email, or by not objecting within five business days of delivery. Objections name the clause of this SOW the deliverable fails to meet; Alimi re-performs at no charge.
 
 ## 10. Changes
 
@@ -61,8 +61,8 @@ Scope, timeline or fee change only by a signed change order under section 11 of 
 
 ## Signatures
 
-| | alimi | {{Client}} |
+| | Alimi | {{Client}} |
 | --- | --- | --- |
-| Name | {{alimi Signatory}} | {{Client Signatory}} |
+| Name | {{Alimi Signatory}} | {{Client Signatory}} |
 | Title | | {{Client Title}} |
 | Date | | |

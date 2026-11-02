@@ -14,15 +14,16 @@ const lead = retainer();
 const starterReseller = resellerTiers()[0];
 const faq = [
   { q: "Is the audit included?", a: `No, and it is not included anywhere else either. A SOC 2 or ISO 27001 audit is done by a licensed firm for its own fee. ${brand.display_name} gets you ready, hands over the evidence pack and sits in the room.` },
-  { q: "What happens when we grow past the tier?", a: "You move to the next tier at the next renewal, or sooner if you want the extra frameworks. Nothing is switched off in between." },
-  { q: "Can we pay monthly?", a: `${plat.billing} ${terms.payment}.` },
+  { q: "What happens when we grow past the tier?", a: "You move to the next tier at the end of your term, or sooner if you want the extra frameworks. Nothing is switched off in between." },
+  { q: "What if we leave?", a: `${plat.billingTerms.exit} Nothing is held back and there is no exit fee.` },
+  { q: "Can we pay monthly?", a: `Yes, every plan is. ${plat.billing} ${terms.payment}.` },
   { q: "How were the prices set?", a: "Against the published prices of the compliance platforms we compared in October 2026: the average entry price for a company our size, minus 15%. The method and the sources are written down and shared on request." },
   { q: "What if we only need the insurer questionnaire?", a: `That is the Starter tier. It is the full platform with one framework and one integration, for companies of up to ${starter.people_up_to} people.` },
   { q: "Do you resell through IT providers?", a: `Yes. A reseller buys at list price minus ${starterReseller.discount} to begin with and sets its own client price; brokers, CPAs and attorneys who refer receive a fee. The terms are on the partners page.` },
 ];
 ---
 
-<Base title="Pricing" description={`alimi platform pricing: ${plat.tiers.map((t) => `${t.name} ${t.price} a year for up to ${t.people_up_to} people`).join(", ")}. Policies and the insurer questionnaire in every tier; fixed-fee services and free resources alongside.`} path="/pricing">
+<Base title="Pricing" description={`Alimi platform pricing: ${plat.tiers.map((t) => `${t.name} ${t.price} a year for up to ${t.people_up_to} people`).join(", ")}. Policies and the insurer questionnaire in every tier; fixed-fee services and free resources alongside.`} path="/pricing">
   <Hero eyebrow="Pricing" title="Published prices, so nobody has to ask">
     <p class="lede">Three tiers by company size, from {starter.price} to {scale.price} a year. {plat.billing} {plat.auditNote}</p>
     <div class="actions">

@@ -121,4 +121,4 @@ POL-03 Access Control · POL-07 Cryptography and Key Management · POL-09 Vulner
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{IT Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{IT Lead}} |

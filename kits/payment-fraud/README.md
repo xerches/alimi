@@ -40,7 +40,7 @@ The tests check the five documents exist with front matter, use only the placeho
 - Loss figures are from the FBI Internet Crime Complaint Center's annual Internet Crime Report. The kit cites the 2025 report (published April 2026): 24,768 business email compromise complaints and $3.04 billion in reported losses; 12,368 real estate fraud complaints and $275.1 million. Update the figures and the year each April from ic3.gov.
 - The Massachusetts closing checklist draws on the Massachusetts Association of Realtors' wire fraud advisory (Form #519) and the Good Funds statute, M.G.L. c. 183 §63B, which requires the closing attorney to hold cleared funds (certified, treasurer's or cashier's check, or wire) before recording. It is general guidance, not legal advice, and says so; a Massachusetts real estate attorney should review it before a firm hands it to clients.
 - The FBI's Financial Fraud Kill Chain is referenced for international wires of $50,000 or more reported within 72 hours; confirm the current criteria with the bank or the FBI when adapting the procedure.
-- The scenario in the training script is a composite built from the FBI's public descriptions, labelled as such. No client stories: alimi has none yet, and the rules in `CLAUDE.md` forbid implying otherwise.
+- The scenario in the training script is a composite built from the FBI's public descriptions, labelled as such. No client stories: Alimi has none yet, and the rules in `CLAUDE.md` forbid implying otherwise.
 
 ## What is not here
 

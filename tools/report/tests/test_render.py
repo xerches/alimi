@@ -72,7 +72,7 @@ def test_reseller_cover_and_powered_by(gws_fail, brand, offer, tmp_path):
     html = render_html(gws_fail, brand=brand, offer=offer, reseller=reseller, free=True, now=NOW)
     assert 'alt="Northside IT"' in html
     assert "data:image/png;base64," in html
-    assert "powered by alimi" in html
+    assert "powered by Alimi" in html
     assert "by Northside IT (help@northside.example)" in html
     assert "Contact Northside IT: help@northside.example" in html
 
@@ -156,7 +156,7 @@ def test_pdf_unavailable_is_a_clear_error(monkeypatch, m365_fail, brand, offer, 
 def test_brand_and_offer_load_from_the_repo_config():
     assert find_brand_file() is not None
     brand = load_brand()
-    assert brand.display_name == "alimi"
+    assert brand.display_name == "Alimi"
     assert brand.color("primary").startswith("#")
     assert brand.domain is None  # TODO in brand.yaml means not decided
     offer = load_offer()

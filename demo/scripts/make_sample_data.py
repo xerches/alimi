@@ -1,4 +1,4 @@
-"""Writes the sample company behind the alimi platform demo into demo/data/*.json.
+"""Writes the sample company behind the Alimi platform demo into demo/data/*.json.
 
 Saltmarsh Payroll, Inc. is fictional: every person, vendor, date and number here is invented so that
 nothing on a demo screen implies a client. The policies, requirement IDs, controls and checks the
@@ -133,7 +133,7 @@ assert len(PEOPLE) == 52, len(PEOPLE)
 # People with accounts who are not Saltmarsh employees.
 person("X-01", "Marcus Okafor", "Account Lead, Bay State IT Partners (outside IT provider)", "IT provider", "P-02", date(2022, 1, 10),
        employment="provider", external=True, counted=False)
-person("X-02", "Alex Dennis", "Fractional Security Lead, alimi", "Security (fractional)", "P-01", date(2026, 9, 22),
+person("X-02", "Alex Dennis", "Fractional Security Lead, Alimi", "Security (fractional)", "P-01", date(2026, 9, 22),
        email=f"alex.dennis_alimi.example#EXT#@{DOMAIN}", employment="provider", external=True, counted=False)
 person("X-03", "Nora Gomez", "Systems Engineer, Bay State IT Partners", "IT provider", "X-01", date(2023, 5, 2),
        email=f"adm-ngomez@{DOMAIN}", employment="provider", external=True, counted=False)
@@ -285,7 +285,7 @@ add_user("breakglass", f"breakglass@{DOMAIN}", "Emergency access", created=date(
          has_mailbox=False, mfa=True, methods=["fido2"])
 add_user("payroll-shared", f"payroll@{DOMAIN}", "Payroll (shared mailbox)", created=date(2015, 6, 1), last_sign_in=None, has_mailbox=True, mfa=False, methods=[])
 add_user("support-shared", f"support@{DOMAIN}", "Support (shared mailbox)", created=date(2017, 3, 1), last_sign_in=None, has_mailbox=True, mfa=False, methods=[])
-add_user("X-02", f"alex.dennis_alimi.example#EXT#@{DOMAIN}", "Alex Dennis (alimi)", user_type="Guest", created=date(2026, 9, 22),
+add_user("X-02", f"alex.dennis_alimi.example#EXT#@{DOMAIN}", "Alex Dennis (Alimi)", user_type="Guest", created=date(2026, 9, 22),
          last_sign_in=SCAN_AT - timedelta(hours=26), has_mailbox=False, mfa=True, methods=["microsoftAuthenticatorPush"])
 add_user("X-04", f"sam.whitfield_harborline.example#EXT#@{DOMAIN}", "Sam Whitfield (Harborline)", user_type="Guest", created=date(2026, 10, 1),
          last_sign_in=days_ago(20, 16), has_mailbox=False, mfa=True, methods=["sms"])
@@ -335,7 +335,7 @@ SNAPSHOT = {
     "sharing": {"sharing_capability": "externalUserAndGuestSharing", "anonymous_link_expiration_days": None},
     "audit": {"unified_audit_log_enabled": True, "retention_days": 180, "directory_audit_available": True},
     "secure_score": {"current": 66.5, "max": 100, "created": iso(SCAN_AT - timedelta(hours=6))},
-    "notes": ["Sample tenant for the alimi demo. Fictional company; nothing here was read from a real tenant."],
+    "notes": ["Sample tenant for the Alimi demo. Fictional company; nothing here was read from a real tenant."],
 }
 assert len([u for u in users if u["user_type"] == "Member" and u["enabled"] and not u["mfa_registered"]]) == 5
 
@@ -443,7 +443,7 @@ for pid, (version, status, approved, owner, approver, applies) in POLICY_META.it
         if version == "1.2" or version == "1.3":
             history.append({"version": "1.0", "date": "2024-02-15", "summary": "First adoption, written in-house.", "approved_by": "P-01"})
             history.append({"version": "1.1", "date": "2025-04-01", "summary": "Yearly review, minor wording.", "approved_by": "P-01"})
-        history.append({"version": version, "date": approved, "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions." if approved >= "2026-03-01" else "Yearly review.", "approved_by": approver})
+        history.append({"version": version, "date": approved, "summary": "Rewritten on the Alimi template, mapped to SOC 2, ISO 27001 and the insurer questions." if approved >= "2026-03-01" else "Yearly review.", "approved_by": approver})
     pending_note = None
     if status == "needs_approval":
         pending_note = "v1.1 submitted to the CEO on Oct 22, 2026: adds the retention schedule the bank asked for."
@@ -474,7 +474,7 @@ def ev(eid, name, etype, controls, owner, created, renewal, artifact, descriptio
 
 F = lambda name: {"kind": "file", "name": name}  # noqa: E731
 L = lambda url, name: {"kind": "link", "name": name, "url": url}  # noqa: E731
-SCAN = {"kind": "scan", "name": "alimi scan, Oct 30, 2026", "ref": "scan.json"}
+SCAN = {"kind": "scan", "name": "Alimi scan, Oct 30, 2026", "ref": "scan.json"}
 
 ev("EV-01", "Information Security Policy v2.1, approved", "policy", ["CTL-01"], "X-02", "2026-03-10", "2027-03-10", F("POL-01-v2.1-signed.pdf"),
    "The approved policy with the CEO's signature page and the version history.")
@@ -493,8 +493,8 @@ ev("EV-07", "Background screening agreement and procedure", "contract", ["CTL-06
 ev("EV-08", "Joiner, mover and leaver checklist with Q3 leaver sample", "record", ["CTL-07"], "P-42", "2026-10-05", "2027-01-05", F("jml-q3-2026.pdf"),
    "Three leavers in Q3; access removed the same day in each case, with the ticket numbers.")
 ev("EV-09", "Payment verification procedure and callback log", "record", ["CTL-08"], "P-03", "2026-08-20", "2026-11-20", F("callback-log-2026-q3.xlsx"),
-   "The verify-before-you-pay procedure from the alimi kit and the quarter's callback log: 31 bank-detail changes, 31 callbacks.")
-ev("EV-10", "alimi scan report, Oct 30, 2026", "report", ["CTL-09", "CTL-10", "CTL-11", "CTL-12", "CTL-14", "CTL-15", "CTL-17", "CTL-27", "CTL-30"],
+   "The verify-before-you-pay procedure from the Alimi kit and the quarter's callback log: 31 bank-detail changes, 31 callbacks.")
+ev("EV-10", "Alimi scan report, Oct 30, 2026", "report", ["CTL-09", "CTL-10", "CTL-11", "CTL-12", "CTL-14", "CTL-15", "CTL-17", "CTL-27", "CTL-30"],
    "X-02", "2026-10-30", "2026-11-30", SCAN, "The weekly read-only scan of the Microsoft 365 tenant: 12 automated checks, 3 attestations.")
 ev("EV-11", "Conditional Access policy export", "export", ["CTL-09", "CTL-10", "CTL-28"], "X-01", "2026-10-28", "2027-01-28", F("conditional-access-2026-10-28.json"),
    "The four policies as exported from Entra: MFA for all, block legacy auth, compliant device, geo block (report only).")
@@ -784,7 +784,7 @@ INSURER_ANSWERS = {
 
 BANK_QUESTIONS = [
     ("B-01", "Organization", "Do you have a written information security program approved by management and reviewed at least annually?", "Yes", ["CTL-01"], ["EV-01"], "High", "Information Security Policy v2.1, approved Mar 10, 2026; reviewed yearly."),
-    ("B-02", "Organization", "Is there a named individual responsible for information security?", "Yes", ["CTL-02"], ["EV-02"], "High", "A fractional security lead (alimi) reports to the CEO; the RACI names every role."),
+    ("B-02", "Organization", "Is there a named individual responsible for information security?", "Yes", ["CTL-02"], ["EV-02"], "High", "A fractional security lead (Alimi) reports to the CEO; the RACI names every role."),
     ("B-03", "Organization", "Do you perform a formal risk assessment at least annually?", "Partial", ["CTL-03"], ["EV-03"], "Medium", "Last workshop September 2025; the 2026 workshop is scheduled for Nov 18."),
     ("B-04", "People", "Are background checks performed on employees with access to customer data?", "Yes", ["CTL-06"], ["EV-07"], "High", "Every hire is screened before access, proportionate to the role."),
     ("B-05", "People", "Do all employees complete security awareness training at least annually?", "Yes", ["CTL-05"], ["EV-05"], "High", "49 of 52 complete; 3 new hires within their 30-day window."),
@@ -847,11 +847,11 @@ QUESTIONNAIRES = {
 
 TRAINING = {
     "courses": [
-        {"id": "TR-01", "name": "Security awareness", "minutes": 35, "frequency": "Yearly, plus a phishing simulation each quarter", "source": "alimi",
+        {"id": "TR-01", "name": "Security awareness", "minutes": 35, "frequency": "Yearly, plus a phishing simulation each quarter", "source": "Alimi",
          "assigned_to": "All staff", "description": "Phishing, passwords and MFA, handling client data, reporting an incident. Written for a payroll office, not an IT team."},
-        {"id": "TR-02", "name": "Verify before you pay", "minutes": 20, "frequency": "Yearly, with a drill", "source": "alimi payment fraud kit",
+        {"id": "TR-02", "name": "Verify before you pay", "minutes": 20, "frequency": "Yearly, with a drill", "source": "Alimi payment fraud kit",
          "assigned_to": "Money movers", "description": "The callback procedure for bank-detail changes and wires, the scripts, and the closing-day checklist."},
-        {"id": "TR-03", "name": "AI acceptable use", "minutes": 15, "frequency": "Yearly", "source": "alimi AI policy kit",
+        {"id": "TR-03", "name": "AI acceptable use", "minutes": 15, "frequency": "Yearly", "source": "Alimi AI policy kit",
          "assigned_to": "All staff", "description": "Which AI tools are approved, what may never be pasted into one, and how to ask for a new tool."},
     ]
 }

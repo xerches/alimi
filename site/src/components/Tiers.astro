@@ -12,7 +12,7 @@ const { tiers } = platform();
       <h3 class="tier__name" id={`tier-${tier.id}`}>{tier.name}</h3>
       <p class="tier__meta">{tier.peopleLabel}</p>
       <p class="tier__price">{tier.price}<span class="tier__per"> a year</span></p>
-      <p class="tier__note">{tier.monthly}, {tier.note.toLowerCase()}</p>
+      <p class="tier__note">{tier.monthly} on a {tier.termLabel}, or {tier.monthToMonth} month to month</p>
       {!compact && (
         <>
           <p class="tier__meta"><strong>Frameworks:</strong> {tier.frameworkLabels.join(", ")}. <strong>{tier.integrationsLabel}.</strong></p>

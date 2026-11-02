@@ -245,5 +245,5 @@ checks:
     severity: high
     insurer_question: incident_response
     explain: Insurers ask for a written plan and a tabletop exercise, not good intentions.
-    remediation: Adopt the alimi incident response plan template and run a one-hour tabletop; keep the after-action notes.
+    remediation: Adopt the Alimi incident response plan template and run a one-hour tabletop; keep the after-action notes.
     evidence: "Plan document and dated tabletop notes"

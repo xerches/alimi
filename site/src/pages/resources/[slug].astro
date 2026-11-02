@@ -14,7 +14,7 @@ const doc = freeDoc(slug);
 const mapped = doc.requirements
   ? Object.entries(doc.requirements).filter(([, ids]) => ids && ids.length).map(([fw, ids]) => `${FRAMEWORK_LABELS[fw] ?? fw} (${ids.length})`)
   : [];
-const description = `${doc.title}${doc.id ? ` (${doc.id})` : ""}, free from alimi: a ${doc.group.toLowerCase()} document written for a company of 10 to 200 people. Read it here, adapt it, then adopt it.`;
+const description = `${doc.title}${doc.id ? ` (${doc.id})` : ""}, free from Alimi: a ${doc.group.toLowerCase()} document written for a company of 10 to 200 people. Read it here, adapt it, then adopt it.`;
 ---
 
 <Base title={doc.title} description={description} path={`/resources/${slug}`}>

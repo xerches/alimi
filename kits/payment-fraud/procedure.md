@@ -4,7 +4,7 @@ slug: payment-verification-procedure
 title: Payment Verification Procedure
 kind: procedure
 ---
-> Part of the alimi Payment Fraud Protection Kit. Adapt the names, numbers and threshold to your company before adopting.
+> Part of the Alimi Payment Fraud Protection Kit. Adapt the names, numbers and threshold to your company before adopting.
 
 # {{Company}} Payment Verification Procedure
 
@@ -118,4 +118,4 @@ There are no exceptions to Rule 1 or Rule 2. {{CEO}} may change the threshold in
 
 | Version | Date | Change |
 | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi Payment Fraud Protection Kit |
+| 1.0 | {{Effective Date}} | First version from the Alimi Payment Fraud Protection Kit |

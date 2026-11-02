@@ -2,7 +2,7 @@
 
 Oct 31, 2026 · Alex
 
-Source: Claude Docs, https://claude.ai/artifact/5Xsmabw1PnuLHPtfSamXFE. Written before the rename, so "Caprius" means alimi. The build order changed on Nov 1, 2026 (scanner first, then the fraud kit, then the platform); see CLAUDE.md.
+Source: Claude Docs, https://claude.ai/artifact/5Xsmabw1PnuLHPtfSamXFE. Written before the rename, so "Caprius" means Alimi. The build order changed on Nov 1, 2026 (scanner first, then the fraud kit, then the platform); see CLAUDE.md.
 
 ## Bottom line
 

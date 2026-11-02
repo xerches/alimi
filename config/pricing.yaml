@@ -1,22 +1,33 @@
-# alimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
-# One product: the alimi platform, priced per company by size, with fixed-fee services around it and
+# Alimi pricing. Single source of truth: the site, proposals and CLAUDE.md read from here.
+# One product: the Alimi platform, priced per company by size, with fixed-fee services around it and
 # free resources in front of it. The platform tiers were set on Nov 1, 2026 by the founder's rule
 # (average of comparable vendors' published prices, minus 5 to 15%); the comparables and the arithmetic
 # are in docs/research/platform-pricing.md. Raise after three case studies.
 # Prices in USD. "list" is what the site shows; "range" is what we quote for a fixed-fee service.
 
 currency: USD
-updated: 2026-11-01
+updated: 2026-11-02
 
 products:
   platform:
-    name: alimi platform
+    name: Alimi platform
     tagline: Continuous security and compliance for companies too small for a security team.
-    billing: Billed yearly in advance; the monthly figure is the yearly price divided by twelve.
+    # Billing, set by the founder on Nov 2, 2026: every plan is paid monthly. A 12-month term costs
+    # the list price in twelve monthly payments; month to month costs monthly_premium more and can end
+    # at any month's end. No automatic increase at renewal, the price is locked for price_lock_months,
+    # and a customer can export every policy, test result and piece of evidence at any time. The
+    # month-to-month premium is the founder's pricing rule applied to the 15 to 25% typical SaaS vendors
+    # charge; confirm or change it here and the site follows.
+    billing:
+      term_months: 12
+      monthly_premium: 0.15
+      escalator: none
+      price_lock_months: 24
+      exit: Export every policy, test result and piece of evidence at any time, included.
     audit_note: CPA audit fees are separate, as with every platform on the market.
     included_everywhere:
       - The full policy library, 23 policies with staff acknowledgement tracking
-      - Read-only integrations; alimi never holds a password
+      - Read-only integrations; Alimi never holds a password
       - An owner, a status, tasks and reminders for every control
       - A named compliance lead for the scoping and policy calls software leaves to you
     tiers:
@@ -159,7 +170,7 @@ terms:
 # Channel: resellers and referrers. Tiers set by the founder Nov 1, 2026. Discounts apply to platform
 # list prices and to the low end of service ranges.
 partners:
-  principle: alimi never sells direct to a reseller's client for less than the reseller pays.
+  principle: Alimi never sells direct to a reseller's client for less than the reseller pays.
   reseller:
     who: MSPs, IT consultancies, vCISO firms
     buys_at: list price minus the tier discount; the reseller sets its own client price
@@ -174,15 +185,15 @@ partners:
         active_clients: [151, null]
         discount: 0.20
     includes:
-      - White-label option on reports, policy packs and the trust page (reseller logo, "powered by alimi" line)
+      - White-label option on reports, policy packs and the trust page (reseller logo, "powered by Alimi" line)
       - Not-for-resale licence for the reseller's own tenant
       - Multi-tenant view in the platform (the Scale tier feature, included for resellers)
       - One 60-minute partner training session and a sales one-pager
       - Inbound leads in the reseller's area offered to them first
-    billing: alimi invoices the reseller monthly; the reseller invoices its client
+    billing: Alimi invoices the reseller monthly; the reseller invoices its client
     review: tiers recalculated quarterly on active clients
   referral:
     who: insurance brokers, CPAs, attorneys who refer but do not resell
     fee: 0.10
     of: first-year product and service revenue from the referred client
-    paid: within 30 days of alimi being paid
+    paid: within 30 days of Alimi being paid

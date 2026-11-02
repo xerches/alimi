@@ -847,7 +847,7 @@
     {
       "id": "u-059",
       "upn": "alex.dennis_alimi.example#EXT#@saltmarsh.example",
-      "display_name": "Alex Dennis (alimi)",
+      "display_name": "Alex Dennis (Alimi)",
       "enabled": true,
       "user_type": "Guest",
       "created": "2026-09-22T00:00:00Z",
@@ -1073,6 +1073,6 @@
     "created": "2026-10-30T16:15:00Z"
   },
   "notes": [
-    "Sample tenant for the alimi demo. Fictional company; nothing here was read from a real tenant."
+    "Sample tenant for the Alimi demo. Fictional company; nothing here was read from a real tenant."
   ]
 }

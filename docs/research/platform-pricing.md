@@ -1,8 +1,8 @@
 # Platform pricing: comparables and the rule applied
 
-Date: Nov 1, 2026. Prices are USD per year, platform only, as published by the vendors (AWS Marketplace listings, pricing pages) or observed by Vendr, checked in September and October 2026 by the sources below. Every vendor except where noted leaves the CPA audit fee out, as alimi does.
+Date: Nov 1, 2026. Prices are USD per year, platform only, as published by the vendors (AWS Marketplace listings, pricing pages) or observed by Vendr, checked in September and October 2026 by the sources below. Every vendor except where noted leaves the CPA audit fee out, as Alimi does.
 
-The founder's rule: for a price without a direct comparable, take the vendors offering a similar service, average their prices, and cut 5 to 15%. alimi cuts the full 15% because the buyer is smaller than the comparables' entry customer and the founder's time is the margin.
+The founder's rule: for a price without a direct comparable, take the vendors offering a similar service, average their prices, and cut 5 to 15%. Alimi cuts the full 15% because the buyer is smaller than the comparables' entry customer and the founder's time is the margin.
 
 ## Entry tiers (the Growth comparable)
 
@@ -58,7 +58,7 @@ Average of 10: **$18,550**. Minus 15%: $15,768. **Scale: $15,700** (up to 200 pe
 
 ## What this says about positioning
 
-Vanta's Vendr median is $20,000 and Drata's $25,000. alimi's Growth tier is under half of either, and Starter is a quarter of Vanta Essentials. The number to repeat on the site is the gap, not the discount: a published price, in the low thousands, for the company sizes the market quotes at $12,000 and up.
+Vanta's Vendr median is $20,000 and Drata's $25,000. Alimi's Growth tier is under half of either, and Starter is a quarter of Vanta Essentials. The number to repeat on the site is the gap, not the discount: a published price, in the low thousands, for the company sizes the market quotes at $12,000 and up.
 
 ## Sources
 

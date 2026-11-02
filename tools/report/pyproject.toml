@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "alimi-report"
 version = "0.1.0"
-description = "Turns alimi scanner findings into an insurer-ready HTML and PDF report."
+description = "Turns Alimi scanner findings into an insurer-ready HTML and PDF report."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Proprietary" }

@@ -1,6 +1,6 @@
 # Research
 
-Markdown copies of the three Claude Docs behind the product choices, for the site-copy prompt (prompt 11) and anyone without access to the originals. They were written on Oct 31, 2026 under the earlier working name, so "Caprius" means alimi; the build order changed on Nov 1, 2026 (see CLAUDE.md).
+Markdown copies of the three Claude Docs behind the product choices, for the site-copy prompt (prompt 11) and anyone without access to the originals. They were written on Oct 31, 2026 under the earlier working name, so "Caprius" means Alimi; the build order changed on Nov 1, 2026 (see CLAUDE.md).
 
 | File | Original |
 | --- | --- |

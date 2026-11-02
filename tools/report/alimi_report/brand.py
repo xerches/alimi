@@ -27,8 +27,8 @@ DEFAULT_COLORS = {
 
 
 class Brand(BaseModel):
-    name: str = "alimi"
-    display_name: str = "alimi"
+    name: str = "Alimi"
+    display_name: str = "Alimi"
     tagline: str = ""
     founder: str | None = None
     location: str | None = None
@@ -50,7 +50,7 @@ class Brand(BaseModel):
 
 
 class Reseller(BaseModel):
-    """A partner's name and logo on the cover, with a "powered by alimi" line underneath."""
+    """A partner's name and logo on the cover, with a "powered by Alimi" line underneath."""
 
     name: str
     logo: Path | None = None
@@ -104,8 +104,8 @@ def load_brand(path: Path | None = None) -> Brand:
     colors = dict(DEFAULT_COLORS)
     colors.update({k: v for k, v in (raw.get("colors") or {}).items() if isinstance(v, str)})
     return Brand(
-        name=_clean(raw.get("name")) or "alimi",
-        display_name=_clean(raw.get("display_name")) or _clean(raw.get("name")) or "alimi",
+        name=_clean(raw.get("name")) or "Alimi",
+        display_name=_clean(raw.get("display_name")) or _clean(raw.get("name")) or "Alimi",
         tagline=_clean(raw.get("tagline")) or "",
         founder=_clean(raw.get("founder")),
         location=_clean(raw.get("location")),

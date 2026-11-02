@@ -5,7 +5,7 @@ import Section from "../components/Section.astro";
 import { brand } from "../lib/config.js";
 
 const rules = [
-  { title: "Read-only, always", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. alimi never holds a customer's passwords, and connection tokens are encrypted with a key kept outside the database." },
+  { title: "Read-only, always", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. Alimi never holds a customer's passwords, and connection tokens are encrypted with a key kept outside the database." },
   { title: "Only tenants with a signed letter", text: "No scan runs without a signed authorization letter, however friendly the request." },
   { title: "Plain English", text: "Every term is explained the first time it appears: MFA, EDR, BEC. Reports are written for the owner who signs the renewal." },
   { title: "Honest claims", text: "Results from past employment are described as such. There will be case studies when there are clients, and not before." },
@@ -14,7 +14,7 @@ const rules = [
 ];
 ---
 
-<Base title="About" description="alimi is built in Boston by Alex Dennis: a compliance platform for companies of 10 to 200 people that cannot hire a security team, with the founder as the compliance lead. Who is behind it and the rules it works by." path="/about">
+<Base title="About" description="Alimi is built in Boston by Alex Dennis: a compliance platform for companies of 10 to 200 people that cannot hire a security team, with the founder as the compliance lead. Who is behind it and the rules it works by." path="/about">
   <Hero eyebrow="About" title={brand.tagline_alt}>
     <p class="lede">{brand.display_name} is built in {brand.location} by {brand.founder}, for the owner or operations lead who has to answer an insurer, a customer or a bank, and has no one to hand it to.</p>
   </Hero>
@@ -28,7 +28,7 @@ const rules = [
     </p>
   </Section>
 
-  <Section id="status" title="Where alimi is today">
+  <Section id="status" title="Where Alimi is today">
     <p class="measure">{brand.display_name} is a working name for a company in formation. Until the entity and insurance exist, the work is limited to building the platform in the open, free pilots under a signed authorization letter, and conversations with the brokers, accountants, attorneys and IT providers whose clients ask them about security. Prices are published now so that nobody has to ask.</p>
     <p class="measure">The code is public: <a href={brand.social.github} rel="noopener">{brand.social.github.replace("https://", "")}</a>.</p>
   </Section>

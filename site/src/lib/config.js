@@ -48,7 +48,15 @@ export function tierPrice(tier) {
 export function tierNote(tier) {
   if (tier.type === "service") return "Fixed fee, confirmed after a short call";
   if (tier.list === 0) return "No card and no account needed";
-  return "Billed yearly";
+  return "Paid monthly";
+}
+
+/** The platform's billing terms from pricing.yaml, as one plain-English sentence pair. */
+export function billingText(b = pricing.products.platform.billing) {
+  return (
+    `Every plan is paid monthly: a ${b.term_months}-month term at the list price, or month to month for ${percent(b.monthly_premium)} more. ` +
+    `No automatic increase at renewal, and your price is locked for ${b.price_lock_months} months. ${b.exit}`
+  );
 }
 
 // One product (the platform), the fixed-fee services around it, and the free resources in front of it.
@@ -71,7 +79,10 @@ export const FRAMEWORK_LABELS = {
 function decorate(tier) {
   const out = { ...tier, price: tierPrice(tier), note: tierNote(tier) };
   if (typeof tier.people_up_to === "number") {
-    out.monthly = `${money(Math.round(tier.list / 12))} a month`;
+    const b = pricing.products.platform.billing;
+    out.monthly = `${money(Math.round(tier.list / b.term_months))} a month`;
+    out.monthToMonth = `${money(Math.round((tier.list / b.term_months) * (1 + b.monthly_premium)))} a month`;
+    out.termLabel = `${b.term_months}-month term`;
     out.yearly = `${money(tier.list)} a year`;
     out.peopleLabel = `Up to ${tier.people_up_to} people`;
     out.frameworkLabels = (tier.frameworks ?? []).map((id) => FRAMEWORK_LABELS[id] ?? id);
@@ -105,7 +116,8 @@ export function platform() {
   return {
     ...product("platform"),
     included: entry.included_everywhere,
-    billing: entry.billing,
+    billing: billingText(entry.billing),
+    billingTerms: entry.billing,
     auditNote: entry.audit_note,
   };
 }

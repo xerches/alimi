@@ -58,7 +58,7 @@ def test_every_document_but_the_poster_carries_the_kit_note():
         if doc.kind == "poster":
             continue
         first = doc.body.lstrip().splitlines()[0]
-        assert first.startswith("> Part of the alimi Payment Fraud Protection Kit"), doc.path.name
+        assert first.startswith("> Part of the Alimi Payment Fraud Protection Kit"), doc.path.name
 
 
 def test_procedure_states_the_three_rules():

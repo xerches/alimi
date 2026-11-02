@@ -108,4 +108,4 @@ POL-02 Acceptable Use · POL-03 Access Control · POL-11 Backup and Recovery · 
 
 | Version | Date | Change | Author |
 | --- | --- | --- | --- |
-| 1.0 | {{Effective Date}} | First version from the alimi policy library template | {{Security Lead}} |
+| 1.0 | {{Effective Date}} | First version from the Alimi policy library template | {{Security Lead}} |

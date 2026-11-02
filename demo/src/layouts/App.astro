@@ -11,7 +11,7 @@ import Nav from "../components/Nav.astro";
 const { title, heading, description, path, section, eyebrow, lead, crumbs = [], wide = false } = Astro.props;
 if (!path) throw new Error("App layout needs a path prop");
 const origin = String(Astro.site).replace(/\/$/, "");
-const fullTitle = path === "/" ? `${company.short_name} on alimi (demo)` : `${title} | ${company.short_name} on alimi`;
+const fullTitle = path === "/" ? `${company.short_name} on Alimi (demo)` : `${title} | ${company.short_name} on Alimi`;
 const viewer = person(company.roles["AI Lead"]);
 const initials = viewer.name.split(" ").map((w) => w[0]).join("");
 ---
@@ -56,7 +56,7 @@ const initials = viewer.name.split(" ").map((w) => w[0]).join("");
             <div class="actions"><slot name="actions" /></div>
           </div>
           <slot />
-          <p class="foot">alimi demo. {company.name} is a fictional sample company; people, vendors, dates and numbers are invented. Policies, requirement IDs, controls and checks are alimi's real content.</p>
+          <p class="foot">Alimi demo. {company.name} is a fictional sample company; people, vendors, dates and numbers are invented. Policies, requirement IDs, controls and checks are Alimi's real content.</p>
         </main>
       </div>
     </div>
