@@ -26,7 +26,7 @@ Node 22 or newer. The build reads `config/brand.yaml`, `config/controls.yaml`, `
 | Home | `/` | Readiness tiles, compliance progress per framework, what needs attention, tasks due, last scan |
 | Compliance | `/frameworks`, `/frameworks/:id` | Insurer questionnaire, SOC 2, ISO 27001, HIPAA, ISO 42001: percent ready, one row per requirement ID with the controls and policies that satisfy it |
 | Compliance | `/controls`, `/controls/:id` | 40 controls with owner, status, frameworks, evidence and tests; a control page with tests and their history, evidence with renewal dates, the add-evidence form, policies, risks, requirements and activity |
-| Compliance | `/policies`, `/policies/:id` | The policy library: status, owner, version, acknowledgements; the full rendered policy with its requirement mapping and the controls it sets rules for |
+| Compliance | `/policies`, `/policies/:id` | The policy library: status, owner, version, acknowledgements; the policy's outline and opening paragraph (the text itself is never published) with its requirement mapping and the controls it sets rules for |
 | Compliance | `/evidence` | The evidence library with status (ready, upcoming renewal, needs renewal, needs artifact), owner and renewal filters |
 | Compliance | `/monitoring` | The 12 automated tests from the scanner, five weeks of history, the three attestation items, failing tests with the fix plan |
 | Risk | `/risks` | Risk register scored on a 4x4 scale with treatment, owner, review date and linked controls |

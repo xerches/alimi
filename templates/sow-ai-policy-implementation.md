@@ -47,7 +47,7 @@ Up to 200 accounts, one tenant; the Client's licence tier supports the access ru
 
 ## 8. Fee and payment
 
-Fixed fee within Alimi's published range of **{{pricing.products.services.ai_policy_implementation.price}}**, quoted for this engagement at **{{Quoted Price}}**, with the ISO 42001 gap check **[ ] included / [ ] not included** in the quote. Payment: {{pricing.terms.payment}}; invoiced on signing. The {{pricing.products.free.ai_policy.name}} ({{pricing.products.free.ai_policy.price}}) is the starting document; the inventory of AI tools in use comes from the platform's AI governance module.
+Fixed fee within Alimi's published range of **{{pricing.products.services.ai_policy_implementation.price}}**, quoted for this engagement at **{{Quoted Price}}**, with the ISO 42001 gap check **[ ] included / [ ] not included** in the quote. Payment: {{pricing.terms.payment}}; invoiced on signing. The AI acceptable use policy from the Alimi policy library (POL-22) is the starting document; the inventory of AI tools in use comes from the platform's AI governance module.
 
 ## 9. Acceptance
 

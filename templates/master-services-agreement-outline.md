@@ -35,7 +35,7 @@ The Client provides timely access, information and decisions; names a contact wi
 
 ## 6. Fees and payment
 
-Fees are stated in each SOW and are drawn from Alimi's published price list at the time of signing. Payment terms: {{pricing.terms.payment}}. Retainers are billed monthly in advance with a minimum of {{pricing.terms.minimum_monthly_retainer}}. Platform subscriptions are paid monthly, on a 12-month term at the published price or month to month at the published month-to-month price; the price does not rise automatically at renewal and is locked for 24 months from signing; the Client may export its policies, evidence and test results at any time and at no charge. Expenses are charged only when an SOW allows them and at cost. **[Attorney review]** Late payment interest and suspension rights.
+Fees are stated in each SOW and are drawn from Alimi's published price list at the time of signing. Payment terms: {{pricing.terms.payment}}. Retainers are billed monthly in advance with a minimum of {{pricing.terms.minimum_monthly_retainer}}. Platform subscriptions are priced per user a month, on a 12-month term at the published price or month to month at the published month-to-month price, with the user count read from the Client's tenant each month and a minimum of {{pricing.products.platform.minimum_users}}; the price does not rise automatically at renewal and is locked for 24 months from signing. **[Attorney review]** Return of the Client's data at the end of the agreement. Expenses are charged only when an SOW allows them and at cost. **[Attorney review]** Late payment interest and suspension rights.
 
 ## 7. Term and termination
 

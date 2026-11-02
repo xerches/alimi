@@ -6,7 +6,9 @@ Order changed Nov 1, 2026: the workspace scanner and insurer-ready report come f
 
 On Nov 2, 2026 prompt 12 was split into 12a, 12b and 12c, and 12c takes the insurer readiness dashboard and the export pack from prompt 14 so the first framework is sellable end to end before prompt 13. Prompt 14 keeps SOC 2 and ISO 27001. Plan: https://claude.ai/artifact/VjN79aEaY6paZNPDxAwdoS.
 
-Later on Nov 1, 2026 the founder made the platform the only product (see CLAUDE.md, "What Alimi is"). Prompt 11 became the one-platform site rework and is done; prompts 15 and 16 build the AI governance module of the platform rather than a separate kit; the payment fraud kit and the policy library are free content and platform modules, not products.
+Later on Nov 1, 2026 the founder made the platform the only product (see CLAUDE.md, "What Alimi is"). Prompt 11 became the one-platform site rework and is done; prompts 15 and 16 build the AI governance module of the platform rather than a separate kit; the payment fraud kit and the policy library are platform modules, not products.
+
+On the evening of Nov 2, 2026 a review round (PR #14) changed the packaging, not the order: prices are per user a month in four tiers (Silver, Gold, Platinum, Diamond) with one framework included and the rest as add-ons; `config/frameworks.yaml` lists 23 frameworks, led by the Alimi Security Posture Score (our own, not accredited, in every plan; the "security posture" score in 12c is this score); there are no free resources and no policy text in public, so nothing in prompts 15 to 17 ships as free content; the site gained Compare and For resellers pages and the indigo palette; prompt 14 now covers the whole framework catalog; and end-user training is prompt 18.
 
 ## Phase 1: Foundation (weeks 1-2)
 
@@ -151,7 +153,7 @@ from /config/brand.yaml. Mobile-first, accessible, Lighthouse 95+. Placeholder c
 TODO. Add a netlify.toml so it deploys with no settings. Show me the plan first.
 ```
 
-**11. Site copy and the one-platform rework** (done Nov 1, 2026, PR #9)
+**11. Site copy and the one-platform rework** (done Nov 1, 2026, PR #9; the Free resources pages and the three-tier pricing were replaced on Nov 2, 2026 by PR #14)
 ```
 Read CLAUDE.md, docs/research/platform-pricing.md and the site. Rebuild the site around one
 offer, the Alimi platform. Pages: Home (headline leads with the outcome for an owner, the
@@ -214,8 +216,9 @@ the audit log and carried into the export. Mock data, tests, plain-English page 
 **12c. Insurer readiness dashboard, two scores, export pack** (pulled forward from prompt 14 on Nov 2, 2026)
 ```
 Extend /platform. A readiness dashboard for the insurer framework: audit readiness (share of
-requirements whose controls are Ok) and security posture (check results weighted by severity and
-insurer impact), each defined in one plain-English line on the page; every requirement with its
+requirements whose controls are Ok) and the Alimi Security Posture Score (check results weighted
+by severity and insurer impact; our own score, not an accredited framework, in every plan, the
+first entry of /config/frameworks.yaml), each defined in one plain-English line on the page; every requirement with its
 controls and status; top five fixes. Render the insurer-ready report by calling alimi_report
 inside the app, with the reseller's branding when the organization belongs to one. An export
 pack: a zip of the report, evidence files, test results with raw evidence, override reasons and
@@ -232,33 +235,39 @@ because the checks file changes.
 Extend /platform. Policies: import the /policies library (front matter becomes the framework
 mapping), versions, an approver, and staff acceptance tracking with reminders. People: pull
 the staff list from the connected Microsoft 365 or Google Workspace tenant, an onboarding and
-offboarding checklist per person, and training completion. Link policies and people to
-controls so the dashboard can score them. Mock data, tests, plain-English page copy.
+offboarding checklist per person, and training completion (a date per person per lesson;
+prompt 18 supplies the lessons, so leave the field and the reminder in place). Link policies
+and people to controls so the dashboard can score them. Mock data, tests, plain-English page copy.
 ```
 
-**14. SOC 2 and ISO 27001 frameworks** (the dashboard, in-app report and export pack moved to 12c on Nov 2, 2026)
+**14. The framework catalog: SOC 2 and ISO 27001 first** (the dashboard, in-app report and export pack moved to 12c on Nov 2, 2026; widened the same day from two frameworks to the catalog)
 ```
 Extend /platform. Add SOC 2 as the second framework and ISO 27001 as the third: criterion IDs
 and our own summaries only (from /policies/requirements.yaml), mapped onto the existing controls
-and policies. The dashboard from 12c shows every framework the organization's tier includes, and
-the export pack adds the adopted policies and the per-framework readiness. Tests on mock data.
+and policies. Then the rest of /config/frameworks.yaml in the order customers ask, each with
+requirement IDs and our own one-line summaries only, mapped to the same controls; a framework
+not yet mapped shows as "available to add", never as ready. Price frameworks from the frameworks
+block of /config/pricing.yaml: one included, each further one an add-on per user, the discounts
+from five and ten frameworks on the account, the cap at ten; the Alimi Security Posture Score is
+in every plan and never counted. The dashboard from 12c shows every framework on the account,
+and the export pack adds the adopted policies and the per-framework readiness. Tests on mock data.
 ```
 
 ## Phase 7: AI governance module (weeks 30-32; was "AI policy kit")
 
-Since Nov 1, 2026 these two prompts build a module of the platform: the generator feeds the policy module's AI policy flow and the inventory is a platform integration. A static generator in /tools/ai-policy may still ship first as free content, with no paid tier of its own.
+Since Nov 1, 2026 these two prompts build a module of the platform: the generator feeds the policy module's AI policy flow and the inventory is a platform integration. Since Nov 2, 2026 nothing ships as free content: the generator runs behind sign-in in the Platinum tier's AI governance module, and /tools/ai-policy holds the question and clause library the platform imports.
 
 **15. AI policy generator**
 ```
-Read CLAUDE.md. In /tools/ai-policy, build a static web app (no backend; plain HTML/JS or
-Astro island) with a ~20-question form: company size, industry, regulated data types, which AI
+Read CLAUDE.md. In /tools/ai-policy, build an importable Python package with a ~20-question
+form the platform renders behind sign-in (HTMX; no public version, Nov 2, 2026): company size, industry, regulated data types, which AI
 tools are approved, whether customer data may be entered, review and logging expectations,
 and who owns AI decisions. From the answers generate (a) an AI acceptable use policy,
 (b) a one-page staff guide, (c) an AI tool inventory template, all downloadable as Markdown and
 DOCX. Questions and clause text live in a YAML file so I can edit them without touching code;
-the clauses start from the AI policies in /policies. Free tier generates everything; add a
-clearly marked "find the AI apps your staff actually use" call to action that links to the
-platform's AI governance module.
+the clauses start from the AI policies in /policies. The outputs are platform documents with
+versions and sign-off like any policy; add a "find the AI apps your staff actually use" action
+that runs the inventory from prompt 16.
 ```
 
 **16. AI app inventory from audit logs**
@@ -282,9 +291,26 @@ Umami free tier, or none). Add a blog collection with two starter posts I'll pas
 AI policy? A 10-minute answer." Run Lighthouse and fix anything under 95.
 ```
 
+## Phase 7b: Security awareness training module (after prompt 13)
+
+**18. Security awareness training module** (added Nov 2, 2026 at the founder's request; lesson plan in docs/training-modules.md)
+```
+Read CLAUDE.md and docs/training-modules.md. In /training, write the eight lessons as Markdown
+with YAML front matter (id, title, audience, minutes, policies, controls, version), each with a
+timed script, a slide list, a five-question quiz with an explanation per answer, and production
+notes for a recording; lesson 2 and the finance role lesson reuse
+kits/payment-fraud/training-video-script.md. Extend /platform: import the lessons the way it
+imports /policies; render a lesson as slides with the script as the reading text (and an embedded
+video when one exists), then the quiz; a pass (four of five) writes a completion record (person,
+lesson, version, date, score) that the People module and the dashboards read; reminders at 14 and
+3 days before the yearly due date; the onboarding checklist adds lessons 1 to 4 within 30 days.
+Build slides to PPTX and PDF from the same Markdown with the fraud kit's build script as the
+pattern. Lessons are never public. Mock data and tests.
+```
+
 ## Later, only when a customer asks (no prompts yet)
 
-Vendor risk list with review dates, risk register, customer questionnaire answer library, public trust center, more integrations (AWS, GitHub, Intune, Jamf, HR systems), auditor portal, reseller billing and usage reports. Write the prompt when the first customer or reseller asks for the module.
+Vendor risk list with review dates, risk register, customer questionnaire answer library, public trust center and auditor portal are sold in Gold and above since Nov 2, 2026, so each is built when the first customer on that tier signs; the demo holds the draft screens. Still unplanned: more integrations (AWS, GitHub, Intune, Jamf, HR systems), reseller billing and usage reports, access reviews (Platinum), audit coordination (Diamond). Write the prompt when the first customer or reseller asks for the module.
 
 ## Habits
 

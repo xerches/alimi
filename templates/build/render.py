@@ -7,14 +7,19 @@
     python templates/build/render.py --pdf                       # also PDF through pandoc's weasyprint engine
 
 Tokens that read pricing.yaml (so proposals never drift from the price list):
-    {{pricing.products.<product>.<tier>.price}}   "$3,900", "$500 to $1,500" or "free"; <product> is platform, services or free
+    {{pricing.products.<product>.<tier>.price}}   "$13 per user a month", "$500 to $1,500"; <product> is platform or services
     {{pricing.products.<product>.<tier>.name}}
     {{pricing.products.<product>.<tier>.includes}}  bullet list
     {{pricing.products.<product>.product_name}} / .tagline
+    {{pricing.products.platform.minimum_users}}   "10 users"
+    {{pricing.products.platform.frameworks.addon_price}}   "$4 per user a month per added framework"
+    {{pricing.products.platform.frameworks.terms}}  one sentence: included count, add-on price, discounts, cap
+    {{pricing.products.platform.billing.terms}}    one sentence: paid monthly, term or month to month, no increase, price lock
     {{pricing.retainers.<retainer>.price}}        "$3,000 to $6,000 a month"
     {{pricing.retainers.<retainer>.hours}}        "10 to 20 hours a month"
     {{pricing.partners.reseller.tiers_table}}     Markdown table of the wholesale tiers
     {{pricing.partners.reseller.includes}}        bullet list
+    {{pricing.partners.reseller.incentives}}      bullet list of the published incentives
     {{pricing.partners.referral.fee}}             "10%"
     {{pricing.partners.referral.of}} / .paid / .who
     {{pricing.partners.principle}}
@@ -120,15 +125,37 @@ def money_range(pair: list) -> str:
 
 
 def tier_price(tier: dict) -> str:
-    """The list price when the price list publishes one (0 means free), otherwise the quoted range."""
+    """Per user a month for a platform tier, the list price when the price list publishes one, otherwise the quoted range."""
+    if "per_user_month" in tier:
+        return f"{money(tier['per_user_month'])} per user a month"
     if "list" in tier:
         return "free" if tier["list"] == 0 else money(tier["list"])
     if "range" in tier:
         return money_range(tier["range"])
-    raise KeyError("tier has neither range nor list")
+    raise KeyError("tier has neither per_user_month, range nor list")
 
 
-def bullets(items: list[str]) -> str:
+def framework_terms(frameworks: dict) -> str:
+    included = frameworks["included"]
+    lead = "One framework of your choice is" if included == 1 else f"{included} frameworks of your choice are"
+    discounts = "; ".join(
+        f"with {d['from_total']} or more frameworks every added framework is {percent(d['discount'])} off" for d in frameworks["discounts"]
+    )
+    return (
+        f"{lead} included in every plan, and so is the Alimi Security Posture Score. Each further framework is "
+        f"{money(frameworks['addon_per_user_month'])} per user a month; {discounts}. Up to {frameworks['max']} frameworks on one account."
+    )
+
+
+def billing_terms(billing: dict) -> str:
+    return (
+        f"Every plan is paid monthly: a {billing['term_months']}-month term at the list price, or month to month for "
+        f"{percent(billing['monthly_premium'])} more. No automatic increase at renewal, and the price is locked for "
+        f"{billing['price_lock_months']} months."
+    )
+
+
+def bullets(items) -> str:
     return "\n".join(f"- {item}" for item in items)
 
 
@@ -155,6 +182,16 @@ def resolve(path: str, pricing: dict) -> str:
                 return str(product_data["name"])
             if field == "tagline":
                 return str(product_data["tagline"])
+        if parts[0] == "products" and parts[1] == "platform" and parts[2] == "minimum_users" and len(parts) == 3:
+            return f"{pricing['products']['platform']['minimum_users']} users"
+        if parts[0] == "products" and parts[1] == "platform" and parts[2] == "frameworks" and len(parts) == 4:
+            frameworks = pricing["products"]["platform"]["frameworks"]
+            if parts[3] == "addon_price":
+                return f"{money(frameworks['addon_per_user_month'])} per user a month per added framework"
+            if parts[3] == "terms":
+                return framework_terms(frameworks)
+        if parts[0] == "products" and parts[1] == "platform" and parts[2] == "billing" and len(parts) == 4 and parts[3] == "terms":
+            return billing_terms(pricing["products"]["platform"]["billing"])
         if parts[0] == "products":
             _, product, tier_id, field = parts
             product_data = pricing["products"][product]
@@ -187,6 +224,8 @@ def resolve(path: str, pricing: dict) -> str:
                     return reseller_tiers_table(reseller)
                 if field == "includes":
                     return bullets(reseller["includes"])
+                if field == "incentives":
+                    return bullets(f"**{i['name']}.** {i['text']}" for i in reseller["incentives"])
                 if field in ("who", "buys_at", "billing", "review"):
                     return str(reseller[field])
                 if field == "discount" and len(parts) == 4:

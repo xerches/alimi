@@ -1,21 +1,23 @@
 ---
-// The platform tiers from config/pricing.yaml. compact: name, size and price only, for the home page.
+// The platform tiers from config/pricing.yaml, priced per user per month. compact: name, price and
+// summary only, for the home page.
 import { platform } from "../lib/config.js";
-const { compact = false, cta = "/pricing#waitlist", ctaLabel = "Join the waitlist" } = Astro.props;
-const { tiers } = platform();
+const { compact = false, cta = "/pricing#calculator", ctaLabel = "Work out your price" } = Astro.props;
+const { tiers, frameworks } = platform();
+const featured = 1; // Gold: the tier most companies with a customer asking for SOC 2 land on
 ---
 
-<div class="tiers">
+<div class="tiers tiers--four">
   {tiers.map((tier, index) => (
-    <article class={index === 1 ? "card tier tier--featured" : "card tier"} aria-labelledby={`tier-${tier.id}`}>
-      {index === 1 && <span class="badge">Most companies</span>}
+    <article class={index === featured ? "card tier tier--featured" : "card tier"} aria-labelledby={`tier-${tier.id}`}>
+      {index === featured && <span class="badge">Most companies</span>}
       <h3 class="tier__name" id={`tier-${tier.id}`}>{tier.name}</h3>
-      <p class="tier__meta">{tier.peopleLabel}</p>
-      <p class="tier__price">{tier.price}<span class="tier__per"> a year</span></p>
-      <p class="tier__note">{tier.monthly} on a {tier.termLabel}, or {tier.monthToMonth} month to month</p>
+      <p class="tier__price">{tier.perUser}<span class="tier__per"> per user a month</span></p>
+      <p class="tier__note">On a {tier.termLabel}; {tier.perUserMonthToMonth} month to month. {frameworks.included === 1 ? "One framework" : `${frameworks.included} frameworks`} included.</p>
+      <p class="tier__meta">{tier.summary}</p>
       {!compact && (
         <>
-          <p class="tier__meta"><strong>Frameworks:</strong> {tier.frameworkLabels.join(", ")}. <strong>{tier.integrationsLabel}.</strong></p>
+          <p class="tier__meta"><strong>{tier.integrationsLabel}.</strong> Minimum {tier.minimumUsers} users.</p>
           <ul class="checklist">
             {tier.includes.map((item) => <li>{item}</li>)}
           </ul>

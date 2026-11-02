@@ -4,41 +4,163 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Tiers from "../components/Tiers.astro";
 import WaitlistForm from "../components/WaitlistForm.astro";
-import { brand, pricing, platform, services, retainer, terms, resellerTiers } from "../lib/config.js";
+import { brand, pricing, platform, services, retainer, terms, resellerTiers, choosableFrameworks, alwaysIncludedFrameworks, frameworkDiscount, quote, EXAMPLE_SIZES, money, percent } from "../lib/config.js";
 import { formatDate } from "../lib/content.js";
 
 const plat = platform();
-const starter = plat.tiers[0];
-const scale = plat.tiers[plat.tiers.length - 1];
+const silver = plat.tiers[0];
+const diamond = plat.tiers[plat.tiers.length - 1];
+const fw = plat.frameworks;
+const catalog = choosableFrameworks();
+const posture = alwaysIncludedFrameworks()[0];
 const lead = retainer();
-const starterReseller = resellerTiers()[0];
+const firstReseller = resellerTiers()[0];
+const b = plat.billingTerms;
+
+// Data the browser calculator needs, as attributes (the site allows no inline script).
+const calculatorData = {
+  tiers: plat.tiers.map((t) => ({ id: t.id, name: t.name, rate: t.per_user_month })),
+  addon: fw.addon,
+  included: fw.included,
+  max: fw.max,
+  minimum: plat.minimumUsers,
+  premium: b.monthly_premium,
+  discounts: fw.discounts.map((d) => ({ from: d.fromTotal, off: d.off })),
+};
+const sample = quote({ tierId: "gold", users: 25, frameworks: 2 });
+
+// Worked examples: one framework, 12-month term, per company size.
+const examples = EXAMPLE_SIZES.map((users) => ({
+  users,
+  totals: plat.tiers.map((t) => quote({ tierId: t.id, users })),
+}));
+// The add-on bands: what each added framework costs per user a month as the account grows.
+const bands = (() => {
+  const edges = [fw.included + 1, ...fw.discounts.map((d) => d.fromTotal), fw.max + 1];
+  return edges.slice(0, -1).map((from, i) => {
+    const to = edges[i + 1] - 1;
+    const off = frameworkDiscount(from);
+    return { label: from === to ? `${from}` : `${from} to ${to}`, off, offText: off ? percent(off) : "None", step: Math.round(fw.addon * (1 - off) * 100) / 100 };
+  });
+})();
+
 const faq = [
-  { q: "Is the audit included?", a: `No, and it is not included anywhere else either. A SOC 2 or ISO 27001 audit is done by a licensed firm for its own fee. ${brand.display_name} gets you ready, hands over the evidence pack and sits in the room.` },
-  { q: "What happens when we grow past the tier?", a: "You move to the next tier at the end of your term, or sooner if you want the extra frameworks. Nothing is switched off in between." },
-  { q: "What if we leave?", a: `${plat.billingTerms.exit} Nothing is held back and there is no exit fee.` },
+  { q: "What counts as a user?", a: `A person with an account in the tenant ${brand.display_name} watches: staff, contractors with a mailbox, and admins. Guests, shared mailboxes and service accounts do not count. The count is read from your tenant each month, so a hire or a departure shows on the next invoice, and the minimum is ${plat.minimumUsers} users.` },
+  { q: "Which framework is included?", a: `Any one of the ${catalog.length} in the catalog. Most companies start with the cyber insurance questionnaire, because the renewal arrives whether or not a customer asks for SOC 2. You can swap the included framework at the end of a term.` },
+  { q: "How do add-on frameworks work?", a: `${fw.text} A second framework reuses the same controls and evidence, so it is mostly a mapping, which is why it costs a fraction of the plan.` },
+  { q: "Is the audit included?", a: `No, and it is not included anywhere else either. A SOC 2 or ISO 27001 audit is done by a licensed firm for its own fee. ${brand.display_name} gets you ready, hands over the evidence pack and sits in the room; on ${diamond.name}, ${brand.display_name} runs the audit with the firm for you.` },
   { q: "Can we pay monthly?", a: `Yes, every plan is. ${plat.billing} ${terms.payment}.` },
-  { q: "How were the prices set?", a: "Against the published prices of the compliance platforms we compared in October 2026: the average entry price for a company our size, minus 15%. The method and the sources are written down and shared on request." },
-  { q: "What if we only need the insurer questionnaire?", a: `That is the Starter tier. It is the full platform with one framework and one integration, for companies of up to ${starter.people_up_to} people.` },
-  { q: "Do you resell through IT providers?", a: `Yes. A reseller buys at list price minus ${starterReseller.discount} to begin with and sets its own client price; brokers, CPAs and attorneys who refer receive a fee. The terms are on the partners page.` },
+  { q: "How were the prices set?", a: "Against what the compliance platforms we compared in October 2026 charge a 50-person company for the same tier, per user: the average, minus 15%. The method, the vendors and the arithmetic are written down and shared on request." },
+  { q: "Do you sell through IT providers?", a: `Yes. A reseller buys at list price minus ${firstReseller.discount} to begin with and sets its own client price; brokers, CPAs and attorneys who refer receive a fee. The programme is on the resellers page.` },
 ];
 ---
 
-<Base title="Pricing" description={`Alimi platform pricing: ${plat.tiers.map((t) => `${t.name} ${t.price} a year for up to ${t.people_up_to} people`).join(", ")}. Policies and the insurer questionnaire in every tier; fixed-fee services and free resources alongside.`} path="/pricing">
-  <Hero eyebrow="Pricing" title="Published prices, so nobody has to ask">
-    <p class="lede">Three tiers by company size, from {starter.price} to {scale.price} a year. {plat.billing} {plat.auditNote}</p>
+<Base title="Pricing" description={`Alimi platform pricing per user a month: ${plat.tiers.map((t) => `${t.name} ${t.perUser}`).join(", ")}, one framework included and ${catalog.length} to choose from. Policies, training and a named compliance lead in every tier; fixed-fee services alongside.`} path="/pricing">
+  <Hero eyebrow="Pricing" title="Published prices, per user, so nobody has to ask">
+    <p class="lede">Four tiers from {silver.perUser} to {diamond.perUser} per user a month, each with one framework included and {catalog.length} to choose from. {plat.billing} {plat.auditNote}</p>
     <div class="actions">
-      <a class="button button--primary" href="#waitlist">Join the waitlist</a>
+      <a class="button button--primary" href="#calculator">Work out your price</a>
       <a class="button button--secondary" href="#services">Services</a>
     </div>
   </Hero>
 
-  <Section id="tiers" tone="alt" title="The platform" lede="Pick the tier by headcount. Every tier starts with the cyber insurance questionnaire and includes the whole policy library.">
+  <Section id="tiers" tone="alt" title="The platform" lede={`Pick the tier by what you need to prove. Every tier is priced per user a month, starts with one framework, and includes the whole policy library.`}>
     <Tiers />
     <h3 style="margin-top:2rem">Included at every tier</h3>
     <ul class="checklist">
       {plat.included.map((item) => <li>{item}</li>)}
     </ul>
-    <p class="price-updated small">Prices in {pricing.currency}, updated {formatDate(pricing.updated)}. Resellers buy at a discount; see <a href="/for-partners">For partners</a>.</p>
+    <p class="price-updated small">Prices in {pricing.currency}, updated {formatDate(pricing.updated)}. Resellers buy at a discount; see <a href="/for-resellers">For resellers</a>.</p>
+  </Section>
+
+  <Section id="frameworks" title="Frameworks" lede={fw.text}>
+    <div class="grid grid--two" style="align-items:start">
+      <div class="card">
+        <h3>The catalog</h3>
+        <ul class="columns">
+          {catalog.map((f) => <li>{f.name}</li>)}
+        </ul>
+        <p style="margin-top:1rem"><strong>And in every plan, at no charge: the {posture.name}.</strong> {posture.summary}</p>
+        <p class="muted small" style="margin-top:1rem">Requirement IDs and our own one-line summaries only; the standards' text stays with its owners. <a href="/platform#frameworks">Who needs which</a>.</p>
+      </div>
+      <div class="card">
+        <h3>What each added framework costs</h3>
+        <div class="table-wrap">
+          <table class="table table--compact">
+            <thead><tr><th>Frameworks on the account</th><th>Discount</th><th>Each added framework</th></tr></thead>
+            <tbody>
+              {bands.map((row) => (
+                <tr>
+                  <td>{row.label}</td>
+                  <td>{row.offText}</td>
+                  <td>{money(row.step)} per user a month</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small" style="margin-top:0.75rem">Example: {sample.tier}, {sample.seats} users, {sample.frameworks} frameworks is {sample.perUserText}, {sample.yearlyText} on the {silver.termLabel}.</p>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="calculator" tone="alt" title="Work out your price" lede="Enter your headcount, pick a tier and the frameworks you need. The arithmetic is the one in our price list; nothing is sent anywhere.">
+    <div class="grid grid--two" style="align-items:start">
+      <div class="card calculator" id="price-calculator" role="group" aria-labelledby="calculator-title"
+        data-tiers={JSON.stringify(calculatorData.tiers)} data-addon={calculatorData.addon} data-included={calculatorData.included}
+        data-max={calculatorData.max} data-minimum={calculatorData.minimum} data-premium={calculatorData.premium}
+        data-discounts={JSON.stringify(calculatorData.discounts)}>
+        <h3 id="calculator-title" style="margin-top:0">Your company</h3>
+        <div class="form__row">
+          <div class="field">
+            <label for="calc-users">People with an account</label>
+            <input id="calc-users" name="users" type="number" inputmode="numeric" min="1" max="2000" step="1" value="25" />
+          </div>
+          <div class="field">
+            <label for="calc-frameworks">Frameworks (1 to {fw.max})</label>
+            <input id="calc-frameworks" name="frameworks" type="number" inputmode="numeric" min="1" max={fw.max} step="1" value="1" />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="calc-tier">Tier</label>
+            <select id="calc-tier" name="tier">
+              {plat.tiers.map((t) => <option value={t.id} selected={t.id === "gold"}>{t.name}, {t.perUser} per user</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="calc-term">Billing</label>
+            <select id="calc-term" name="term">
+              <option value="term">{silver.termLabel}, paid monthly</option>
+              <option value="month">Month to month ({percent(b.monthly_premium)} more)</option>
+            </select>
+          </div>
+        </div>
+        <output class="calculator__result" for="calc-users calc-frameworks calc-tier calc-term" aria-live="polite">
+          <p class="muted small" data-calc="fallback">Turn on JavaScript for a live total, or read the worked examples below.</p>
+          <p class="calculator__total" data-calc="monthly" hidden></p>
+          <p class="muted" data-calc="detail" hidden></p>
+        </output>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Worked examples</h3>
+        <p class="muted small">One framework, {silver.termLabel}, total a year.</p>
+        <div class="table-wrap">
+          <table class="table table--compact">
+            <thead><tr><th>People</th>{plat.tiers.map((t) => <th>{t.name}</th>)}</tr></thead>
+            <tbody>
+              {examples.map((row) => (
+                <tr>
+                  <th scope="row">{row.users}</th>
+                  {row.totals.map((q) => <td>{money(q.yearly)}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small" style="margin-top:0.75rem">Below {plat.minimumUsers} people the plan is billed at {plat.minimumUsers} users. {plat.auditNote}</p>
+      </div>
+    </div>
   </Section>
 
   <Section id="services" title="Services" lede="Fixed fees, delivered by the founder. Each one leaves the platform in better shape than it found it.">
@@ -58,7 +180,7 @@ const faq = [
         <span class="badge badge--service">Retainer</span>
         <h3 class="tier__name" id="service-retainer" style="margin-top:0.75rem">{lead.name}</h3>
         <p class="tier__price">{lead.price}</p>
-        <p class="tier__note">{lead.hours}; minimum retainer {terms.minimum_monthly_retainer.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })} a month</p>
+        <p class="tier__note">{lead.hours}; minimum retainer {money(terms.minimum_monthly_retainer)} a month</p>
         <ul class="checklist">
           <li>A named security and compliance lead who owns the program</li>
           <li>Answers insurers, customers and auditors on your behalf</li>
@@ -83,3 +205,50 @@ const faq = [
     <WaitlistForm name="waitlist" title="Reserve a place" intro="Tell us the size of the company and which framework is pressing. The founder replies personally." interest="platform" button="Join the waitlist" />
   </Section>
 </Base>
+
+<script>
+  // The pricing calculator. Same arithmetic as quote() in src/lib/config.js; the numbers come from
+  // the form's data attributes so this file carries no price of its own.
+  const form = document.getElementById("price-calculator");
+  if (form) {
+    const data = form.dataset;
+    const tiers = JSON.parse(data.tiers ?? "[]");
+    const discounts = JSON.parse(data.discounts ?? "[]");
+    const addon = Number(data.addon);
+    const included = Number(data.included);
+    const max = Number(data.max);
+    const minimum = Number(data.minimum);
+    const premium = Number(data.premium);
+    const money = (n) => {
+      const v = Math.round(n * 100) / 100;
+      return "$" + v.toLocaleString("en-US", Number.isInteger(v) ? { maximumFractionDigits: 0 } : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    const field = (name) => form.querySelector(`[name="${name}"]`);
+    const out = (key) => form.querySelector(`[data-calc="${key}"]`);
+    const update = () => {
+      const tier = tiers.find((t) => t.id === field("tier").value) ?? tiers[0];
+      const users = Math.round(Number(field("users").value)) || 0;
+      const held = Math.min(Math.max(1, Math.round(Number(field("frameworks").value)) || 1), max);
+      const monthToMonth = field("term").value === "month";
+      const seats = Math.max(users, minimum);
+      const addons = Math.max(0, held - included);
+      let off = 0;
+      for (const d of discounts) if (held >= d.from && d.off > off) off = d.off;
+      let perUser = tier.rate + addons * addon * (1 - off);
+      if (monthToMonth) perUser *= 1 + premium;
+      perUser = Math.round(perUser * 100) / 100;
+      const monthly = Math.round(perUser * seats);
+      out("monthly").textContent = `${money(monthly)} a month, ${money(monthly * 12)} a year`;
+      const notes = [`${tier.name}, ${money(perUser)} per user a month for ${seats} user${seats === 1 ? "" : "s"}`];
+      if (users < seats) notes.push(`billed at the ${minimum}-user minimum`);
+      if (addons) notes.push(`${addons} added framework${addons === 1 ? "" : "s"}${off ? ` at ${Math.round(off * 100)}% off` : ""}`);
+      notes.push(monthToMonth ? "month to month" : "12-month term");
+      out("detail").textContent = notes.join("; ") + ".";
+      out("monthly").hidden = false;
+      out("detail").hidden = false;
+      out("fallback").hidden = true;
+    };
+    form.addEventListener("input", update);
+    update();
+  }
+</script>
