@@ -44,3 +44,9 @@
   from = "/ai-policy-kit"
   to = "/resources"
   status = 301
+
+# The home-buyer closing-day checklist was removed on Nov 2, 2026 (consumer content outside compliance).
+[[redirects]]
+  from = "/resources/closing-day-checklist"
+  to = "/resources"
+  status = 301

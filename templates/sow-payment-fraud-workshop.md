@@ -14,7 +14,7 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 ## 2. Scope
 
-**In scope:** a half-day (three and a half hour) workshop for the finance team, or for a closing office its attorneys, paralegals and closers, up to twelve people, on site in the Boston area or remote; the Payment Verification Procedure tailored to the Client's payment systems, approval limits and roles; the callback scripts, poster and training materials from Alimi's Payment Fraud Protection Kit filled in for the Client; and one drill within twelve months of the workshop.
+**In scope:** a half-day (three and a half hour) workshop for the finance team and anyone who can approve a payment or change bank details, up to twelve people, on site in the Boston area or remote; the Payment Verification Procedure tailored to the Client's payment systems, approval limits and roles; the callback scripts, poster and training materials from Alimi's Payment Fraud Protection Kit filled in for the Client; and one drill within twelve months of the workshop.
 
 **Out of scope:** changes to banking products or accounting software, insurance claims, recovery of funds already lost, and legal advice on client funds or trust accounting.
 
@@ -22,7 +22,7 @@ Make it a habit at {{Client}} that no payment goes to a new or changed destinati
 
 {{pricing.products.services.fraud_workshop.includes}}
 
-In detail: the free {{pricing.products.free.fraud_procedure.name}} with its callback scripts, poster and closing-day checklist; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
+In detail: the free {{pricing.products.free.fraud_procedure.name}} with its callback scripts and poster; the tailored procedure as DOCX and PDF with the Client's threshold, roles and bank fraud line; the poster; the callback scripts; the 20-minute training recording or slides for staff who missed the session; a one-page summary of the drill with what was caught and what to improve.
 
 ## 4. Approach and timeline
 

@@ -87,7 +87,6 @@ export const FREE_DOCS = [
   { slug: "payment-verification-procedure", file: "kits/payment-fraud/procedure.md", group: "Payment fraud procedure" },
   { slug: "callback-scripts", file: "kits/payment-fraud/callback-scripts.md", group: "Payment fraud procedure" },
   { slug: "payment-fraud-poster", file: "kits/payment-fraud/poster.md", group: "Payment fraud procedure" },
-  { slug: "closing-day-checklist", file: "kits/payment-fraud/closing-day-checklist.md", group: "Payment fraud procedure" },
 ];
 
 const ROLE_PLACEHOLDERS = ["Security Lead", "IT Lead", "HR Lead", "Finance Lead", "Privacy Lead", "AI Lead", "CEO"];

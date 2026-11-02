@@ -22,14 +22,13 @@ EXPECTED = {
     "PFK-01": ("payment-verification-procedure", "procedure"),
     "PFK-02": ("callback-scripts", "scripts"),
     "PFK-03": ("staff-poster", "poster"),
-    "PFK-04": ("closing-day-checklist", "checklist"),
     "PFK-05": ("training-video-script", "script"),
 }
-WORDS = {"PFK-01": (1200, 2500), "PFK-02": (800, 2000), "PFK-03": (120, 400), "PFK-04": (900, 2200), "PFK-05": (1800, 3500)}
+WORDS = {"PFK-01": (1200, 2500), "PFK-02": (800, 2000), "PFK-03": (120, 400), "PFK-05": (1800, 3500)}
 pandoc_needed = pytest.mark.skipif(shutil.which("pandoc") is None, reason="pandoc not installed")
 
 
-def test_the_five_documents_exist():
+def test_the_four_documents_exist():
     assert {d.id: (d.slug, d.kind) for d in DOCS} == EXPECTED
 
 
@@ -75,22 +74,12 @@ def test_terms_are_defined_before_the_acronym():
     procedure = BY_ID["PFK-01"].body
     assert procedure.find("business email compromise (BEC)") < procedure.find("BEC)") + 1
     assert "ACH (the US bank-to-bank network" in procedure
-    checklist = BY_ID["PFK-04"].body
-    assert "IOLTA** account, short for Interest on Lawyers' Trust Accounts" in checklist
     video = BY_ID["PFK-05"].body
     assert "Business email compromise (BEC)" in video
 
 
-def test_closing_checklist_is_not_legal_advice_and_names_the_fbi_boston_number():
-    body = BY_ID["PFK-04"].body
-    assert "not legal advice" in body
-    assert "857-386-2000" in body
-    assert "ic3.gov" in body
-    assert "M.G.L. c. 183 §63B" in body
-
-
 def test_statistics_name_their_source_and_year():
-    for doc in (BY_ID["PFK-04"], BY_ID["PFK-05"]):
+    for doc in (BY_ID["PFK-05"],):
         if "$" in doc.body and "billion" in doc.body or "million" in doc.body:
             assert "2025 Internet Crime Report" in doc.body, f"{doc.path.name} quotes a figure without naming the FBI report year"
 

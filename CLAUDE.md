@@ -39,7 +39,7 @@ Prices live in `config/pricing.yaml`; the site, the templates and this file read
 /platform             hosted web app (phase 3+): FastAPI, HTMX pages, Postgres; orgs, login, scheduled runs, controls, evidence, policies, people, dashboard
 /tools/ai-policy      AI governance module (prompts 15-16, not started): policy generator + AI app inventory; a static generator may ship as free content first
 /policies             policy library (the platform's policy module): Markdown + YAML front matter mapped to SOC 2, ISO 27001, ISO 42001, HIPAA and insurer IDs; coverage matrix; build to DOCX/PDF
-/kits/payment-fraud   payment fraud procedure, scripts, poster, checklist, training script; free content on the site and a policy-module document; build script to PDF
+/kits/payment-fraud   payment fraud procedure, scripts, poster, training script; free content on the site and a policy-module document; build script to PDF
 /templates            MSA, SOW, pilot authorization letter, case-study template ({{placeholders}}, attorney-review header)
 /docs                 research summaries, decisions log, pilot runbook
 /config               pricing.yaml (tiers, services, free, partners), checks.yaml (scanner checks + severity + insurer mapping), controls.yaml (40 controls), brand.yaml
@@ -71,7 +71,7 @@ Order changed Nov 1, 2026: scanner first, then the documents and kits, and from 
 | 1 | Repo foundation, config files, CLAUDE.md | Nov 14, 2026 | done Oct 31, 2026 (prompts 1-2) |
 | 2 | Scanner core and Microsoft 365 checks (prompt 3) | Dec 5, 2026 | done Nov 1, 2026, PR #2 |
 | 3 | Google Workspace checks and insurer-ready report (prompts 4-5) | Jan 9, 2027 | done Nov 1, 2026: prompt 4 PR #3, prompt 5 PR #4 |
-| 4 | Payment fraud procedure, scripts, poster, checklist, training script (prompt 6); now free content and a policy-module document | Jan 30, 2027 | done Nov 1, 2026, PR #6 |
+| 4 | Payment fraud procedure, scripts, poster, training script (prompt 6); now free content and a policy-module document; the home-buyer closing checklist was removed Nov 2, 2026 | Jan 30, 2027 | done Nov 1, 2026, PR #6 |
 | 5 | Policy library mapped to SOC 2, ISO 27001, ISO 42001 (prompt 7); the platform's policy module | Feb 2027 | done Nov 1, 2026, PR #5 |
 | 6 | Templates (incl. reseller and referral agreements) and pilot runbook (prompts 8-9), needed before the first pilot | Feb 2027 | done Nov 1, 2026: prompt 8 PR #7, prompt 9 PR #8 |
 | 7 | Marketing site (prompt 10), then the one-platform rework with final copy, published tiers and free resources (prompt 11) | Mar 2027 | done Nov 1, 2026, PR #9 (both prompts), merged Nov 2 |

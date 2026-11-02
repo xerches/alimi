@@ -16,7 +16,7 @@
       "frequency": "Yearly, with a drill",
       "source": "Alimi payment fraud kit",
       "assigned_to": "Money movers",
-      "description": "The callback procedure for bank-detail changes and wires, the scripts, and the closing-day checklist."
+      "description": "The callback procedure for bank-detail changes and wires, and the scripts."
     },
     {
       "id": "TR-03",
