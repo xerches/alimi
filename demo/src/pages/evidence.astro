@@ -1,0 +1,70 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { evidence, evidenceCounts, evidenceTypes, formatDate, href, control } from "../lib/data.js";
+const sorted = [...evidence].sort((a, b) => ({ needs_artifact: 0, needs_renewal: 1, upcoming: 2, ready: 3 }[a.status] - { needs_artifact: 0, needs_renewal: 1, upcoming: 2, ready: 3 }[b.status]) || (a.renewal ?? "9").localeCompare(b.renewal ?? "9"));
+---
+
+<App title="Evidence" path="/evidence" section="evidence" eyebrow="Compliance" crumbs={[{ label: "Evidence" }]} wide
+  description="The evidence library: every artifact that proves a control, with its type, status, owner, renewal date and the controls it is linked to."
+  lead="Evidence is many to many with controls and carries a renewal date, so staying compliant looks like a calendar, not a project. Scanner reports renew themselves every run.">
+  <a slot="actions" class="button" href="#add">Add evidence</a>
+
+  <div class="grid">
+    <Tile label="Ready" value={evidenceCounts.ready} />
+    <Tile label="Upcoming renewal" value={evidenceCounts.upcoming} note="Due inside 30 days" />
+    <Tile label="Needs renewal" value={evidenceCounts.needs_renewal} note="Past its date" />
+    <Tile label="Needs artifact" value={evidenceCounts.needs_artifact} note="Requested, nothing attached yet" />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="evidence-filter">Filter evidence</label>
+    <input id="evidence-filter" type="search" placeholder="Filter by name, owner or control" data-filter="#evidence" />
+    <div class="chips" data-chips="#evidence" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-value="ready" aria-pressed="false">Ready</button>
+      <button class="chip" type="button" data-value="upcoming" aria-pressed="false">Upcoming renewal</button>
+      <button class="chip" type="button" data-value="needs_renewal" aria-pressed="false">Needs renewal</button>
+      <button class="chip" type="button" data-value="needs_artifact" aria-pressed="false">Needs artifact</button>
+    </div>
+    <div class="chips" data-chips="#evidence" data-key="type" role="group" aria-label="Filter by type">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Every type</button>
+      {Object.keys(evidenceTypes).map((t) => <button class="chip" type="button" data-value={t} aria-pressed="false">{t}</button>)}
+    </div>
+    <span class="muted" data-count-for="#evidence"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="evidence">
+      <thead><tr><th>Evidence</th><th>Type</th><th>Status</th><th>Owner</th><th>Controls</th><th>Created</th><th>Renewal</th></tr></thead>
+      <tbody>
+        {sorted.map((e) => (
+          <tr id={e.id} data-status={e.status} data-type={e.type}>
+            <td><strong>{e.name}</strong><span class="sub">{e.description}</span>{e.artifact ? <span class="sub mono">{e.artifact.kind === "file" ? e.artifact.name : e.artifact.kind === "link" ? e.artifact.name : e.artifact.name}</span> : <span class="sub">Requested {formatDate(e.requested_on)}, due {formatDate(e.due)}</span>}</td>
+            <td>{e.type}</td>
+            <td><Pill status={e.status} /></td>
+            <td>{e.owner ? <a href={href.person(e.owner)}>{e.ownerName}</a> : <span class="muted">Unassigned</span>}</td>
+            <td>{e.controls.map((cid) => <div><a href={href.control(cid)}>{control(cid)?.name}</a></div>)}</td>
+            <td>{e.created ? formatDate(e.created) : "—"}</td>
+            <td>{e.renewal ? <span>{formatDate(e.renewal)}<span class="sub">{e.daysToRenewal < 0 ? `${-e.daysToRenewal} days ago` : `in ${e.daysToRenewal} days`}</span></span> : <span class="muted">—</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" id="add">
+    <h2>Add evidence</h2>
+    <p class="muted" style="font-size:.8125rem">In the demo nothing is saved. In the platform the file goes to encrypted storage scoped to this company, and the item appears above with its renewal date and the controls it is linked to.</p>
+    <form class="form-grid" aria-label="Add evidence (demo, does not save)">
+      <div class="field"><label for="add-name">Name</label><input id="add-name" type="text" placeholder="Outbound anti-spam policy screenshot" /></div>
+      <div class="field"><label for="add-type">Type</label><select id="add-type">{Object.entries(evidenceTypes).map(([k, v]) => <option value={k}>{k}: {v}</option>)}</select></div>
+      <div class="field"><label for="add-source">Source</label><select id="add-source"><option>Upload a file</option><option>Link</option><option>Note</option><option>Scanner report</option></select></div>
+      <div class="field"><label for="add-controls">Link to controls</label><input id="add-controls" type="text" placeholder="CTL-15, CTL-16" /></div>
+      <div class="field"><label for="add-owner">Owner</label><input id="add-owner" type="text" placeholder="Marcus Okafor" /></div>
+      <div class="field"><label for="add-renewal">Renewal</label><select id="add-renewal"><option>In 12 months</option><option>In 3 months</option><option>Monthly</option><option>No renewal</option></select></div>
+      <div class="form-actions"><button class="button" type="button">Save evidence</button> <span class="demo-note">Demo: does nothing</span></div>
+    </form>
+  </div>
+</App>

@@ -1,0 +1,44 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Bar from "../components/Bar.astro";
+import { courses, formatDate, href } from "../lib/data.js";
+---
+
+<App title="Training" path="/training" section="training" eyebrow="People" crumbs={[{ label: "Training" }]}
+  description="Three short courses with completion per course, who is due or overdue, and the export an insurer or auditor accepts as evidence."
+  lead="Short courses written for an office, not an IT team: one for everyone, one for the people who move money, one for AI use. Completion is tracked per person and exported as evidence once a year.">
+  <a slot="actions" class="button secondary" href="/evidence#EV-05">Completion export</a>
+
+  <div class="grid wide">
+    {courses.map((c) => (
+      <div class="card" id={c.id}>
+        <div class="card-head"><h2>{c.name}</h2><span class="tag">{c.minutes} min</span></div>
+        <p class="muted" style="margin:0 0 .5rem">{c.description}</p>
+        <p style="font-size:1.5rem;font-weight:700;margin:0;font-family:var(--font-heading)">{c.percent}%</p>
+        <Bar percent={c.percent} label={`${c.name} completion`} />
+        <dl class="kv">
+          <dt>Assigned to</dt><dd>{c.assigned_to} ({c.counts.assigned})</dd>
+          <dt>Completed</dt><dd>{c.counts.completed}</dd>
+          <dt>Due</dt><dd>{c.counts.due}</dd>
+          <dt>Overdue</dt><dd>{c.counts.overdue}</dd>
+          <dt>Frequency</dt><dd>{c.frequency}</dd>
+          <dt>Source</dt><dd>{c.source}</dd>
+        </dl>
+        {c.counts.due + c.counts.overdue > 0 && (
+          <>
+            <h3>Not yet complete</h3>
+            <ul class="list">
+              {c.assigned.filter((r) => r.record.status !== "completed").map((r) => <li><span class="grow"><a href={href.person(r.person.id)}>{r.person.name}</a> <span class="muted">{r.person.title}</span></span><Pill status={r.record.status} /><span class="when">{r.record.due ? formatDate(r.record.due) : ""}</span></li>)}
+            </ul>
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <div class="card">
+    <h2>How it is assigned</h2>
+    <p>New hires get the security awareness and AI courses on day one, due by day 30. People in the Money movers group (leadership, finance and payroll operations) also get Verify before you pay. A reminder goes out a week before the due date and every Monday after it; the manager is copied once a course is overdue by two weeks. Completion exports feed the insurer's training question and SOC 2's awareness criterion.</p>
+  </div>
+</App>

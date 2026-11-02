@@ -1,0 +1,57 @@
+---
+import App from "../../layouts/App.astro";
+import Pill from "../../components/Pill.astro";
+import Bar from "../../components/Bar.astro";
+import { readiness, readinessFor, requirementRows, formatDate, href } from "../../lib/data.js";
+
+export function getStaticPaths() {
+  return readiness.map((r) => ({ params: { id: r.id } }));
+}
+const { id } = Astro.params;
+const fw = readinessFor(id);
+const rows = requirementRows(id);
+const mapped = rows.filter((r) => r.controls.length);
+const okRows = mapped.filter((r) => r.status === "ok").length;
+---
+
+<App title={fw.short} path={`/frameworks/${id}`} section="frameworks" eyebrow="Framework" crumbs={[{ label: "Frameworks", href: "/frameworks" }, { label: fw.short }]}
+  description={`${fw.name}: every requirement ID with alimi's one-line summary, the controls that satisfy it and their status.`}
+  lead={fw.name}>
+  <a slot="actions" class="button secondary" href={`/controls?framework=${id}`}>Controls in scope</a>
+
+  <div class="grid">
+    <div class="tile"><span class="label">Readiness</span><span class="value">{fw.percent}%</span><Bar percent={fw.percent} label={`${fw.short} readiness`} /><span class="note">{fw.ok} of {fw.controls.length} controls Ok</span></div>
+    <div class="tile"><span class="label">Requirement IDs</span><span class="value">{fw.mappedRequirements}<small> of {fw.total} mapped</small></span><span class="note">{okRows} of {mapped.length} mapped IDs fully Ok</span></div>
+    <div class="tile"><span class="label">Target</span><span class="value" style="font-size:1.25rem">{fw.target?.date ? formatDate(fw.target.date) : "No date"}</span><span class="note">{fw.target?.label}</span></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="req-filter">Filter requirements</label>
+    <input id="req-filter" type="search" placeholder="Filter by ID or words" data-filter="#requirements" />
+    <div class="chips" data-chips="#requirements" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-value="ok" aria-pressed="false">Ok</button>
+      <button class="chip" type="button" data-value="needs_attention" aria-pressed="false">Needs attention</button>
+      <button class="chip" type="button" data-value="needs_evidence" aria-pressed="false">Needs evidence</button>
+      <button class="chip" type="button" data-value="unmapped" aria-pressed="false">Not mapped yet</button>
+    </div>
+    <span class="muted" data-count-for="#requirements"></span>
+  </div>
+  <div class="table-wrap">
+    <table id="requirements">
+      <thead><tr><th>ID</th><th>What it asks for, in plain words</th><th>Controls</th><th>Policies</th><th>Status</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr data-status={r.status}>
+            <td class="mono">{r.id}</td>
+            <td>{r.summary}</td>
+            <td>{r.controls.length ? r.controls.map((c) => <div><a href={href.control(c.id)}>{c.name}</a></div>) : <span class="muted">Not mapped to a control yet</span>}</td>
+            <td>{r.policies.map((p) => <div><a href={href.policy(p.id)}>{p.id}</a></div>)}</td>
+            <td>{r.status === "unmapped" ? <Pill label="Not mapped" tone="neutral" /> : <Pill status={r.status} />}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">Requirement IDs come from the framework; the one-line summaries are alimi's own words. No framework text is reproduced here.</p>
+</App>

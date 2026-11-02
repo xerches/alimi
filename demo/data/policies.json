@@ -1,0 +1,547 @@
+{
+  "policies": [
+    {
+      "id": "POL-01",
+      "version": "2.1",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "2.1",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-02",
+      "version": "2.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "2.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-03",
+      "version": "2.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "2.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-04",
+      "version": "2.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "2.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-05",
+      "version": "1.2",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2025-04-01",
+          "summary": "Yearly review, minor wording.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.2",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-06",
+      "version": "1.1",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "P-04",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-07",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-08",
+      "version": "1.1",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-05-05",
+      "next_review": "2027-05-05",
+      "owner": "P-45",
+      "approver": "P-02",
+      "applies_to": "Engineering",
+      "history": [
+        {
+          "version": "1.1",
+          "date": "2026-05-05",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-09",
+      "version": "1.1",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-10",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-11",
+      "version": "1.1",
+      "status": "renews_soon",
+      "status_label": "Renews soon",
+      "approved": "2025-11-20",
+      "next_review": "2026-11-20",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2025-11-20",
+          "summary": "Yearly review.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": "Yearly review due Nov 20, 2026."
+    },
+    {
+      "id": "POL-12",
+      "version": "1.3",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-04-14",
+      "next_review": "2027-04-14",
+      "owner": "P-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2025-04-01",
+          "summary": "Yearly review, minor wording.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.3",
+          "date": "2026-04-14",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-13",
+      "version": "2.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "2.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-14",
+      "version": "1.1",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "P-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-15",
+      "version": "1.0",
+      "status": "past_due",
+      "status_label": "Past due",
+      "approved": "2025-09-18",
+      "next_review": "2026-09-18",
+      "owner": "X-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2025-09-18",
+          "summary": "Yearly review.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": "Yearly review was due Sep 18, 2026; the risk workshop that feeds it is scheduled for Nov 18."
+    },
+    {
+      "id": "POL-16",
+      "version": "1.2",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "P-42",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2024-02-15",
+          "summary": "First adoption, written in-house.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.1",
+          "date": "2025-04-01",
+          "summary": "Yearly review, minor wording.",
+          "approved_by": "P-01"
+        },
+        {
+          "version": "1.2",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-17",
+      "version": "1.1",
+      "status": "draft",
+      "status_label": "Draft",
+      "approved": "2025-07-01",
+      "next_review": "2026-07-01",
+      "owner": "P-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.1",
+          "date": "2025-07-01",
+          "summary": "Yearly review.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": "v1.1 in draft since the move to the Quincy office; v1.0 of Jul 1, 2025 is past its review date."
+    },
+    {
+      "id": "POL-18",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-19",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-03-10",
+      "next_review": "2027-03-10",
+      "owner": "X-01",
+      "approver": "P-02",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-03-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-02"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-20",
+      "version": "1.1",
+      "status": "needs_approval",
+      "status_label": "Needs approval",
+      "approved": "2025-10-22",
+      "next_review": "2026-10-22",
+      "owner": "P-04",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.1",
+          "date": "2025-10-22",
+          "summary": "Yearly review.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": "v1.1 submitted to the CEO on Oct 22, 2026: adds the retention schedule the bank asked for."
+    },
+    {
+      "id": "POL-21",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-04-01",
+      "next_review": "2027-04-01",
+      "owner": "P-04",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-04-01",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-22",
+      "version": "1.0",
+      "status": "published",
+      "status_label": "Published",
+      "approved": "2026-10-10",
+      "next_review": "2027-10-10",
+      "owner": "P-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [
+        {
+          "version": "1.0",
+          "date": "2026-10-10",
+          "summary": "Rewritten on the alimi template, mapped to SOC 2, ISO 27001 and the insurer questions.",
+          "approved_by": "P-01"
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "POL-23",
+      "version": "0.9",
+      "status": "draft",
+      "status_label": "Draft",
+      "approved": null,
+      "next_review": null,
+      "owner": "P-02",
+      "approver": "P-01",
+      "applies_to": "all",
+      "history": [],
+      "note": "First version in draft; the AI Lead and the Privacy Lead are reviewing the impact-assessment section."
+    }
+  ]
+}

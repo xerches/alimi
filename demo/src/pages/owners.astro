@@ -1,0 +1,43 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import { owners, formatDate, href, controlCounts } from "../lib/data.js";
+---
+
+<App title="Owners" path="/owners" section="owners" eyebrow="People" crumbs={[{ label: "Owners" }]}
+  description="What each owner is accountable for: controls, policies, evidence, vendors, risks and AI tools, with the tasks due and overdue."
+  lead="Accountability by person. Every control, policy, evidence item, vendor and risk has one owner, and this page is what each of them owes. Unassigned items sit at the bottom until someone takes them.">
+  <a slot="actions" class="button secondary" href="/people">People</a>
+
+  <div class="grid two">
+    {owners.map((o) => {
+      const cc = controlCounts(o.controls);
+      return (
+        <div class="card" id={o.id ?? "unassigned"}>
+          <div class="card-head">
+            <h2>{o.person ? <a href={href.person(o.id)}>{o.name}</a> : "Unassigned"}</h2>
+            <span class="muted">{o.person ? `${o.person.title}${o.role ? ` · ${o.role}` : ""}` : "Needs an owner"}</span>
+          </div>
+          <dl class="kv">
+            <dt>Controls</dt><dd>{o.controls.length}{o.controls.length ? <span class="muted"> ({cc.ok} Ok{cc.needs_attention ? `, ${cc.needs_attention} need attention` : ""}{cc.needs_evidence ? `, ${cc.needs_evidence} need evidence` : ""}{cc.needs_owner ? `, ${cc.needs_owner} need an owner` : ""})</span> : null}</dd>
+            <dt>Policies</dt><dd>{o.policies.length}</dd>
+            <dt>Evidence</dt><dd>{o.evidence.length}</dd>
+            <dt>Vendors</dt><dd>{o.vendors.length}</dd>
+            <dt>Risks</dt><dd>{o.risks.length}</dd>
+            <dt>AI tools</dt><dd>{o.aiTools.length}</dd>
+          </dl>
+          {o.tasks.length ? (
+            <>
+              <h3 style="margin-top:.5rem">Due{o.overdue ? <span class="muted"> · {o.overdue} overdue</span> : null}</h3>
+              <ul class="list">
+                {o.tasks.slice(0, 8).map((t) => <li><span class="grow"><a href={t.href}>{t.title}</a></span><span class="when" data-overdue={String(t.overdue)}>{t.due ? formatDate(t.due) : "No date"}</span></li>)}
+                {o.tasks.length > 8 && <li class="muted">and {o.tasks.length - 8} more</li>}
+              </ul>
+            </>
+          ) : <p class="muted" style="margin:0">Nothing due.</p>}
+          {o.controls.length ? <p style="margin:.75rem 0 0;font-size:.8125rem">{o.controls.slice(0, 6).map((c) => <a href={href.control(c.id)} style="margin-right:.5rem">{c.id}</a>)}{o.controls.length > 6 && <span class="muted">+{o.controls.length - 6}</span>}</p> : null}
+        </div>
+      );
+    })}
+  </div>
+</App>

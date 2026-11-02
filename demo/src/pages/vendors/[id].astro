@@ -1,0 +1,88 @@
+---
+import App from "../../layouts/App.astro";
+import Pill from "../../components/Pill.astro";
+import { vendors, vendor, vendorRubric, formatDate, href, evidenceItem, personName } from "../../lib/data.js";
+
+export function getStaticPaths() {
+  return vendors.map((v) => ({ params: { id: v.id } }));
+}
+const { id } = Astro.params;
+const v = vendor(id);
+const rubricLabels = { data_types: "Data types", business_criticality: "Business criticality", integration_access: "Integration access", communication_scope: "Communication scope" };
+const index = vendors.findIndex((x) => x.id === v.id);
+const prev = vendors[index - 1];
+const next = vendors[index + 1];
+---
+
+<App title={v.name} path={`/vendors/${v.id}`} section="vendors" eyebrow={`${v.category}${v.fictional ? " · fictional vendor" : ""}`} crumbs={[{ label: "Vendors", href: "/vendors" }, { label: v.name }]}
+  description={`${v.name}: data shared, inherent risk from the four-factor rubric, owner, review status, evidence, findings and activity.`}
+  lead={`${v.discovered_via === "Manual" ? "Added by hand" : `Found through ${v.discovered_via}`}. ${v.users} ${v.users === 1 ? "person uses" : "people use"} it. Holds: ${v.data_shared.join(", ").toLowerCase()}.`}>
+  <Pill slot="actions" label={v.inherent_risk} />
+  <Pill slot="actions" label={v.review_status} />
+  <a slot="actions" class="button secondary" href="#evidence">Request evidence</a>
+  <a slot="actions" class="button" href="#findings">Flag as finding</a>
+
+  {v.alerts.map((a) => (
+    <div class="callout" data-tone="danger">
+      <p><strong>{v.name} had a security incident, {formatDate(a.date)}.</strong> {a.text}</p>
+      <p style="margin:.5rem 0 0"><button class="button small" type="button">Flag as finding</button> <span class="muted" style="font-size:.8125rem">Flagged as {a.flagged_as_finding} on {formatDate(a.date)}; risk opened. Demo: the button does nothing more.</span></p>
+    </div>
+  ))}
+
+  <div class="section-nav" aria-label="Sections">
+    <a href="#overview">Overview</a><a href="#evidence">Evidence ({v.evidence.length})</a><a href="#findings">Findings ({v.findings.length})</a><a href="#activity">Activity ({v.activity.length})</a>
+  </div>
+
+  <div class="grid two" id="overview">
+    <div class="card">
+      <h2>Overview</h2>
+      <dl class="kv">
+        <dt>Owner</dt><dd>{v.owner ? <a href={href.person(v.owner)}>{v.ownerName}</a> : <span><Pill status="needs_owner" /> <span class="muted">Assign one to start the review</span></span>}</dd>
+        <dt>Review</dt><dd><Pill label={v.review_status} />{v.last_review && <span class="muted"> last {formatDate(v.last_review)}</span>}{v.next_review && <span class="muted">, next {formatDate(v.next_review)}{v.daysToReview < 0 ? ` (${-v.daysToReview} days overdue)` : ` (in ${v.daysToReview} days)`}</span>}</dd>
+        <dt>Data shared</dt><dd>{v.data_shared.join(", ")}</dd>
+        <dt>Subprocessor</dt><dd>{v.subprocessor ? "Yes, handles client data; listed on the trust page" : "No"}</dd>
+        <dt>AI</dt><dd>{v.aiTools.length ? v.aiTools.map((t) => <div><a href={href.ai(t.id)}>{t.name}</a> <span class="muted">({t.status})</span></div>) : v.ai ? "Uses AI features; see the AI governance page" : "No AI features declared"}</dd>
+        <dt>Risks</dt><dd>{v.risks.length ? v.risks.map((r) => <div><a href={href.risk(r.id)}>{r.title}</a></div>) : "None open"}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h2>Inherent risk: {v.inherent_risk} ({v.rubricTotal} of 16)</h2>
+      <div class="table-wrap plain"><table><thead><tr><th>Factor</th><th class="num">Score</th><th>Scale</th></tr></thead><tbody>
+        {Object.entries(v.rubric).map(([k, score]) => <tr><td>{rubricLabels[k]}</td><td class="num">{score}</td><td class="muted" style="font-size:.8125rem">{vendorRubric[k]}</td></tr>)}
+      </tbody></table></div>
+      <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">{vendorRubric.review_rule}</p>
+    </div>
+  </div>
+
+  <div class="card" id="evidence">
+    <div class="card-head"><h2>Evidence</h2></div>
+    {v.evidence.length ? (
+      <div class="table-wrap plain"><table><thead><tr><th>Item</th><th>Kind</th><th>Date</th><th>Status</th></tr></thead><tbody>
+        {v.evidence.map((e) => <tr><td>{e.evidence_id ? <a href={href.evidence(e.evidence_id)}>{e.name}</a> : e.name}</td><td>{e.kind}</td><td>{formatDate(e.date)}</td><td>{e.expired ? <Pill label="Expired" tone="danger" /> : e.awaiting ? <Pill label="Awaiting vendor" tone="warning" /> : <Pill label="On file" tone="success" />}</td></tr>)}
+      </tbody></table></div>
+    ) : <p class="muted">Nothing on file{v.review_status === "Not required" ? "; a contract is enough at this tier" : ""}.</p>}
+    <h3 style="margin-top:1rem">Add evidence</h3>
+    <div class="chips">
+      <button class="chip" type="button">Add from the vendor's trust center</button>
+      <button class="chip" type="button">Request from the vendor</button>
+      <button class="chip" type="button">Upload a file</button>
+      <button class="chip" type="button">Add a link</button>
+      <button class="chip" type="button">Import a past review</button>
+    </div>
+    <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">Demo: the buttons do nothing. In the platform a request emails the vendor contact and reminds them every week until the document arrives.</p>
+  </div>
+
+  <div class="card" id="findings">
+    <h2>Findings</h2>
+    {v.findings.length ? (
+      <ul class="list">{v.findings.map((f) => <li><span class="grow"><strong>{f.id}</strong> {f.text}<span class="sub muted" style="display:block;font-size:.8125rem">Owner {personName(f.owner)} · {formatDate(f.date)}{f.risk && <span> · risk <a href={href.risk(f.risk)}>{f.risk}</a></span>}</span></span><Pill label={f.status} /></li>)}</ul>
+    ) : <p class="muted" style="margin:0">No findings.</p>}
+  </div>
+
+  <div class="card" id="activity">
+    <h2>Activity</h2>
+    {v.activity.length ? <ul class="list">{[...v.activity].sort((a, b) => b.date.localeCompare(a.date)).map((a) => <li><span class="when">{formatDate(a.date)}</span><span class="grow">{a.text}</span></li>)}</ul> : <p class="muted" style="margin:0">No activity recorded.</p>}
+  </div>
+
+  <p class="muted">{prev && <a href={href.vendor(prev.id)}>← {prev.name}</a>}{prev && next && " · "}{next && <a href={href.vendor(next.id)}>{next.name} →</a>}</p>
+</App>

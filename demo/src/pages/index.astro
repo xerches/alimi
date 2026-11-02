@@ -1,0 +1,121 @@
+---
+import App from "../layouts/App.astro";
+import Tile from "../components/Tile.astro";
+import Pill from "../components/Pill.astro";
+import Bar from "../components/Bar.astro";
+import { questionnaires } from "../lib/data.js";
+import {
+  company, controlCounts, controls, readiness, testCounts, monitoring, peopleCounts, policyCounts, policies, tasks, taskCounts,
+  evidenceCounts, vendors, vendorCounts, aiCounts, daysUntil, formatDate, formatDateTime, href, plural, person,
+} from "../lib/data.js";
+
+const counts = controlCounts();
+const okPercent = Math.round((100 * counts.ok) / controls.length);
+const renewalDays = daysUntil(company.insurance.renewal);
+const packDays = daysUntil(company.insurance.questionnaire_due);
+const teamTasks = tasks.filter((t) => t.kind !== "person").slice(0, 12);
+const attention = [
+  ...monitoring.tests.filter((t) => t.status === "fail").map((t) => ({ text: `Test failing: ${t.title}`, sub: t.summary, href: href.test(t.check_id), tone: "danger", label: "Fail" })),
+  ...vendors.filter((v) => v.alerts.length).map((v) => ({ text: `Vendor alert: ${v.name}`, sub: v.alerts[0].text, href: href.vendor(v.id), tone: "danger", label: "Breach notice" })),
+  ...controls.filter((c) => c.status === "needs_owner").map((c) => ({ text: c.name, sub: c.assignmentNote, href: href.control(c.id), tone: "warning", label: "Needs owner" })),
+  ...controls.filter((c) => c.status === "needs_evidence").map((c) => ({ text: c.name, sub: `${c.evidenceItems.filter((e) => e.status !== "ready" && e.status !== "upcoming").map((e) => e.name).join("; ") || "No current evidence"}`, href: href.control(c.id), tone: "warning", label: "Needs evidence" })),
+];
+const trend = testCounts.failing - testCounts.previous;
+const bankDays = daysUntil(company.customer_review.due);
+function questionnaireProgress() {
+  return `${questionnaires.bank.drafted} of ${questionnaires.bank.questions.length}`;
+}
+---
+
+<App title="Home" heading={company.short_name} path="/" section="home" eyebrow="Readiness overview"
+  description={`Readiness overview for ${company.name}: controls, failing tests, people, policies and the tasks due before the insurance renewal.`}
+  lead={`Cyber insurance renews ${formatDate(company.insurance.renewal)}, in ${renewalDays} days. The broker wants the evidence pack by ${formatDate(company.insurance.questionnaire_due)}, in ${packDays} days.`}>
+  <a slot="actions" class="button secondary" href="/questionnaires">Insurer questionnaire</a>
+  <a slot="actions" class="button" href="/controls">View tasks</a>
+
+  <div class="grid tight">
+    <Tile label="Controls Ok" value={counts.ok} unit={`of ${controls.length}`} percent={okPercent} tone={okPercent >= 90 ? "success" : "warning"} note={`${plural(counts.needs_attention, "test failing", "with failing tests")}, ${counts.needs_evidence} need evidence, ${counts.needs_owner} need an owner`} href="/controls" linkText="Controls" />
+    <Tile label="Failing tests" value={testCounts.failing} unit={`of ${testCounts.automated}`} note={`${trend === 0 ? "No change" : trend > 0 ? `${trend} more` : `${-trend} fewer`} since last week; ${testCounts.first} failing on the first scan`} href="/monitoring" linkText="Monitoring" />
+    <Tile label="People compliant" value={peopleCounts.compliant} unit={`of ${peopleCounts.total}`} percent={Math.round((100 * peopleCounts.compliant) / peopleCounts.total)} tone="warning" note={`${peopleCounts.onboarding} started this month; the rest owe a policy or a course`} href="/people" linkText="People" />
+    <Tile label="Tasks due in 30 days" value={taskCounts.next30} note={`${plural(taskCounts.overdue, "task")} overdue across the team`} href="/owners" linkText="By owner" />
+    <Tile label="Bank review" value={questionnaireProgress()} unit="answered" note={`First Quincy Savings Bank, due ${formatDate(company.customer_review.due)} (${bankDays} days)`} href="/questionnaires#bank" linkText="Questionnaire" />
+  </div>
+
+  <h2>Compliance progress</h2>
+  <div class="grid wide">
+    {readiness.map((r) => (
+      <div class="card">
+        <div class="card-head">
+          <h3><a href={href.framework(r.id)}>{r.short}</a></h3>
+          <span class="muted">{r.target?.label}{r.target?.date ? `, ${formatDate(r.target.date)}` : ""}</span>
+        </div>
+        <p class="value" style="font-size:1.75rem;font-weight:700;margin:0">{r.percent}%</p>
+        <Bar percent={r.percent} label={`${r.short} readiness ${r.percent} percent`} />
+        <p class="muted" style="margin:0">{r.ok} of {r.controls.length} controls Ok · {r.remaining} remaining · {r.mappedRequirements} of {r.total} requirement IDs mapped</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="grid two">
+    <div class="card">
+      <div class="card-head"><h2>Needs attention</h2><a href="/controls">All controls</a></div>
+      <ul class="list">
+        {attention.map((a) => (
+          <li>
+            <Pill label={a.label} tone={a.tone} />
+            <span class="grow"><a href={a.href}>{a.text}</a><span class="sub muted" style="display:block;font-size:.8125rem">{a.sub}</span></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Tasks due</h2><a href="/owners">By owner</a></div>
+      <ul class="list">
+        {teamTasks.map((t) => (
+          <li>
+            <span class="grow"><a href={t.href}>{t.title}</a><span class="sub muted" style="display:block;font-size:.8125rem">{t.ownerName}</span></span>
+            <span class="when" data-overdue={String(t.overdue)}>{t.due ? (t.overdue ? `Overdue, ${formatDate(t.due)}` : formatDate(t.due)) : "No date"}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="muted" style="margin:.75rem 0 0;font-size:.8125rem">{taskCounts.team} team tasks in all; reminders go to each owner on Monday and again three days before a due date.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-head"><h2>Policies</h2><a href="/policies">All policies</a></div>
+      <dl class="kv">
+        <dt>Published</dt><dd>{policyCounts.published}</dd>
+        <dt>Renews soon</dt><dd>{policyCounts.renews_soon}</dd>
+        <dt>Past due</dt><dd>{policyCounts.past_due}</dd>
+        <dt>Needs approval</dt><dd>{policyCounts.needs_approval}</dd>
+        <dt>Draft</dt><dd>{policyCounts.draft}</dd>
+      </dl>
+      <p class="muted" style="margin:0;font-size:.8125rem">{policies.filter((p) => p.status !== "draft").reduce((n, p) => n + p.acknowledged, 0)} acknowledgements on file across {policies.length} policies.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Evidence</h2><a href="/evidence">Library</a></div>
+      <dl class="kv">
+        <dt>Ready</dt><dd>{evidenceCounts.ready}</dd>
+        <dt>Upcoming renewal</dt><dd>{evidenceCounts.upcoming}</dd>
+        <dt>Needs renewal</dt><dd>{evidenceCounts.needs_renewal}</dd>
+        <dt>Needs artifact</dt><dd>{evidenceCounts.needs_artifact}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Vendors and AI</h2><a href="/vendors">Vendors</a></div>
+      <dl class="kv">
+        <dt>Vendors</dt><dd>{vendorCounts.total}, {vendorCounts.byTier.Critical} critical</dd>
+        <dt>Reviews to do</dt><dd>{vendorCounts.needingAction}</dd>
+        <dt>Alerts</dt><dd>{vendorCounts.alerts}</dd>
+        <dt>AI tools</dt><dd>{aiCounts.total}, {aiCounts.byStatus["Under review"]} under review</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Last scan</h2><a href="/monitoring">Monitoring</a></div>
+      <p style="margin:0 0 .35rem">{formatDateTime(monitoring.collectedAt)}, read-only, {company.workspace}.</p>
+      <p class="muted" style="margin:0;font-size:.8125rem">{monitoring.runs.at(-1).note} Next run {company.scan.schedule.toLowerCase()}.</p>
+    </div>
+  </div>
+</App>

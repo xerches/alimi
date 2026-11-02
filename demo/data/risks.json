@@ -1,0 +1,254 @@
+{
+  "scale": {
+    "likelihood": "1 rare to 4 likely within a year",
+    "impact": "1 minor to 4 severe (payroll stops, client data exposed, regulator involved)",
+    "rating": "Likelihood x impact: Critical 12 or more, High 8 to 11, Medium 4 to 7, Low under 4"
+  },
+  "risks": [
+    {
+      "id": "R-01",
+      "title": "A spoofed bank-detail change redirects a client payroll payment",
+      "description": "Business email compromise is the top loss for payroll firms. Treatment: the callback procedure with two approvers (CTL-08), DMARC enforcement and phishing filtering.",
+      "source": "Risk workshop",
+      "likelihood": 3,
+      "impact": 4,
+      "score": 12,
+      "rating": "Critical",
+      "treatment": "Reduce",
+      "owner": "P-03",
+      "controls": [
+        "CTL-08",
+        "CTL-14",
+        "CTL-16"
+      ],
+      "status": "Treating",
+      "identified": "2025-09-18",
+      "next_review": "2027-03-18"
+    },
+    {
+      "id": "R-02",
+      "title": "A payroll specialist's mailbox is taken over before MFA is registered",
+      "description": "Five accounts have no second factor: three new hires inside their first week and two shared mailboxes that should be sign-in blocked.",
+      "source": "Scan: m365.mfa.coverage",
+      "likelihood": 3,
+      "impact": 4,
+      "score": 12,
+      "rating": "Critical",
+      "treatment": "Reduce",
+      "owner": "X-01",
+      "controls": [
+        "CTL-09",
+        "CTL-10"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-30",
+      "next_review": "2026-11-30"
+    },
+    {
+      "id": "R-03",
+      "title": "Client payroll files reachable through anyone-with-the-link sharing",
+      "description": "Anyone links are allowed without expiry. Change scheduled for Nov 8: expire after 30 days, then restrict to existing guests.",
+      "source": "Scan: m365.sharing.anonymous_links",
+      "likelihood": 2,
+      "impact": 3,
+      "score": 6,
+      "rating": "Medium",
+      "treatment": "Reduce",
+      "owner": "X-01",
+      "controls": [
+        "CTL-17"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-30",
+      "next_review": "2026-12-30"
+    },
+    {
+      "id": "R-04",
+      "title": "Company mail forwarded automatically to a personal mailbox",
+      "description": "One inbox rule copies mail to a personal Gmail address and the tenant still allows outbound forwarding. Rule removed Oct 31; the tenant setting is due Nov 7.",
+      "source": "Scan: m365.forwarding.external",
+      "likelihood": 3,
+      "impact": 3,
+      "score": 9,
+      "rating": "High",
+      "treatment": "Reduce",
+      "owner": "X-01",
+      "controls": [
+        "CTL-15"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-30",
+      "next_review": "2026-11-30"
+    },
+    {
+      "id": "R-05",
+      "title": "The Brightfile portal breach exposes client documents",
+      "description": "Brightfile reported unauthorized access to a support system. Awaiting its incident report; the breach notification procedure is on standby.",
+      "source": "Vendor review: Brightfile alert",
+      "likelihood": 3,
+      "impact": 4,
+      "score": 12,
+      "rating": "Critical",
+      "treatment": "Reduce",
+      "owner": "P-45",
+      "controls": [
+        "CTL-35",
+        "CTL-34"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-24",
+      "next_review": "2026-11-15"
+    },
+    {
+      "id": "R-06",
+      "title": "Client files shared through personal Dropbox accounts",
+      "description": "Six staff connected personal Dropbox accounts. Decision due: approve a business account with a DPA, or block and move the files to SharePoint.",
+      "source": "Vendor discovery: OAuth consent review",
+      "likelihood": 3,
+      "impact": 3,
+      "score": 9,
+      "rating": "High",
+      "treatment": "Reduce",
+      "owner": "P-02",
+      "controls": [
+        "CTL-20",
+        "CTL-17"
+      ],
+      "status": "Open",
+      "identified": "2026-10-28",
+      "next_review": "2026-11-28"
+    },
+    {
+      "id": "R-07",
+      "title": "Staff paste client personal data into unapproved AI tools",
+      "description": "Eleven AI tools found in use. Treatment: the AI Acceptable Use Policy, the 15-minute course, approved tools with rules, blocked tools at sign-in.",
+      "source": "AI inventory",
+      "likelihood": 3,
+      "impact": 3,
+      "score": 9,
+      "rating": "High",
+      "treatment": "Reduce",
+      "owner": "P-02",
+      "controls": [
+        "CTL-38",
+        "CTL-39"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-10",
+      "next_review": "2027-01-10"
+    },
+    {
+      "id": "R-08",
+      "title": "An automation agent reads the payroll inbox beyond its purpose",
+      "description": "Zapier Agents can read the whole payroll@ mailbox. Treatment under review: a scoped mailbox, an action log and a DPA addendum before approval.",
+      "source": "AI inventory: Zapier Agents",
+      "likelihood": 2,
+      "impact": 3,
+      "score": 6,
+      "rating": "Medium",
+      "treatment": "Reduce",
+      "owner": "P-05",
+      "controls": [
+        "CTL-38",
+        "CTL-40"
+      ],
+      "status": "Open",
+      "identified": "2026-10-28",
+      "next_review": "2026-11-28"
+    },
+    {
+      "id": "R-09",
+      "title": "Ransomware on the file store with backups that cannot be restored",
+      "description": "EDR on 54 of 55 devices and immutable backups restore-tested in September reduce both likelihood and impact.",
+      "source": "Risk workshop",
+      "likelihood": 2,
+      "impact": 4,
+      "score": 8,
+      "rating": "High",
+      "treatment": "Reduce",
+      "owner": "X-01",
+      "controls": [
+        "CTL-23",
+        "CTL-31"
+      ],
+      "status": "Treating",
+      "identified": "2025-09-18",
+      "next_review": "2027-03-18"
+    },
+    {
+      "id": "R-10",
+      "title": "The incident response plan has not been exercised in 14 months",
+      "description": "Last tabletop August 2025. The 2026 exercise (a payroll-day outage plus a BEC attempt) is scheduled for Nov 20 with the IT provider and counsel.",
+      "source": "Evidence review",
+      "likelihood": 2,
+      "impact": 3,
+      "score": 6,
+      "rating": "Medium",
+      "treatment": "Reduce",
+      "owner": "X-02",
+      "controls": [
+        "CTL-33"
+      ],
+      "status": "Treating",
+      "identified": "2026-10-15",
+      "next_review": "2026-11-20"
+    },
+    {
+      "id": "R-11",
+      "title": "Loss of the IT provider's account lead delays incident handling",
+      "description": "Bay State names a second engineer in the contract; accepted with that cover.",
+      "source": "Risk workshop",
+      "likelihood": 2,
+      "impact": 2,
+      "score": 4,
+      "rating": "Medium",
+      "treatment": "Accept",
+      "owner": "P-02",
+      "controls": [
+        "CTL-02",
+        "CTL-33"
+      ],
+      "status": "Accepted",
+      "identified": "2025-09-18",
+      "next_review": "2027-03-18"
+    },
+    {
+      "id": "R-12",
+      "title": "Paper payroll records in the Quincy office are not shredded on schedule",
+      "description": "The retention schedule is unapproved and the office manager role is open, so the shredding cadence has no owner.",
+      "source": "Risk workshop",
+      "likelihood": 2,
+      "impact": 2,
+      "score": 4,
+      "rating": "Medium",
+      "treatment": "Reduce",
+      "owner": null,
+      "controls": [
+        "CTL-21",
+        "CTL-37"
+      ],
+      "status": "Open",
+      "identified": "2026-07-01",
+      "next_review": "2026-11-30"
+    },
+    {
+      "id": "R-13",
+      "title": "The Massachusetts written information security program is not documented as 201 CMR 17.00 expects",
+      "description": "Massachusetts requires a written program for businesses holding residents' personal information. The policy set covers it; counsel is assembling the single document that points to it.",
+      "source": "Compliance review",
+      "likelihood": 2,
+      "impact": 3,
+      "score": 6,
+      "rating": "Medium",
+      "treatment": "Reduce",
+      "owner": "P-04",
+      "controls": [
+        "CTL-01",
+        "CTL-36"
+      ],
+      "status": "Treating",
+      "identified": "2026-04-01",
+      "next_review": "2027-04-01"
+    }
+  ]
+}

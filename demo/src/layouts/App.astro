@@ -1,0 +1,67 @@
+---
+// The demo's page shell: brand tokens inlined from config/brand.yaml, the sample-company banner on
+// every page, the left navigation, a top bar with breadcrumbs, and the page header. Every page
+// passes its own path because build.format "file" makes Astro.url.pathname end in .html.
+import "../styles/app.css";
+import { brand } from "../lib/config.js";
+import { cssVariables } from "../lib/tokens.js";
+import { company, formatDate, person } from "../lib/data.js";
+import Nav from "../components/Nav.astro";
+
+const { title, heading, description, path, section, eyebrow, lead, crumbs = [], wide = false } = Astro.props;
+if (!path) throw new Error("App layout needs a path prop");
+const origin = String(Astro.site).replace(/\/$/, "");
+const fullTitle = path === "/" ? `${company.short_name} on alimi (demo)` : `${title} | ${company.short_name} on alimi`;
+const viewer = person(company.roles["AI Lead"]);
+const initials = viewer.name.split(" ").map((w) => w[0]).join("");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={origin + path} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content={brand.colors.background_dark} />
+    <style is:inline set:html={cssVariables(brand)}></style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="shell">
+      <Nav section={section} />
+      <div class="content">
+        <div class="sample-banner" data-sample-banner>
+          <strong>Sample company.</strong>
+          <span>{company.name} is fictional. Static data as of {formatDate(company.as_of)}; nothing here was read from a real tenant.</span>
+        </div>
+        <div class="topbar">
+          <a class="menu-button" href="#nav">Menu</a>
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            {crumbs.map((crumb) => (<><span aria-hidden="true">/</span>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span>{crumb.label}</span>}</>))}
+          </nav>
+          <div class="who"><span>Viewing as {viewer.name}, {viewer.title}</span><span class="avatar" aria-hidden="true">{initials}</span></div>
+        </div>
+        <main id="main" style={wide ? "max-width:none" : undefined}>
+          <div class="page-header">
+            <div>
+              {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+              <h1>{heading ?? title}</h1>
+              {lead && <p class="lead">{lead}</p>}
+            </div>
+            <div class="actions"><slot name="actions" /></div>
+          </div>
+          <slot />
+          <p class="foot">alimi demo. {company.name} is a fictional sample company; people, vendors, dates and numbers are invented. Policies, requirement IDs, controls and checks are alimi's real content.</p>
+        </main>
+      </div>
+    </div>
+    <script>
+      import "../scripts/enhance.js";
+    </script>
+  </body>
+</html>

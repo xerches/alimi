@@ -1,0 +1,405 @@
+{
+  "schema_version": "1",
+  "scanner_version": "0.2.0",
+  "platform": "m365",
+  "tenant": {
+    "display_name": "Saltmarsh Payroll",
+    "primary_domain": "saltmarsh.example",
+    "source": "mock:snapshot.json"
+  },
+  "collected_at": "2026-10-30T22:15:00Z",
+  "findings": [
+    {
+      "check_id": "m365.mfa.coverage",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "MFA registration coverage",
+      "severity": "critical",
+      "status": "fail",
+      "insurer_question": "mfa",
+      "insurer_question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "summary": "5 of 58 enabled users (8.6%) have no second sign-in factor registered.",
+      "evidence": {
+        "enabled_users": 58,
+        "registered": 53,
+        "unregistered": 5,
+        "coverage_percent": 91.4,
+        "unregistered_sample": [
+          "yara.castillo@saltmarsh.example",
+          "omar.keane@saltmarsh.example",
+          "esme.donnelly@saltmarsh.example",
+          "payroll@saltmarsh.example",
+          "support@saltmarsh.example"
+        ]
+      },
+      "remediation": "Require MFA for all users through Conditional Access or Security Defaults; chase the unregistered users.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.conditional_access.present",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Conditional Access policies enforce MFA",
+      "severity": "high",
+      "status": "pass",
+      "insurer_question": "mfa",
+      "insurer_question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "summary": "Conditional Access requires MFA for all users and all apps (Require MFA for all users).",
+      "evidence": {
+        "policies_total": 4,
+        "mfa_for_all_users": [
+          "Require MFA for all users"
+        ],
+        "mfa_report_only": []
+      },
+      "remediation": "Create a Conditional Access policy requiring MFA for all users and all cloud apps, with a break-glass exclusion.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.legacy_auth.blocked",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Legacy authentication blocked",
+      "severity": "critical",
+      "status": "pass",
+      "insurer_question": "mfa",
+      "insurer_question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "summary": "Legacy authentication is blocked by Block legacy authentication and no legacy sign-ins succeeded in the last 30 days.",
+      "evidence": {
+        "blocked_by": [
+          "Block legacy authentication"
+        ],
+        "legacy_sign_ins_30d": 0
+      },
+      "remediation": "Block legacy authentication with Conditional Access and disable SMTP AUTH per mailbox.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.security_defaults",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Security Defaults or equivalent policy",
+      "severity": "medium",
+      "status": "pass",
+      "insurer_question": "mfa",
+      "insurer_question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "summary": "Security Defaults is off, but Conditional Access requires MFA for everyone and blocks legacy authentication.",
+      "evidence": {
+        "security_defaults_enabled": false,
+        "conditional_access_requires_mfa": true,
+        "conditional_access_blocks_legacy_auth": true
+      },
+      "remediation": "Enable Security Defaults if Conditional Access is not licensed or configured.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.admins.global_count",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Number of Global Administrators",
+      "severity": "high",
+      "status": "pass",
+      "insurer_question": "admin_access",
+      "insurer_question_text": "Are privileged accounts limited, separate from daily-use accounts, and reviewed?",
+      "summary": "3 Global Administrators, all on dedicated accounts without a mailbox.",
+      "evidence": {
+        "global_admins": 3,
+        "accounts": [
+          "adm-mokafor@saltmarsh.example",
+          "adm-ngomez@saltmarsh.example",
+          "breakglass@saltmarsh.example"
+        ],
+        "with_mailbox": []
+      },
+      "remediation": "Keep 2 to 4 Global Admins, use least-privilege roles for everyone else, and separate admin accounts from daily mail accounts.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.admins.mfa",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "All admins protected by MFA",
+      "severity": "critical",
+      "status": "pass",
+      "insurer_question": "admin_access",
+      "insurer_question_text": "Are privileged accounts limited, separate from daily-use accounts, and reviewed?",
+      "summary": "All 3 privileged accounts are registered for MFA.",
+      "evidence": {
+        "privileged_accounts": 3,
+        "unprotected": [],
+        "unknown_status": [],
+        "non_user_members": 0
+      },
+      "remediation": "Require MFA, preferably phishing-resistant, for every privileged role.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.forwarding.external",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "External mail forwarding and inbox rules",
+      "severity": "high",
+      "status": "fail",
+      "insurer_question": "email_security",
+      "insurer_question_text": "Are SPF, DKIM and DMARC in place, and is external auto-forwarding blocked?",
+      "summary": "1 inbox rule(s) forward or redirect mail to addresses outside the company.",
+      "evidence": {
+        "rules_reviewed": 3,
+        "external_forwarding_rules": [
+          {
+            "user": "miles.fischer@saltmarsh.example",
+            "rule": "Copy to home",
+            "to": [
+              "miles.fischer.home@gmail.example"
+            ]
+          }
+        ],
+        "outbound_forwarding_blocked": false
+      },
+      "remediation": "Block automatic external forwarding in the outbound spam policy and review existing rules.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.email_auth.dmarc",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "SPF, DKIM and DMARC configured",
+      "severity": "high",
+      "status": "pass",
+      "insurer_question": "email_security",
+      "insurer_question_text": "Are SPF, DKIM and DMARC in place, and is external auto-forwarding blocked?",
+      "summary": "SPF, DKIM and an enforcing DMARC policy are in place on all 2 sending domains.",
+      "evidence": {
+        "domains": [
+          {
+            "domain": "saltmarsh.example",
+            "spf": true,
+            "dkim": true,
+            "dmarc_policy": "quarantine"
+          },
+          {
+            "domain": "saltmarshpayroll.example",
+            "spf": true,
+            "dkim": true,
+            "dmarc_policy": "reject"
+          }
+        ]
+      },
+      "remediation": "Publish SPF, enable DKIM signing for each domain, and move DMARC to p=quarantine then p=reject.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.sharing.anonymous_links",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Anonymous sharing links",
+      "severity": "medium",
+      "status": "fail",
+      "insurer_question": "data_sharing",
+      "insurer_question_text": "Is external and anonymous file sharing controlled?",
+      "summary": "Anyone-with-the-link sharing is on for SharePoint and OneDrive and link expiry could not be confirmed (that setting is only visible in SharePoint PowerShell).",
+      "evidence": {
+        "sharing_capability": "externalUserAndGuestSharing",
+        "anonymous_link_expiration_days": null
+      },
+      "remediation": "Set SharePoint and OneDrive sharing to \"new and existing guests\" or stricter, and expire links.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.guests.review",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Guest users reviewed",
+      "severity": "low",
+      "status": "pass",
+      "insurer_question": "data_sharing",
+      "insurer_question_text": "Is external and anonymous file sharing controlled?",
+      "summary": "All 2 guest accounts were active in the last 90 days.",
+      "evidence": {
+        "guests": 2,
+        "inactive_90d": 0,
+        "inactive_sample": []
+      },
+      "remediation": "Review guests quarterly and remove inactive ones.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.audit.enabled",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Unified audit log enabled",
+      "severity": "high",
+      "status": "pass",
+      "insurer_question": "logging",
+      "insurer_question_text": "Are audit logs enabled and retained for at least 90 days?",
+      "summary": "The unified audit log is on with 180 days of retention.",
+      "evidence": {
+        "unified_audit_log_enabled": true,
+        "retention_days": 180,
+        "directory_audit_available": true
+      },
+      "remediation": "Enable the unified audit log and confirm retention meets 90 days or more.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "m365.secure_score",
+      "platform": "m365",
+      "kind": "automated",
+      "title": "Microsoft Secure Score",
+      "severity": "low",
+      "status": "pass",
+      "insurer_question": "mfa",
+      "insurer_question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "summary": "Secure Score is 66.5 of 100 (66.5%).",
+      "evidence": {
+        "current": 66.5,
+        "max": 100.0,
+        "percent": 66.5
+      },
+      "remediation": "Work through the top improvement actions, prioritising identity.",
+      "evidence_requested": null,
+      "notes": []
+    },
+    {
+      "check_id": "att.edr.coverage",
+      "platform": "any",
+      "kind": "attestation",
+      "title": "EDR on 95% or more of endpoints",
+      "severity": "critical",
+      "status": "attestation_needed",
+      "insurer_question": "edr",
+      "insurer_question_text": "Is endpoint detection and response deployed on at least 95% of endpoints?",
+      "summary": "This cannot be read from the tenant. The client confirms it and supplies the evidence.",
+      "evidence": {},
+      "remediation": "Deploy an EDR such as Defender for Business or a managed EDR; export the device coverage report as evidence.",
+      "evidence_requested": "Device coverage export from the EDR console",
+      "notes": []
+    },
+    {
+      "check_id": "att.backups.tested",
+      "platform": "any",
+      "kind": "attestation",
+      "title": "Backups immutable and restore-tested quarterly",
+      "severity": "critical",
+      "status": "attestation_needed",
+      "insurer_question": "backups",
+      "insurer_question_text": "Are backups immutable or offline, and restore-tested at least quarterly?",
+      "summary": "This cannot be read from the tenant. The client confirms it and supplies the evidence.",
+      "evidence": {},
+      "remediation": "Back up Microsoft 365 or Google Workspace with a third-party tool, keep an immutable copy, and record quarterly restore tests.",
+      "evidence_requested": "Backup job report and dated restore test record",
+      "notes": []
+    },
+    {
+      "check_id": "att.ir_plan.tested",
+      "platform": "any",
+      "kind": "attestation",
+      "title": "Incident response plan tested in the last 12 months",
+      "severity": "high",
+      "status": "attestation_needed",
+      "insurer_question": "incident_response",
+      "insurer_question_text": "Is there a written incident response plan, tested in the last 12 months?",
+      "summary": "This cannot be read from the tenant. The client confirms it and supplies the evidence.",
+      "evidence": {},
+      "remediation": "Adopt the alimi incident response plan template and run a one-hour tabletop; keep the after-action notes.",
+      "evidence_requested": "Plan document and dated tabletop notes",
+      "notes": []
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 9,
+    "failed": 3,
+    "attestation_needed": 3,
+    "errors": 0,
+    "not_applicable": 0,
+    "score_percent": 72.7
+  },
+  "insurer_answers": [
+    {
+      "question_id": "mfa",
+      "question_text": "Is multi-factor authentication enforced for all users, including email, remote access and admin accounts?",
+      "status": "fail",
+      "check_ids": [
+        "m365.mfa.coverage",
+        "m365.conditional_access.present",
+        "m365.legacy_auth.blocked",
+        "m365.security_defaults",
+        "m365.secure_score"
+      ]
+    },
+    {
+      "question_id": "admin_access",
+      "question_text": "Are privileged accounts limited, separate from daily-use accounts, and reviewed?",
+      "status": "pass",
+      "check_ids": [
+        "m365.admins.global_count",
+        "m365.admins.mfa"
+      ]
+    },
+    {
+      "question_id": "email_security",
+      "question_text": "Are SPF, DKIM and DMARC in place, and is external auto-forwarding blocked?",
+      "status": "fail",
+      "check_ids": [
+        "m365.forwarding.external",
+        "m365.email_auth.dmarc"
+      ]
+    },
+    {
+      "question_id": "data_sharing",
+      "question_text": "Is external and anonymous file sharing controlled?",
+      "status": "fail",
+      "check_ids": [
+        "m365.sharing.anonymous_links",
+        "m365.guests.review"
+      ]
+    },
+    {
+      "question_id": "logging",
+      "question_text": "Are audit logs enabled and retained for at least 90 days?",
+      "status": "pass",
+      "check_ids": [
+        "m365.audit.enabled"
+      ]
+    },
+    {
+      "question_id": "edr",
+      "question_text": "Is endpoint detection and response deployed on at least 95% of endpoints?",
+      "status": "attestation_needed",
+      "check_ids": [
+        "att.edr.coverage"
+      ]
+    },
+    {
+      "question_id": "backups",
+      "question_text": "Are backups immutable or offline, and restore-tested at least quarterly?",
+      "status": "attestation_needed",
+      "check_ids": [
+        "att.backups.tested"
+      ]
+    },
+    {
+      "question_id": "incident_response",
+      "question_text": "Is there a written incident response plan, tested in the last 12 months?",
+      "status": "attestation_needed",
+      "check_ids": [
+        "att.ir_plan.tested"
+      ]
+    }
+  ],
+  "notes": [
+    "Sample tenant for the alimi demo. Fictional company; nothing here was read from a real tenant."
+  ]
+}

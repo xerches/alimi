@@ -1,0 +1,77 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import Bar from "../components/Bar.astro";
+import { questionnaires, company, formatDate, daysUntil, href } from "../lib/data.js";
+const q = questionnaires.insurer;
+const b = questionnaires.bank;
+const sections = [...new Set(b.questions.map((x) => x.section))];
+---
+
+<App title="Questionnaires" path="/questionnaires" section="questionnaires" eyebrow="Trust" crumbs={[{ label: "Questionnaires" }]} wide
+  description="The insurer's renewal questionnaire answered from the controls and evidence, each answer with its source and a confidence, and a client bank's vendor questionnaire half-drafted by the assistant."
+  lead="Questions arrive from an insurer, a bank, a customer. The answers already exist in the controls and evidence; this page drafts them with the source shown, and a person signs off. The insurer's questionnaire is answered first because it is the framework the company bought for.">
+  <a slot="actions" class="button secondary" href="/trust#pack">Evidence pack</a>
+  <a slot="actions" class="button" href="#export">Export answers</a>
+
+  <div class="grid">
+    <Tile label="Insurer: due" value={formatDate(q.due)} note={`${daysUntil(q.due)} days; renewal ${formatDate(company.insurance.renewal)}`} />
+    <Tile label="Insurer: Yes" value={q.counts.Yes} unit={`of ${q.answers.length}`} />
+    <Tile label="Insurer: Partial" value={q.counts.Partial} note="Each has a fix with a date" />
+    <Tile label="Bank: drafted" value={b.drafted} unit={`of ${b.questions.length}`} note={`Due ${formatDate(b.due)}, ${daysUntil(b.due)} days`} href="#bank" linkText="Bank questionnaire" />
+  </div>
+
+  <h2 id="insurer">{q.name}</h2>
+  <p class="muted">From {q.from}. Answered from: {q.answered_by.toLowerCase()}. Confidence is High when a test or a dated artifact backs the answer, Medium when it rests on a record a person wrote.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Question</th><th>Answer</th><th>Confidence</th><th>Why, in the insurer's words</th><th>Sources</th></tr></thead>
+      <tbody>
+        {q.answers.map((a) => (
+          <tr id={`q-${a.question_id}`}>
+            <td style="min-width:14rem"><strong>{a.question}</strong><span class="sub mono">{a.question_id}</span></td>
+            <td><Pill label={a.answer} /></td>
+            <td><Pill label={a.confidence} tone={a.confidence === "High" ? "success" : "info"} /></td>
+            <td style="min-width:18rem">{a.note}</td>
+            <td style="font-size:.8125rem">
+              {a.controlRecords.map((c) => <div><a href={href.control(c.id)}>{c.id}</a> {c.name}</div>)}
+              {a.testRecords.map((t) => <div><a href={href.test(t.check_id)}>{t.title}</a>: {t.status}</div>)}
+              {a.evidenceRecords.map((e) => <div><a href={href.evidence(e.id)}>{e.name}</a></div>)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <div class="card" id="export">
+    <h2>Export</h2>
+    <p>The export is the insurer's own form with these answers filled in, plus the evidence pack as a ZIP: the scan report, the policy PDFs and the dated artifacts each answer cites. The broker forwards it to the carrier; nothing in it names a person's account or shows a secret.</p>
+    <button class="button secondary" type="button">Export answers and pack</button> <span class="demo-note">Demo: does nothing</span>
+  </div>
+
+  <h2 id="bank">{b.name}</h2>
+  <p class="muted">From {b.from}, opened {formatDate(b.opened)}, due {formatDate(b.due)}. {b.answered_by}.</p>
+  <Bar percent={Math.round((100 * b.drafted) / b.questions.length)} tone="primary" label={`${b.drafted} of ${b.questions.length} drafted`} />
+  <div class="callout"><p><span class="tag preview">Preview</span> The assistant drafts answers from the same controls and evidence and shows its sources. Every draft is reviewed and signed by a person before it leaves the company; the open questions need a human answer (insurance limits, assurance plans, subprocessor list).</p></div>
+  {sections.map((section) => (
+    <div class="card">
+      <h3>{section}</h3>
+      <div class="table-wrap plain">
+        <table>
+          <thead><tr><th>Question</th><th>Answer</th><th>Draft</th><th>Sources</th></tr></thead>
+          <tbody>
+            {b.questions.filter((x) => x.section === section).map((x) => (
+              <tr id={x.id}>
+                <td style="min-width:16rem">{x.text}<span class="sub mono">{x.id}</span></td>
+                <td>{x.answer ? <Pill label={x.answer} /> : <Pill label="Open" tone="neutral" />}</td>
+                <td style="min-width:16rem">{x.answer ? <span>{x.note}<span class="sub">Drafted by the assistant · confidence {x.confidence}</span></span> : <span class="muted">Needs a person's answer</span>}</td>
+                <td style="font-size:.8125rem">{x.controlRecords.map((c) => <div><a href={href.control(c.id)}>{c.id}</a></div>)}{x.evidenceRecords.map((e) => <div><a href={href.evidence(e.id)}>{e.id}</a></div>)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  ))}
+</App>

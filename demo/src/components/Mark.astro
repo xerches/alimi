@@ -1,0 +1,5 @@
+---
+// A yes/no mark for check columns: a tick, or a muted dash with an accessible label.
+const { ok } = Astro.props;
+---
+{ok ? <span aria-label="Yes" title="Yes">✓</span> : <span class="muted" aria-label="No" title="No">—</span>}

@@ -1,0 +1,700 @@
+{
+  "evidence": [
+    {
+      "id": "EV-01",
+      "name": "Information Security Policy v2.1, approved",
+      "type": "policy",
+      "controls": [
+        "CTL-01"
+      ],
+      "owner": "X-02",
+      "created": "2026-03-10",
+      "renewal": "2027-03-10",
+      "artifact": {
+        "kind": "file",
+        "name": "POL-01-v2.1-signed.pdf"
+      },
+      "description": "The approved policy with the CEO's signature page and the version history."
+    },
+    {
+      "id": "EV-02",
+      "name": "Security roles and responsibilities (RACI)",
+      "type": "record",
+      "controls": [
+        "CTL-02"
+      ],
+      "owner": "X-02",
+      "created": "2026-03-10",
+      "renewal": "2027-03-10",
+      "artifact": {
+        "kind": "file",
+        "name": "security-raci-2026.xlsx"
+      },
+      "description": "Who owns what: CEO, COO, outside IT provider, fractional security lead, HR, Finance, Privacy."
+    },
+    {
+      "id": "EV-03",
+      "name": "Risk assessment workshop report, September 2025",
+      "type": "record",
+      "controls": [
+        "CTL-03"
+      ],
+      "owner": "X-02",
+      "created": "2025-09-18",
+      "renewal": "2026-09-18",
+      "artifact": {
+        "kind": "file",
+        "name": "risk-assessment-2025-09.pdf"
+      },
+      "description": "Last year's risk workshop and treatment plan. The 2026 workshop is scheduled for Nov 18."
+    },
+    {
+      "id": "EV-04",
+      "name": "Policy acknowledgement report",
+      "type": "export",
+      "controls": [
+        "CTL-04"
+      ],
+      "owner": "P-42",
+      "created": "2026-10-01",
+      "renewal": "2027-10-01",
+      "artifact": {
+        "kind": "link",
+        "name": "Policies page, acknowledgements",
+        "url": "#/policies"
+      },
+      "description": "Who has accepted which policy, exported from this platform."
+    },
+    {
+      "id": "EV-05",
+      "name": "Security awareness training completion export",
+      "type": "export",
+      "controls": [
+        "CTL-05"
+      ],
+      "owner": "P-42",
+      "created": "2026-10-15",
+      "renewal": "2027-10-15",
+      "artifact": {
+        "kind": "file",
+        "name": "training-completion-2026-10.csv"
+      },
+      "description": "49 of 52 completed the yearly course; 3 new hires are inside their 30-day window."
+    },
+    {
+      "id": "EV-06",
+      "name": "Phishing simulation results, Q3 2026",
+      "type": "report",
+      "controls": [
+        "CTL-05"
+      ],
+      "owner": "X-01",
+      "created": "2026-09-30",
+      "renewal": "2026-12-30",
+      "artifact": {
+        "kind": "file",
+        "name": "phishing-sim-2026-q3.pdf"
+      },
+      "description": "Click rate 4.1 percent, report rate 61 percent; two people retrained."
+    },
+    {
+      "id": "EV-07",
+      "name": "Background screening agreement and procedure",
+      "type": "contract",
+      "controls": [
+        "CTL-06"
+      ],
+      "owner": "P-42",
+      "created": "2024-06-01",
+      "renewal": "2027-06-01",
+      "artifact": {
+        "kind": "file",
+        "name": "clearpath-msa-2024.pdf"
+      },
+      "description": "Agreement with ClearPath Screening and the procedure that says which roles need which check."
+    },
+    {
+      "id": "EV-08",
+      "name": "Joiner, mover and leaver checklist with Q3 leaver sample",
+      "type": "record",
+      "controls": [
+        "CTL-07"
+      ],
+      "owner": "P-42",
+      "created": "2026-10-05",
+      "renewal": "2027-01-05",
+      "artifact": {
+        "kind": "file",
+        "name": "jml-q3-2026.pdf"
+      },
+      "description": "Three leavers in Q3; access removed the same day in each case, with the ticket numbers."
+    },
+    {
+      "id": "EV-09",
+      "name": "Payment verification procedure and callback log",
+      "type": "record",
+      "controls": [
+        "CTL-08"
+      ],
+      "owner": "P-03",
+      "created": "2026-08-20",
+      "renewal": "2026-11-20",
+      "artifact": {
+        "kind": "file",
+        "name": "callback-log-2026-q3.xlsx"
+      },
+      "description": "The verify-before-you-pay procedure from the alimi kit and the quarter's callback log: 31 bank-detail changes, 31 callbacks."
+    },
+    {
+      "id": "EV-10",
+      "name": "alimi scan report, Oct 30, 2026",
+      "type": "report",
+      "controls": [
+        "CTL-09",
+        "CTL-10",
+        "CTL-11",
+        "CTL-12",
+        "CTL-14",
+        "CTL-15",
+        "CTL-17",
+        "CTL-27",
+        "CTL-30"
+      ],
+      "owner": "X-02",
+      "created": "2026-10-30",
+      "renewal": "2026-11-30",
+      "artifact": {
+        "kind": "scan",
+        "name": "alimi scan, Oct 30, 2026",
+        "ref": "scan.json"
+      },
+      "description": "The weekly read-only scan of the Microsoft 365 tenant: 12 automated checks, 3 attestations."
+    },
+    {
+      "id": "EV-11",
+      "name": "Conditional Access policy export",
+      "type": "export",
+      "controls": [
+        "CTL-09",
+        "CTL-10",
+        "CTL-28"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-28",
+      "renewal": "2027-01-28",
+      "artifact": {
+        "kind": "file",
+        "name": "conditional-access-2026-10-28.json"
+      },
+      "description": "The four policies as exported from Entra: MFA for all, block legacy auth, compliant device, geo block (report only)."
+    },
+    {
+      "id": "EV-12",
+      "name": "Quarterly access review, Q3 2026",
+      "type": "record",
+      "controls": [
+        "CTL-12"
+      ],
+      "owner": "P-02",
+      "created": "2026-10-02",
+      "renewal": "2027-01-02",
+      "artifact": {
+        "kind": "file",
+        "name": "access-review-2026-q3.pdf"
+      },
+      "description": "Signed by the COO: all accounts, admin roles, guests and shared mailboxes reviewed; two guests removed."
+    },
+    {
+      "id": "EV-13",
+      "name": "Password manager rollout report",
+      "type": "export",
+      "controls": [
+        "CTL-13"
+      ],
+      "owner": "X-01",
+      "created": "2026-07-15",
+      "renewal": "2027-07-15",
+      "artifact": {
+        "kind": "file",
+        "name": "password-manager-rollout.pdf"
+      },
+      "description": "52 of 52 staff enrolled; shared secrets moved to team vaults."
+    },
+    {
+      "id": "EV-14",
+      "name": "DMARC monitoring report, October",
+      "type": "report",
+      "controls": [
+        "CTL-14"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-01",
+      "renewal": "2026-11-15",
+      "artifact": {
+        "kind": "file",
+        "name": "dmarc-report-2026-10.pdf"
+      },
+      "description": "Both sending domains at p=quarantine or p=reject; 99.6 percent of mail aligned."
+    },
+    {
+      "id": "EV-15",
+      "name": "Outbound anti-spam policy: automatic forwarding off",
+      "type": "export",
+      "controls": [
+        "CTL-15"
+      ],
+      "owner": "X-01",
+      "created": null,
+      "renewal": null,
+      "artifact": null,
+      "description": "Requested from the IT provider after the Oct 30 scan found forwarding still allowed. Screenshot of the Defender setting due Nov 7.",
+      "requested_on": "2026-10-31",
+      "due": "2026-11-07"
+    },
+    {
+      "id": "EV-16",
+      "name": "Defender for Office 365 anti-phishing and Safe Links policies",
+      "type": "export",
+      "controls": [
+        "CTL-16"
+      ],
+      "owner": "X-01",
+      "created": "2026-09-12",
+      "renewal": "2027-03-12",
+      "artifact": {
+        "kind": "file",
+        "name": "defender-o365-policies.pdf"
+      },
+      "description": "Preset security policy: Standard, applied to every mailbox."
+    },
+    {
+      "id": "EV-17",
+      "name": "SharePoint and OneDrive sharing settings",
+      "type": "export",
+      "controls": [
+        "CTL-17"
+      ],
+      "owner": "X-01",
+      "created": "2026-06-30",
+      "renewal": "2026-12-30",
+      "artifact": {
+        "kind": "file",
+        "name": "sharepoint-sharing-2026-06.png"
+      },
+      "description": "Screenshot from the SharePoint admin center. The scan shows anyone links still allowed without expiry; change scheduled for Nov 8."
+    },
+    {
+      "id": "EV-18",
+      "name": "Data classification scheme",
+      "type": "policy",
+      "controls": [
+        "CTL-18"
+      ],
+      "owner": "P-04",
+      "created": "2026-03-10",
+      "renewal": "2027-03-10",
+      "artifact": {
+        "kind": "file",
+        "name": "POL-06-appendix-classification.pdf"
+      },
+      "description": "Four levels (Public, Internal, Confidential, Restricted) and the handling rules for each."
+    },
+    {
+      "id": "EV-19",
+      "name": "Intune encryption compliance report",
+      "type": "export",
+      "controls": [
+        "CTL-19",
+        "CTL-22"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-27",
+      "renewal": "2026-11-27",
+      "artifact": {
+        "kind": "file",
+        "name": "intune-encryption-2026-10-27.csv"
+      },
+      "description": "55 of 55 managed devices encrypted (BitLocker or FileVault)."
+    },
+    {
+      "id": "EV-20",
+      "name": "Approved apps register and OAuth consent review",
+      "type": "register",
+      "controls": [
+        "CTL-20"
+      ],
+      "owner": "P-02",
+      "created": "2026-10-15",
+      "renewal": "2027-01-15",
+      "artifact": {
+        "kind": "file",
+        "name": "approved-apps-2026-10.xlsx"
+      },
+      "description": "Every third-party app connected to the tenant, with an owner and a decision; Dropbox flagged for review."
+    },
+    {
+      "id": "EV-21",
+      "name": "Retention schedule",
+      "type": "policy",
+      "controls": [
+        "CTL-21"
+      ],
+      "owner": null,
+      "created": null,
+      "renewal": null,
+      "artifact": null,
+      "description": "No approved schedule yet; POL-20 v1.1 adds it and is waiting for the CEO's approval.",
+      "requested_on": "2026-10-22",
+      "due": "2026-11-30"
+    },
+    {
+      "id": "EV-22",
+      "name": "Intune device compliance policy export",
+      "type": "export",
+      "controls": [
+        "CTL-22"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-27",
+      "renewal": "2027-01-27",
+      "artifact": {
+        "kind": "file",
+        "name": "intune-compliance-policy.json"
+      },
+      "description": "Screen lock at 10 minutes, encryption required, OS minimum versions, EDR required."
+    },
+    {
+      "id": "EV-23",
+      "name": "EDR coverage export from the IT provider",
+      "type": "export",
+      "controls": [
+        "CTL-23"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-29",
+      "renewal": "2026-11-29",
+      "artifact": {
+        "kind": "file",
+        "name": "defender-devices-2026-10-29.csv"
+      },
+      "description": "Defender for Business active on 54 of 55 devices (98 percent); the conference room PC is the exception.",
+      "attests": [
+        "att.edr.coverage"
+      ]
+    },
+    {
+      "id": "EV-24",
+      "name": "Patch compliance report, October",
+      "type": "report",
+      "controls": [
+        "CTL-24"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-29",
+      "renewal": "2026-11-29",
+      "artifact": {
+        "kind": "file",
+        "name": "patch-compliance-2026-10.pdf"
+      },
+      "description": "Critical updates installed within 14 days on 53 of 55 devices; two laptops pending."
+    },
+    {
+      "id": "EV-25",
+      "name": "Vulnerability scan report",
+      "type": "report",
+      "controls": [
+        "CTL-25"
+      ],
+      "owner": "X-01",
+      "created": "2026-08-14",
+      "renewal": "2026-09-14",
+      "artifact": {
+        "kind": "file",
+        "name": "vuln-scan-2026-08.pdf"
+      },
+      "description": "External and internal scan from August. The monthly cadence slipped in September and October."
+    },
+    {
+      "id": "EV-26",
+      "name": "Asset inventory export",
+      "type": "register",
+      "controls": [
+        "CTL-26"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-27",
+      "renewal": "2027-01-27",
+      "artifact": {
+        "kind": "file",
+        "name": "asset-inventory-2026-10-27.xlsx"
+      },
+      "description": "55 devices, 21 SaaS applications, 3 data stores, each with an owner."
+    },
+    {
+      "id": "EV-27",
+      "name": "Microsoft Secure Score snapshot",
+      "type": "report",
+      "controls": [
+        "CTL-27"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-28",
+      "renewal": "2026-11-28",
+      "artifact": {
+        "kind": "scan",
+        "name": "alimi scan, Oct 30, 2026",
+        "ref": "scan.json"
+      },
+      "description": "66.5 of 100 on Oct 30; up from 48 in June."
+    },
+    {
+      "id": "EV-28",
+      "name": "Remote access standard",
+      "type": "export",
+      "controls": [
+        "CTL-28"
+      ],
+      "owner": "X-01",
+      "created": "2026-05-05",
+      "renewal": "2027-05-05",
+      "artifact": {
+        "kind": "file",
+        "name": "remote-access-standard-2026.pdf"
+      },
+      "description": "VPN retired in May; access to Microsoft 365 requires MFA and a compliant device (Conditional Access)."
+    },
+    {
+      "id": "EV-29",
+      "name": "Change log sample: client portal releases, Q3",
+      "type": "record",
+      "controls": [
+        "CTL-29"
+      ],
+      "owner": "P-45",
+      "created": "2026-10-01",
+      "renewal": "2027-01-01",
+      "artifact": {
+        "kind": "link",
+        "name": "Portal releases",
+        "url": "https://github.example/saltmarsh/portal/releases"
+      },
+      "description": "Eleven releases, each with a reviewer and a test record."
+    },
+    {
+      "id": "EV-30",
+      "name": "Purview audit retention and alert policies",
+      "type": "export",
+      "controls": [
+        "CTL-30"
+      ],
+      "owner": "X-01",
+      "created": "2026-10-28",
+      "renewal": "2027-01-28",
+      "artifact": {
+        "kind": "file",
+        "name": "purview-audit-2026-10-28.png"
+      },
+      "description": "Unified audit log on, 180-day retention, alerts on admin role changes and new forwarding rules."
+    },
+    {
+      "id": "EV-31",
+      "name": "Backup restore test record, September 2026",
+      "type": "record",
+      "controls": [
+        "CTL-31"
+      ],
+      "owner": "X-01",
+      "created": "2026-09-26",
+      "renewal": "2026-12-26",
+      "artifact": {
+        "kind": "file",
+        "name": "restore-test-2026-09-26.pdf"
+      },
+      "description": "Mailbox and SharePoint restore from Harborvault in 41 minutes; immutable copies confirmed.",
+      "attests": [
+        "att.backups.tested"
+      ]
+    },
+    {
+      "id": "EV-32",
+      "name": "Business continuity plan v1.3",
+      "type": "policy",
+      "controls": [
+        "CTL-32"
+      ],
+      "owner": "P-02",
+      "created": "2026-04-14",
+      "renewal": "2027-04-14",
+      "artifact": {
+        "kind": "file",
+        "name": "bcp-v1.3.pdf"
+      },
+      "description": "Recovery targets: payroll runs within 4 hours from the backup region; reviewed yearly."
+    },
+    {
+      "id": "EV-33",
+      "name": "Incident response plan v2.0",
+      "type": "policy",
+      "controls": [
+        "CTL-33"
+      ],
+      "owner": "X-02",
+      "created": "2026-03-10",
+      "renewal": "2027-03-10",
+      "artifact": {
+        "kind": "file",
+        "name": "POL-13-v2.0-signed.pdf"
+      },
+      "description": "Roles, contacts (IT provider, counsel, broker, carrier hotline), severity levels and the first-hour checklist."
+    },
+    {
+      "id": "EV-34",
+      "name": "Incident response tabletop exercise record",
+      "type": "record",
+      "controls": [
+        "CTL-33"
+      ],
+      "owner": "X-02",
+      "created": "2025-08-21",
+      "renewal": "2026-08-21",
+      "artifact": {
+        "kind": "file",
+        "name": "tabletop-2025-08.pdf"
+      },
+      "description": "Last exercise: a ransomware scenario, August 2025. The 2026 tabletop is scheduled for Nov 20.",
+      "attests": [
+        "att.ir_plan.tested"
+      ]
+    },
+    {
+      "id": "EV-35",
+      "name": "Breach notification procedure and Massachusetts checklist",
+      "type": "policy",
+      "controls": [
+        "CTL-34"
+      ],
+      "owner": "P-04",
+      "created": "2026-03-10",
+      "renewal": "2027-03-10",
+      "artifact": {
+        "kind": "file",
+        "name": "breach-notification-procedure.pdf"
+      },
+      "description": "Who decides, who notifies, the deadlines, and the regulator contacts. [Legal review on file]"
+    },
+    {
+      "id": "EV-36",
+      "name": "Vendor register and review schedule",
+      "type": "register",
+      "controls": [
+        "CTL-35"
+      ],
+      "owner": "P-02",
+      "created": "2026-10-20",
+      "renewal": "2027-01-20",
+      "artifact": {
+        "kind": "link",
+        "name": "Vendors page",
+        "url": "#/vendors"
+      },
+      "description": "Every vendor with data or system access, its tier, owner and next review."
+    },
+    {
+      "id": "EV-37",
+      "name": "Ledgerline SOC 2 Type II report (period to Jun 30, 2026)",
+      "type": "report",
+      "controls": [
+        "CTL-35"
+      ],
+      "owner": "P-05",
+      "created": "2026-08-15",
+      "renewal": "2027-08-15",
+      "artifact": {
+        "kind": "file",
+        "name": "ledgerline-soc2-type2-2026.pdf"
+      },
+      "description": "Reviewed by the Head of Payroll Operations; no exceptions relevant to Saltmarsh."
+    },
+    {
+      "id": "EV-38",
+      "name": "Privacy notice and data map",
+      "type": "policy",
+      "controls": [
+        "CTL-36"
+      ],
+      "owner": "P-04",
+      "created": "2026-04-01",
+      "renewal": "2027-04-01",
+      "artifact": {
+        "kind": "link",
+        "name": "Privacy notice",
+        "url": "https://www.saltmarsh.example/privacy"
+      },
+      "description": "The published notice and the map of personal data by system."
+    },
+    {
+      "id": "EV-39",
+      "name": "Office access list and visitor log sample",
+      "type": "record",
+      "controls": [
+        "CTL-37"
+      ],
+      "owner": null,
+      "created": "2026-07-01",
+      "renewal": "2026-10-01",
+      "artifact": {
+        "kind": "file",
+        "name": "office-access-2026-07.pdf"
+      },
+      "description": "Badge list from the Quincy office and July's visitor log. Needs a quarterly refresh and an owner."
+    },
+    {
+      "id": "EV-40",
+      "name": "AI Acceptable Use Policy v1.0, approved",
+      "type": "policy",
+      "controls": [
+        "CTL-38"
+      ],
+      "owner": "P-02",
+      "created": "2026-10-10",
+      "renewal": "2027-10-10",
+      "artifact": {
+        "kind": "file",
+        "name": "POL-22-v1.0-signed.pdf"
+      },
+      "description": "Approved by the CEO on Oct 10; acknowledgements under way."
+    },
+    {
+      "id": "EV-41",
+      "name": "AI tool inventory",
+      "type": "register",
+      "controls": [
+        "CTL-39"
+      ],
+      "owner": "P-02",
+      "created": "2026-10-25",
+      "renewal": "2027-01-25",
+      "artifact": {
+        "kind": "link",
+        "name": "AI governance page",
+        "url": "#/ai"
+      },
+      "description": "Eleven tools and agents with owner, data allowed, risk level and status."
+    },
+    {
+      "id": "EV-42",
+      "name": "AI transparency notice to clients",
+      "type": "record",
+      "controls": [
+        "CTL-40"
+      ],
+      "owner": "P-04",
+      "created": null,
+      "renewal": null,
+      "artifact": null,
+      "description": "Draft with counsel: how clients are told when AI touches their payroll data, and how to raise a concern.",
+      "requested_on": "2026-10-25",
+      "due": "2026-12-15"
+    }
+  ]
+}

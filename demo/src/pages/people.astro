@@ -1,0 +1,72 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import Mark from "../components/Mark.astro";
+import { staff, externals, peopleCounts, formatDate, href } from "../lib/data.js";
+const departments = [...new Set(staff.map((p) => p.department))];
+const mfa = staff.filter((p) => p.mfa_registered).length;
+---
+
+<App title="People" path="/people" section="people" eyebrow="People" crumbs={[{ label: "People" }]} wide
+  description="Every person with one column per check: policies accepted, training current, MFA registered, device compliant, background check done, and whether they are currently compliant."
+  lead="One row per person, one column per check. A person is compliant when every column is a yes. Each person has a page of their own tasks, which is what they see when they log in.">
+  <a slot="actions" class="button secondary" href="/training">Training</a>
+  <a slot="actions" class="button" href={href.person("P-21")}>Onboarding example</a>
+
+  <div class="grid">
+    <Tile label="Currently compliant" value={peopleCounts.compliant} unit={`of ${peopleCounts.total}`} percent={Math.round((100 * peopleCounts.compliant) / peopleCounts.total)} tone="warning" />
+    <Tile label="MFA registered" value={mfa} unit={`of ${peopleCounts.total}`} note="From the tenant scan, not self-reported" />
+    <Tile label="Onboarding" value={peopleCounts.onboarding} note="Started in the last 30 days; tasks due by day 30" />
+    <Tile label="Providers and guests" value={externals.length} note="Accounts that are not staff" />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="people-filter">Filter people</label>
+    <input id="people-filter" type="search" placeholder="Filter by name, title or department" data-filter="#people" />
+    <div class="chips" data-chips="#people" data-key="compliant" role="group" aria-label="Filter by compliance">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Everyone</button>
+      <button class="chip" type="button" data-value="yes" aria-pressed="false">Compliant</button>
+      <button class="chip" type="button" data-value="no" aria-pressed="false">Not compliant</button>
+    </div>
+    <div class="chips" data-chips="#people" data-key="department" role="group" aria-label="Filter by department">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Every department</button>
+      {departments.map((d) => <button class="chip" type="button" data-value={d.replaceAll(" ", "_")} aria-pressed="false">{d}</button>)}
+    </div>
+    <span class="muted" data-count-for="#people"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="people">
+      <thead><tr><th>Person</th><th>Department</th><th>Policies</th><th>Training</th><th>MFA</th><th>Device</th><th>Background check</th><th>Compliant</th></tr></thead>
+      <tbody>
+        {staff.map((p) => (
+          <tr data-compliant={p.compliant ? "yes" : "no"} data-department={p.department.replaceAll(" ", "_")}>
+            <td><a href={href.person(p.id)}>{p.name}</a><span class="sub">{p.title}{p.status === "onboarding" ? ` · started ${formatDate(p.start_date)}` : ""}</span></td>
+            <td>{p.department}</td>
+            {p.checks.slice(0, 5).map((c) => <td title={c.detail}><Mark ok={c.ok} />{!c.ok && <span class="sub">{c.detail}</span>}</td>)}
+            <td><Pill status={p.compliant ? "compliant" : "not_compliant"} /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Providers and guests</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Person</th><th>Organisation and role</th><th>Account</th><th>MFA</th><th>Owns</th></tr></thead>
+      <tbody>
+        {externals.map((p) => (
+          <tr>
+            <td><a href={href.person(p.id)}>{p.name}</a></td>
+            <td>{p.title}</td>
+            <td><span class="mono" style="word-break:break-all">{p.email}</span><span class="sub">{p.employment === "guest" ? "Guest account" : "Member account, provider"}</span></td>
+            <td><Mark ok={p.mfa_registered} /></td>
+            <td>{p.groups.length ? p.groups.join(", ") : <span class="muted">—</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</App>

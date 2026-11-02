@@ -1,0 +1,64 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 1,
+      "settings": {
+        "chromeFlags": "--no-sandbox --headless --disable-gpu"
+      },
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/frameworks.html",
+        "http://localhost/controls.html",
+        "http://localhost/policies.html",
+        "http://localhost/evidence.html",
+        "http://localhost/monitoring.html",
+        "http://localhost/risks.html",
+        "http://localhost/vendors.html",
+        "http://localhost/ai.html",
+        "http://localhost/people.html",
+        "http://localhost/training.html",
+        "http://localhost/owners.html",
+        "http://localhost/assets.html",
+        "http://localhost/trust.html",
+        "http://localhost/questionnaires.html",
+        "http://localhost/assistant.html",
+        "http://localhost/integrations.html",
+        "http://localhost/settings.html",
+        "http://localhost/404.html",
+        "http://localhost/frameworks/insurer.html",
+        "http://localhost/controls/CTL-09.html",
+        "http://localhost/policies/POL-01.html",
+        "http://localhost/people/P-21.html",
+        "http://localhost/vendors/V-05.html"
+      ]
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:best-practices": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:seo": "off"
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}

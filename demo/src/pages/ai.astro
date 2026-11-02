@@ -1,0 +1,97 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import Bar from "../components/Bar.astro";
+import { aiTools, aiVendorChanges, aiCounts, aiPolicy, aiGovernancePolicy, readinessFor, control, formatDate, href, personName, person, courses } from "../lib/data.js";
+const iso = readinessFor("iso42001");
+const aiControls = ["CTL-38", "CTL-39", "CTL-40"].map((id) => control(id));
+const course = courses.find((c) => c.id === "TR-03");
+const order = { High: 0, Medium: 1, Low: 2 };
+const sorted = [...aiTools].sort((a, b) => order[a.risk] - order[b.risk] || b.users - a.users);
+---
+
+<App title="AI governance" path="/ai" section="ai" eyebrow="Risk" crumbs={[{ label: "AI governance" }]} wide
+  description="The AI tools and agents in use, found from sign-in logs and app consents: vendor, model, data allowed, risk level, status, who has access and the rule that applies; vendor AI changes; policy acknowledgement; ISO 42001 readiness."
+  lead="Govern AI as fast as people adopt it. The inventory comes from the tenant's sign-in logs and app consents, not a survey; each tool gets a rule from the AI Acceptable Use Policy, and vendor changes land here before they land in a contract.">
+  <a slot="actions" class="button secondary" href={href.policy("POL-22")}>AI Acceptable Use Policy</a>
+  <a slot="actions" class="button" href="#changes">Vendor changes ({aiVendorChanges.length})</a>
+
+  <div class="grid">
+    <Tile label="Tools and agents" value={aiCounts.total} note={`${aiCounts.agents} agent that acts on its own`} />
+    <Tile label="Approved" value={aiCounts.byStatus.Approved} />
+    <Tile label="Under review" value={aiCounts.byStatus["Under review"]} note="Decision due Nov 14" />
+    <Tile label="Blocked" value={aiCounts.byStatus.Blocked} note="Blocked at sign-in" />
+    <Tile label="People using AI" value={aiCounts.users} note="Seats across approved and pending tools" />
+    <Tile label="ISO 42001" value={`${iso.percent}%`} note={`${iso.ok} of ${iso.controls.length} AI controls Ok; ${iso.mappedRequirements} of ${iso.total} IDs mapped`} href={href.framework("iso42001")} linkText="Framework" />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="ai-filter">Filter AI tools</label>
+    <input id="ai-filter" type="search" placeholder="Filter by tool, vendor or owner" data-filter="#ai-tools" />
+    <div class="chips" data-chips="#ai-tools" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      {["Approved", "Under_review", "Blocked"].map((s) => <button class="chip" type="button" data-value={s} aria-pressed="false">{s.replaceAll("_", " ")}</button>)}
+    </div>
+    <div class="chips" data-chips="#ai-tools" data-key="kind" role="group" aria-label="Filter by kind">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Any kind</button>
+      {["assistant", "agent", "feature"].map((k) => <button class="chip" type="button" data-value={k} aria-pressed="false">{k}</button>)}
+    </div>
+    <span class="muted" data-count-for="#ai-tools"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="ai-tools">
+      <thead><tr><th>Tool</th><th>Kind</th><th>Vendor and model</th><th class="num">People</th><th>Data allowed</th><th>Risk</th><th>Status</th><th>Owner</th><th>Rule</th></tr></thead>
+      <tbody>
+        {sorted.map((t) => (
+          <tr id={t.id} data-status={t.status.replaceAll(" ", "_")} data-kind={t.kind}>
+            <td><strong>{t.name}</strong><span class="sub">Found via {t.discovered_via.toLowerCase()}</span></td>
+            <td>{t.kind}</td>
+            <td>{t.vendorRecord ? <a href={href.vendor(t.vendorRecord.id)}>{t.vendor}</a> : t.vendor}<span class="sub">{t.model}</span></td>
+            <td class="num">{t.users}</td>
+            <td>{t.data_allowed.length ? t.data_allowed.join("; ") : <span class="muted">None</span>}{t.data_prohibited.length ? <span class="sub">Never: {t.data_prohibited.join("; ")}</span> : null}</td>
+            <td><Pill label={t.risk} /></td>
+            <td><Pill label={t.status} /></td>
+            <td><a href={href.person(t.owner)}>{t.ownerName}</a></td>
+            <td style="min-width:16rem;font-size:.8125rem">{t.rule}{t.reviewed && <span class="sub">Reviewed {formatDate(t.reviewed)}</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid two">
+    <div class="card" id="changes">
+      <h2>Vendor AI changes</h2>
+      <p class="muted" style="font-size:.8125rem;margin-top:0">When an approved vendor turns on an AI feature, it appears here with the tools it affects and a recommendation. Nothing changes until a person accepts it.</p>
+      <ul class="list">
+        {aiVendorChanges.map((c) => (
+          <li>
+            <span class="when">{formatDate(c.date)}</span>
+            <span class="grow"><strong>{c.vendor_id ? <a href={href.vendor(c.vendor_id)}>{c.vendor}</a> : c.vendor}</strong>: {c.change}<span class="sub muted" style="display:block;font-size:.8125rem">Affects {c.tools.length ? c.tools.map((t) => t.name).join(", ") : "no inventoried tool yet"}. Recommendation: {c.recommendation}</span></span>
+            <button class="button small secondary" type="button">Accept</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Policy and training</h2>
+      <dl class="kv">
+        <dt>Policy</dt><dd><a href={href.policy(aiPolicy.id)}>{aiPolicy.title}</a> v{aiPolicy.version}, <Pill status={aiPolicy.status} /> {formatDate(aiPolicy.approved)}</dd>
+        <dt>Acknowledged</dt><dd>{aiPolicy.acknowledged} of {aiPolicy.audience}<Bar percent={Math.round((100 * aiPolicy.acknowledged) / aiPolicy.audience)} label="AI policy acknowledgement" /></dd>
+        <dt>Not yet</dt><dd class="links">{aiPolicy.pendingPeople.map((pid) => <a href={href.person(pid)}>{personName(pid)}</a>)}</dd>
+        <dt>Course</dt><dd><a href="/training#TR-03">{course.name}</a>: {course.counts.completed} of {course.counts.assigned} complete ({course.percent}%)</dd>
+        <dt>Governance</dt><dd><a href={href.policy(aiGovernancePolicy.id)}>{aiGovernancePolicy.title}</a> <Pill status={aiGovernancePolicy.status} /> <span class="muted">{aiGovernancePolicy.note}</span></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Controls</h2>
+    <ul class="list">
+      {aiControls.map((c) => <li><span class="grow"><a href={href.control(c.id)}>{c.name}</a> <span class="muted mono">{c.id}</span></span><span class="muted">{c.ownerName}</span><Pill status={c.status} /></li>)}
+    </ul>
+    <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">The three AI controls map to ISO 42001 clauses and Annex A controls by ID, and to the AI governance expectations insurers have started adding. Agent behaviour monitoring (what an agent does, not only what it may do) is on the Integrations page as a later item.</p>
+  </div>
+</App>

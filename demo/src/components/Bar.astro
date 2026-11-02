@@ -1,0 +1,6 @@
+---
+const { percent, tone, label } = Astro.props;
+const resolvedTone = tone ?? (percent >= 90 ? "success" : percent >= 70 ? "warning" : "danger");
+---
+
+<div class="bar" data-tone={resolvedTone} role="img" aria-label={label ?? `${percent} percent`}><span style={`width:${percent}%`}></span></div>

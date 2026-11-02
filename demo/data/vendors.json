@@ -1,0 +1,861 @@
+{
+  "rubric": {
+    "data_types": "What data the vendor holds: 1 public, 2 internal, 3 personal, 4 Social Security numbers, bank details or health data",
+    "business_criticality": "What stops if the vendor is down: 1 nothing, 2 an inconvenience, 3 a team, 4 payroll runs",
+    "integration_access": "What the vendor can reach: 1 nothing, 2 one app, 3 several systems, 4 administrative access",
+    "communication_scope": "Who the vendor talks to: 1 one person, 2 a team, 3 the company, 4 clients on our behalf",
+    "tiers": {
+      "Critical": "13 to 16",
+      "High": "10 to 12",
+      "Medium": "7 to 9",
+      "Low": "4 to 6"
+    },
+    "review_rule": "Critical and High vendors are reviewed yearly with a SOC 2 or ISO 27001 report or a questionnaire; Medium every two years; Low need a contract only."
+  },
+  "vendors": [
+    {
+      "id": "V-01",
+      "name": "Microsoft 365",
+      "category": "Productivity, identity and email",
+      "discovered_via": "Microsoft 365 tenant",
+      "data_shared": [
+        "All company data",
+        "Email",
+        "Identities"
+      ],
+      "users": 58,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 4,
+        "communication_scope": 4
+      },
+      "inherent_risk": "Critical",
+      "owner": "X-01",
+      "review_status": "Reviewed",
+      "last_review": "2026-09-15",
+      "next_review": "2027-09-15",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II (Service Trust Portal)",
+          "date": "2026-09-15"
+        },
+        {
+          "kind": "contract",
+          "name": "Microsoft Products and Services DPA",
+          "date": "2022-01-10"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-09-15",
+          "text": "Yearly review completed by Marcus Okafor; SOC 2 reviewed, no action."
+        }
+      ],
+      "subprocessor": true,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-02",
+      "name": "Ledgerline Payroll Engine",
+      "category": "Payroll processing platform",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Employee personal data",
+        "Social Security numbers",
+        "Bank details",
+        "Pay data"
+      ],
+      "users": 30,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 3,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Critical",
+      "owner": "P-05",
+      "review_status": "Reviewed",
+      "last_review": "2026-08-15",
+      "next_review": "2027-08-15",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II, period to Jun 30, 2026",
+          "date": "2026-08-15",
+          "evidence_id": "EV-37"
+        },
+        {
+          "kind": "contract",
+          "name": "DPA signed",
+          "date": "2024-01-05"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-20",
+          "text": "Vendor enabled Ledgerline Assist (AI) for all customers; added to the AI inventory as Under review."
+        },
+        {
+          "date": "2026-08-15",
+          "text": "SOC 2 Type II received and reviewed by Rosa Delgado."
+        }
+      ],
+      "subprocessor": true,
+      "fictional": true,
+      "ai": true
+    },
+    {
+      "id": "V-03",
+      "name": "TaxBridge e-File",
+      "category": "Federal and state tax filing",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Employer identification numbers",
+        "Social Security numbers",
+        "Wage data"
+      ],
+      "users": 8,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 3,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Critical",
+      "owner": "P-03",
+      "review_status": "Due",
+      "last_review": "2025-10-30",
+      "next_review": "2026-10-30",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 1 Type II (2025)",
+          "date": "2025-10-30",
+          "expired": true
+        },
+        {
+          "kind": "questionnaire",
+          "name": "Security questionnaire sent",
+          "date": "2026-10-20",
+          "awaiting": true
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-20",
+          "text": "Questionnaire sent; reminder scheduled for Nov 3."
+        },
+        {
+          "date": "2026-10-30",
+          "text": "Yearly review date passed; status Due."
+        }
+      ],
+      "subprocessor": true,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-04",
+      "name": "First Quincy Savings Bank",
+      "category": "ACH origination and banking",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Bank account numbers",
+        "Payment files"
+      ],
+      "users": 4,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 2,
+        "communication_scope": 2
+      },
+      "inherent_risk": "High",
+      "owner": "P-03",
+      "review_status": "Reviewed",
+      "last_review": "2026-06-01",
+      "next_review": "2027-06-01",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "Bank SOC 1 Type II",
+          "date": "2026-06-01"
+        },
+        {
+          "kind": "contract",
+          "name": "Treasury services agreement",
+          "date": "2016-02-01"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-06",
+          "text": "The bank opened its own vendor security review of Saltmarsh (see Questionnaires)."
+        }
+      ],
+      "subprocessor": false,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-05",
+      "name": "Bay State IT Partners",
+      "category": "Managed IT provider",
+      "discovered_via": "Manual",
+      "data_shared": [
+        "Administrative access to all systems"
+      ],
+      "users": 2,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 4,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Critical",
+      "owner": "P-02",
+      "review_status": "Reviewed",
+      "last_review": "2026-09-01",
+      "next_review": "2027-09-01",
+      "evidence": [
+        {
+          "kind": "contract",
+          "name": "MSA with security addendum",
+          "date": "2025-09-01"
+        },
+        {
+          "kind": "certificate",
+          "name": "Cyber insurance certificate ($2M)",
+          "date": "2026-09-01"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-06",
+      "name": "Brightfile Client Portal",
+      "category": "Document exchange with clients",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Client payroll files",
+        "Employee personal data"
+      ],
+      "users": 22,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 3,
+        "integration_access": 3,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Critical",
+      "owner": "P-45",
+      "review_status": "In progress",
+      "last_review": "2025-11-12",
+      "next_review": "2026-11-12",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II (2025)",
+          "date": "2025-11-12"
+        },
+        {
+          "kind": "request",
+          "name": "Incident report requested",
+          "date": "2026-10-24",
+          "awaiting": true
+        }
+      ],
+      "findings": [
+        {
+          "id": "VF-01",
+          "date": "2026-10-24",
+          "text": "Confirm no Saltmarsh files were in the affected support system; obtain the incident report by Nov 15; decide on continued use.",
+          "owner": "P-45",
+          "status": "Open",
+          "risk": "R-05"
+        }
+      ],
+      "alerts": [
+        {
+          "kind": "breach",
+          "date": "2026-10-24",
+          "text": "Brightfile disclosed unauthorized access to a support system between Oct 18 and Oct 22. The vendor says customer files were not affected. Incident report requested.",
+          "flagged_as_finding": "VF-01"
+        }
+      ],
+      "activity": [
+        {
+          "date": "2026-10-24",
+          "text": "Breach notice received; flagged as finding VF-01 and risk R-05 opened."
+        },
+        {
+          "date": "2026-10-25",
+          "text": "Incident report requested from the vendor; clients informed that no Saltmarsh data was reported affected."
+        }
+      ],
+      "subprocessor": true,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-07",
+      "name": "DocuSign",
+      "category": "Electronic signature",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Client contracts",
+        "Employee onboarding forms"
+      ],
+      "users": 12,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 3,
+        "integration_access": 2,
+        "communication_scope": 3
+      },
+      "inherent_risk": "High",
+      "owner": "P-04",
+      "review_status": "Reviewed",
+      "last_review": "2026-05-20",
+      "next_review": "2027-05-20",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II (from the vendor's trust center)",
+          "date": "2026-05-20"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-12",
+          "text": "Vendor added AI contract summaries; confirm the setting is off for Saltmarsh envelopes (AI feed)."
+        }
+      ],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-08",
+      "name": "QuickBooks Online",
+      "category": "Accounting",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Company financials",
+        "Vendor bank details"
+      ],
+      "users": 5,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 3,
+        "integration_access": 2,
+        "communication_scope": 1
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-03",
+      "review_status": "Reviewed",
+      "last_review": "2026-04-10",
+      "next_review": "2028-04-10",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 (vendor trust page)",
+          "date": "2026-04-10"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-09",
+      "name": "HubSpot",
+      "category": "CRM and marketing",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Prospect and client contact details"
+      ],
+      "users": 9,
+      "rubric": {
+        "data_types": 2,
+        "business_criticality": 2,
+        "integration_access": 2,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-37",
+      "review_status": "Reviewed",
+      "last_review": "2026-03-02",
+      "next_review": "2028-03-02",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 (vendor trust page)",
+          "date": "2026-03-02"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-10",
+      "name": "Zoom",
+      "category": "Video meetings",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Meeting content"
+      ],
+      "users": 55,
+      "rubric": {
+        "data_types": 2,
+        "business_criticality": 2,
+        "integration_access": 1,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Medium",
+      "owner": "X-01",
+      "review_status": "Reviewed",
+      "last_review": "2026-03-02",
+      "next_review": "2028-03-02",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 (vendor trust page)",
+          "date": "2026-03-02"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-11",
+      "name": "Dropbox",
+      "category": "File sharing (not approved)",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Client files (6 people sharing)"
+      ],
+      "users": 6,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 2,
+        "integration_access": 3,
+        "communication_scope": 3
+      },
+      "inherent_risk": "High",
+      "owner": null,
+      "review_status": "Under review",
+      "last_review": null,
+      "next_review": null,
+      "evidence": [],
+      "findings": [
+        {
+          "id": "VF-02",
+          "date": "2026-10-28",
+          "text": "Six staff connected personal Dropbox accounts and shared client files. Decide: approve with a business account and a DPA, or block and move files to SharePoint.",
+          "owner": "P-02",
+          "status": "Open",
+          "risk": "R-06"
+        }
+      ],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-28",
+          "text": "Found by the Oct 28 OAuth consent review; no owner yet."
+        }
+      ],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-12",
+      "name": "ClearPath Screening",
+      "category": "Background checks",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Social Security numbers",
+        "Dates of birth",
+        "Addresses"
+      ],
+      "users": 3,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 2,
+        "integration_access": 1,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-42",
+      "review_status": "Reviewed",
+      "last_review": "2026-06-01",
+      "next_review": "2027-06-01",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II",
+          "date": "2026-06-01"
+        },
+        {
+          "kind": "contract",
+          "name": "MSA and DPA",
+          "date": "2024-06-01",
+          "evidence_id": "EV-07"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-13",
+      "name": "Harborvault Backup",
+      "category": "SaaS backup for Microsoft 365",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Copies of mailboxes and SharePoint"
+      ],
+      "users": 2,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 4,
+        "integration_access": 4,
+        "communication_scope": 1
+      },
+      "inherent_risk": "Critical",
+      "owner": "X-01",
+      "review_status": "Reviewed",
+      "last_review": "2026-09-15",
+      "next_review": "2027-09-15",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 Type II",
+          "date": "2026-09-15"
+        },
+        {
+          "kind": "record",
+          "name": "Restore test, Sep 26, 2026",
+          "date": "2026-09-26",
+          "evidence_id": "EV-31"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": true,
+      "fictional": true,
+      "ai": false
+    },
+    {
+      "id": "V-14",
+      "name": "Grammarly",
+      "category": "Writing assistant (AI)",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Text typed in email and documents"
+      ],
+      "users": 9,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 1,
+        "integration_access": 2,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-02",
+      "review_status": "Reviewed",
+      "last_review": "2026-10-10",
+      "next_review": "2027-10-10",
+      "evidence": [
+        {
+          "kind": "record",
+          "name": "AI tool review (POL-22)",
+          "date": "2026-10-10"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-15",
+      "name": "OpenAI (ChatGPT Team)",
+      "category": "AI assistant",
+      "discovered_via": "Entra sign-in logs",
+      "data_shared": [
+        "Whatever staff paste; client data prohibited by policy"
+      ],
+      "users": 14,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 1,
+        "integration_access": 1,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-02",
+      "review_status": "Reviewed",
+      "last_review": "2026-10-10",
+      "next_review": "2027-10-10",
+      "evidence": [
+        {
+          "kind": "record",
+          "name": "AI tool review (POL-22)",
+          "date": "2026-10-10"
+        },
+        {
+          "kind": "contract",
+          "name": "Team plan terms: no training on business data",
+          "date": "2026-10-10"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-16",
+      "name": "Otter.ai",
+      "category": "Meeting transcription (AI)",
+      "discovered_via": "Entra sign-in logs",
+      "data_shared": [
+        "Client call recordings"
+      ],
+      "users": 3,
+      "rubric": {
+        "data_types": 4,
+        "business_criticality": 1,
+        "integration_access": 2,
+        "communication_scope": 3
+      },
+      "inherent_risk": "High",
+      "owner": "P-23",
+      "review_status": "Blocked",
+      "last_review": "2026-10-10",
+      "next_review": null,
+      "evidence": [
+        {
+          "kind": "record",
+          "name": "AI tool review: blocked",
+          "date": "2026-10-10"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-10",
+          "text": "Blocked: records client calls without a consent step or a retention rule."
+        }
+      ],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-17",
+      "name": "Zapier",
+      "category": "Automation, including AI agents",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Payroll mailbox contents",
+        "Ticket data"
+      ],
+      "users": 2,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 2,
+        "integration_access": 3,
+        "communication_scope": 2
+      },
+      "inherent_risk": "High",
+      "owner": "P-05",
+      "review_status": "Under review",
+      "last_review": null,
+      "next_review": null,
+      "evidence": [
+        {
+          "kind": "request",
+          "name": "DPA and agent scope requested",
+          "date": "2026-10-28",
+          "awaiting": true
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [
+        {
+          "date": "2026-10-28",
+          "text": "Zapier turned on Agents for the Team plan; review opened (AI feed)."
+        }
+      ],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-18",
+      "name": "Mailchimp",
+      "category": "Client newsletters",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Client contact emails"
+      ],
+      "users": 2,
+      "rubric": {
+        "data_types": 2,
+        "business_criticality": 1,
+        "integration_access": 1,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Medium",
+      "owner": "P-37",
+      "review_status": "Reviewed",
+      "last_review": "2026-02-14",
+      "next_review": "2028-02-14",
+      "evidence": [
+        {
+          "kind": "report",
+          "name": "SOC 2 (vendor trust page)",
+          "date": "2026-02-14"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-19",
+      "name": "Calendly",
+      "category": "Scheduling",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Calendar availability"
+      ],
+      "users": 6,
+      "rubric": {
+        "data_types": 1,
+        "business_criticality": 1,
+        "integration_access": 1,
+        "communication_scope": 3
+      },
+      "inherent_risk": "Low",
+      "owner": "P-37",
+      "review_status": "Not required",
+      "last_review": null,
+      "next_review": null,
+      "evidence": [],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": false
+    },
+    {
+      "id": "V-20",
+      "name": "Canva",
+      "category": "Design",
+      "discovered_via": "Microsoft 365 app consent",
+      "data_shared": [
+        "Marketing images"
+      ],
+      "users": 4,
+      "rubric": {
+        "data_types": 1,
+        "business_criticality": 1,
+        "integration_access": 1,
+        "communication_scope": 2
+      },
+      "inherent_risk": "Low",
+      "owner": "P-37",
+      "review_status": "Not required",
+      "last_review": null,
+      "next_review": null,
+      "evidence": [],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": false,
+      "ai": true
+    },
+    {
+      "id": "V-21",
+      "name": "Shred-Right Document Destruction",
+      "category": "Paper records disposal",
+      "discovered_via": "Accounts payable",
+      "data_shared": [
+        "Paper payroll records"
+      ],
+      "users": 1,
+      "rubric": {
+        "data_types": 3,
+        "business_criticality": 1,
+        "integration_access": 1,
+        "communication_scope": 1
+      },
+      "inherent_risk": "Low",
+      "owner": null,
+      "review_status": "Not required",
+      "last_review": null,
+      "next_review": null,
+      "evidence": [
+        {
+          "kind": "contract",
+          "name": "Service agreement and certificates of destruction",
+          "date": "2025-01-15"
+        }
+      ],
+      "findings": [],
+      "alerts": [],
+      "activity": [],
+      "subprocessor": false,
+      "fictional": true,
+      "ai": false
+    }
+  ]
+}

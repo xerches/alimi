@@ -1,0 +1,79 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { assets, deviceCounts, formatDateTime, personName, href } from "../lib/data.js";
+---
+
+<App title="Assets" path="/assets" section="assets" eyebrow="Assets" crumbs={[{ label: "Assets" }]} wide
+  description="Devices with encryption, EDR and owner; the applications in use; the data stores and who owns them; the tenant and its sending domains with SPF, DKIM and DMARC."
+  lead="Every device, application and data store with an owner. Device facts come from the management tool's export today and from a direct connection once Intune is linked.">
+  <a slot="actions" class="button secondary" href="/integrations">Connect Intune</a>
+
+  <div class="grid">
+    <Tile label="Devices" value={deviceCounts.total} note={`${deviceCounts.macs} Macs, the rest Windows`} />
+    <Tile label="Compliant" value={deviceCounts.compliant} unit={`of ${deviceCounts.total}`} />
+    <Tile label="Encrypted" value={deviceCounts.encrypted} unit={`of ${deviceCounts.total}`} />
+    <Tile label="EDR active" value={deviceCounts.edr} unit={`of ${deviceCounts.total}`} note={`${Math.round((100 * deviceCounts.edr) / deviceCounts.total)} percent; the insurer asks for 95`} />
+    <Tile label="Applications" value={assets.apps.length} note="Discovered from the tenant and accounts payable" href="/vendors" linkText="Vendors" />
+  </div>
+
+  <h2>Devices</h2>
+  <div class="toolbar">
+    <label class="visually-hidden" for="device-filter">Filter devices</label>
+    <input id="device-filter" type="search" placeholder="Filter by name, person or OS" data-filter="#devices" />
+    <div class="chips" data-chips="#devices" data-key="compliant" role="group" aria-label="Filter by compliance">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-value="yes" aria-pressed="false">Compliant</button>
+      <button class="chip" type="button" data-value="no" aria-pressed="false">Not compliant</button>
+    </div>
+    <span class="muted" data-count-for="#devices"></span>
+  </div>
+  <div class="table-wrap">
+    <table id="devices">
+      <thead><tr><th>Device</th><th>Assigned to</th><th>OS</th><th>Encryption</th><th>EDR</th><th>Last check-in</th><th>Status</th></tr></thead>
+      <tbody>
+        {assets.devices.map((d) => (
+          <tr data-compliant={d.compliant ? "yes" : "no"}>
+            <td><strong class="mono">{d.name}</strong><span class="sub">{d.type}, {d.managed_by}</span></td>
+            <td>{d.assigned_to ? <a href={href.person(d.assigned_to)}>{d.assignedName}</a> : <span>{d.shared_use}</span>}</td>
+            <td>{d.os}</td>
+            <td>{d.encrypted ? d.encryption : "Not encrypted"}</td>
+            <td>{d.edr_active ? d.edr : <span class="muted">None</span>}</td>
+            <td>{formatDateTime(d.last_check_in)}</td>
+            <td>{d.compliant ? <Pill label="Compliant" tone="success" /> : <span><Pill label="Not compliant" tone="warning" /><span class="sub">{d.issue}</span></span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid two">
+    <div class="card">
+      <h2>Data stores</h2>
+      <div class="table-wrap plain"><table><thead><tr><th>Store</th><th>Owner</th><th>Classification</th><th>Contains</th></tr></thead><tbody>
+        {assets.data_stores.map((s) => <tr><td>{s.name}</td><td>{s.owner ? <a href={href.person(s.owner)}>{personName(s.owner)}</a> : <span class="muted">Unassigned</span>}</td><td><Pill label={s.classification} tone={s.classification === "Restricted" ? "danger" : "warning"} /></td><td>{s.contains.join(", ")}</td></tr>)}
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>Tenant and domains</h2>
+      <dl class="kv">
+        <dt>Tenant</dt><dd>{assets.tenant.name}, {assets.tenant.licence}, {assets.tenant.users} accounts</dd>
+        <dt>Domains</dt><dd>{assets.tenant.domains.join(", ")}</dd>
+      </dl>
+      <div class="table-wrap plain"><table><thead><tr><th>Sending domain</th><th>SPF</th><th>DKIM</th><th>DMARC</th></tr></thead><tbody>
+        {assets.domains.map((d) => <tr><td class="mono">{d.domain}</td><td>{d.spf ? <Pill label="Present" tone="success" /> : <Pill label="Missing" tone="danger" />}</td><td>{d.dkim_enabled ? <Pill label="Enabled" tone="success" /> : <Pill label="Off" tone="danger" />}</td><td>{/p=(quarantine|reject)/.test(d.dmarc ?? "") ? <Pill label={d.dmarc.includes("reject") ? "p=reject" : "p=quarantine"} tone="success" /> : <Pill label="Not enforcing" tone="danger" />}</td></tr>)}
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <h2>Applications</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Application</th><th>Category</th><th>Found via</th><th class="num">People</th><th>Review</th><th>Tier</th></tr></thead>
+      <tbody>
+        {assets.apps.map((v) => <tr><td><a href={href.vendor(v.id)}>{v.name}</a></td><td>{v.category}</td><td>{v.discovered_via}</td><td class="num">{v.users}</td><td><Pill label={v.review_status} /></td><td><Pill label={v.inherent_risk} /></td></tr>)}
+      </tbody>
+    </table>
+  </div>
+</App>

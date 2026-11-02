@@ -1,0 +1,67 @@
+---
+import App from "../layouts/App.astro";
+import { company, person, formatDate, href, staff } from "../lib/data.js";
+const access = [
+  ["Owner", person(company.roles.CEO).name, "Everything, including billing and who has access"],
+  ["Admin", `${person(company.roles["AI Lead"]).name}; ${person(company.roles["Security Lead"]).name}`, "Everything except billing; approves evidence and policies"],
+  ["Editor", `${person(company.roles["IT Lead"]).name}; ${person(company.roles["HR Lead"]).name}; ${person(company.roles["Finance Lead"]).name}; ${person(company.roles["Privacy Lead"]).name}`, "Edits what they own: controls, evidence, vendors, policies"],
+  ["Viewer", "Every member of staff", "Their own tasks, the policies to accept, the training to take"],
+  ["Auditor", "Nobody yet", "Read-only view of controls and evidence for a chosen framework, time-limited"],
+];
+---
+
+<App title="Settings" path="/settings" section="settings" eyebrow="Setup" crumbs={[{ label: "Settings" }]}
+  description="Company profile, the pilot authorization, who holds which security role, access roles, and how the platform handles the company's data."
+  lead="The company, the people who hold the security roles, who can see what, and the rules the platform follows with the company's data.">
+  <a slot="actions" class="button secondary" href="/integrations">Integrations</a>
+
+  <div class="grid two">
+    <div class="card">
+      <h2>Company</h2>
+      <dl class="kv">
+        <dt>Name</dt><dd>{company.name}</dd>
+        <dt>Location</dt><dd>{company.location}</dd>
+        <dt>Sector</dt><dd>{company.sector}</dd>
+        <dt>People</dt><dd>{company.headcount} ({staff.filter((p) => p.status === "onboarding").length} onboarding)</dd>
+        <dt>Workspace</dt><dd>{company.workspace}; domain {company.domain}</dd>
+        <dt>IT provider</dt><dd>{company.it_provider}</dd>
+        <dt>Insurance</dt><dd>{company.insurance.carrier} through {company.insurance.broker}; renewal {formatDate(company.insurance.renewal)}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h2>Pilot authorization</h2>
+      <dl class="kv">
+        <dt>Signed</dt><dd>{formatDate(company.pilot_letter.signed)} by {person(company.pilot_letter.signed_by).name}, {person(company.pilot_letter.signed_by).title}</dd>
+        <dt>Scope</dt><dd>{company.pilot_letter.scope}</dd>
+        <dt>Permissions</dt><dd>Read-only Microsoft Graph, listed on <a href="/integrations">Integrations</a></dd>
+        <dt>Data</dt><dd>Scan results and uploaded evidence belong to the company and are deleted on request</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Security roles</h2>
+    <div class="table-wrap plain"><table><thead><tr><th>Role</th><th>Person</th><th>Title</th></tr></thead><tbody>
+      {Object.entries(company.roles).map(([role, pid]) => <tr><td>{role}</td><td><a href={href.person(pid)}>{person(pid).name}</a></td><td>{person(pid).title}</td></tr>)}
+    </tbody></table></div>
+    <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">The roles are the placeholders in the policy library ({"{{Security Lead}}"}, {"{{IT Lead}}"} and so on); the policies and the controls resolve to these people.</p>
+  </div>
+
+  <div class="card">
+    <h2>Who can see what</h2>
+    <div class="table-wrap plain"><table><thead><tr><th>Role</th><th>Who</th><th>Can</th></tr></thead><tbody>
+      {access.map(([role, who, can]) => <tr><td>{role}</td><td>{who}</td><td>{can}</td></tr>)}
+    </tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h2>How the platform handles this company's data</h2>
+    <ul>
+      <li>Every query is scoped to one company; the database enforces it row by row, so an application bug cannot show one company's data to another.</li>
+      <li>Connection tokens are encrypted at rest with a key kept outside the database and never appear in logs or error reports.</li>
+      <li>Connections are read-only. The platform cannot change a setting in the tenant.</li>
+      <li>Framework text is never stored; requirement IDs and alimi's own summaries only.</li>
+      <li>This demo is static and holds no customer data. The hosted platform holds customer data only after the company entity, insurance, a signed pilot letter and an outside security review exist.</li>
+    </ul>
+  </div>
+</App>

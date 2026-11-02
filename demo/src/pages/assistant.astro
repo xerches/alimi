@@ -1,0 +1,32 @@
+---
+import App from "../layouts/App.astro";
+import { assistantAnswers } from "../lib/data.js";
+---
+
+<App title="Assistant" path="/assistant" section="assistant" eyebrow="Preview" crumbs={[{ label: "Assistant" }]}
+  description="Ask alimi: a preview of the assistant that finds policies, evidence, people and vendors across the program and drafts the change summaries and questionnaire answers a person approves."
+  lead="Ask a question in plain words and get the answer from the program's own data, with the source on every line. Coming later; the five answers below are prepared from the same data, so they are exactly what the assistant will say.">
+  <span slot="actions" class="tag preview">Preview</span>
+
+  <div class="callout"><p>How it will work: the assistant reads the same tables you see on these screens (controls, evidence, policies, people, vendors, AI tools) and nothing else. It suggests, with a rationale and a source; a person accepts. It never changes a record on its own, and customer data never leaves the platform to train a model.</p></div>
+
+  <div class="chat">
+    {assistantAnswers.map((a) => (
+      <div id={a.id} style="display:contents">
+        <div class="bubble me"><strong>You</strong><p style="margin:.25rem 0 0">{a.question}</p></div>
+        <div class="bubble">
+          <strong>alimi</strong>
+          <ul>{a.items.map((item) => <li>{item.href ? <a href={item.href}>{item.text}</a> : item.text}</li>)}</ul>
+          <p style="margin:0 0 .35rem">{a.after}</p>
+          <p class="sources" style="margin:0">Sources: {a.sources.join("; ")}</p>
+        </div>
+      </div>
+    ))}
+    <form class="bubble" aria-label="Ask (preview, does nothing)" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+      <label for="ask" class="visually-hidden">Ask alimi</label>
+      <input id="ask" type="text" placeholder="Which controls does the bank's question 17 map to?" style="flex:1 1 16rem;font:inherit;padding:.5rem .7rem;border:1px solid var(--color-border-strong);border-radius:.5rem;background:var(--color-surface);color:var(--color-text)" />
+      <button class="button" type="button">Ask</button>
+      <span class="muted" style="font-size:.8125rem;flex-basis:100%">Preview: the box does nothing yet.</span>
+    </form>
+  </div>
+</App>

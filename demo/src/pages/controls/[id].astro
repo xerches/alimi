@@ -1,0 +1,148 @@
+---
+import App from "../../layouts/App.astro";
+import Pill from "../../components/Pill.astro";
+import { controls, control, frameworks, requirementSummary, risks, evidenceTypes, formatDate, formatDateTime, href, attestations, status as statusOf } from "../../lib/data.js";
+
+export function getStaticPaths() {
+  return controls.map((c) => ({ params: { id: c.id } }));
+}
+const { id } = Astro.params;
+const c = control(id);
+const linkedRisks = risks.filter((r) => r.controls.includes(c.id));
+const activity = [
+  ...c.evidenceItems.filter((e) => e.created).map((e) => ({ date: e.created, text: `Evidence added: ${e.name} (${e.ownerName})` })),
+  ...c.evidenceItems.filter((e) => e.requested_on).map((e) => ({ date: e.requested_on, text: `Evidence requested: ${e.name}, due ${formatDate(e.due)}` })),
+  ...(c.testResults.length ? [{ date: c.lastChecked.slice(0, 10), text: `Tests ran: ${c.testResults.map((t) => `${t.title} (${statusOf(t.status).label})`).join("; ")}` }] : []),
+].sort((a, b) => b.date.localeCompare(a.date));
+const index = controls.findIndex((x) => x.id === c.id);
+const prev = controls[index - 1];
+const next = controls[index + 1];
+---
+
+<App title={c.name} path={`/controls/${c.id}`} section="controls" eyebrow={`${c.id} · ${c.domainLabel}`} crumbs={[{ label: "Controls", href: "/controls" }, { label: c.id }]}
+  description={`${c.name}: what it means, how ${"the company"} runs it, the requirements it satisfies, its tests and evidence.`}
+  lead={c.description}>
+  <Pill slot="actions" status={c.status} />
+  <a slot="actions" class="button secondary" href="#evidence">Add evidence</a>
+  <a slot="actions" class="button" href="#tests">Tests</a>
+
+  <div class="section-nav" aria-label="Sections">
+    <a href="#overview">Overview</a><a href="#tests">Tests ({c.testResults.length})</a><a href="#evidence">Evidence ({c.evidenceItems.length})</a><a href="#policies">Policies ({c.policyRecords.length})</a><a href="#frameworks">Frameworks</a><a href="#risks">Risks ({linkedRisks.length})</a><a href="#activity">Activity</a>
+  </div>
+
+  <div class="grid two" id="overview">
+    <div class="card">
+      <h2>Implementation details</h2>
+      <p>{c.implementation}</p>
+      <dl class="kv">
+        <dt>Owner</dt><dd>{c.owner ? <a href={href.person(c.owner.id)}>{c.ownerName}</a> : <span>Unassigned</span>} <span class="muted">({c.ownerRole})</span>{c.assignmentNote && <div class="muted" style="font-size:.8125rem">{c.assignmentNote}</div>}</dd>
+        <dt>Approver</dt><dd>{c.approver ? <a href={href.person(c.approver.id)}>{c.approver.name}</a> : "CEO"}</dd>
+        <dt>Frequency</dt><dd>{c.frequencyLabel}</dd>
+        <dt>Evidence expected</dt><dd>{c.evidence.map((t) => `${t}: ${evidenceTypes[t]}`).join("; ")}</dd>
+        <dt>Last checked</dt><dd>{c.lastChecked ? (c.testResults.length ? formatDateTime(c.lastChecked) : formatDate(c.lastChecked)) : "Never"}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h2>Readiness</h2>
+      <ul class="list">
+        <li><span class="grow">Tests</span>{c.testResults.length ? <Pill status={c.testResults.some((t) => t.status === "fail") ? "needs_attention" : c.testResults.every((t) => t.status === "pass" || attestations(t.check_id).some((e) => e.status === "ready" || e.status === "upcoming")) ? "ok" : "needs_evidence"} /> : <span class="muted">No automated test; evidence only</span>}</li>
+        <li><span class="grow">Evidence</span>{c.evidenceItems.length ? <Pill status={c.evidenceItems.some((e) => e.status === "needs_artifact" || e.status === "needs_renewal") ? "needs_evidence" : "ok"} /> : <Pill status="needs_evidence" />}</li>
+        <li><span class="grow">Policies</span>{c.policyRecords.length ? <Pill status={c.policyRecords.every((p) => ["published", "renews_soon"].includes(p.status)) ? "ok" : "needs_evidence"} /> : <span class="muted">None mapped</span>}</li>
+        <li><span class="grow">Owner</span>{c.owner ? <Pill status="ok" /> : <Pill status="needs_owner" />}</li>
+      </ul>
+      <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">Status is computed, never typed: a failing test makes the control Needs attention; missing or expired evidence makes it Needs evidence; no owner makes it Needs owner whatever the evidence says.</p>
+    </div>
+  </div>
+
+  <div class="card" id="tests">
+    <div class="card-head"><h2>Tests</h2><a href="/monitoring">All tests</a></div>
+    {c.testResults.length === 0 && c.testsNotRun.length === 0 && <p class="muted" style="margin:0">No API can read this control. A person confirms it with the evidence below.</p>}
+    {c.testResults.length > 0 && (
+      <div class="table-wrap plain">
+        <table>
+          <thead><tr><th>Test</th><th>Result</th><th>Severity</th><th>What the scan found</th><th>History</th></tr></thead>
+          <tbody>
+            {c.testResults.map((t) => (
+              <tr>
+                <td><a href={href.test(t.check_id)}>{t.title}</a><span class="sub mono">{t.check_id}</span></td>
+                <td><Pill status={t.status} /></td>
+                <td>{t.severity}</td>
+                <td>{t.summary}{t.status === "fail" && t.remediation_plan && <span class="sub">Plan: {t.remediation_plan.action} Due {formatDate(t.remediation_plan.due)}.</span>}{t.status === "attestation_needed" && <span class="sub">Answered by: {attestations(t.check_id).map((e) => `${e.name} (${statusOf(e.status).label})`).join(", ") || "nothing yet"}</span>}</td>
+                <td><span class="history" aria-label={`Last ${t.history.length} runs: ${t.history.map((h) => h.status).join(", ")}`}>{t.history.map((h) => <span data-status={h.status} title={`${formatDate(h.date)}: ${h.status}`}></span>)}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+    {c.testsNotRun.length > 0 && <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">Also tests this control on Google Workspace tenants: {c.testsNotRun.join(", ")}. Not run here; the company uses Microsoft 365.</p>}
+  </div>
+
+  <div class="card" id="evidence">
+    <div class="card-head"><h2>Evidence</h2><a href="/evidence">Library</a></div>
+    {c.evidenceItems.length ? (
+      <div class="table-wrap plain">
+        <table>
+          <thead><tr><th>Item</th><th>Type</th><th>Status</th><th>Owner</th><th>Created</th><th>Renewal</th></tr></thead>
+          <tbody>
+            {c.evidenceItems.map((e) => (
+              <tr id={`${e.id}`}>
+                <td><a href={href.evidence(e.id)}>{e.name}</a><span class="sub">{e.description}</span></td>
+                <td>{e.type}{e.artifact ? <span class="sub">{e.artifact.kind === "file" ? e.artifact.name : e.artifact.kind === "link" ? "Link" : "Scan"}</span> : <span class="sub">No artifact yet</span>}</td>
+                <td><Pill status={e.status} /></td>
+                <td>{e.owner ? <a href={href.person(e.owner)}>{e.ownerName}</a> : <span class="muted">Unassigned</span>}</td>
+                <td>{e.created ? formatDate(e.created) : "—"}</td>
+                <td>{e.renewal ? formatDate(e.renewal) : e.due ? `Due ${formatDate(e.due)}` : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : <p class="muted">No evidence attached yet.</p>}
+    <h3 style="margin-top:1rem">Add evidence</h3>
+    <p class="muted" style="font-size:.8125rem">In the demo nothing is saved; this is the form and the state a saved item shows above. In the platform the file goes to encrypted storage and the item appears in the library with its renewal date.</p>
+    <form class="form-grid" aria-label="Add evidence (demo, does not save)">
+      <div class="field"><label for="ev-name">Name</label><input id="ev-name" type="text" value={`${c.name}: evidence`} /></div>
+      <div class="field"><label for="ev-kind">Source</label><select id="ev-kind"><option>Upload a file</option><option>Link</option><option>Note</option><option>Scanner report</option></select></div>
+      <div class="field"><label for="ev-owner">Owner</label><input id="ev-owner" type="text" value={c.ownerName} /></div>
+      <div class="field"><label for="ev-renewal">Renewal</label><select id="ev-renewal"><option>In 12 months</option><option>In 3 months</option><option>Monthly</option><option>No renewal</option></select></div>
+      <div class="field" style="grid-column:1/-1"><label for="ev-note">Note for the reviewer</label><textarea id="ev-note" rows="2">Export from the admin center, dated and with the tenant name visible.</textarea></div>
+      <div class="form-actions"><button class="button" type="button">Save evidence</button> <span class="demo-note">Demo: does nothing</span></div>
+    </form>
+  </div>
+
+  <div class="grid two">
+    <div class="card" id="policies">
+      <h2>Policies that set the rule</h2>
+      <ul class="list">
+        {c.policyRecords.map((p) => <li><span class="grow"><a href={href.policy(p.id)}>{p.title}</a> <span class="muted">v{p.version}</span></span><Pill status={p.status} /></li>)}
+      </ul>
+    </div>
+    <div class="card" id="risks">
+      <h2>Risks this control treats</h2>
+      {linkedRisks.length ? <ul class="list">{linkedRisks.map((r) => <li><span class="grow"><a href={href.risk(r.id)}>{r.title}</a></span><Pill label={r.rating} /></li>)}</ul> : <p class="muted" style="margin:0">None in the register.</p>}
+    </div>
+  </div>
+
+  <div class="card" id="frameworks">
+    <h2>Requirements this control satisfies</h2>
+    {frameworks.filter((f) => (c.requirements[f.id] ?? []).length).map((f) => (
+      <div>
+        <h3><a href={href.framework(f.id)}>{f.short}</a></h3>
+        <dl class="kv">
+          {(c.requirements[f.id] ?? []).map((rid) => <><dt class="mono">{rid}</dt><dd>{requirementSummary(f.id, rid)}</dd></>)}
+        </dl>
+      </div>
+    ))}
+    <p class="muted" style="margin:0;font-size:.8125rem">IDs and alimi's summaries only; framework text is not reproduced.</p>
+  </div>
+
+  <div class="card" id="activity">
+    <h2>Activity</h2>
+    <ul class="list">
+      {activity.map((a) => <li><span class="when">{formatDate(a.date)}</span><span class="grow">{a.text}</span></li>)}
+    </ul>
+  </div>
+
+  <p class="muted">{prev && <a href={href.control(prev.id)}>← {prev.id}</a>}{prev && next && " · "}{next && <a href={href.control(next.id)}>{next.id} →</a>}</p>
+</App>

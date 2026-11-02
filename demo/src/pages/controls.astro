@@ -1,0 +1,77 @@
+---
+import App from "../layouts/App.astro";
+import Pill from "../components/Pill.astro";
+import Tile from "../components/Tile.astro";
+import { controls, controlCounts, controlDomains, frameworks, formatDate, href } from "../lib/data.js";
+
+const counts = controlCounts();
+const owners = [...new Set(controls.map((c) => c.ownerName))].sort();
+---
+
+<App title="Controls" path="/controls" section="controls" eyebrow="Compliance" crumbs={[{ label: "Controls" }]} wide
+  description="The forty plain-English controls the company runs, each with an owner, a status, the frameworks it serves, its evidence and its automated tests."
+  lead="Every control has one owner and one status. Tests set the status where a tenant read can; evidence with a renewal date covers the rest.">
+  <a slot="actions" class="button secondary" href="/owners">By owner</a>
+  <a slot="actions" class="button" href="/evidence#add">Add evidence</a>
+
+  <div class="grid">
+    <Tile label="Ok" value={counts.ok} unit={`of ${controls.length}`} />
+    <Tile label="Needs attention" value={counts.needs_attention} note="A linked test is failing" />
+    <Tile label="Needs evidence" value={counts.needs_evidence} note="Evidence missing or past its renewal" />
+    <Tile label="Needs owner" value={counts.needs_owner} note="Nobody is accountable yet" />
+  </div>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="control-filter">Filter controls</label>
+    <input id="control-filter" type="search" placeholder="Filter by name, owner or ID" data-filter="#controls" />
+    <div class="chips" data-chips="#controls" data-key="status" role="group" aria-label="Filter by status">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-value="ok" aria-pressed="false">Ok</button>
+      <button class="chip" type="button" data-value="needs_attention" aria-pressed="false">Needs attention</button>
+      <button class="chip" type="button" data-value="needs_evidence" aria-pressed="false">Needs evidence</button>
+      <button class="chip" type="button" data-value="needs_owner" aria-pressed="false">Needs owner</button>
+    </div>
+    <div class="chips" data-chips="#controls" data-key="framework" role="group" aria-label="Filter by framework">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">Every framework</button>
+      {frameworks.map((f) => <button class="chip" type="button" data-value={f.id} aria-pressed="false">{f.short}</button>)}
+    </div>
+    <span class="muted" data-count-for="#controls"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="controls">
+      <thead><tr><th>Control</th><th>Area</th><th>Owner</th><th>Status</th><th>Frameworks</th><th class="num">Evidence</th><th>Tests</th><th>Last checked</th></tr></thead>
+      <tbody>
+        {controls.map((c) => {
+          const passing = c.testResults.filter((t) => t.status === "pass").length;
+          const failing = c.testResults.filter((t) => t.status === "fail").length;
+          const attest = c.testResults.filter((t) => t.status === "attestation_needed").length;
+          return (
+            <tr data-status={c.status} data-framework={c.frameworks.join(" ")}>
+              <td><a href={href.control(c.id)}>{c.name}</a><span class="sub mono">{c.id}</span></td>
+              <td>{c.domainLabel}</td>
+              <td>{c.owner ? <a href={href.person(c.owner.id)}>{c.ownerName}</a> : <span class="muted">Unassigned ({c.ownerRole})</span>}</td>
+              <td><Pill status={c.status} /></td>
+              <td>{c.frameworks.map((f) => <span class="tag" style="margin:0 .2rem .2rem 0">{frameworks.find((x) => x.id === f)?.short}</span>)}</td>
+              <td class="num">{c.evidenceItems.length}</td>
+              <td>{c.testResults.length ? <span>{passing} pass{failing ? `, ${failing} fail` : ""}{attest ? `, ${attest} attest` : ""}</span> : <span class="muted">Evidence only</span>}</td>
+              <td>{c.lastChecked ? formatDate(c.lastChecked) : <span class="muted">Never</span>}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Common controls</h2>
+    <p class="muted">Controls that serve three or more frameworks at once. Doing these once answers the insurer, the SOC 2 auditor and the ISO 27001 assessor together.</p>
+    <ul class="list">
+      {controls.filter((c) => c.frameworks.length >= 3).map((c) => (
+        <li><span class="grow"><a href={href.control(c.id)}>{c.name}</a></span><span class="muted">{c.frameworks.map((f) => frameworks.find((x) => x.id === f)?.short).join(", ")}</span><Pill status={c.status} /></li>
+      ))}
+    </ul>
+  </div>
+
+  <p class="muted">Areas: {controlDomains.map((d) => `${d.label} (${d.controls.length})`).join(", ")}. Owners: {owners.join(", ")}.</p>
+</App>

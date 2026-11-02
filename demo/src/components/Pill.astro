@@ -1,0 +1,9 @@
+---
+// A status in one or two plain words. Either a status key from the shared vocabulary or a label
+// with a tone (success, warning, danger, info, primary, neutral).
+import { status as statusOf, tone as toneOf } from "../lib/data.js";
+const { status, label, tone, plain = false } = Astro.props;
+const resolved = status ? statusOf(status) : { label, tone: tone ?? toneOf(label) };
+---
+
+<span class:list={["pill", { plain }]} data-tone={resolved.tone}>{resolved.label}</span>
