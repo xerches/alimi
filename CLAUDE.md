@@ -4,7 +4,7 @@ Working name for a security company founded by Alex Dennis (Boston, MA). Renamed
 
 ## What Alimi is
 
-One buyer: the owner or operations lead of a 10 to 200 person company that cannot hire security staff. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
+One buyer: the owner or operations lead of a company of 10 people and up that cannot hire security staff. There is no upper limit on company size (founder, Nov 3, 2026): the minimum is 10 employees and the highest tier is offered to companies of 500 and more. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
 
 Positioning line (draft): **Security that insurers, customers and auditors accept, for companies too small for a security team.**
 
@@ -32,7 +32,7 @@ Prices live in `config/pricing.yaml` and the framework catalog in `config/framew
 ## Repo layout
 
 ```
-/site                 static marketing site (Astro) for the one platform offer: Home, Platform, Pricing (per-user calculator), Compare (Vanta and Drata, sourced), For partners, For resellers, About, Contact; no policy text, no free downloads; Netlify Forms; deploys free to Netlify
+/site                 static marketing site (Astro) for the one platform offer: Home, Platform, Integrations, Frameworks (+ a page per framework), Security, Solutions, Pricing (per-user calculator), Compare (Vanta and Drata, sourced), For partners, For resellers, Resources (library, glossary, help, academy, community, customer stories), About, Press, Careers, Trust, Status, Legal, Privacy, Contact; menus from site/src/lib/nav.js; no policy text, no free downloads, no scalable counts on any page (the framework count is the one number allowed); Netlify Forms; deploys free to Netlify
 /tools/scanner        Python package alimi_scanner + thin typer CLI: findings schema, checks engine, m365 and gws connectors, mock connector. The platform imports it.
 /tools/report         findings JSON -> insurer-ready HTML/PDF report, also importable by the platform
 /demo                 platform demo: Astro, sample company "Saltmarsh Payroll", every module, built from the real scanner run and policy library; noindex, linked from the site as "See the product" since Nov 2, 2026
@@ -42,7 +42,7 @@ Prices live in `config/pricing.yaml` and the framework catalog in `config/framew
 /kits/payment-fraud   payment fraud procedure, scripts, poster, training script; a policy-module document and the finance lesson of the training module, not public; build script to PDF
 /templates            MSA, SOW, pilot authorization letter, case-study template ({{placeholders}}, attorney-review header)
 /docs                 research summaries, decisions log, pilot runbook
-/config               pricing.yaml (per-user tiers, framework add-on, services, partners), frameworks.yaml (23-entry catalog led by the Posture Score), checks.yaml (scanner checks + severity + insurer mapping), controls.yaml (40 controls), brand.yaml
+/config               pricing.yaml (per-user tiers, framework add-on, services, partners), frameworks.yaml (49-entry catalog in six categories, led by the Posture Score; every framework Vanta and Drata list), checks.yaml (scanner checks + severity + insurer mapping), controls.yaml (40 controls), brand.yaml
 ```
 
 ## Rules (non-negotiable)

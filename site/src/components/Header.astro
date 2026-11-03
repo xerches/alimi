@@ -1,15 +1,16 @@
 ---
+// The header: brand mark and the main menu. Dropdowns are <details> elements, so they work without
+// JavaScript; the small script below closes the others when one opens and closes them all on Escape
+// or a click outside. The menus come from src/lib/nav.js.
 import { brand } from "../lib/config.js";
+import { MENUS } from "../lib/nav.js";
 const { current } = Astro.props;
-const links = [
-  { href: "/platform", label: "Platform" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/compare", label: "Compare" },
-  { href: "/for-partners", label: "For partners" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-const isCurrent = (href) => current === href || (href !== "/" && current.startsWith(`${href}/`));
+const path = (href) => href.split("#")[0];
+const isCurrent = (href) => current === path(href) || (path(href) !== "/" && current.startsWith(`${path(href)}/`));
+// One top-level entry is marked current: the one whose own page this is, else the first menu that lists the page.
+const currentMenu =
+  MENUS.find((m) => isCurrent(m.href)) ?? MENUS.find((m) => (m.groups ?? []).some((g) => g.items.some((i) => !i.external && isCurrent(i.href))));
+const menuIsCurrent = (menu) => menu === currentMenu;
 ---
 
 <header class="site-header">
@@ -23,12 +24,62 @@ const isCurrent = (href) => current === href || (href !== "/" && current.startsW
     </a>
     <nav class="nav" aria-label="Main">
       <ul>
-        {links.map((link) => (
-          <li>
-            <a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</a>
-          </li>
-        ))}
+        {MENUS.map((menu) =>
+          menu.groups ? (
+            <li class="nav__item">
+              <details class={menuIsCurrent(menu) ? "nav__menu nav__menu--current" : "nav__menu"}>
+                <summary>{menu.label}</summary>
+                <div class={menu.wide ? "nav__panel nav__panel--wide" : "nav__panel"}>
+                  {menu.groups.map((group) => (
+                    <div class="nav__group">
+                      <p class="nav__group-title">{group.title}</p>
+                      <ul>
+                        {group.items.map((item) => (
+                          <li>
+                            <a href={item.href} rel={item.external ? "noopener" : undefined} aria-current={!item.external && isCurrent(item.href) && !item.href.includes("#") ? "page" : undefined}>
+                              <span class="nav__link-label">{item.label}</span>
+                              {item.text && <span class="nav__link-text">{item.text}</span>}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  <p class="nav__all"><a href={menu.href}>All of {menu.label.toLowerCase()}</a></p>
+                </div>
+              </details>
+            </li>
+          ) : (
+            <li class="nav__item">
+              <a class={menu.button ? "nav__button" : undefined} href={menu.href} aria-current={menuIsCurrent(menu) ? "page" : undefined}>{menu.label}</a>
+            </li>
+          ),
+        )}
       </ul>
     </nav>
   </div>
 </header>
+
+<script>
+  // One menu open at a time; Escape and a click outside close them. Progressive enhancement only.
+  const menus = Array.from(document.querySelectorAll("details.nav__menu"));
+  for (const menu of menus) {
+    menu.addEventListener("toggle", () => {
+      if (!menu.open) return;
+      for (const other of menus) if (other !== menu) other.open = false;
+    });
+  }
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    for (const menu of menus) if (menu.open && !menu.contains(target)) menu.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    for (const menu of menus) {
+      if (!menu.open) continue;
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+</script>

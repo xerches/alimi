@@ -77,9 +77,40 @@ export const PRODUCT_PAGES = {
 
 // ----- frameworks: the catalog in config/frameworks.yaml and how they are priced -----
 
+/** The catalog's categories in display order, our own grouping in the buyer's words (Nov 2, 2026). */
+export const FRAMEWORK_CATEGORIES = [
+  { id: "security", name: "Security", text: "The standards a customer, an insurer or a buyer's security team asks for." },
+  { id: "privacy", name: "Privacy", text: "Laws and standards about personal data, by country, state and industry." },
+  { id: "ai", name: "AI", text: "How a company governs the AI it builds or uses." },
+  { id: "government", name: "Government and defence", text: "What federal, state and defence customers require of their suppliers." },
+  { id: "financial", name: "Financial services", text: "Rules for banks, insurers, lenders, fintechs and the companies that serve them." },
+  { id: "industry", name: "Industry and operations", text: "Continuity, quality and sector standards that arrive with a particular customer." },
+];
+
+const CATEGORY_IDS = new Set(FRAMEWORK_CATEGORIES.map((c) => c.id));
+for (const f of catalog) {
+  if (!CATEGORY_IDS.has(f.category)) throw new Error(`frameworks.yaml: "${f.id}" has an unknown category "${f.category}"`);
+}
+
+/** The page for one framework: /frameworks/<id with hyphens>. */
+export function frameworkHref(id) {
+  return `/frameworks/${String(id).replace(/_/g, "-")}`;
+}
+
 /** Every framework in the catalog, in order. IDs, names and our own summaries only. */
 export function frameworkCatalog() {
-  return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included) }));
+  return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included), slug: String(f.id).replace(/_/g, "-"), href: frameworkHref(f.id) }));
+}
+
+/** The framework whose page is /frameworks/<slug>, or null. */
+export function frameworkBySlug(slug) {
+  return frameworkCatalog().find((f) => f.slug === slug) ?? null;
+}
+
+/** The choosable frameworks grouped by category, in category order; categories with no entry are left out. */
+export function frameworksByCategory() {
+  const choosable = choosableFrameworks();
+  return FRAMEWORK_CATEGORIES.map((c) => ({ ...c, frameworks: choosable.filter((f) => f.category === c.id) })).filter((c) => c.frameworks.length > 0);
 }
 
 /** The frameworks a customer picks from: the catalog without the Alimi Recommended Security Posture Score, which every plan carries. */
@@ -121,11 +152,16 @@ export function frameworkPricing() {
     rule: f.rule,
     includedChoices: choosableFrameworks().filter((c) => c.mapped).map((c) => c.name),
     pendingCount: choosableFrameworks().filter((c) => !c.mapped).length,
+    // Two sentences, trimmed at the founder's request on Nov 2, 2026; the mapped-today list is a pricing FAQ.
     text:
-      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, chosen today from ${listNames(choosableFrameworks().filter((c) => c.mapped).map((c) => c.name))}, with the rest of the catalog added as their requirement lists land; the ${alwaysIncludedFrameworks()[0].name} is in every plan too. Each further framework is ${money(f.addon_per_user_month)} per user a month. ` +
-      discounts.map((d) => `With ${d.from_total} or more frameworks, every added framework is ${percent(d.discount)} off`).join("; ") +
-      `. Up to ${f.max} frameworks on one account, not counting the posture score.`,
+      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, and the ${alwaysIncludedFrameworks()[0].name} comes with all of them. ` +
+      `Each further framework is ${money(f.addon_per_user_month)} per user a month, ${discounts.map((d) => `${percent(d.discount)} off from the ${ordinal(d.from_total)}`).join(" and ")}, up to ${f.max} on one account.`,
   };
+}
+
+function ordinal(n) {
+  const words = { 1: "first", 2: "second", 3: "third", 4: "fourth", 5: "fifth", 6: "sixth", 7: "seventh", 8: "eighth", 9: "ninth", 10: "tenth" };
+  return words[n] ?? `${n}th`;
 }
 
 /** The discount on add-on frameworks for an account holding `total` frameworks (the included one counts). */

@@ -41,7 +41,7 @@ const themes = [
     id: "support",
     title: "Small customers get the sales call, then the queue",
     reviews: "Trustpilot reviewers of Vanta (3.1 out of 5 overall) describe aggressive sales outreach followed by no onboarding, generic support replies and no human response to a cancellation; Gartner Peer Insights reviewers name limited support and cost as the reasons they consider switching. A Drata reviewer on Gartner reports far more internal security, IT and policy effort than expected.",
-    alimi: `${brand.display_name} is built for companies of 10 to 200 people and nobody else. A named compliance lead is in every tier, with a quarterly call on ${plat.tiers[0].name} and a monthly one from ${plat.tiers[1].name}; the founder answers the support address.`,
+    alimi: `${brand.display_name} is built for companies of 10 people and up that cannot hire a security team. A named compliance lead is in every tier, with a quarterly call on ${plat.tiers[0].name} and a monthly one from ${plat.tiers[1].name}; the founder answers the support address.`,
   },
   {
     id: "noise",
@@ -53,7 +53,7 @@ const themes = [
     id: "integrations",
     title: "Integrations that quietly stop syncing",
     reviews: "A healthcare security officer in the Drata interview set: \"when one quietly stops syncing, confidence in the dashboard drops fast.\" G2 and Capterra reviewers of both products ask for deeper integrations and report that custom setups need manual work; a 2024 Reddit thread lists connector and multi-framework frustrations.",
-    alimi: "Two integrations done properly first, Microsoft 365 and Google Workspace, with a data-quality page that shows when each one last read your tenant and what it could not read. A silent gap is shown as an error naming the permission, never as a pass.",
+    alimi: "Microsoft 365 and Google Workspace done properly first, with a data-quality page that shows when each connection last read your tenant and what it could not read. A silent gap is shown as an error naming the permission, never as a pass.",
   },
   {
     id: "agent",
@@ -65,7 +65,7 @@ const themes = [
     id: "templates",
     title: "Generic policies and a product written for auditors",
     reviews: "Capterra reviewers of Vanta say the policy templates need updating and that the policy generator loses its automation once a document is edited outside it. Interviewed Drata users warn that compliance looks \"deceptively simple during a demo\" and that someone still has to make the scope and remediation decisions.",
-    alimi: `${brand.display_name}'s 23 policies are written for a company of your size and tailored with you in a workshop; versions, approvals and sign-offs live in the platform. The scoping and policy calls that software leaves to you are made with a person, in plain English, with every term explained the first time.`,
+    alimi: `${brand.display_name}'s policies are written for a company of your size and tailored with you in a workshop; versions, approvals and sign-offs live in the platform. The scoping and policy calls that software leaves to you are made with a person, in plain English, with every term explained the first time.`,
   },
   {
     id: "audit",
@@ -83,7 +83,7 @@ const themes = [
     id: "expertise",
     title: "Built for a company that already has a security person",
     reviews: "SoftwareAdvice and Capterra reviewers of Vanta at 2 to 50 person companies say the product seems built for enterprise clients, that the pricing is too high for them, and ask for more automation and help with remediation because they have no IT team; PeerSpot reviewers of Drata say setting up integrations needs specialist knowledge, and a Trustpilot reviewer warns small businesses off a contract that 'will add no real value'. Interviewed Drata users say someone still has to own scope, fixes and approval decisions.",
-    alimi: `${brand.display_name} is priced per user from ${plat.tiers[0].perUser} a month and built for 10 to 200 people only. A named compliance lead in every tier owns the scoping and policy calls, every failing check carries a plain-English fix, and the fixed-fee services do the remediation when there is nobody to hand it to.`,
+    alimi: `${brand.display_name} is priced per user from ${plat.tiers[0].perUser} a month and built for companies of 10 people and up that cannot hire a security team. A named compliance lead in every tier owns the scoping and policy calls, every failing check carries a plain-English fix, and the fixed-fee services do the remediation when there is nobody to hand it to.`,
   },
 ];
 
@@ -98,12 +98,12 @@ const facts = [
   { label: "Frameworks", vanta: "35 and more", drata: "About 30 pre-mapped", alimi: `${catalog.length} in the catalog, one included, the rest add-ons; plus the ${posture.name} in every plan` },
   { label: "Questionnaires included", vanta: "25 a year on Plus, 144 on Professional; more as an add-on", drata: "100 with the Trust Center Foundation tier", alimi: allowances.charAt(0).toUpperCase() + allowances.slice(1) },
   { label: "Outcome numbers on the website", vanta: "'2,000 hrs. saved annually', '20% faster deal cycles', not tied to a named customer", drata: "'3x productivity', '$20M annual revenue accelerated', no method given", alimi: "None. No outcome number appears until a named customer has agreed to it" },
-  { label: "Integrations", vanta: "300 and more", drata: "200 and more", alimi: "Microsoft 365 and Google Workspace today; more as customers ask" },
+  { label: "Integrations", vanta: "300 and more", drata: "200 and more", alimi: "Microsoft 365 and Google Workspace today; the next ones are listed on the integrations page" },
   { label: "Reviews", vanta: "G2 4.6 of 5; Capterra and SoftwareAdvice 4.2 (33); Trustpilot 3.1 (33)", drata: "G2 4.7 of 5 (1,399); Capterra 4.8 (6); Gartner 4.1 (17); PeerSpot 4.0 (10); Trustpilot 2.6 (4)", alimi: "None yet; pilots open in January 2027" },
 ];
 
 const stronger = [
-  "Hundreds of integrations each, where Alimi has two. A company running AWS, GitHub, Okta and a dozen SaaS tools gets more automated evidence from either of them today.",
+  "Hundreds of integrations each, where Alimi starts with Microsoft 365 and Google Workspace. A company running AWS, GitHub, Okta and a dozen SaaS tools gets more automated evidence from either of them today.",
   "Years of audits behind them, large auditor networks and a SOC 2 report of their own. Alimi is a company in formation with no customers yet.",
   "Enterprise features Alimi does not plan to build: multiple business units, hundreds of custom tests, SCIM provisioning at scale.",
 ];
@@ -179,7 +179,7 @@ const sources = [
     <ul class="checklist">
       {stronger.map((item) => <li>{item}</li>)}
     </ul>
-    <p class="measure">If your company is above 200 people, runs a dozen cloud systems, or needs an audit next month, one of them is probably the right choice. If you are between 10 and 200 people, have one insurer and one or two customers asking, and nobody whose job this is, {brand.display_name} was built for you.</p>
+    <p class="measure">If your company runs a dozen cloud systems or needs an audit next month, one of them is probably the right choice. If you have 10 people or more, one insurer and one or two customers asking, and nobody whose job this is, {brand.display_name} was built for you.</p>
   </Section>
 
   <Section id="sources" title="Sources" lede={`Read in ${checked}. Several are published by competitors of Vanta and Drata and cite third-party transaction data rather than contracts; treat the dollar figures as ranges, not quotes.`}>

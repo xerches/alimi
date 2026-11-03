@@ -1,0 +1,62 @@
+---
+// The website privacy notice: what the forms collect and where it goes. Short because the site
+// collects little: no cookies, no analytics, no third-party scripts. Draft until an attorney has
+// reviewed it (CLAUDE.md). Added Nov 2, 2026; closes the open audit finding about forms without a notice.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand } from "../lib/config.js";
+
+const collected = [
+  { what: "The contact, partner and waitlist forms", data: "Your name, work email, company, company size or partner type, and the message you write", why: "To reply to you, and to tell you when your turn comes if you joined the waitlist", keep: "Until you ask for it to be deleted, or two years after the last reply, whichever is first" },
+  { what: "Visiting the site", data: "The web server's standard log: your address, the page, the time, the browser", why: "Hosting and security; the site runs no analytics and sets no cookies", keep: "As long as the hosting provider keeps its logs; Alimi does not copy them" },
+];
+---
+
+<Base title="Privacy notice" description="Alimi's website privacy notice: the forms collect a name, a work email, a company and a message, used only to reply; the site sets no cookies and runs no analytics; how to have your data deleted." path="/privacy">
+  <Hero eyebrow="Privacy notice" title="What this site collects, and what it does with it">
+    <p class="lede">Little, and only to reply to you. No cookies, no analytics, no advertising, no third-party scripts. This notice covers the website; the platform's data-handling terms arrive with the platform.</p>
+  </Hero>
+
+  <Section id="draft" tone="alt" tight>
+    <Callout label="Draft" tone="warning">
+      <p>DRAFT. Not legal advice. Reviewed by a Massachusetts attorney before the company forms. Updated Nov 2, 2026.</p>
+    </Callout>
+  </Section>
+
+  <Section id="collected" title="What is collected">
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th scope="col">When</th><th scope="col">What</th><th scope="col">Why</th><th scope="col">How long</th></tr></thead>
+        <tbody>
+          {collected.map((c) => (
+            <tr>
+              <th scope="row">{c.what}</th>
+              <td>{c.data}</td>
+              <td>{c.why}</td>
+              <td>{c.keep}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="where" tone="alt" title="Where it goes">
+    <p class="measure">Form submissions are received by Netlify Forms, the form service of the company that hosts this site, and read by {brand.founder}. They are not sold, shared, added to a marketing list or used to train anything. The hosting provider's own privacy terms apply to its logs. The full list of companies that hold data on {brand.display_name}'s behalf is on the <a href="/trust#subprocessors">trust page</a>.</p>
+  </Section>
+
+  <Section id="rights" title="Your choices">
+    <ul class="checklist">
+      <li>Ask what {brand.display_name} holds about you, and get a copy</li>
+      <li>Ask for it to be corrected or deleted; waitlist entries are deleted on request the same week</li>
+      <li>Write with no form at all: the email address arrives with the domain and will be listed in the footer</li>
+    </ul>
+    <p class="measure">Requests go through the <a href="/contact">contact form</a>. A reply within two business days.</p>
+  </Section>
+
+  <Section id="changes" tone="alt" title="Changes">
+    <p class="measure">When this notice changes, the date at the top changes with it, and anything that affects data already collected is announced on this page before it takes effect.</p>
+  </Section>
+</Base>

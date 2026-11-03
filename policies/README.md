@@ -1,6 +1,6 @@
 # Alimi policy library
 
-Twenty-three security and company policies for a 10 to 200 person company, written in plain English for an owner rather than an auditor, and mapped by criterion ID to SOC 2, ISO 27001:2022, ISO 42001:2023, the HIPAA Security Rule and the cyber insurance questionnaire. The library is sold on its own as a policy pack, included in the services, and read by the platform (prompt 13) and the AI policy kit (prompt 15).
+Twenty-three security and company policies for a company of 10 people and up, written in plain English for an owner rather than an auditor, and mapped by criterion ID to SOC 2, ISO 27001:2022, ISO 42001:2023, the HIPAA Security Rule and the cyber insurance questionnaire. The library is sold on its own as a policy pack, included in the services, and read by the platform (prompt 13) and the AI policy kit (prompt 15).
 
 Every file starts with the header **TEMPLATE. Adapt before adopting. Sections marked [HR or legal review] need a human reviewer.** The library maps to requirements by ID only; it never quotes SOC 2 or ISO text, which is copyrighted. `requirements.yaml` holds our own one-line summaries of what each ID asks for.
 

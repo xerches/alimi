@@ -65,6 +65,10 @@ The founder accepted all eleven recommendations the same evening, with one chang
 10. Channel: the Nov 17, 2026 Vanta Trusted Network webinar is a dated item in `docs/agenda.md`, to be watched before the first MSP conversation.
 11. Who it is for: a block on the home page by the person who sent the buyer (broker, accountant, customer or attorney, IT provider).
 
+## Site map gaps, Nov 2, 2026 evening
+
+The founder asked for every section the two sites have that Alimi's did not, "even if there's no content for now". The vendor sites could not be fetched from the second session (network policy), so the list comes from the founder's screenshots of Vanta's Resources menu (Customers: customer stories, help center, academy, community, instructor-led training; Company: about, security, press, careers; Compliance resources: SOC 2, GRC, CMMC, trust, ISO 27001, Cyber Essentials, HIPAA, ISO 42001, HITRUST, TPRM, GDPR, FedRAMP; All resources), the search index of drata.com (`llms.txt`: enterprise GRC, compliance automation, trust center, questionnaire assistance, TPRM, risk, Drata AI, integrations, resource library, blog, learning, help center, customer stories, webinars; solutions by stage and industry; partners and auditor alliance; company, careers, newsroom) and the Nov 2 scan above. Added to the site: Platform menu (overview, integrations, frameworks, security, demo, the modules), Solutions (by who sent you, industry, size, framework), Frameworks with a page each, Partners menu, the Resources menu as in the screenshots, and the pages customers, help, academy, community, press, careers, trust, status, legal, privacy. Each placeholder says what exists and what comes when; nothing claims a customer, a certificate or a date that does not exist.
+
 ## Sources
 
 - https://www.vanta.com/ and https://www.vanta.com/pricing, fetched Nov 2, 2026

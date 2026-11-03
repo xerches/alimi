@@ -4,41 +4,38 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Steps from "../components/Steps.astro";
 import Tiers from "../components/Tiers.astro";
-import { brand, decided, platform, choosableFrameworks, alwaysIncludedFrameworks, quote, money } from "../lib/config.js";
-import { policies, checkCounts, controlSummary } from "../lib/content.js";
+import { brand, decided, platform, choosableFrameworks, alwaysIncludedFrameworks, quote } from "../lib/config.js";
 
 const plat = platform();
 const silver = plat.tiers[0];
 const gold = plat.tiers[1];
 const demo = decided(brand.demo_url);
-const policyCount = policies().length;
-const checks = checkCounts();
-const controls = controlSummary();
 const frameworkCount = choosableFrameworks().length;
 const posture = alwaysIncludedFrameworks()[0];
 const example = quote({ tierId: "silver", users: 25 });
 
+// One line per module; the detail is on /platform. No scalable count appears on the site (founder's rule, Nov 2, 2026).
 const modules = [
-  { title: "Controls that check themselves", text: `${controls.total} controls, each with one owner and one status. ${controls.automated} are tested on every scan of your tenant; the rest are covered by evidence with a renewal date, so nothing quietly expires.` },
-  { title: "Evidence with a renewal date", text: "Every screenshot, export and report is filed against the control it proves, with an owner and a date it goes stale. The export pack for a broker or auditor builds itself." },
-  { title: "Policies your staff actually sign", text: `${policyCount} policies written for a company your size, mapped to the frameworks by criterion ID, with acknowledgement tracking and a yearly review.` },
-  { title: "People and training", text: "One row per person, one column per check: policies accepted, training current, MFA registered, device compliant. Short security lessons for every user, with a quiz and a yearly cycle, so the insurer's training question has a date behind it." },
-  { title: "Frameworks, insurer first", text: `The cyber insurance questionnaire first, then SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the rest: ${frameworkCount} frameworks in the catalog, one included, each answered by the same controls and policies.` },
-  { title: "A security score, not only a compliance score", text: `Compliance is not security. The ${posture.name} is in every plan: a scored set of controls that go beyond what any standard asks, in the spirit of Microsoft Secure Score, so you can see the gap between passing the audit and being hard to break into.` },
-  { title: "Vendors, risks and AI tools", text: "The vendors who hold your data, scored and reviewed; a risk register in plain sentences; an inventory of the AI tools in use and what changed at each vendor." },
-  { title: "Trust page and questionnaires", text: `A public page a prospect or bank can read, and the next security questionnaire drafted from answers you already have, from the ${gold.name} tier.` },
-  { title: "An assistant that drafts; you decide", text: "Ask in plain words which policy answers a question or what is due before the renewal. It reads your own data, shows its sources on every line and says so when it finds nothing. It never changes a record on its own; you and your compliance lead make the calls. In preview." },
+  { href: "/platform#controls", title: "Controls that check themselves", text: "Each control has one owner and one status, tested on every scan of your tenant or covered by evidence with a renewal date, so nothing quietly expires." },
+  { href: "/platform#evidence", title: "Evidence with a renewal date", text: "Every screenshot, export and report is filed against the control it proves. The export pack for a broker or auditor builds itself." },
+  { href: "/platform#policies", title: "Policies your staff actually sign", text: "A policy library written for a company your size, mapped to the frameworks by criterion ID, with acknowledgement tracking and a yearly review." },
+  { href: "/platform#people", title: "People and training", text: "One row per person, one column per check, and short security lessons with a quiz, so the insurer's training question has a date behind it." },
+  { href: "/frameworks", title: "Frameworks, insurer first", text: `${frameworkCount} frameworks in the catalog, one included, each answered by the same controls and policies.` },
+  { href: "/frameworks", title: "A security score, not only a compliance score", text: `The ${posture.name} is in every plan, so you can see the gap between passing the audit and being hard to break into.` },
+  { href: "/platform#vendors", title: "Vendors, risks and AI tools", text: "The vendors who hold your data, scored and reviewed; a risk register in plain sentences; an inventory of the AI tools in use." },
+  { href: "/platform#trust", title: "Trust page and questionnaires", text: `A public page a prospect or bank can read, and the next security questionnaire drafted from answers you already have, from the ${gold.name} tier.` },
+  { href: "/platform#assistant", title: "An assistant that drafts; you decide", text: "It reads your own data, shows its sources on every line, and never changes a record on its own. In preview." },
 ];
 const steps = [
   { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. Alimi reads settings, never mail or files, and never holds a password." },
-  { title: "Watch and fix", text: `${checks.total} checks run every week: MFA coverage, legacy sign-in, admin accounts, mail forwarding, sharing links, audit logs. A failing check becomes a task with an owner, a plain-English fix and a due date.` },
+  { title: "Watch and fix", text: "Checks run every week: MFA coverage, legacy sign-in, admin accounts, mail forwarding, sharing links, audit logs. A failing check becomes a task with an owner, a plain-English fix and a due date." },
   { title: "Prove it", text: "Readiness per framework, an export pack for the broker or the auditor, a trust page for prospects, and questionnaire answers drafted from your own evidence." },
 ];
 const audiences = [
-  { title: "Your insurance broker sent you", text: `The renewal questionnaire is due and the premium depends on the answers: MFA, backups, endpoint protection, admin accounts. Start on ${silver.name} with the cyber insurance questionnaire as your framework; the report goes to the broker with the evidence attached.` },
-  { title: "Your accountant mentioned it", text: "A near-miss on a fake invoice, or a question about controls at year end. The payment verification procedure, the finance lesson and the signed policies answer both, and the controls your CPA asks about exist and have an owner." },
-  { title: "A customer or your attorney asked for SOC 2 or ISO 27001", text: `A security clause in a contract, or a questionnaire from a customer's procurement team. ${gold.name} adds the second framework, the public trust page and questionnaire answers drafted from the evidence you already have.` },
-  { title: "Your IT provider runs it for you", text: "Many companies arrive through the MSP that already manages their Microsoft 365 or Google Workspace. The provider resells Alimi under its own name, stays your first call, and sees every client's readiness on one screen; Alimi is the second line." },
+  { href: "/solutions#broker", title: "Your insurance broker sent you", text: `The renewal questionnaire is due and the premium depends on the answers: MFA, backups, endpoint protection, admin accounts. Start on ${silver.name} with the cyber insurance questionnaire as your framework; the report goes to the broker with the evidence attached.` },
+  { href: "/solutions#accountant", title: "Your accountant mentioned it", text: "A near-miss on a fake invoice, or a question about controls at year end. The payment verification procedure, the finance lesson and the signed policies answer both, and the controls your CPA asks about exist and have an owner." },
+  { href: "/solutions#customer", title: "A customer or your attorney asked for SOC 2 or ISO 27001", text: `A security clause in a contract, or a questionnaire from a customer's procurement team. ${gold.name} adds the second framework, the public trust page and questionnaire answers drafted from the evidence you already have.` },
+  { href: "/solutions#provider", title: "Your IT provider runs it for you", text: "Many companies arrive through the MSP that already manages their Microsoft 365 or Google Workspace. The provider resells Alimi under its own name, stays your first call, and sees every client's readiness on one screen; Alimi is the second line." },
 ];
 const differences = [
   { title: "A published price, per user", text: `From ${silver.perUser} per user a month, on this site: ${example.yearlyText} for a 25-person company. The platforms built for larger companies quote by sales call and start around $12,000 to $15,000 a year for the same company.` },
@@ -64,10 +61,10 @@ const differences = [
   <Section id="modules" tone="alt" title="One place that knows whether your security is in order" lede="Continuous monitoring of your controls, evidence that renews itself, policies with sign-off, and the frameworks answered from the same work.">
     <div class="grid grid--two">
       {modules.map((m) => (
-        <article class="card">
+        <a class="card card--link" href={m.href}>
           <h3>{m.title}</h3>
           <p>{m.text}</p>
-        </article>
+        </a>
       ))}
     </div>
     <p style="margin-top:1.5rem"><a href="/platform">Every module, in detail</a></p>
@@ -100,13 +97,13 @@ const differences = [
   <Section id="who" title="Who it is for" lede="Most companies arrive through someone they already trust. Here is what each of them is trying to solve, and where to start.">
     <div class="grid grid--two">
       {audiences.map((a) => (
-        <article class="card">
+        <a class="card card--link" href={a.href}>
           <h3>{a.title}</h3>
           <p>{a.text}</p>
-        </article>
+        </a>
       ))}
     </div>
-    <p style="margin-top:1.5rem"><a href="/for-partners">For the brokers, accountants, attorneys and IT providers who refer or resell</a></p>
+    <p style="margin-top:1.5rem"><a href="/solutions">Solutions by industry and company size</a>, and <a href="/for-partners">for the brokers, accountants, attorneys and IT providers who refer or resell</a></p>
   </Section>
 
   <Section id="founder" tone="alt" title="Who is behind it">

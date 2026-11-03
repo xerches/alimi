@@ -2,13 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-const pages = [
-  { href: "/platform", label: "The platform" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/compare", label: "Compare" },
-  { href: "/for-partners", label: "For partners" },
-  { href: "/about", label: "About" },
-];
+import { MAIN_PAGES } from "../lib/nav.js";
 ---
 
 <Base title="Thank you" description="Your message reached Alimi. A reply within two business days." path="/thank-you">
@@ -20,7 +14,7 @@ const pages = [
   </Hero>
   <Section id="meanwhile" tone="alt" title="Meanwhile">
     <ul>
-      {pages.map((p) => (
+      {MAIN_PAGES.map((p) => (
         <li><a href={p.href}>{p.label}</a></li>
       ))}
     </ul>

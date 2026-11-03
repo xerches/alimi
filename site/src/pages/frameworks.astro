@@ -1,0 +1,76 @@
+---
+// The framework catalog, grouped by who asks for each. Added Nov 2, 2026 when the founder asked for
+// every framework Vanta and Drata list; the table left the platform page the same evening. IDs, names
+// and our own one-line summaries only; the standards' text is never copied in.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, platform, choosableFrameworks, alwaysIncludedFrameworks, frameworksByCategory, money, listNames } from "../lib/config.js";
+
+const plat = platform();
+const fw = plat.frameworks;
+const catalog = choosableFrameworks();
+const posture = alwaysIncludedFrameworks()[0];
+const groups = frameworksByCategory();
+const readyNames = listNames(fw.includedChoices);
+const platinum = plat.tiers[2];
+---
+
+<Base title="Frameworks" description={`The ${catalog.length} frameworks in the Alimi catalog, grouped by who asks for them: security, privacy, AI, government and defence, financial services, industry. One is included in every plan; each further one is ${fw.addonText}. Plus the ${posture.name} in every plan.`} path="/frameworks">
+  <Hero eyebrow="Frameworks" title={`${catalog.length} frameworks, one set of controls`}>
+    <p class="lede">{fw.text} The standards' own text is never copied in; you see the requirement ID and our plain-English summary.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#calculator">Work out your price</a>
+      <a class="button button--secondary" href="#security">The catalog</a>
+    </div>
+  </Hero>
+
+  <Section id="ready" tone="alt" tight>
+    <Callout label="Which ones are ready today" tone="brand">
+      <p>{readyNames} are mapped to the policy library and the control catalog now, which is what makes a framework sellable end to end. The rest are being mapped before launch; each one's page says where it stands. Most companies start with the cyber insurance questionnaire, because the renewal arrives whether or not a customer asks for SOC 2.</p>
+    </Callout>
+  </Section>
+
+  {groups.map((g, index) => (
+    <Section id={g.id} tone={index % 2 === 1 ? "alt" : "default"} title={g.name} lede={g.text}>
+      <div class="table-wrap">
+        <table class="table table--compact">
+          <thead><tr><th scope="col">Framework</th><th scope="col">What it is</th><th scope="col">Who usually needs it</th><th scope="col">Status</th></tr></thead>
+          <tbody>
+            {g.frameworks.map((f) => (
+              <tr>
+                <th scope="row"><a href={f.href}>{f.name}</a></th>
+                <td>{f.summary}</td>
+                <td>{f.audience}</td>
+                <td>{f.mapped ? <span class="tag tag--ready">Ready</span> : <span class="tag">Before launch</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Section>
+  ))}
+
+  <Section id="posture" tone={groups.length % 2 === 1 ? "alt" : "default"} title="In every plan, outside the count">
+    <div class="grid grid--two">
+      <article class="card">
+        <h3><a href={posture.href}>{posture.name}</a></h3>
+        <p>{posture.summary}</p>
+        <p class="muted small">{posture.audience}. It is Alimi's own and not an accreditation.</p>
+      </article>
+      <article class="card">
+        <h3>Your own framework</h3>
+        <p>A customer's security addendum, a parent company's standard or an internal checklist can be loaded as a framework of its own and answered by the same controls. Custom controls and custom frameworks come with the {platinum.name} tier.</p>
+        <p class="muted small">Imported text stays yours; Alimi stores the requirement IDs and your summaries.</p>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="pricing" tone="dark" title="What a framework costs" lede={`One is included in every plan. Each further one is ${money(fw.addon)} per user a month, discounted from the fifth, because a second framework reuses the same controls and evidence and is mostly a mapping.`}>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#frameworks">The add-on bands</a>
+      <a class="button button--secondary" href="/contact">Ask which one you need</a>
+    </div>
+  </Section>
+</Base>

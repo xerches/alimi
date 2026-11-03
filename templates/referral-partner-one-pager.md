@@ -11,7 +11,7 @@ title: Referral Partner One-Pager
 
 ## The problem you see every week
 
-Your clients run 10 to 200 person companies. Their insurer sends a questionnaire they cannot answer, a customer asks for a security policy they do not have, someone in accounts nearly pays a fake invoice. They cannot hire a security person, and the compliance platforms start above what they can justify. So they ask you.
+Your clients run companies of 10 people and up. Their insurer sends a questionnaire they cannot answer, a customer asks for a security policy they do not have, someone in accounts nearly pays a fake invoice. They cannot hire a security person, and the compliance platforms start above what they can justify. So they ask you.
 
 ## What Alimi does for them
 

@@ -1,0 +1,43 @@
+---
+// Alimi Community: not open yet, and the page says so. Added Nov 2, 2026 because both larger vendors
+// have one and the founder asked for every section they have.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { brand, decided } from "../lib/config.js";
+
+const linkedin = decided(brand.social?.linkedin);
+const plans = [
+  { title: "A monthly call for pilots", text: "From January 2027, the pilot companies and the founder on one call a month: what the platform found, what was fixed, what to build next." },
+  { title: "A partner briefing each quarter", text: "Resellers and referrers get a product briefing every quarter, with the roadmap and the questions clients asked most." },
+  { title: "A forum, when there are enough people to fill it", text: "A place for customers and partners to compare notes on insurers, auditors and questionnaires. Opened when the pilots ask for it, not before." },
+];
+---
+
+<Base title="Alimi Community" description="Alimi Community: where customers and partners will compare notes on insurers, auditors and questionnaires. Not open yet; a monthly pilot call and a quarterly partner briefing come first." path="/community">
+  <Hero eyebrow="Community" title="Connect with other Alimi users">
+    <p class="lede">Not open yet: {brand.display_name} has no customers to fill it. Here is what comes first, and when.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Join the waitlist</a>
+      {linkedin && <a class="button button--secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a>}
+    </div>
+  </Hero>
+
+  <Section id="plans" tone="alt" title="What comes first">
+    <div class="grid">
+      {plans.map((p) => (
+        <article class="card">
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="next" tone="dark" title="Be in the first call" lede="Pilots open in January 2027.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Reserve a place</a>
+      <a class="button button--secondary" href="/for-partners">Partner briefings</a>
+    </div>
+  </Section>
+</Base>

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { brand, pricing, money, tierPrice, tierNote, product, products, platform, services, service, resellerTiers, partners, retainer, decided, frameworkCatalog, choosableFrameworks, alwaysIncludedFrameworks, framework, frameworkPricing, frameworkDiscount, quote, EXAMPLE_SIZES, PRODUCT_PAGES, PRODUCT_ORDER, questionnaireAllowances, listNames } from "../src/lib/config.js";
+import { brand, pricing, money, tierPrice, tierNote, product, products, platform, services, service, resellerTiers, partners, retainer, decided, frameworkCatalog, choosableFrameworks, alwaysIncludedFrameworks, framework, frameworkPricing, frameworkDiscount, frameworksByCategory, frameworkBySlug, frameworkHref, FRAMEWORK_CATEGORIES, quote, EXAMPLE_SIZES, PRODUCT_PAGES, PRODUCT_ORDER, questionnaireAllowances, listNames } from "../src/lib/config.js";
 import { cssVariables } from "../src/lib/tokens.js";
 import { insurerQuestions, checkCounts, policies, mappedFrameworks, controlSummary } from "../src/lib/content.js";
 
@@ -66,16 +66,26 @@ test("platform tiers are Silver, Gold, Platinum, Diamond, per user, rising, each
 
 test("the framework catalog carries IDs, our own summaries and the posture score, never framework text", () => {
   const catalog = frameworkCatalog();
-  assert.ok(catalog.length >= 20);
+  assert.ok(catalog.length >= 45, "every framework Vanta and Drata list is in the catalog (founder, Nov 2, 2026)");
   const ids = catalog.map((f) => f.id);
-  for (const required of ["alimi_posture", "insurer", "soc2", "iso27001", "hipaa", "pci_dss", "gdpr", "iso42001", "nist_csf", "ma_201_cmr_17"]) {
+  for (const required of ["alimi_posture", "insurer", "soc2", "iso27001", "hipaa", "pci_dss", "gdpr", "iso42001", "nist_csf", "ma_201_cmr_17", "hitrust", "fedramp", "fedramp_20x", "dora", "tisax", "cjis", "iso27017", "iso27018", "iso22301", "iso9001", "essential_eight", "cps234", "cps230", "cri_profile", "bsi_c5", "mvsp", "ofdss", "aws_ftr", "microsoft_sspa", "us_state_privacy", "csa_ccm", "ffiec", "cobit", "cyber_fundamentals", "aiuc1", "eu_cra"]) {
     assert.ok(ids.includes(required), `frameworks.yaml is missing ${required}`);
   }
+  assert.equal(new Set(ids).size, ids.length, "framework ids are unique");
   for (const f of catalog) {
     assert.ok(f.name.length > 2 && f.short.length > 2 && f.summary.length > 30 && f.audience.length > 10, `${f.id} is incomplete`);
     assert.ok(f.summary.split(/\s+/).length <= 40, `${f.id} summary is not one line`);
     assert.equal(typeof f.mapped, "boolean");
+    assert.ok(FRAMEWORK_CATEGORIES.some((c) => c.id === f.category), `${f.id} has no known category`);
+    assert.equal(f.href, frameworkHref(f.id));
+    assert.match(f.href, /^\/frameworks\/[a-z0-9-]+$/, `${f.id} has an odd page path`);
+    assert.equal(frameworkBySlug(f.slug)?.id, f.id);
   }
+  assert.equal(frameworkBySlug("nope"), null);
+  const groups = frameworksByCategory();
+  assert.deepEqual(groups.map((g) => g.id), FRAMEWORK_CATEGORIES.map((c) => c.id), "every category has at least one framework");
+  assert.equal(groups.reduce((n, g) => n + g.frameworks.length, 0), choosableFrameworks().length, "grouping loses nothing");
+  assert.ok(!groups.some((g) => g.frameworks.some((f) => f.always_included)), "the posture score is outside the groups");
   const posture = alwaysIncludedFrameworks();
   assert.equal(posture.length, 1);
   assert.equal(posture[0].id, "alimi_posture");
@@ -100,6 +110,9 @@ test("framework add-ons: $4 per user, 5% off from five frameworks, 10% off from 
   assert.equal(frameworkDiscount(10), 0.1);
   assert.match(fp.text, /One framework of your choice is included/);
   assert.match(fp.text, /Alimi Recommended Security Posture Score/);
+  assert.equal(fp.text.split(/\.\s/).length, 2, "the frameworks text is two sentences (founder, Nov 2, 2026)");
+  assert.match(fp.text, /\$4 per user a month, 5% off from the fifth and 10% off from the tenth, up to 10 on one account\./);
+  assert.doesNotMatch(fp.text, /chosen today|requirement lists/, "the mapped-today list left the text for the pricing FAQ");
   assert.ok(fp.includedChoices.some((n) => /SOC 2/.test(n)) && fp.includedChoices.includes("Cyber insurance questionnaire"), "the included framework is chosen from the mapped ones");
   assert.equal(fp.includedChoices.length + fp.pendingCount, choosableFrameworks().length);
   assert.match(fp.rule, /minus 15%/);
