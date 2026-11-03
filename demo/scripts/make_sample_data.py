@@ -903,7 +903,7 @@ HISTORY = {
     "att.ir_plan.tested": ["attestation_needed"] * 5,
 }
 HISTORY_NOTES = {
-    "2026-10-02": "First scan after the pilot letter: 7 of 12 automated checks failing.",
+    "2026-10-02": "First scan after the pilot letter: 8 of 12 automated checks failing.",
     "2026-10-09": "Legacy authentication blocked, DMARC moved to quarantine, Secure Score up to 61.",
     "2026-10-16": "Two daily-use Global Administrator accounts replaced by admin-only accounts; two stale guests removed.",
     "2026-10-23": "Three new hires started without MFA registration; coverage check turned red.",
