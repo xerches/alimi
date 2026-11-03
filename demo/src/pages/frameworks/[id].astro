@@ -14,7 +14,7 @@ const mapped = rows.filter((r) => r.controls.length);
 const okRows = mapped.filter((r) => r.status === "ok").length;
 ---
 
-<App title={fw.short} path={`/frameworks/${id}`} section="frameworks" eyebrow="Framework" crumbs={[{ label: "Frameworks", href: "/frameworks" }, { label: fw.short }]}
+<App title={fw.short} path={`/frameworks/${id}`} section="frameworks" item={id} eyebrow="Framework" crumbs={[{ label: "Frameworks", href: "/frameworks" }, { label: fw.short }]}
   description={`${fw.name}: every requirement ID with Alimi's one-line summary, the controls that satisfy it and their status.`}
   lead={fw.name}>
   <a slot="actions" class="button secondary" href={`/controls?framework=${id}`}>Controls in scope</a>

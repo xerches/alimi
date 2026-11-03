@@ -19,7 +19,7 @@ const prev = controls[index - 1];
 const next = controls[index + 1];
 ---
 
-<App title={c.name} path={`/controls/${c.id}`} section="controls" eyebrow={`${c.id} · ${c.domainLabel}`} crumbs={[{ label: "Controls", href: "/controls" }, { label: c.id }]}
+<App title={c.name} path={`/controls/${c.id}`} section="controls" item={c.domain} eyebrow={`${c.id} · ${c.domainLabel}`} crumbs={[{ label: "Controls", href: "/controls" }, { label: c.id }]}
   description={`${c.name}: what it means, how ${"the company"} runs it, the requirements it satisfies, its tests and evidence.`}
   lead={c.description}>
   <Pill slot="actions" status={c.status} />

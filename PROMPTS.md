@@ -178,6 +178,19 @@ company labelled on every page, noindex everywhere, never linked from the market
 nothing saved. The pages and the status rules are the draft for the platform's screens.
 ```
 
+**11b. App shell and monthly Home** (added and done Nov 3, 2026 from the founder's UI review; the chosen layout is recorded in docs/decisions.md)
+```
+Read CLAUDE.md and demo/README.md. Give the demo one shell on every page and make it the
+platform's: a captioned icon strip on the left with the twelve sections, a second column only
+where a section has children (Frameworks lists the Posture Score and each framework on the
+account, Controls lists the areas, Settings holds the Audit log), a company switcher and
+breadcrumbs in the top bar, a bottom bar on a phone. Home is the month: days to renewal, audit
+readiness and the Alimi Recommended Security Posture Score, and the month's list of fixes,
+renewals and decisions ordered by what moves the insurer evidence pack, then by what is overdue;
+the charts move to /overview. Compute the Posture Score from weights in config/scoring.yaml with
+tests. Then copy the same shell into the platform templates on top of 12a.
+```
+
 ## Phase 6: Platform web app (weeks 20-29)
 
 **12a. Platform foundation: data model, tenancy, mock scans**

@@ -8,6 +8,8 @@
       },
       "url": [
         "http://localhost/index.html",
+        "http://localhost/audit.html",
+        "http://localhost/overview.html",
         "http://localhost/frameworks.html",
         "http://localhost/controls.html",
         "http://localhost/policies.html",

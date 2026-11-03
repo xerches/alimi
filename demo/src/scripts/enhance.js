@@ -1,5 +1,7 @@
 // Progressive enhancement for tables: a text filter and chip filters. Every row is visible without
 // this script; it only hides rows. Served from the site's own origin, so it fits the CSP.
+// Also: a query string such as ?domain=access applies the matching row filter on load (the second
+// column links to the controls page that way), and the column link for the current URL is marked.
 function rowsOf(selector) {
   const table = document.querySelector(selector);
   return table ? [...table.querySelectorAll("tbody tr")] : [];
@@ -48,5 +50,29 @@ for (const group of document.querySelectorAll("[data-chips]")) {
       state.set(selector, s);
       apply(selector);
     });
+  }
+}
+
+// ?key=value filters the first filterable table whose rows carry data-<key>.
+const params = new URLSearchParams(location.search);
+for (const [key, value] of params) {
+  const table = [...document.querySelectorAll("table[id]")].find((t) => t.querySelector(`tbody tr[data-${key}]`));
+  if (!table) continue;
+  const selector = `#${table.id}`;
+  const s = state.get(selector) ?? { text: "", chips: {} };
+  s.chips[key] = value;
+  state.set(selector, s);
+  apply(selector);
+  const chip = document.querySelector(`[data-chips="${selector}"][data-key="${key}"] button[data-value="${value}"]`);
+  if (chip) chip.click();
+}
+
+// The column link that matches this exact URL (path and query) is the current one.
+const here = location.pathname.replace(/\.html$/, "") + location.search;
+for (const link of document.querySelectorAll("[data-column-link]")) {
+  const target = link.getAttribute("href");
+  if (target === here) {
+    for (const other of document.querySelectorAll(".column a[aria-current]")) other.removeAttribute("aria-current");
+    link.setAttribute("aria-current", "page");
   }
 }

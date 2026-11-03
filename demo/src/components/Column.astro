@@ -1,0 +1,101 @@
+---
+// The second column, shown only where a section has children. Frameworks lists what is on the account
+// with its readiness; Controls lists the domains; People, Risk, Trust and Settings list their pages.
+// Everything here is computed from the same data as the pages it links to.
+import { STATIC_COLUMNS } from "../lib/nav.js";
+import { readiness, frameworkCatalog, controlDomains, controlCounts, peopleCounts, courses, taskCounts, riskCounts, vendorCounts, aiCounts, questionnaires, integrations } from "../lib/data.js";
+import { posture } from "../lib/scores.js";
+
+const { section, item } = Astro.props;
+const active = new Set(readiness.map((r) => r.id));
+const moreFrameworks = frameworkCatalog.filter((f) => !f.always_included && !active.has(f.id)).length;
+const counts = controlCounts();
+const overdueLearners = courses.reduce((n, c) => n + c.counts.overdue, 0);
+const connected = Array.isArray(integrations.connected) ? integrations.connected.length : 1;
+
+const subs = {
+  people: `${peopleCounts.compliant} of ${peopleCounts.total} compliant`,
+  training: overdueLearners ? `${overdueLearners} overdue` : "Everyone current",
+  owners: taskCounts.overdue ? `${taskCounts.overdue} tasks overdue` : "Nothing overdue",
+  risks: `${riskCounts.open} open`,
+  vendors: vendorCounts.alerts ? `${vendorCounts.alerts} alert, ${vendorCounts.needingAction} reviews to do` : `${vendorCounts.needingAction} reviews to do`,
+  ai: `${aiCounts.byStatus["Under review"]} under review`,
+  trust: "What a customer sees",
+  questionnaires: `${questionnaires.bank.open} bank questions open`,
+  settings: "Profile, roles, access",
+  integrations: `${connected} connected, read-only`,
+  audit: "Who changed what, when",
+};
+const staticColumn = STATIC_COLUMNS[section.key];
+const isCurrent = (key) => (key === item ? "page" : undefined);
+---
+
+<aside class="column" aria-label={`${section.label} sections`}>
+  <div class="column-inner">
+    {section.key === "frameworks" && (
+      <>
+        <h2 class="column-title">Frameworks</h2>
+        <ul>
+          <li>
+            <a href="/frameworks#posture" aria-current={isCurrent("posture")}>
+              <span class="row"><span>Posture score</span><small>{posture.score}</small></span>
+              <span class="bar" data-tone="primary" role="img" aria-label={`Posture score ${posture.score} of 100`}><span style={`width:${posture.score}%`}></span></span>
+              <span class="sub">Alimi's recommendations, in every plan</span>
+            </a>
+          </li>
+          <li class="column-group">On this account</li>
+          {readiness.map((r) => (
+            <li>
+              <a href={`/frameworks/${r.id}`} aria-current={isCurrent(r.id)}>
+                <span class="row"><span>{r.short}</span><small>{r.percent}%</small></span>
+                <span class="bar" data-tone={r.percent >= 90 ? "success" : r.percent >= 70 ? "warning" : "danger"} role="img" aria-label={`${r.short} readiness ${r.percent} percent`}><span style={`width:${r.percent}%`}></span></span>
+                <span class="sub">{r.ok} of {r.controls.length} controls Ok</span>
+              </a>
+            </li>
+          ))}
+          <li><a class="add" href="/frameworks#available">+ Add a framework <small>{moreFrameworks} more</small></a></li>
+        </ul>
+      </>
+    )}
+    {section.key === "controls" && (
+      <>
+        <h2 class="column-title">Controls</h2>
+        <ul>
+          <li>
+            <a href="/controls" aria-current={item ? undefined : "page"}>
+              <span class="row"><span>All controls</span><small>{counts.ok + counts.needs_attention + counts.needs_evidence + counts.needs_owner}</small></span>
+              <span class="sub">{counts.ok} Ok, {counts.needs_attention + counts.needs_evidence + counts.needs_owner} need something</span>
+            </a>
+          </li>
+          <li class="column-group">By area</li>
+          {controlDomains.map((d) => {
+            const notOk = d.controls.filter((c) => c.status !== "ok").length;
+            return (
+              <li>
+                <a href={`/controls?domain=${d.id}`} aria-current={isCurrent(d.id)} data-column-link>
+                  <span class="row"><span>{d.label}</span><small>{d.controls.length}</small></span>
+                  <span class="sub">{notOk ? `${notOk} need${notOk === 1 ? "s" : ""} something` : "All Ok"}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    )}
+    {staticColumn && (
+      <>
+        <h2 class="column-title">{staticColumn.title}</h2>
+        <ul>
+          {staticColumn.items.map((i) => (
+            <li>
+              <a href={i.href} aria-current={isCurrent(i.key)}>
+                <span class="row"><span>{i.label}</span></span>
+                {subs[i.key] && <span class="sub">{subs[i.key]}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+  </div>
+</aside>

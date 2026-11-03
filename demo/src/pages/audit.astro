@@ -1,0 +1,52 @@
+---
+import App from "../layouts/App.astro";
+import { company, monitoring, evidence, policies, people, person, personName, formatDate, formatDateTime, href } from "../lib/data.js";
+
+// The audit log is the programme's history, built from the same records the other pages show: scans,
+// evidence added or requested, policy approvals, people joining, the pilot letter. In the platform
+// every write lands here as an append-only row (prompt 12a); the demo shows what that looks like.
+const entries = [
+  ...monitoring.runs.map((r) => ({ date: r.date, kind: "Scan", text: `Weekly scan ran on ${company.workspace}: ${r.note}`, who: "Alimi scanner, read-only", href: "/monitoring" })),
+  ...evidence.filter((e) => e.created).map((e) => ({ date: e.created, kind: "Evidence", text: `Evidence added: ${e.name}`, who: e.ownerName, href: href.evidence(e.id) })),
+  ...evidence.filter((e) => e.requested_on).map((e) => ({ date: e.requested_on, kind: "Evidence", text: `Evidence requested: ${e.name}${e.due ? `, due ${formatDate(e.due)}` : ""}`, who: e.ownerName, href: href.evidence(e.id) })),
+  ...policies.flatMap((p) => (p.history ?? []).map((h) => ({ date: h.date, kind: "Policy", text: `${p.id} ${p.title} v${h.version} approved: ${h.summary}`, who: personName(h.approved_by), href: href.policy(p.id) }))),
+  ...people.filter((p) => p.counted && p.start_date >= "2026-01-01").map((p) => ({ date: p.start_date, kind: "People", text: `${p.name} joined as ${p.title}${p.status === "onboarding" ? "; onboarding checklist opened" : ""}`, who: personName(company.roles["HR Lead"]), href: href.person(p.id) })),
+  { date: company.pilot_letter.signed, kind: "Account", text: `Pilot authorization letter signed: ${company.pilot_letter.scope}`, who: personName(company.pilot_letter.signed_by), href: "/settings" },
+  { date: "2026-09-29", kind: "Account", text: `${company.workspace} connected with read-only permissions`, who: personName("X-01"), href: "/integrations" },
+].filter((e) => e.date).sort((a, b) => b.date.localeCompare(a.date));
+const kinds = [...new Set(entries.map((e) => e.kind))];
+---
+
+<App title="Audit log" path="/audit" section="audit" eyebrow="Settings" crumbs={[{ label: "Settings", href: "/settings" }, { label: "Audit log" }]} wide
+  description="Every change to the programme in date order: scans, evidence added or requested, policy approvals, people joining, connections made. Append-only; nothing here can be edited or deleted."
+  lead="Who did what, when. Every write the platform makes lands here and stays; an auditor or a broker reads it to see that the evidence was not assembled the week before the audit.">
+  <a slot="actions" class="button secondary" href="/settings">Settings</a>
+  <a slot="actions" class="button" href="/trust#pack">Export pack</a>
+
+  <div class="toolbar">
+    <label class="visually-hidden" for="audit-filter">Filter the log</label>
+    <input id="audit-filter" type="search" placeholder="Filter by words, a person or a policy ID" data-filter="#audit" />
+    <div class="chips" data-chips="#audit" data-key="kind" role="group" aria-label="Filter by kind">
+      <button class="chip" type="button" data-value="all" aria-pressed="true">All</button>
+      {kinds.map((k) => <button class="chip" type="button" data-value={k} aria-pressed="false">{k}</button>)}
+    </div>
+    <span class="muted" data-count-for="#audit"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="audit">
+      <thead><tr><th>When</th><th>Kind</th><th>What changed</th><th>Who</th></tr></thead>
+      <tbody>
+        {entries.map((e) => (
+          <tr data-kind={e.kind}>
+            <td style="white-space:nowrap">{formatDate(e.date)}</td>
+            <td><span class="tag">{e.kind}</span></td>
+            <td><a href={e.href}>{e.text}</a></td>
+            <td>{e.who}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">{entries.length} entries since {formatDate(entries.at(-1).date)}. In the platform the log also records sign-ins, role changes, test overrides with their reason, and every export, each with the exact time ({formatDateTime(monitoring.collectedAt)} is the format).</p>
+</App>
