@@ -1,5 +1,5 @@
 ---
-// Solutions: by who sent the buyer (the axis that fits 10 to 200 people), by industry, by company
+// Solutions: by who sent the buyer (the axis that fits a company without a security team), by industry, by company
 // size, by framework. Added Nov 2, 2026 because both larger vendors segment this way and the founder
 // asked for every section they have. Framework lists come from the catalog, never typed twice.
 import Base from "../layouts/Base.astro";
@@ -8,7 +8,7 @@ import Section from "../components/Section.astro";
 import { brand, platform, framework, frameworkHref, quote, choosableFrameworks } from "../lib/config.js";
 
 const plat = platform();
-const [silver, gold, platinum] = plat.tiers;
+const [silver, gold, platinum, diamond] = plat.tiers;
 const catalogCount = choosableFrameworks().length;
 const fws = (ids) => ids.map((id) => ({ ...framework(id), href: frameworkHref(id) }));
 
@@ -31,13 +31,14 @@ const industries = [
 const sizes = [
   { range: "10 to 25 people", tier: silver, example: quote({ tierId: "silver", users: 25 }), text: "One insurer, one questionnaire, nobody whose job this is. The cyber insurance questionnaire as the framework, one integration, and the founder on a quarterly call." },
   { range: "25 to 100 people", tier: gold, example: quote({ tierId: "gold", users: 50 }), text: "A customer or two asking for SOC 2 or ISO 27001, vendors that hold your data, and the first security questionnaires. Two frameworks, the trust page and a monthly call." },
-  { range: "100 to 200 people", tier: platinum, example: quote({ tierId: "platinum", users: 150, frameworks: 3 }), text: "Several frameworks, your own systems to connect, access reviews on a schedule and an AI programme to govern. Unlimited integrations and the API." },
+  { range: "100 to 500 people", tier: platinum, example: quote({ tierId: "platinum", users: 250, frameworks: 3 }), text: "Several frameworks, your own systems to connect, access reviews on a schedule and an AI programme to govern. Unlimited integrations and the API." },
+  { range: "500 people and more", tier: diamond, example: quote({ tierId: "diamond", users: 600, frameworks: 4 }), text: "Several entities or business units, an audit every year, a board that wants a quarterly report, and a compliance lead who runs it all. The audit run by Alimi, multi-entity and unlimited questionnaires." },
 ];
 ---
 
 <Base title="Solutions" description={`Alimi by who sent you (broker, accountant, customer, IT provider), by industry (healthcare, financial services, software, professional services, government suppliers, manufacturing), by company size and by framework, with the frameworks each usually needs from a catalog of ${catalogCount}.`} path="/solutions">
   <Hero eyebrow="Solutions" title="Start from the person who asked, the industry you are in, or the size you are">
-    <p class="lede">Most companies of 10 to 200 people arrive with one request from one person: a broker, an accountant, a customer, an IT provider. Each path below says where to start and which frameworks usually follow.</p>
+    <p class="lede">Most companies without a security team arrive with one request from one person: a broker, an accountant, a customer, an IT provider. Each path below says where to start and which frameworks usually follow.</p>
     <div class="actions">
       <a class="button button--primary" href="#sender">By who sent you</a>
       <a class="button button--secondary" href="#industry">By industry</a>

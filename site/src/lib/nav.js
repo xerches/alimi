@@ -70,7 +70,8 @@ export const MENUS = [
         items: [
           { href: "/solutions#size", label: "10 to 25 people" },
           { href: "/solutions#size", label: "25 to 100 people" },
-          { href: "/solutions#size", label: "100 to 200 people" },
+          { href: "/solutions#size", label: "100 to 500 people" },
+          { href: "/solutions#size", label: "500 people and more" },
         ],
       },
     ],

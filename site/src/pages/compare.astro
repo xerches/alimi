@@ -41,7 +41,7 @@ const themes = [
     id: "support",
     title: "Small customers get the sales call, then the queue",
     reviews: "Trustpilot reviewers of Vanta (3.1 out of 5 overall) describe aggressive sales outreach followed by no onboarding, generic support replies and no human response to a cancellation; Gartner Peer Insights reviewers name limited support and cost as the reasons they consider switching. A Drata reviewer on Gartner reports far more internal security, IT and policy effort than expected.",
-    alimi: `${brand.display_name} is built for companies of 10 to 200 people and nobody else. A named compliance lead is in every tier, with a quarterly call on ${plat.tiers[0].name} and a monthly one from ${plat.tiers[1].name}; the founder answers the support address.`,
+    alimi: `${brand.display_name} is built for companies of 10 people and up that cannot hire a security team. A named compliance lead is in every tier, with a quarterly call on ${plat.tiers[0].name} and a monthly one from ${plat.tiers[1].name}; the founder answers the support address.`,
   },
   {
     id: "noise",
@@ -83,7 +83,7 @@ const themes = [
     id: "expertise",
     title: "Built for a company that already has a security person",
     reviews: "SoftwareAdvice and Capterra reviewers of Vanta at 2 to 50 person companies say the product seems built for enterprise clients, that the pricing is too high for them, and ask for more automation and help with remediation because they have no IT team; PeerSpot reviewers of Drata say setting up integrations needs specialist knowledge, and a Trustpilot reviewer warns small businesses off a contract that 'will add no real value'. Interviewed Drata users say someone still has to own scope, fixes and approval decisions.",
-    alimi: `${brand.display_name} is priced per user from ${plat.tiers[0].perUser} a month and built for 10 to 200 people only. A named compliance lead in every tier owns the scoping and policy calls, every failing check carries a plain-English fix, and the fixed-fee services do the remediation when there is nobody to hand it to.`,
+    alimi: `${brand.display_name} is priced per user from ${plat.tiers[0].perUser} a month and built for companies of 10 people and up that cannot hire a security team. A named compliance lead in every tier owns the scoping and policy calls, every failing check carries a plain-English fix, and the fixed-fee services do the remediation when there is nobody to hand it to.`,
   },
 ];
 
@@ -179,7 +179,7 @@ const sources = [
     <ul class="checklist">
       {stronger.map((item) => <li>{item}</li>)}
     </ul>
-    <p class="measure">If your company is above 200 people, runs a dozen cloud systems, or needs an audit next month, one of them is probably the right choice. If you are between 10 and 200 people, have one insurer and one or two customers asking, and nobody whose job this is, {brand.display_name} was built for you.</p>
+    <p class="measure">If your company runs a dozen cloud systems or needs an audit next month, one of them is probably the right choice. If you have 10 people or more, one insurer and one or two customers asking, and nobody whose job this is, {brand.display_name} was built for you.</p>
   </Section>
 
   <Section id="sources" title="Sources" lede={`Read in ${checked}. Several are published by competitors of Vanta and Drata and cite third-party transaction data rather than contracts; treat the dollar figures as ranges, not quotes.`}>

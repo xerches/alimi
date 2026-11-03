@@ -4,7 +4,7 @@ Working name for a security company founded by Alex Dennis (Boston, MA). Renamed
 
 ## What Alimi is
 
-One buyer: the owner or operations lead of a 10 to 200 person company that cannot hire security staff. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
+One buyer: the owner or operations lead of a company of 10 people and up that cannot hire security staff. There is no upper limit on company size (founder, Nov 3, 2026): the minimum is 10 employees and the highest tier is offered to companies of 500 and more. Referral partners: insurance brokers, CPAs, business and real estate attorneys, and MSPs.
 
 Positioning line (draft): **Security that insurers, customers and auditors accept, for companies too small for a security team.**
 

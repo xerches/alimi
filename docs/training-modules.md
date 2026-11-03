@@ -8,7 +8,7 @@ Why it belongs in the product: every cyber insurance questionnaire asks whether 
 
 - Under ten minutes. One habit per lesson, named in the title. A quiz of five questions; pass at four; retake allowed.
 - Plain English, every term defined the first time (phishing, MFA, BEC), no fear, no hooded figures, no red triangles. Brand colours from `config/brand.yaml`.
-- Written for a 10 to 200 person company where the learner is the receptionist, the bookkeeper and the owner, not an engineer.
+- Written for a company of 10 people and up where the learner is the receptionist, the bookkeeper and the owner, not an engineer.
 - Scenarios are composites built from public sources (FBI IC3, CISA, FTC), never a client story. Figures carry their source and year on the slide.
 - Each lesson maps to the policies it teaches (by POL ID) and the controls it proves, so completion lands on the right row of the frameworks.
 - New hire: lessons 1 to 4 within 30 days of the start date (the onboarding checklist in the People module). Everyone: all eight once a year; the yearly cycle resets on the anniversary of completion. Finance and admins get their role lesson too.
