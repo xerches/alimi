@@ -27,8 +27,8 @@ const fullTitle = path === "/" ? `${brand.display_name}: ${brand.tagline}` : `${
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content={brand.colors.background_dark} />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={brand.colors_dark.background_dark} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={brand.colors.background_dark} data-theme="light" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={brand.colors_dark.background_dark} data-theme="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={brand.display_name} />
     <meta property="og:title" content={fullTitle} />

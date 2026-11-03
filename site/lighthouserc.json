@@ -3,17 +3,67 @@
     "collect": {
       "staticDistDir": "./dist",
       "numberOfRuns": 1,
-      "maxAutodiscoverUrls": 20,
       "settings": {
         "chromeFlags": "--no-sandbox --headless --disable-gpu"
-      }
+      },
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/platform.html",
+        "http://localhost/integrations.html",
+        "http://localhost/frameworks.html",
+        "http://localhost/frameworks/alimi-posture.html",
+        "http://localhost/frameworks/soc2.html",
+        "http://localhost/frameworks/gdpr.html",
+        "http://localhost/security.html",
+        "http://localhost/solutions.html",
+        "http://localhost/pricing.html",
+        "http://localhost/compare.html",
+        "http://localhost/for-partners.html",
+        "http://localhost/for-resellers.html",
+        "http://localhost/resources.html",
+        "http://localhost/glossary.html",
+        "http://localhost/help.html",
+        "http://localhost/academy.html",
+        "http://localhost/community.html",
+        "http://localhost/customers.html",
+        "http://localhost/about.html",
+        "http://localhost/press.html",
+        "http://localhost/careers.html",
+        "http://localhost/trust.html",
+        "http://localhost/status.html",
+        "http://localhost/legal.html",
+        "http://localhost/privacy.html",
+        "http://localhost/contact.html",
+        "http://localhost/thank-you.html",
+        "http://localhost/404.html"
+      ]
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.95 }],
-        "categories:accessibility": ["error", { "minScore": 0.95 }],
-        "categories:best-practices": ["error", { "minScore": 0.95 }],
-        "categories:seo": ["error", { "minScore": 0.95 }]
+        "categories:performance": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:best-practices": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:seo": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ]
       }
     },
     "upload": {
