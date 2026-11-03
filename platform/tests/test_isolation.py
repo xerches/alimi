@@ -65,7 +65,7 @@ def test_each_org_sees_only_its_own_rows(app_engine, orgs, table):
     assert len(seen) == 3
 
 
-@pytest.mark.parametrize("table", CUSTOMER_TABLES + ["organizations", "users"])
+@pytest.mark.parametrize("table", CUSTOMER_TABLES + ["organizations", "users", "user_settings"])
 def test_no_context_means_no_rows(app_engine, table):
     with app_engine.begin() as conn:
         assert conn.execute(text(f"SELECT count(*) FROM {table}")).scalar() == 0

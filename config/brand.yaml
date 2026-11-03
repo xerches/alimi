@@ -13,6 +13,7 @@ location: Boston, MA
 domain: TODO
 contact_email: TODO
 site_url: https://alimibeta.netlify.app   # beta host until the domain exists
+demo_url: https://alimi-demo.netlify.app  # the product demo; linked from the site as "See the product" since Nov 2, 2026 (founder's decision), noindex kept until the hosted app exists
 
 voice:
   - Plain English a business owner understands.
@@ -29,14 +30,23 @@ voice:
 # small accent on dark surfaces only. Every text pairing below meets WCAG AA (4.5:1) on the surface
 # it is meant for (site/tests/contrast.test.mjs proves it); the light theme is the default and the
 # *_on_dark / *_inverse / *_dark tokens serve the dark bands.
+#
+# Two themes since Nov 3, 2026 (founder: "dark theme as an option"): `colors` is the light theme and
+# the default; `colors_dark` lists the same keys for the dark theme, which the site applies when the
+# visitor's device asks for it or when the visitor picks it with the toggle in the top bar. The two
+# maps must have the same keys in the same order (site/src/lib/theme.js checks), and every pairing
+# the contrast test proves is proved on both. Dark bands keep their own tokens in both themes, so
+# the ink strip, the footer and the count block stay a step darker than the page around them.
 colors:
   # Brand
   primary: "#4338CA"            # indigo: buttons, links, brand marks on light surfaces (7.9:1 on white)
   primary_hover: "#3730A3"
   primary_active: "#2E2A86"
   primary_soft: "#EEF0FD"       # tinted panel behind callouts and badges on light surfaces
+  primary_contrast: "#FFFFFF"   # the label on a primary button or counter (white on indigo here, ink on periwinkle in the dark theme)
   primary_on_dark: "#A5B4FC"    # periwinkle: links and buttons on dark bands (7.7:1 on secondary)
   primary_on_dark_hover: "#C7D2FE"
+  primary_on_dark_contrast: "#14181F"  # the label on a periwinkle button, in both themes
   secondary: "#1E2340"          # indigo ink: header, footer, dark sections
   secondary_soft: "#E6E8F4"     # light tint of the ink for quiet panels
   accent: "#F0B86B"             # amber: focus rings and small marks on dark surfaces, never body text
@@ -73,6 +83,58 @@ colors:
 
   # Interactive states
   focus_ring: "#4338CA"         # on light surfaces
+  focus_ring_on_dark: "#F0B86B"
+
+# The dark theme: the same indigo and ink, inverted. The page is deep ink, cards a step lighter,
+# the strip and the footer a step darker than the page, periwinkle for links and primary buttons
+# (so a primary button's label is ink, through primary_contrast), the feedback colors lifted so they
+# read on dark tints. Same keys as `colors`, same order.
+colors_dark:
+  # Brand
+  primary: "#A5B4FC"            # periwinkle: links, buttons and marks on the dark page
+  primary_hover: "#C7D2FE"
+  primary_active: "#E0E7FF"
+  primary_soft: "#23285A"       # tinted panel behind callouts, badges and the readiness bar
+  primary_contrast: "#0E1126"   # ink on periwinkle
+  primary_on_dark: "#A5B4FC"
+  primary_on_dark_hover: "#C7D2FE"
+  primary_on_dark_contrast: "#0E1126"
+  secondary: "#232A5C"          # the dark bands and the count block: a lighter indigo than the page, so they still read as bands
+  secondary_soft: "#23285A"     # quiet panels, badges and tags
+  accent: "#F0B86B"
+  accent_deep: "#F2CC7C"        # amber decoration, now on dark surfaces
+
+  # Backgrounds and surfaces
+  background: "#0E1126"         # page
+  background_alt: "#0E1126"     # the canvas; alternate sections use surface, one step lighter
+  background_dark: "#07091A"    # the strip and the footer, a step darker than the page
+  surface: "#171B38"            # cards and panels
+  surface_dark: "#2F3773"       # cards and the active item on dark bands
+
+  # Text
+  text: "#E9EBF7"
+  text_secondary: "#C5CAE3"
+  text_muted: "#A6ACC8"         # 7.5:1 on surface
+  text_inverse: "#FFFFFF"
+  text_inverse_muted: "#AEB4D0"
+
+  # Borders and dividers
+  border: "#2A3060"             # hairlines and card edges
+  border_strong: "#7B86B3"      # form fields and controls, 3:1 on surface
+  border_dark: "#3A4170"        # dividers on dark bands
+
+  # Semantic feedback
+  success: "#8BD9AC"
+  success_soft: "#163A28"
+  warning: "#F2CC7C"
+  warning_soft: "#3D300F"
+  danger: "#F7A3AB"
+  danger_soft: "#4A1A21"
+  info: "#9CC9E6"
+  info_soft: "#16304A"
+
+  # Interactive states
+  focus_ring: "#A5B4FC"
   focus_ring_on_dark: "#F0B86B"
 
 typography:

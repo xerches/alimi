@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<p class="eyebrow">Account</p>
+<h1>Notifications</h1>
+<p class="lead">What Alimi sends you by email, to {{ me.email }}. Everything else stays in the app. In mock mode nothing is sent; the choices are kept and the audit log records each change.</p>
+{% if saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+
+<form class="card form" method="post" action="/account/notifications">
+  <h2>Email me when</h2>
+  <div class="checks">
+    <label><input type="checkbox" name="notify_failed_tests"{% if prefs.notify_failed_tests %} checked{% endif %}> <span>A check that passed starts failing <small class="muted">after a scheduled scan; one email per scan, not per test</small></span></label>
+    <label><input type="checkbox" name="notify_renewals"{% if prefs.notify_renewals %} checked{% endif %}> <span>Evidence or a policy review is due within 30 days <small class="muted">only for items I own</small></span></label>
+    <label><input type="checkbox" name="notify_policy_acknowledgements"{% if prefs.notify_policy_acknowledgements %} checked{% endif %}> <span>A policy waits for my acknowledgement <small class="muted">once when it is published, a reminder after 14 days</small></span></label>
+    <label><input type="checkbox" name="notify_access_requests"{% if prefs.notify_access_requests %} checked{% endif %}> <span>Someone asks for access to the trust center <small class="muted">owners and admins only</small></span></label>
+    <label><input type="checkbox" name="notify_weekly_digest"{% if prefs.notify_weekly_digest %} checked{% endif %}> <span>The Monday digest <small class="muted">the company's position, what changed, what is due this week</small></span></label>
+  </div>
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

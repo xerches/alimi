@@ -38,6 +38,7 @@ class SampleUser:
     email: str
     display_name: str
     role: str
+    title: str = ""   # job title shown in the top bar; the person can change it on their Profile page
 
     @property
     def id(self) -> uuid.UUID:
@@ -70,8 +71,8 @@ SAMPLE_ORGS: tuple[SampleOrg, ...] = (
         integration_name="Microsoft 365 (sample tenant)",
         fixture="fail",
         users=(
-            SampleUser("dana.whitcomb@saltmarsh.example", "Dana Whitcomb", "owner"),
-            SampleUser("theo.marsh@saltmarsh.example", "Theo Marsh", "member"),
+            SampleUser("dana.whitcomb@saltmarsh.example", "Dana Whitcomb", "owner", "Owner and CEO"),
+            SampleUser("theo.marsh@saltmarsh.example", "Theo Marsh", "member", "Operations lead"),
         ),
     ),
     SampleOrg(
@@ -81,8 +82,8 @@ SAMPLE_ORGS: tuple[SampleOrg, ...] = (
         integration_name="Google Workspace (sample tenant)",
         fixture="fail",
         users=(
-            SampleUser("priya.nair@harbordental.example", "Priya Nair", "owner"),
-            SampleUser("sam.okafor@harbordental.example", "Sam Okafor", "admin"),
+            SampleUser("priya.nair@harbordental.example", "Priya Nair", "owner", "Practice owner"),
+            SampleUser("sam.okafor@harbordental.example", "Sam Okafor", "admin", "Office manager"),
         ),
     ),
     SampleOrg(
@@ -91,7 +92,7 @@ SAMPLE_ORGS: tuple[SampleOrg, ...] = (
         platform="m365",
         integration_name="Microsoft 365 (sample tenant until our own is connected)",
         fixture="pass",
-        users=(SampleUser("founder@alimi.example", "Alimi founder (sample)", "owner"),),
+        users=(SampleUser("founder@alimi.example", "Alimi founder (sample)", "owner", "Founder"),),
     ),
 )
 
@@ -162,8 +163,8 @@ def seed(owner_engine: Engine, settings: Settings, run_scans: bool = True) -> No
                 conn.execute(
                     # No ON CONFLICT: Postgres would also check the row against the SELECT policy,
                     # and a user is not visible until their membership exists.
-                    text("INSERT INTO users (id, email, display_name) VALUES (:id, :email, :name)"),
-                    {"id": user.id, "email": user.email, "name": user.display_name},
+                    text("INSERT INTO users (id, email, display_name, job_title) VALUES (:id, :email, :name, :title)"),
+                    {"id": user.id, "email": user.email, "name": user.display_name, "title": user.title or None},
                 )
                 conn.execute(
                     text("INSERT INTO memberships (organization_id, user_id, role) VALUES (:org, :user, :role)"),

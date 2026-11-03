@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<p class="eyebrow">Account</p>
+<h1>Profile</h1>
+<p class="lead">Who you are in Alimi. Your name and title show in the top bar and next to anything you approve or acknowledge; the time zone sets how dates and reminders are shown to you.</p>
+{% if saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+
+<div class="cards">
+  <form class="card form" method="post" action="/account">
+    <h2>About you</h2>
+    <div class="field">
+      <label for="display_name">Name</label>
+      <input id="display_name" name="display_name" type="text" value="{{ me.display_name }}" required maxlength="80" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="job_title">Title</label>
+      <input id="job_title" name="job_title" type="text" value="{{ me.job_title or '' }}" maxlength="80" autocomplete="organization-title" placeholder="Owner, Operations lead, Office manager">
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" value="{{ me.email }}" readonly aria-describedby="email-note">
+      <small id="email-note" class="muted">Comes from how you sign in; it cannot be edited here.</small>
+    </div>
+    <div class="field">
+      <label for="time_zone">Time zone</label>
+      <select id="time_zone" name="time_zone">
+        {% for tz in time_zones %}<option value="{{ tz }}"{% if tz == prefs.time_zone %} selected{% endif %}>{{ tz.replace("_", " ") }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <span class="label">Language</span>
+      <p class="muted">English. More languages come later; the choice is kept with your settings.</p>
+    </div>
+    <button type="submit">Save</button>
+  </form>
+
+  <section class="card">
+    <h2>Your companies</h2>
+    <table>
+      <thead><tr><th scope="col">Company</th><th scope="col">Your role</th></tr></thead>
+      <tbody><tr><td>{{ me.org_name }}</td><td>{{ me.role }}</td></tr></tbody>
+    </table>
+    <p class="muted">A person who belongs to more than one company (a reseller, a multi-entity customer) switches between them in the top bar; that arrives with the reseller view.</p>
+    <h2>Roles, in short</h2>
+    <dl>
+      <dt>owner</dt><dd>Everything, including billing and who has access.</dd>
+      <dt>admin</dt><dd>Runs the program: controls, evidence, policies, people, the trust center.</dd>
+      <dt>member</dt><dd>Sees the company's position, owns the tasks assigned to them, acknowledges policies.</dd>
+      <dt>auditor</dt><dd>Read-only access to evidence and reports, for a CPA or a broker.</dd>
+    </dl>
+  </section>
+</div>
+{% endblock %}

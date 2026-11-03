@@ -29,7 +29,9 @@ passing). `docker compose down -v` wipes the database and the generated keys.
 | Status rules | `alimi_platform/status.py` | control and requirement status are computed, never typed in |
 | Token encryption | `alimi_platform/crypto.py` | Fernet with a key from the environment; a log filter redacts anything token-shaped |
 | Pages | `alimi_platform/main.py`, `templates/` | FastAPI, Jinja templates, HTMX (vendored, `static/htmx.min.js`, 2.0.4, BSD Zero Clause licence) |
-| App shell | `alimi_platform/nav.py`, `templates/base.html`, `static/app.css` | the layout chosen Nov 3, 2026, the same as the demo's: a captioned icon strip, a second column where a section has children, breadcrumbs, a phone bottom bar; `nav.py` mirrors `demo/src/lib/nav.js`; the brand colors are typed once in `:root` and `tests/test_brand_tokens.py` keeps them equal to `config/brand.yaml` |
+| App shell | `alimi_platform/nav.py`, `templates/base.html`, `static/app.css` | the layout chosen Nov 3, 2026, the same as the demo's: a captioned icon strip, a second column where a section has children, breadcrumbs, a phone bottom bar, the account menu and the theme toggle in the top bar; `nav.py` mirrors `demo/src/lib/nav.js` |
+| Themes | `alimi_platform/theme.py`, `static/theme.js` | both themes are generated from `config/brand.yaml` (`colors`, `colors_dark`) and served at `/theme.css`; `app.css` types no color (`tests/test_theme.py`). Light is the default, the device setting applies, and the toggle in the top bar overrides it per browser (localStorage key `alimi-theme`), the same script as the site |
+| Account | `templates/account*.html`, `migrations/0003_account.sql` | the person's own pages (Profile, Security, Notifications) from the menu under their initials; `user_settings` is keyed by user with a "your own row" policy |
 | Sample data | `alimi_platform/seed.py` | fixed IDs, so the mock picker can list users without the database |
 
 ## Pages
@@ -51,6 +53,7 @@ badges on the strip and everything in the column are computed from the organizat
 | `/controls`, `/controls?domain=<area>`, `/controls/<id>` | every control with its computed status, filtered by area; a control's tests, evidence and requirements |
 | `/monitoring`, `/scans/<id>` | the connected systems with **Run checks now**, the latest result per test, every scan; a scan's results with the raw evidence each check read |
 | `/settings`, `/audit` | the company, who has access, what is connected; the append-only audit log |
+| `/account`, `/account/security`, `/account/notifications` | the person's own pages: name, title and time zone; how they sign in, the tenant's MFA check and this session; which emails they want |
 
 ## How the isolation works
 
