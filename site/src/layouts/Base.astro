@@ -1,11 +1,13 @@
 ---
 // Page shell: head metadata, the brand tokens inlined as CSS custom properties (light theme, and the
-// dark theme under a media query and a data-theme attribute), the theme script, skip link, header,
-// main landmark and footer. Every page passes its own path because build.format "file" makes
-// Astro.url.pathname end in .html.
+// dark theme under a media query and a data-theme attribute), the theme script inlined after them (so
+// it runs before first paint and costs no request; the CSP in netlify.toml allows it by hash), skip
+// link, header, main landmark and footer. Every page passes its own path because build.format "file"
+// makes Astro.url.pathname end in .html.
 import "../styles/global.css";
 import { brand } from "../lib/config.js";
 import { themeCss } from "../lib/theme.js";
+import themeScript from "../scripts/theme.js?raw";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
@@ -33,7 +35,7 @@ const fullTitle = path === "/" ? `${brand.display_name}: ${brand.tagline}` : `${
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <style is:inline data-tokens set:html={themeCss(brand)}></style>
-    <script is:inline src="/theme.js"></script>
+    <script is:inline set:html={themeScript}></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

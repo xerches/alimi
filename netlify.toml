@@ -8,7 +8,9 @@
   NODE_VERSION = "22"
 
 # Security headers for every page. Styles allow inline because Astro inlines small stylesheets
-# and the brand tokens; there is no client-side JavaScript to allow.
+# and the brand tokens. Scripts: the site's own files, plus the theme script the layout inlines in
+# <head> (site/src/scripts/theme.js), allowed by the hash of its exact text; the site's build check
+# and tests recompute the hash, so editing that file means updating it here.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,7 +19,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-oKM9f92FEH8pSOlZoq3oDPziLsO7y2p3UkIojZHbaTM='; font-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 
 [[headers]]
   for = "/_astro/*"

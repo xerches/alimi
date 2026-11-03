@@ -1,7 +1,10 @@
 // Theme choice (Nov 3, 2026): light by default, dark when the device asks for it, and a toggle in the
-// top bar for the visitor who wants the other one. Runs in <head> before the page paints, so a saved
-// choice never flashes the other theme. The choice is kept in this browser's localStorage under
-// "alimi-theme" only when it differs from the device setting; nothing else is stored, nothing is sent.
+// top bar for the visitor who wants the other one. The layout inlines this file in <head>, so it runs
+// before the page paints (a saved choice never flashes the other theme) and costs no request; the
+// Content Security Policy in netlify.toml allows it by the hash of this exact text, which
+// scripts/check-dist.mjs and tests/theme.test.mjs recompute, so a change here means a new hash there.
+// The choice is kept in this browser's localStorage under "alimi-theme" only when it differs from the
+// device setting; nothing else is stored, nothing is sent.
 (function () {
   var KEY = "alimi-theme";
   var root = document.documentElement;

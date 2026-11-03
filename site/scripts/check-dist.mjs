@@ -1,6 +1,7 @@
 // Post-build checks on every page in dist/ (subfolders included): lang, one h1, a title and a description; Netlify form
 // names are unique across the site; and no color is hardcoded anywhere outside the token block (light
 // and dark themes) that the layout inlines from brand.yaml. Prints the TODO count for prompt 11. Exits 1 on a failure.
+import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,6 +21,13 @@ const failures = [];
 const forms = new Map();
 let todos = 0;
 const TOKEN_BLOCK = /<style data-tokens>:root\{[\s\S]*?<\/style>/;
+// The Content Security Policy allows scripts from the site's own origin and inline scripts by hash only,
+// so every inline script the build writes (the theme script in <head>, and nothing else: Astro's
+// component scripts are emitted as files, see astro.config.mjs) must have its hash in netlify.toml.
+const SCRIPTS = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/g;
+const csp = /Content-Security-Policy = "([^"]+)"/.exec(readFileSync(path.resolve(dist, "../../netlify.toml"), "utf8"))?.[1] ?? "";
+const allowedHashes = [...csp.matchAll(/'sha256-([^']+)'/g)].map((m) => m[1]);
+const sha256 = (text) => createHash("sha256").update(text).digest("base64");
 // Hex colors, rgb()/hsl() functions and CSS named colors in style contexts.
 const HARDCODED = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\(|\b(?:color|background(?:-color)?|border(?:-color)?|fill|stroke|outline(?:-color)?)\s*:\s*(?!var\(|inherit|transparent|currentColor|currentcolor|none|initial|unset|\d|[a-z-]*\s*var\()/g;
 
@@ -33,7 +41,11 @@ for (const page of pages) {
   if (!/<meta name="description" content="[^"]{20,}"/.test(html)) failures.push(`${where}: missing or short meta description`);
   if (!TOKEN_BLOCK.test(html)) failures.push(`${where}: brand token block not inlined`);
   if (!/\[data-theme="dark"\]/.test(html)) failures.push(`${where}: dark theme tokens not inlined`);
-  if (!/<script src="\/theme\.js"><\/script>/.test(html)) failures.push(`${where}: theme script not loaded`);
+  const inlineScripts = [...html.matchAll(SCRIPTS)].filter((m) => !/\ssrc=/.test(m[1] ?? "")).map((m) => m[2]);
+  if (!inlineScripts.some((js) => js.includes('"alimi-theme"'))) failures.push(`${where}: theme script not inlined`);
+  for (const js of inlineScripts) {
+    if (!allowedHashes.includes(sha256(js))) failures.push(`${where}: an inline script (sha256-${sha256(js)}, starts "${js.slice(0, 40)}") is not allowed by the Content-Security-Policy in netlify.toml; the theme script's hash goes there, any other script is emitted as a file`);
+  }
   todos += (html.match(/data-todo/g) ?? []).length;
 
   for (const match of html.matchAll(/<form\b[^>]*>/g)) {

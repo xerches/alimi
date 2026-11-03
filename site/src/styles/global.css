@@ -729,7 +729,7 @@ a:active {
   color: var(--color-primary-contrast);
 }
 
-/* The theme toggle: a small pressed-or-not button, "Dark theme" on, hidden until public/theme.js has
+/* The theme toggle: a small pressed-or-not button, "Dark theme" on, hidden until the theme script (src/scripts/theme.js) has
    run because it does nothing without it. On a phone only the icon shows. */
 .theme-toggle {
   display: inline-flex;

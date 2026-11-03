@@ -1,6 +1,6 @@
 // The site's two themes as one inlined style block (Nov 3, 2026). `colors` in brand.yaml is the light
 // theme and the default; `colors_dark` is applied when the device asks for a dark scheme and the visitor
-// has not chosen light, or when the visitor has chosen dark (public/theme.js sets data-theme on <html>).
+// has not chosen light, or when the visitor has chosen dark (src/scripts/theme.js, inlined in <head>, sets data-theme on <html>).
 // tokens.js stays the shared helper the demo copies byte for byte; this file is the site's own.
 import { cssVariables } from "./tokens.js";
 

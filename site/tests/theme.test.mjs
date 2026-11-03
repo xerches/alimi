@@ -2,6 +2,7 @@
 // and under the visitor's choice, and the small script that applies the choice stays small and plain.
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,7 +36,7 @@ test("themeCss refuses a dark map whose keys differ from the light map", () => {
 });
 
 test("the theme script is small, plain and stores one key", () => {
-  const js = readFileSync(path.join(here, "../public/theme.js"), "utf8");
+  const js = readFileSync(path.join(here, "../src/scripts/theme.js"), "utf8");
   assert.ok(js.length < 3000, "it runs before first paint, so it stays tiny");
   assert.match(js, /"alimi-theme"/);
   assert.match(js, /prefers-color-scheme: dark/);
@@ -45,11 +46,13 @@ test("the theme script is small, plain and stores one key", () => {
   }
 });
 
-test("the layout loads the theme script from the site's own origin, as the Content Security Policy requires", () => {
+test("the layout inlines the theme script and the Content Security Policy allows exactly that text by hash", () => {
   const layout = readFileSync(path.join(here, "../src/layouts/Base.astro"), "utf8");
-  assert.match(layout, /<script is:inline src="\/theme\.js"><\/script>/);
+  assert.match(layout, /<script is:inline set:html=\{themeScript\}><\/script>/);
   assert.match(layout, /data-tokens/);
+  const js = readFileSync(path.join(here, "../src/scripts/theme.js"), "utf8");
+  const hash = createHash("sha256").update(js).digest("base64");
   const csp = readFileSync(path.join(here, "../../netlify.toml"), "utf8");
-  assert.match(csp, /script-src 'self';/);
-  assert.ok(!/script-src[^;]*'unsafe-inline'/.test(csp), "no inline scripts are allowed");
+  assert.ok(csp.includes(`script-src 'self' 'sha256-${hash}';`), `netlify.toml must carry the hash of src/scripts/theme.js as it is now (sha256-${hash})`);
+  assert.ok(!/script-src[^;]*'unsafe-inline'/.test(csp), "no other inline script is allowed");
 });
