@@ -196,7 +196,7 @@ the insurer mapping in /config/checks.yaml and the controls in /config/controls.
 criterion IDs and our own plain-English summaries only. Login is a mock-mode user picker that
 refuses to load unless ALIMI_MODE=mock; real login is 12b. Seed two sample organizations so the
 isolation tests mean something, and a third, Alimi itself, that reads the founder's own tenant when
-the operator points it there, so the company runs its own programme in the product from day one. One `docker compose up` runs app and database on mock data; CI
+the operator points it there, so the company runs its own program in the product from day one. One `docker compose up` runs app and database on mock data; CI
 runs the tests against a Postgres service container on every PR. Show me the plan first.
 ```
 

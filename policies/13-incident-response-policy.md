@@ -86,7 +86,7 @@ Any event that threatens the confidentiality, integrity or availability of {{Com
 ### 4.5 Learning from incidents
 
 14. Every S1 and S2 incident, and any S3 incident {{Security Lead}} chooses, gets a written review within ten business days of closing: timeline, root cause, what detection and response did well, what did not, and actions with owners and dates. Actions are tracked to completion and reported to {{CEO}}. Patterns across S3 and S4 events are reviewed quarterly.
-15. Lessons feed back into the other policies, the checks run by the security tooling, the training programme and the risk register. Incident metrics (count by severity, time to detect, time to contain, overdue actions) go to {{CEO}} quarterly.
+15. Lessons feed back into the other policies, the checks run by the security tooling, the training program and the risk register. Incident metrics (count by severity, time to detect, time to contain, overdue actions) go to {{CEO}} quarterly.
 16. The response plan is exercised at least once a year with a tabletop scenario (ransomware, account takeover and payment fraud rotate), and whenever the plan or the team changes significantly. New staff are told how to report an incident during their first week.
 
 ## 5. Exceptions

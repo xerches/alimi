@@ -43,7 +43,7 @@ Everyone who works for {{Company}} in any capacity: employees, contractors, inte
 | --- | --- |
 | {{HR Lead}} | Owns this policy, the hiring and leaving checklists, the training records and the disciplinary process. |
 | Managers | Request and approve access for their people, confirm it at reviews, tell HR and IT the day someone's role changes or ends, and set the example. |
-| {{Security Lead}} | Designs the training and awareness programme, reviews joiner and leaver records, runs phishing simulations. |
+| {{Security Lead}} | Designs the training and awareness program, reviews joiner and leaver records, runs phishing simulations. |
 | {{IT Lead}} or managed service provider | Creates and removes accounts and devices on the dates HR gives. |
 | {{CEO}} | Demonstrates that security and honesty are part of how the company works, and acts on breaches at any level. |
 | Everyone | Completes training, follows the policies, reports concerns. |

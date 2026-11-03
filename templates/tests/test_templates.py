@@ -139,7 +139,7 @@ def test_resolver_formats():
     assert resolve("products.platform.minimum_users", PRICING) == "10 users"
     assert resolve("products.platform.frameworks.addon_price", PRICING) == "$4 per user a month per added framework"
     assert "5% off" in resolve("products.platform.frameworks.terms", PRICING)
-    assert "locked for 24 months" in resolve("products.platform.billing.terms", PRICING)
+    assert "locked for 12 months" in resolve("products.platform.billing.terms", PRICING)
     assert resolve("products.services.assessment.price", PRICING) == "$500 to $1,500"
     assert resolve("retainers.fractional_security_lead.price", PRICING) == "$3,000 to $6,000 a month"
     assert resolve("partners.referral.fee", PRICING) == "10%"

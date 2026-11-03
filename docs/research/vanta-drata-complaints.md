@@ -101,7 +101,7 @@ The first three became Compare page themes 9 to 11 on Nov 2, 2026; the hidden-mo
 
 | Theme | Alimi's answer | Where |
 | --- | --- | --- |
-| Renewal jumps | Published per-user price, no automatic increase, 24-month lock | `config/pricing.yaml`, site pricing page |
+| Renewal jumps | Published per-user price, no automatic increase, 12-month lock | `config/pricing.yaml`, site pricing page |
 | Cancellation disputes | 12-month term paid monthly or month to month; renewal is a conversation | pricing.yaml billing, MSA outline |
 | Add-on fees | Vendors, risks, questionnaires, trust page inside Gold; frameworks at $4 per user with discounts | pricing.yaml, platform page |
 | Post-sale support | Named compliance lead in every tier; founder on support | pricing.yaml included_everywhere |

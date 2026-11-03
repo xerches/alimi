@@ -97,7 +97,7 @@ frameworks:
       "8.3": The risk treatment plan is implemented.
       "9.1": Security performance is monitored, measured and evaluated.
       "9.2.1": Internal audits are conducted at planned intervals.
-      "9.2.2": An audit programme defines scope, criteria and reporting.
+      "9.2.2": An audit program defines scope, criteria and reporting.
       "9.3": Management reviews the management system at planned intervals.
       "10.1": The management system is continually improved.
       "10.2": Nonconformities are corrected and their causes addressed.
@@ -270,7 +270,7 @@ frameworks:
     short: HIPAA
     requirements:
       "164.308(a)(1)": Security management process, including risk analysis, risk management, sanctions and activity review.
-      "164.308(a)(2)": A named security official is responsible for the security programme.
+      "164.308(a)(2)": A named security official is responsible for the security program.
       "164.308(a)(3)": Workforce access is authorised, supervised and ended properly.
       "164.308(a)(4)": Access to protected health information is authorised and managed.
       "164.308(a)(5)": Security awareness and training, including malware, log-in monitoring and passwords.

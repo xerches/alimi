@@ -1837,13 +1837,6 @@ html:not([data-theme-active]) .theme-toggle {
 .compare-grid .card p + p {
   margin-top: 0.75rem;
 }
-.sources {
-  font-size: 0.875rem;
-  padding-left: 1.1rem;
-}
-.sources li {
-  margin-bottom: 0.35rem;
-}
 
 /* About: the story as a timeline, the founder card */
 .timeline {
