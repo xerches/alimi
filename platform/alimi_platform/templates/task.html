@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_tasks.html" import task_status, kind_badge, due, task_form with context %}
+{% block title %}{{ t.label }} {{ t.title }}{% endblock %}
+{% block content %}
+<p class="eyebrow">{{ t.project_name or "Tasks" }}</p>
+<h1>{{ t.label }} {{ t.title }} {{ task_status(t.status) }}</h1>
+{% if created %}<p class="notice" role="status">Task created.</p>{% elif saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+
+<div class="actions">
+  {% for next, label in transitions %}
+  <form method="post" action="/tasks/{{ t.id }}/status" class="inline-form"><input type="hidden" name="status" value="{{ next }}"><button type="submit"{% if next != 'done' %} class="secondary"{% endif %}>{{ label }}</button></form>
+  {% endfor %}
+</div>
+
+<div class="cards">
+  <section class="card">
+    <h2>Details</h2>
+    <dl>
+      <dt>Kind</dt><dd>{{ kind_badge(t.kind) }}</dd>
+      <dt>Priority</dt><dd>{{ priorities.get(t.priority, t.priority) }}</dd>
+      <dt>Assignee</dt><dd>{{ t.assignee_name or '<span class="muted">nobody yet</span>' | safe }}</dd>
+      <dt>Due</dt><dd>{{ due(t) }}</dd>
+      {% if t.source_href %}<dt>About</dt><dd><a href="{{ t.source_href }}">{{ t.source_id }}</a> <span class="muted">({{ t.source_kind }})</span></dd>{% endif %}
+      <dt>Project</dt><dd>{% if t.project_id %}<a href="/projects/{{ t.project_id }}">{{ t.project_name }}</a>{% else %}<span class="muted">none</span>{% endif %}</dd>
+      <dt>External ticket</dt><dd>{% if t.external_system or t.external_key or t.external_url %}{{ external.get(t.external_system, t.external_system or "") }} {% if t.external_url %}<a href="{{ t.external_url }}" rel="noopener" target="_blank">{{ t.external_key or t.external_url }} ↗</a>{% else %}{{ t.external_key }}{% endif %}{% else %}<span class="muted">none</span>{% endif %}</dd>
+      <dt>Created</dt><dd>{{ t.created_at.strftime("%b %d, %Y") }}{% if t.creator_name %} by {{ t.creator_name }}{% else %} by the scan{% endif %}</dd>
+      {% if t.done_at %}<dt>Done</dt><dd>{{ t.done_at.strftime("%b %d, %Y") }}</dd>{% endif %}
+    </dl>
+    {% if t.detail %}<h3>What has to happen</h3><p class="prewrap">{{ t.detail }}</p>{% endif %}
+  </section>
+
+  <section class="card" id="comments">
+    <h2>Comments</h2>
+    {% for c in comments %}
+    <div class="comment"><p class="muted"><strong>{{ c.author or "Alimi" }}</strong> · {{ c.created_at.strftime("%b %d, %Y %H:%M UTC") }}</p><p class="prewrap">{{ c.body }}</p></div>
+    {% else %}
+    <p class="muted">No comments yet.</p>
+    {% endfor %}
+    <form class="form" method="post" action="/tasks/{{ t.id }}/comments">
+      <div class="field"><label for="body">Add a comment</label><textarea id="body" name="body" rows="3" maxlength="4000" required></textarea></div>
+      <button type="submit">Comment</button>
+    </form>
+  </section>
+</div>
+
+<details class="card" id="edit">
+  <summary><h2 class="inline">Edit the task</h2></summary>
+  {{ task_form("/tasks/" ~ t.id, t, members, projects, kinds, priorities, external, "Save") }}
+</details>
+{% endblock %}

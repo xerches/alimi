@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_tasks.html" import task_status, kind_badge, due, task_form with context %}
+{% block title %}{{ project.name if project else views[view] }} · Tasks{% endblock %}
+{% block content %}
+<p class="eyebrow">Tasks{% if project %} · {{ project.name }}{% endif %}</p>
+<h1>{{ views[view] }}{% if project %} in {{ project.name }}{% endif %}</h1>
+<p class="lead">
+  {% if view == "mine" %}What is assigned to you and not done, nearest due date first.
+  {% elif view == "open" %}Everything still to do, nearest due date first. Fix tasks come from failing tests, Renew tasks from evidence past its date, Decide tasks from policies and owners; the rest you add yourself.
+  {% elif view == "done" %}What was finished, latest first. A task is closed, never erased, so the audit trail stays whole.
+  {% else %}Every task, open or done.{% endif %}
+</p>
+
+<nav class="chips" aria-label="Views">
+  {% for key, label in views.items() %}<a class="chip" href="/tasks?view={{ key }}{% if project %}&amp;project={{ project.id }}{% endif %}"{% if key == view %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+  <a class="chip add" href="#new">+ New task</a>
+</nav>
+
+{% if tasks %}
+<table>
+  <thead><tr><th scope="col">#</th><th scope="col">Task</th><th scope="col">Kind</th><th scope="col">About</th><th scope="col">Assignee</th><th scope="col">Due</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  {% for t in tasks %}
+  <tr id="task-{{ t.number }}">
+    <td class="nowrap"><a href="/tasks/{{ t.id }}">{{ t.label }}</a></td>
+    <td><a href="/tasks/{{ t.id }}">{{ t.title }}</a>{% if t.project_name and not project %}<br><small class="muted">{{ t.project_name }}</small>{% endif %}{% if t.external_key %}<br><small class="muted">{{ external.get(t.external_system, t.external_system) }} {{ t.external_key }}</small>{% endif %}</td>
+    <td>{{ kind_badge(t.kind) }}</td>
+    <td>{% if t.source_href %}<a href="{{ t.source_href }}">{{ t.source_id }}</a>{% else %}<span class="muted">—</span>{% endif %}</td>
+    <td>{{ t.assignee_name or '<span class="muted">nobody yet</span>' | safe }}</td>
+    <td class="nowrap">{{ due(t) }}</td>
+    <td>{{ task_status(t.status) }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing here{% if view == "mine" %}: nothing is assigned to you{% elif view == "open" %}: everything is done{% endif %}.</p>
+{% endif %}
+
+<details class="card" id="new"{% if created %} open{% endif %}>
+  <summary><h2 class="inline">New task</h2></summary>
+  {{ task_form("/tasks", none, members, projects, kinds, priorities, external, "Create the task", project.id if project else none) }}
+</details>
+{% endblock %}
