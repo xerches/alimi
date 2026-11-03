@@ -4,7 +4,7 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Tiers from "../components/Tiers.astro";
 import WaitlistForm from "../components/WaitlistForm.astro";
-import { brand, pricing, platform, services, retainer, terms, resellerTiers, choosableFrameworks, alwaysIncludedFrameworks, frameworkDiscount, quote, EXAMPLE_SIZES, money, percent } from "../lib/config.js";
+import { brand, pricing, platform, services, retainer, terms, resellerTiers, choosableFrameworks, alwaysIncludedFrameworks, frameworkDiscount, quote, questionnaireAllowances, listNames, EXAMPLE_SIZES, money, percent } from "../lib/config.js";
 import { formatDate } from "../lib/content.js";
 
 const plat = platform();
@@ -44,10 +44,12 @@ const bands = (() => {
   });
 })();
 
+const allowances = questionnaireAllowances();
 const faq = [
   { q: "What counts as a user?", a: `A person with an account in the tenant ${brand.display_name} watches: staff, contractors with a mailbox, and admins. Guests, shared mailboxes and service accounts do not count. The count is read from your tenant each month, so a hire or a departure shows on the next invoice, and the minimum is ${plat.minimumUsers} users.` },
-  { q: "Which framework is included?", a: `Any one of the ${catalog.length} in the catalog. Most companies start with the cyber insurance questionnaire, because the renewal arrives whether or not a customer asks for SOC 2. You can swap the included framework at the end of a term.` },
+  { q: "Which framework is included?", a: `Today, any one of the ${fw.includedChoices.length} that are mapped: ${listNames(fw.includedChoices)}. The other ${fw.pendingCount} in the catalog become available as their requirement lists land, before launch. Most companies start with the cyber insurance questionnaire, because the renewal arrives whether or not a customer asks for SOC 2. You can swap the included framework at the end of a term.` },
   { q: "How do add-on frameworks work?", a: `${fw.text} A second framework reuses the same controls and evidence, so it is mostly a mapping, which is why it costs a fraction of the plan.` },
+  { q: "How many security questionnaires are included?", a: `Questionnaire drafting starts on ${plat.tiers[1].name}: ${allowances}. A questionnaire is one customer's or insurer's form, however long, drafted from your evidence with every answer pointing at its source and marked for your review. The platforms we compared meter them too (25 or 144 a year at Vanta, 100 at Drata's trust centre); we would rather publish the number than argue about it later.` },
   { q: "Is the audit included?", a: `No, and it is not included anywhere else either. A SOC 2 or ISO 27001 audit is done by a licensed firm for its own fee. ${brand.display_name} gets you ready, hands over the evidence pack and sits in the room; on ${diamond.name}, ${brand.display_name} runs the audit with the firm for you.` },
   { q: "Can we pay monthly?", a: `Yes, every plan is. ${plat.billing} ${terms.payment}.` },
   { q: "How were the prices set?", a: "Against what the compliance platforms we compared in October 2026 charge a 50-person company for the same tier, per user: the average, minus 15%. The method, the vendors and the arithmetic are written down and shared on request." },
@@ -55,9 +57,9 @@ const faq = [
 ];
 ---
 
-<Base title="Pricing" description={`Alimi platform pricing per user a month: ${plat.tiers.map((t) => `${t.name} ${t.perUser}`).join(", ")}, one framework included and ${catalog.length} to choose from. Policies, training and a named compliance lead in every tier; fixed-fee services alongside.`} path="/pricing">
+<Base title="Pricing" description={`Alimi platform pricing per user a month: ${plat.tiers.map((t) => `${t.name} ${t.perUser}`).join(", ")}, one framework included and ${catalog.length} in the catalog. Policies, training and a named compliance lead in every tier; fixed-fee services alongside.`} path="/pricing">
   <Hero eyebrow="Pricing" title="Published prices, per user, so nobody has to ask">
-    <p class="lede">Four tiers from {silver.perUser} to {diamond.perUser} per user a month, each with one framework included and {catalog.length} to choose from. {plat.billing} {plat.auditNote}</p>
+    <p class="lede">Four tiers from {silver.perUser} to {diamond.perUser} per user a month, each with one framework included, chosen from the {fw.includedChoices.length} mapped today, and {catalog.length} in the catalog. {plat.billing} {plat.auditNote}</p>
     <div class="actions">
       <a class="button button--primary" href="#calculator">Work out your price</a>
       <a class="button button--secondary" href="#services">Services</a>
@@ -78,7 +80,7 @@ const faq = [
       <div class="card">
         <h3>The catalog</h3>
         <ul class="columns">
-          {catalog.map((f) => <li>{f.name}</li>)}
+          {catalog.map((f) => <li>{f.name}{f.mapped ? null : <span class="muted"> (before launch)</span>}</li>)}
         </ul>
         <p style="margin-top:1rem"><strong>And in every plan, at no charge: the {posture.name}.</strong> {posture.summary}</p>
         <p class="muted small" style="margin-top:1rem">Requirement IDs and our own one-line summaries only; the standards' text stays with its owners. <a href="/platform#frameworks">Who needs which</a>.</p>

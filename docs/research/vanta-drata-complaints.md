@@ -73,6 +73,30 @@ Limits: G2 and Capterra show few low ratings for either product, so the sub-four
 - An evidence upload silently saving one of two files (Vanta, Capterra).
 - Vanta's May 2025 incident: a faulty deploy removed a tenant-isolation filter for under a day; usernames, roles and MFA metadata visible across accounts for fewer than 4% of customers; no passwords or tokens (ComplyJet).
 
+## Second pass, Nov 2, 2026 (late evening)
+
+The founder asked whether any other low-rated reviews were worth building for. Six more sources were read; the Reddit and G2 pages themselves do not load from here, so G2 material comes syndicated through AWS Marketplace and two competitor digests.
+
+| Source | What it is | Rating |
+| --- | --- | --- |
+| SoftwareAdvice, Vanta | Same 33 reviews as Capterra (shared database); six below four stars | 4.2 of 5 |
+| AWS Marketplace, Vanta | G2 reviews syndicated, September 2026 pages, cons only | 4.6 of 5, 2,630 ratings |
+| Trustpilot, Drata | Four reviews, all one star, profile unclaimed | 2.6 of 5 |
+| PeerSpot, Drata | Ten reviews from security and audit staff | 4.0 of 5 |
+| 6clicks blog | A competitor's digest of Vanta complaints from G2, Capterra, Reddit and AWS Marketplace | competitor |
+| Cyber Sierra blog | A competitor's digest of Vanta and Drata complaints from Reddit and interviews | competitor |
+
+New themes, beyond the nine above:
+
+- **The bundled audit and auditor independence.** Trustpilot, Drata: "the bundled audit went horrible", switching auditors took "many weeks", "we had lost a deal in the process"; "overselling the offering and delivering only the automated semi-ready product"; "AVOID IF YOU ARE A SMALL BUSINESS". Capterra, Vanta: "we still had to handle auditor ourselves". Reddit r/soc2 (via 6clicks): allegations that auditor partnerships favour volume; reported as allegations.
+- **A dashboard that does not say what to do today.** G2 via AWS Marketplace, Vanta: "unclear which controls need immediate attention; a filter for mandatory controls would help"; stale test statuses; "change tracking and rollback need improvement"; the AI "returns a blank response for 'no evidence found' and it is unclear whether it searched"; questionnaire automation "gives poor answers"; vendor assessments where it is "hard to tell which version is old and which is new". PeerSpot, Drata: "compliance readiness indicators can be misleading".
+- **Built for a company that already has a security person.** SoftwareAdvice and Capterra, Vanta, 2 to 50 people: "seems built for enterprise clients", "the pricing was too high and we still had to handle auditor ourselves", wants "more automation... help with remediation, since the company has no dedicated IT team". PeerSpot, Drata: "you'll need some specific knowledge if you're a security policy manager"; "the industry tends to market these tools as security experts". Trustpilot, Drata: a contract "that will add no real value" for a small startup.
+- **Hidden modules at the sale.** G2 via 6clicks, Vanta: "You need to buy modules, and this thing [is] not mentioned during initial marketing and pre-sale phase."
+- **A framework that needs a module the tier lacks.** PeerSpot, Drata: "if you're paying for a subscription to ISO 27001, you must undergo a risk assessment", so the risk module should be included. Relevant to Alimi's Silver tier, where the risk register is not included; see `docs/agenda.md`.
+- **Smaller:** marketing email after no sign-up (Trustpilot, Drata); auditors losing access to the audit hub mid-engagement (PeerSpot, Drata); cannot open the app in several tabs (PeerSpot, Drata); API documentation thin (PeerSpot, Drata); the device scanner over-flags small developer tools and needs manual approval to quiet (G2, Vanta); performance drops when an integration ingests a lot of data (G2, Vanta).
+
+The first three became Compare page themes 9 to 11 on Nov 2, 2026; the hidden-modules quote joined theme 3; the ISO 27001 risk-module point is an open decision for the founder.
+
 ## What Alimi does with each, and where it already is
 
 | Theme | Alimi's answer | Where |
@@ -87,6 +111,13 @@ Limits: G2 and Capterra show few low ratings for either product, so the sub-four
 | Templates and expertise | 23 policies tailored in a workshop; versions and sign-offs in the platform; the compliance lead makes scope calls | policies, services, prompt 13 |
 | Access reviews as of a date | Period-start snapshot kept with the review | prompt 12b, to add |
 | Tenant isolation | Row-level security on every customer table, tested | prompt 12a |
+| Bundled audit | The CPA firm is the customer's choice and paid by the customer; Alimi takes no fee from any auditor; the export pack goes to any firm; Diamond coordinates, the firm stays independent | pricing.yaml Diamond, compare page, MSA outline (to add) |
+| Unclear priorities | Home screen ordered by insurer impact with the top five fixes and 30-day due list; two scores; computed statuses; on-demand re-run after a fix; version history on policies and controls; the assistant says what it searched | prompts 12b, 12c, 13 |
+| Built for experts | Named compliance lead in every tier; plain-English fix on every failing check; fixed-fee remediation services | pricing.yaml included_everywhere and services |
+| Hidden modules | The whole price list, add-ons included, on the pricing page; questionnaire allowances published | pricing page, Nov 2 |
+| Framework needs a module the tier lacks | Open: include the risk register with any included framework that requires a risk assessment | docs/agenda.md |
+| Auditor access | Auditor and broker access as time-limited links with an audit log | prompt 12b, to add |
+| Several tabs | Server-rendered pages, every URL stands alone, no client state | prompt 12a (FastAPI and HTMX) |
 
 ## Sources
 
@@ -105,3 +136,9 @@ Limits: G2 and Capterra show few low ratings for either product, so the sub-four
 - https://underdefense.com/blog/drata-pricing/ (competitor, Vendr data)
 - https://costbench.com/software/compliance-management/drata/
 - https://cipherssecurity.com/vanta-vs-drata-pricing-2026/
+- https://www.softwareadvice.com/audit/vanta-profile/reviews/ (second pass)
+- https://aws.amazon.com/marketplace/reviews/reviews-list/prodview-5ophamrbfxt44?page=3 (G2 reviews syndicated; second pass)
+- https://nz.trustpilot.com/review/drata.com (second pass)
+- https://peerspot.com/products/drata-pros-and-cons (second pass)
+- https://www.6clicks.com/resources/blog/understanding-vantas-limitations-insights-from-real-user-experiences (competitor; second pass)
+- https://cybersierra.co/blog/vanta-drata-review/ (competitor; second pass)

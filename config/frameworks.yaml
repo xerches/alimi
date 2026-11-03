@@ -10,9 +10,9 @@
 
 frameworks:
   - id: alimi_posture
-    name: Alimi Security Posture Score
-    short: Posture score
-    summary: Alimi's own scored set of controls that go beyond what any standard asks, in the spirit of Microsoft Secure Score; compliance is not security, and this is where the gap shows.
+    name: Alimi Recommended Security Posture Score   # name fixed by the founder on Nov 2, 2026
+    short: Recommended posture score
+    summary: Alimi's own recommended set of controls, scored, that go beyond what any standard asks, in the spirit of Microsoft Secure Score; compliance is not security, and this is where the gap shows. Not accredited, never an add-on.
     audience: Every customer; it is in every plan and does not count toward the framework total
     mapped: true
     always_included: true   # added Nov 2, 2026 at the founder's request; not accredited, never an add-on

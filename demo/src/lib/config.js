@@ -82,12 +82,12 @@ export function frameworkCatalog() {
   return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included) }));
 }
 
-/** The frameworks a customer picks from: the catalog without Alimi's own posture score, which every plan carries. */
+/** The frameworks a customer picks from: the catalog without the Alimi Recommended Security Posture Score, which every plan carries. */
 export function choosableFrameworks() {
   return frameworkCatalog().filter((f) => !f.always_included);
 }
 
-/** The frameworks in every plan regardless of tier (Alimi's security posture score). */
+/** The frameworks in every plan regardless of tier (the Alimi Recommended Security Posture Score). */
 export function alwaysIncludedFrameworks() {
   return frameworkCatalog().filter((f) => f.always_included);
 }
@@ -101,7 +101,14 @@ export function framework(id) {
 /** id -> name, for pages that print a framework by its ID. */
 export const FRAMEWORK_LABELS = Object.fromEntries(catalog.map((f) => [f.id, f.name]));
 
-/** The add-on price, the included count, the volume discounts and the cap, with text for the page. */
+/** "A", "A and B", "A, B and C": names in a sentence. */
+export function listNames(names) {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+/** The add-on price, the included count, the volume discounts and the cap, with text for the page. The included
+ *  framework is chosen from the frameworks that are mapped today (finding 2 of the Nov 2, 2026 site scan). */
 export function frameworkPricing() {
   const f = pricing.products.platform.frameworks;
   const discounts = [...f.discounts].sort((a, b) => a.from_total - b.from_total);
@@ -112,8 +119,10 @@ export function frameworkPricing() {
     discounts: discounts.map((d) => ({ fromTotal: d.from_total, off: d.discount, offText: percent(d.discount) })),
     max: f.max,
     rule: f.rule,
+    includedChoices: choosableFrameworks().filter((c) => c.mapped).map((c) => c.name),
+    pendingCount: choosableFrameworks().filter((c) => !c.mapped).length,
     text:
-      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, and so is the Alimi Security Posture Score. Each further framework is ${money(f.addon_per_user_month)} per user a month. ` +
+      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, chosen today from ${listNames(choosableFrameworks().filter((c) => c.mapped).map((c) => c.name))}, with the rest of the catalog added as their requirement lists land; the ${alwaysIncludedFrameworks()[0].name} is in every plan too. Each further framework is ${money(f.addon_per_user_month)} per user a month. ` +
       discounts.map((d) => `With ${d.from_total} or more frameworks, every added framework is ${percent(d.discount)} off`).join("; ") +
       `. Up to ${f.max} frameworks on one account, not counting the posture score.`,
   };
@@ -178,8 +187,28 @@ function decorate(tier) {
         ? "Unlimited integrations"
         : `${tier.integrations} integration${tier.integrations === 1 ? "" : "s"}`;
     out.examples = EXAMPLE_SIZES.map((users) => ({ users, ...quote({ tierId: tier.id, users }) }));
+    // Questionnaire allowance (Nov 2, 2026): 0 = not in the tier, a number = per year, "unlimited" = no cap.
+    const q = tier.questionnaires_per_year;
+    if (q === "unlimited") {
+      out.questionnairesShort = "unlimited";
+      out.questionnairesLabel = "Unlimited questionnaires";
+    } else if (typeof q === "number" && q > 0) {
+      out.questionnairesShort = `${q} a year`;
+      out.questionnairesLabel = `${q} questionnaires a year`;
+    } else {
+      out.questionnairesShort = null;
+      out.questionnairesLabel = null;
+    }
   }
   return out;
+}
+
+/** "24 a year on Gold, 100 a year on Platinum, unlimited on Diamond": the questionnaire allowances in one phrase. */
+export function questionnaireAllowances() {
+  return platform()
+    .tiers.filter((t) => t.questionnairesShort)
+    .map((t) => `${t.questionnairesShort} on ${t.name}`)
+    .join(", ");
 }
 
 export function product(key) {

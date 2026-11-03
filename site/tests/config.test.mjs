@@ -1,31 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  brand,
-  pricing,
-  money,
-  tierPrice,
-  tierNote,
-  product,
-  products,
-  platform,
-  services,
-  service,
-  resellerTiers,
-  partners,
-  retainer,
-  decided,
-  frameworkCatalog,
-  choosableFrameworks,
-  alwaysIncludedFrameworks,
-  framework,
-  frameworkPricing,
-  frameworkDiscount,
-  quote,
-  EXAMPLE_SIZES,
-  PRODUCT_PAGES,
-  PRODUCT_ORDER,
-} from "../src/lib/config.js";
+import { brand, pricing, money, tierPrice, tierNote, product, products, platform, services, service, resellerTiers, partners, retainer, decided, frameworkCatalog, choosableFrameworks, alwaysIncludedFrameworks, framework, frameworkPricing, frameworkDiscount, quote, EXAMPLE_SIZES, PRODUCT_PAGES, PRODUCT_ORDER, questionnaireAllowances, listNames } from "../src/lib/config.js";
 import { cssVariables } from "../src/lib/tokens.js";
 import { insurerQuestions, checkCounts, policies, mappedFrameworks, controlSummary } from "../src/lib/content.js";
 
@@ -124,7 +99,9 @@ test("framework add-ons: $4 per user, 5% off from five frameworks, 10% off from 
   assert.equal(frameworkDiscount(9), 0.05);
   assert.equal(frameworkDiscount(10), 0.1);
   assert.match(fp.text, /One framework of your choice is included/);
-  assert.match(fp.text, /Posture Score/);
+  assert.match(fp.text, /Alimi Recommended Security Posture Score/);
+  assert.ok(fp.includedChoices.some((n) => /SOC 2/.test(n)) && fp.includedChoices.includes("Cyber insurance questionnaire"), "the included framework is chosen from the mapped ones");
+  assert.equal(fp.includedChoices.length + fp.pendingCount, choosableFrameworks().length);
   assert.match(fp.rule, /minus 15%/);
 });
 
@@ -216,4 +193,17 @@ test("content: insurer questions, check counts, policy titles, mapped frameworks
   assert.ok(fws.every((f) => f.requirementCount > 10 && f.short.length > 2));
   const controls = controlSummary();
   assert.ok(controls.total >= 30 && controls.automated >= 5 && controls.domains.length >= 5);
+});
+
+test("Nov 2, 2026 tier contents: trust page in Gold, questionnaire allowances published per tier", () => {
+  const [silver, gold, platinum, diamond] = platform().tiers;
+  assert.ok(!silver.includes.some((i) => /trust page/i.test(i)), "Silver has no trust page");
+  assert.ok(gold.includes.some((i) => /trust page/i.test(i)), "Gold has the trust page");
+  assert.equal(silver.questionnairesLabel, null);
+  assert.equal(gold.questionnairesLabel, "24 questionnaires a year");
+  assert.equal(platinum.questionnairesLabel, "100 questionnaires a year");
+  assert.equal(diamond.questionnairesLabel, "Unlimited questionnaires");
+  assert.equal(questionnaireAllowances(), "24 a year on Gold, 100 a year on Platinum, unlimited on Diamond");
+  assert.equal(listNames(["A", "B", "C"]), "A, B and C");
+  assert.equal(alwaysIncludedFrameworks()[0].name, "Alimi Recommended Security Posture Score");
 });
