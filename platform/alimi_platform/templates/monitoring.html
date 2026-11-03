@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% from "_status.html" import result_badge %}
+{% block title %}Monitoring{% endblock %}
+{% block content %}
+<p class="eyebrow">Monitoring</p>
+<h1>Monitoring</h1>
+<p class="lead">The scanner reads the tenant with read-only permissions and runs its checks. Each row is a test's latest result; a failing test turns its control red. Attestation items are confirmed by a person with evidence.</p>
+
+<h2>Connected systems</h2>
+{% for i in integrations %}
+<section class="card">
+  <h3>{{ i.display_name }}</h3>
+  <p class="muted">
+    {{ "Mock connection" if i.mode == "mock" else "Live connection" }}{% if i.fixture %} using the scanner's "{{ i.fixture }}" sample tenant{% endif %}.
+    Read-only scopes: {{ i.scopes | join(", ") }}.
+    Token {{ "stored encrypted" if i.has_token else "not stored" }}.
+  </p>
+  <p>Last scan: {{ i.last_sync_at.strftime("%b %d, %Y %H:%M UTC") if i.last_sync_at else "never" }}</p>
+  <button hx-post="/integrations/{{ i.id }}/scan" hx-target="#scan-{{ i.id }}" hx-swap="innerHTML" hx-disabled-elt="this">Run checks now</button>
+  <div id="scan-{{ i.id }}" class="scan-out" aria-live="polite"></div>
+</section>
+{% endfor %}
+
+<h2>Latest result per test</h2>
+{% if results %}
+<table>
+  <thead><tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Severity</th><th scope="col">What the scan found</th><th scope="col">Controls</th></tr></thead>
+  <tbody>
+  {% for r in results %}
+  <tr>
+    <td><strong>{{ r.title }}</strong><br><code>{{ r.id }}</code></td>
+    <td>{{ result_badge(r.status) }}</td>
+    <td>{{ r.severity }}</td>
+    <td>{{ r.summary }} <span class="muted">{{ r.collected_at.strftime("%b %d, %Y") }}</span></td>
+    <td>{% for c in r.controls %}<a href="/controls/{{ c }}">{{ c }}</a>{% if not loop.last %}, {% endif %}{% else %}<span class="muted">none</span>{% endfor %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No scan has run yet. Press <strong>Run checks now</strong> above.</p>
+{% endif %}
+
+<h2>Scans</h2>
+{% if runs %}
+<table>
+  <thead><tr><th scope="col">Started</th><th scope="col">Source</th><th scope="col">Passed</th><th scope="col">Failed</th><th scope="col">Need attestation</th><th scope="col">Could not run</th><th scope="col">Weighted score</th></tr></thead>
+  <tbody>
+  {% for run in runs %}
+  <tr>
+    <td><a href="/scans/{{ run.id }}">{{ run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</a></td>
+    <td><code>{{ run.source }}</code></td>
+    <td>{{ run.passed }}</td><td>{{ run.failed }}</td><td>{{ run.attest }}</td><td>{{ run.errors }}</td>
+    <td>{% if run.score_percent is not none %}{{ run.score_percent }}%{% else %}<span class="muted">n/a</span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No scans yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<p class="eyebrow">Settings</p>
+<h1>{{ me.org_name }}</h1>
+<p class="lead">The company, who can see it, and what is connected. Editing arrives with real sign-in in the next build step; the audit log on the left records every change already.</p>
+
+<div class="cards">
+  <section class="card">
+    <h2>People with access</h2>
+    <table>
+      <thead><tr><th scope="col">Name</th><th scope="col">Role</th></tr></thead>
+      <tbody>
+      {% for m in members %}
+      <tr><td>{{ m.display_name }}{% if m.id == me.id %} <span class="muted">(you)</span>{% endif %}</td><td>{{ m.role }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <form method="post" action="/logout" class="inline"><button type="submit">Switch user</button></form>
+  </section>
+  <section class="card">
+    <h2>Connected systems</h2>
+    {% for i in integrations %}
+    <h3>{{ i.display_name }}</h3>
+    <p class="muted">
+      {{ "Mock connection" if i.mode == "mock" else "Live connection" }}{% if i.fixture %} using the scanner's "{{ i.fixture }}" sample tenant{% endif %}.
+      Read-only scopes: {{ i.scopes | join(", ") }}.
+      Token {{ "stored encrypted" if i.has_token else "not stored" }}; the key lives outside the database.
+    </p>
+    {% endfor %}
+    <p><a href="/monitoring">Run the checks on the Monitoring page</a></p>
+  </section>
+</div>
+{% endblock %}

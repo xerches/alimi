@@ -9,25 +9,76 @@
   <script src="/static/htmx.min.js" defer></script>
 </head>
 <body>
-  <div class="mockbar" role="note">Mock mode: sample companies and sample tenants only. No customer data.</div>
-  <header class="top">
-    <a class="brand" href="/dashboard">Alimi</a>
-    {% if me %}
-    <nav aria-label="Main">
-      <a href="/dashboard">Dashboard</a>
-      <a href="/frameworks/insurer">Insurer questionnaire</a>
-      <a href="/controls">Controls</a>
-      <a href="/frameworks">Frameworks</a>
-      <a href="/audit">Audit log</a>
-    </nav>
-    <div class="who">
-      <span>{{ me.display_name }} · {{ me.org_name }}</span>
-      <form method="post" action="/logout"><button class="link" type="submit">Switch user</button></form>
+<a class="skip-link" href="#main">Skip to content</a>
+{#- The shell chosen Nov 3, 2026 (the demo's): a captioned icon strip, a second column only where the
+    section has children, the mock-mode banner and a top bar with the company, breadcrumbs and the
+    viewer. The user picker has no session, so it gets the banner and the content only. -#}
+<div class="shell"{% if not (me and shell) %} data-bare{% endif %}>
+  {% if me and shell %}
+  <nav class="strip" id="nav" aria-label="Main">
+    <a class="strip-close" href="#main">Close menu</a>
+    <a class="strip-brand" href="/dashboard" aria-label="Alimi, home"><span class="brand-mark" aria-hidden="true">A</span><span>Alimi</span><span class="brand-tag">Mock</span></a>
+    <ul>
+      {% for s in shell.sections %}
+      <li>
+        <a class="strip-item" href="{{ s.href }}"{% if s.current %} aria-current="page"{% endif %}>
+          <span class="strip-icon">{{ s.icon | safe }}</span>
+          {% if s.badge %}<span class="strip-badge" data-tone="{{ s.badge.tone }}" aria-label="{{ s.badge.n }} {{ s.badge.what }}">{{ s.badge.n }}</span>{% endif %}
+          <span class="strip-label">{{ s.label }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <nav class="bottombar" aria-label="Main, short">
+    {% for s in shell.bottom %}<a href="{{ s.href }}"{% if s.current %} aria-current="page"{% endif %}><span class="strip-icon">{{ s.icon | safe }}</span>{{ s.label }}</a>{% endfor %}
+    <a href="#nav"{% if not shell.in_bottom %} aria-current="page"{% endif %}><span class="strip-icon">{{ shell.menu_icon | safe }}</span>Menu</a>
+  </nav>
+  {% endif %}
+  <div class="content"{% if me and shell and shell.column %} data-column{% endif %}>
+    <div class="mockbar" role="note"><strong>Mock mode.</strong> <span>Sample companies and sample tenants only. No customer data.</span></div>
+    {% if me and shell %}
+    <div class="topbar">
+      <div class="company-switch" title="A reseller switches between clients here; a multi-entity customer between entities (next build step)">
+        <div><strong>{{ me.org_name }}</strong><span>Sample tenant · mock mode</span></div>
+        <span class="chev" aria-hidden="true">▾</span>
+      </div>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/dashboard">Home</a>
+        {% for c in crumbs or [] %}<span aria-hidden="true">/</span>{% if c.href %}<a href="{{ c.href }}">{{ c.label }}</a>{% else %}<span>{{ c.label }}</span>{% endif %}{% endfor %}
+      </nav>
+      <div class="who">
+        <span>Viewing as {{ me.display_name }}, {{ me.role }}</span>
+        <form method="post" action="/logout"><button class="link" type="submit">Switch user</button></form>
+      </div>
     </div>
+    {% if shell.column %}
+    <aside class="column" aria-label="{{ shell.column.title }} sections">
+      <div class="column-inner">
+        <h2 class="column-title">{{ shell.column.title }}</h2>
+        <ul>
+          {% for g in shell.column.groups %}
+          {% if g.label %}<li class="column-group">{{ g.label }}</li>{% endif %}
+          {% for it in g["items"] %}
+          <li>
+            <a href="{{ it.href }}"{% if it.key == shell.item %} aria-current="page"{% endif %}>
+              <span class="row"><span>{{ it.label }}</span>{% if it.percent is defined and it.percent is not none %}<small>{{ it.percent }}%</small>{% elif it.count is defined %}<small>{{ it.count }}</small>{% endif %}</span>
+              {% if it.percent is defined and it.percent is not none %}<span class="bar" data-tone="{{ it.tone }}" role="img" aria-label="{{ it.label }} readiness {{ it.percent }} percent"><span style="width:{{ it.percent }}%"></span></span>{% endif %}
+              {% if it.sub %}<span class="sub">{{ it.sub }}</span>{% endif %}
+            </a>
+          </li>
+          {% endfor %}
+          {% endfor %}
+          {% if shell.column.add %}<li><a class="add" href="{{ shell.column.add.href }}">{{ shell.column.add.label }} <small>{{ shell.column.add.sub }}</small></a></li>{% endif %}
+        </ul>
+      </div>
+    </aside>
     {% endif %}
-  </header>
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+    {% endif %}
+    <main id="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
 </body>
 </html>

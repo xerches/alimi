@@ -2,6 +2,7 @@
 {% from "_status.html" import result_badge %}
 {% block title %}Scan results{% endblock %}
 {% block content %}
+<p class="eyebrow">Monitoring</p>
 <h1>Scan of {{ run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</h1>
 <p class="muted">Source {{ run.source }} · scanner {{ run.scanner_version }}{% if run.score_percent is not none %} · checks passed, weighted by severity: {{ run.score_percent }}%{% endif %}</p>
 {% for r in results %}

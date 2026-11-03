@@ -10,7 +10,7 @@ from alimi_platform.db import org_scope
 
 
 def test_pages_need_a_session(client):
-    for path in ("/dashboard", "/controls", "/frameworks/insurer", "/audit"):
+    for path in ("/dashboard", "/controls", "/frameworks/insurer", "/monitoring", "/settings", "/audit"):
         r = client.get(path, follow_redirects=False)
         assert r.status_code == 303 and r.headers["location"] == "/login"
 

@@ -12,7 +12,7 @@ cd platform
 docker compose up
 ```
 
-Open http://localhost:8000, pick a sample user, and press **Run checks now**. Three organizations
+Open http://localhost:8000, pick a sample user, open **Monitoring** and press **Run checks now**. Three organizations
 are seeded: Saltmarsh Payroll (Microsoft 365, the scanner's failing sample tenant), Harbor Dental
 (Google Workspace, failing) and Alimi (our own organization for dogfooding, Microsoft 365,
 passing). `docker compose down -v` wipes the database and the generated keys.
@@ -29,7 +29,28 @@ passing). `docker compose down -v` wipes the database and the generated keys.
 | Status rules | `alimi_platform/status.py` | control and requirement status are computed, never typed in |
 | Token encryption | `alimi_platform/crypto.py` | Fernet with a key from the environment; a log filter redacts anything token-shaped |
 | Pages | `alimi_platform/main.py`, `templates/` | FastAPI, Jinja templates, HTMX (vendored, `static/htmx.min.js`, 2.0.4, BSD Zero Clause licence) |
+| App shell | `alimi_platform/nav.py`, `templates/base.html`, `static/app.css` | the layout chosen Nov 3, 2026, the same as the demo's: a captioned icon strip, a second column where a section has children, breadcrumbs, a phone bottom bar; `nav.py` mirrors `demo/src/lib/nav.js`; the brand colors are typed once in `:root` and `tests/test_brand_tokens.py` keeps them equal to `config/brand.yaml` |
 | Sample data | `alimi_platform/seed.py` | fixed IDs, so the mock picker can list users without the database |
+
+## Pages
+
+Every signed-in page sits in the same shell (`templates/base.html`): the strip on the left lists the
+sections the platform has built, in the demo's order (Home, Frameworks, Controls, Monitoring,
+Settings); Policies, Evidence, People, Risk, Assets, Trust and the Assistant join it with their
+prompts. A second column appears only where a section has children: Frameworks lists the Posture
+Score, the insurer questionnaire with its readiness and the mapped frameworks; Controls lists the
+areas and filters the table through `?domain=`; Settings holds Company and the Audit log. The top
+bar carries the company, breadcrumbs and the viewer; on a phone the strip hides behind the Menu slot
+of a bottom bar (opened with `:target`, no JavaScript) and the column becomes a row of chips. The
+badges on the strip and everything in the column are computed from the organization's own rows.
+
+| Path | What it shows |
+| --- | --- |
+| `/dashboard` | Home: controls by status, the last scan, what is connected |
+| `/frameworks`, `/frameworks/insurer` | the catalog; the insurer questionnaire with each question's status and the controls that answer it |
+| `/controls`, `/controls?domain=<area>`, `/controls/<id>` | every control with its computed status, filtered by area; a control's tests, evidence and requirements |
+| `/monitoring`, `/scans/<id>` | the connected systems with **Run checks now**, the latest result per test, every scan; a scan's results with the raw evidence each check read |
+| `/settings`, `/audit` | the company, who has access, what is connected; the append-only audit log |
 
 ## How the isolation works
 
