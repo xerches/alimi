@@ -1,26 +1,30 @@
 ---
-// The header: brand mark and the main menu. Dropdowns are <details> elements, so they work without
-// JavaScript; the small script below closes the others when one opens and closes them all on Escape
-// or a click outside. The menus come from src/lib/nav.js.
-import { brand } from "../lib/config.js";
-import { MENUS } from "../lib/nav.js";
-const { current } = Astro.props;
+// The header, in two rows, after the product's B+ shell (Nov 3, 2026): the ink menu strip with a
+// captioned icon per section, turned to run across the top instead of down the side, and under it
+// the light bar the app uses for its company switcher and breadcrumbs, here carrying the breadcrumb
+// trail and the two links a prospect wants on every page. Dropdowns are <details> elements, so they
+// work without JavaScript; the small script below closes the others when one opens and closes them
+// all on Escape or a click outside. The menus and the trail come from src/lib/nav.js.
+import { brand, decided } from "../lib/config.js";
+import { MENUS, breadcrumbs } from "../lib/nav.js";
+import { icon } from "../lib/icons.js";
+const { current, title } = Astro.props;
+const demo = decided(brand.demo_url);
 const path = (href) => href.split("#")[0];
 const isCurrent = (href) => current === path(href) || (path(href) !== "/" && current.startsWith(`${path(href)}/`));
 // One top-level entry is marked current: the one whose own page this is, else the first menu that lists the page.
 const currentMenu =
   MENUS.find((m) => isCurrent(m.href)) ?? MENUS.find((m) => (m.groups ?? []).some((g) => g.items.some((i) => !i.external && isCurrent(i.href))));
 const menuIsCurrent = (menu) => menu === currentMenu;
+const trail = breadcrumbs(current, title ?? brand.display_name);
+const linkClass = (menu, extra = "") => ["nav__link", menu.button && "nav__link--button", menuIsCurrent(menu) && "nav__link--current", extra].filter(Boolean).join(" ");
 ---
 
 <header class="site-header">
-  <div class="container">
+  <div class="container site-header__row">
     <a class="brand" href="/" aria-label={`${brand.display_name} home`}>
-      <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <rect class="brand__mark-back" x="7" y="2" width="15" height="15" rx="3" />
-        <rect class="brand__mark-front" x="2" y="7" width="15" height="15" rx="3" />
-      </svg>
-      <span>{brand.display_name}</span>
+      <span class="brand__mark" aria-hidden="true">{brand.display_name.slice(0, 1)}</span>
+      <span class="brand__name">{brand.display_name}</span>
     </a>
     <nav class="nav" aria-label="Main">
       <ul>
@@ -28,7 +32,10 @@ const menuIsCurrent = (menu) => menu === currentMenu;
           menu.groups ? (
             <li class="nav__item">
               <details class={menuIsCurrent(menu) ? "nav__menu nav__menu--current" : "nav__menu"}>
-                <summary>{menu.label}</summary>
+                <summary class={linkClass(menu, "nav__link--menu")}>
+                  <svg class="nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false" set:html={icon(menu.icon)} />
+                  <span class="nav__caption">{menu.label}</span>
+                </summary>
                 <div class={menu.wide ? "nav__panel nav__panel--wide" : "nav__panel"}>
                   {menu.groups.map((group) => (
                     <div class="nav__group">
@@ -51,12 +58,34 @@ const menuIsCurrent = (menu) => menu === currentMenu;
             </li>
           ) : (
             <li class="nav__item">
-              <a class={menu.button ? "nav__button" : undefined} href={menu.href} aria-current={menuIsCurrent(menu) ? "page" : undefined}>{menu.label}</a>
+              <a class={linkClass(menu)} href={menu.href} aria-current={menuIsCurrent(menu) ? "page" : undefined}>
+                <svg class="nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false" set:html={icon(menu.icon)} />
+                <span class="nav__caption">{menu.label}</span>
+              </a>
             </li>
           ),
         )}
       </ul>
     </nav>
+  </div>
+  <div class="topbar">
+    <div class="container topbar__row">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          {trail.map((crumb) =>
+            crumb.current ? (
+              <li><span aria-current="page">{crumb.label}</span></li>
+            ) : (
+              <li><a href={crumb.href}>{crumb.label}</a></li>
+            ),
+          )}
+        </ol>
+      </nav>
+      <div class="topbar__links">
+        {demo && <a class="topbar__link" href={demo} rel="noopener">See the product</a>}
+        <a class="topbar__button" href="/pricing#calculator">Work out your price</a>
+      </div>
+    </div>
   </div>
 </header>
 

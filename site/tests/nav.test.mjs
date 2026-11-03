@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MENUS, FOOTER, MAIN_PAGES, siteMapPaths } from "../src/lib/nav.js";
+import { MENUS, FOOTER, MAIN_PAGES, siteMapPaths, breadcrumbs } from "../src/lib/nav.js";
+import { ICONS } from "../src/lib/icons.js";
 
 const pagesDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../src/pages");
 
@@ -44,4 +45,18 @@ test("every menu item and footer link has a label and an href; external links ar
     else assert.ok(item.href.startsWith("/"), `${item.label} has a relative href`);
   }
   assert.deepEqual(FOOTER.map((c) => c.title), ["Platform", "Solutions", "Resources", "Partners", "Company"]);
+});
+
+test("every top-level menu has an icon drawing for the header strip", () => {
+  for (const menu of MENUS) assert.ok(menu.icon && ICONS[menu.icon], `${menu.label} has no icon`);
+});
+
+test("the breadcrumb trail is Home, the menu that lists the page, then the page", () => {
+  assert.deepEqual(breadcrumbs("/", "Alimi").map((c) => c.label), ["Home"]);
+  assert.deepEqual(breadcrumbs("/platform", "The platform").map((c) => c.label), ["Home", "The platform"]);
+  assert.deepEqual(breadcrumbs("/security", "Security").map((c) => c.href), ["/", "/platform", "/security"]);
+  assert.deepEqual(breadcrumbs("/frameworks/soc-2", "SOC 2").map((c) => c.label), ["Home", "Frameworks", "SOC 2"]);
+  assert.deepEqual(breadcrumbs("/status", "Status").map((c) => c.label), ["Home", "Status"]);
+  const last = breadcrumbs("/pricing", "Pricing").at(-1);
+  assert.ok(last.current && last.href === "/pricing");
 });
