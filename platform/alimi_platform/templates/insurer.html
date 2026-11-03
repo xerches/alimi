@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_status.html" import badge %}
+{% block title %}Insurer questionnaire{% endblock %}
+{% block content %}
+<h1>{{ fw.name }}</h1>
+<p class="lead">{{ fw.summary }} Each question takes the worst status of the controls that answer it. The wording is Alimi's summary of what carriers commonly ask, not any carrier's form.</p>
+{% for r in requirements %}
+<section class="card">
+  <h2>{{ r.summary or r.code }} {{ badge(r.status) }}</h2>
+  <p class="muted"><code>insurer:{{ r.code }}</code></p>
+  {% if r.controls %}
+  <ul class="plain">
+    {% for c in r.controls %}<li>{{ badge(c.status) }} <a href="/controls/{{ c.id }}">{{ c.id }}</a> {{ c.name }}</li>{% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No control answers this question yet.</p>
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}

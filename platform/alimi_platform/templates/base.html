@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>{% block title %}Alimi{% endblock %} · Alimi</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <div class="mockbar" role="note">Mock mode: sample companies and sample tenants only. No customer data.</div>
+  <header class="top">
+    <a class="brand" href="/dashboard">Alimi</a>
+    {% if me %}
+    <nav aria-label="Main">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/frameworks/insurer">Insurer questionnaire</a>
+      <a href="/controls">Controls</a>
+      <a href="/frameworks">Frameworks</a>
+      <a href="/audit">Audit log</a>
+    </nav>
+    <div class="who">
+      <span>{{ me.display_name }} · {{ me.org_name }}</span>
+      <form method="post" action="/logout"><button class="link" type="submit">Switch user</button></form>
+    </div>
+    {% endif %}
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

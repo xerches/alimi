@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_status.html" import badge, result_badge %}
+{% block title %}{{ ctl.id }}{% endblock %}
+{% block content %}
+<p><a href="/controls">All controls</a></p>
+<h1>{{ ctl.id }} {{ ctl.name }} {{ badge(status.status) }}</h1>
+<p>{{ ctl.description }}</p>
+{% if ctl.implementation %}<p class="muted">How it is usually run: {{ ctl.implementation }}</p>{% endif %}
+
+<h2>Tests</h2>
+{% for r in results %}
+<details class="card result">
+  <summary>{{ result_badge(r.status) }} <strong>{{ r.title }}</strong> <span class="muted">{{ r.collected_at.strftime("%b %d, %Y") }}</span></summary>
+  <p>{{ r.summary }}</p>
+  <dl>
+    <dt>Rule</dt><dd>{{ r.rule }}</dd>
+    <dt>Criterion IDs</dt><dd>{{ r.criterion_ids | join(", ") }}</dd>
+    <dt>Check version</dt><dd><code>{{ r.test_id }} {{ r.check_version }}</code></dd>
+  </dl>
+  <pre>{{ r.raw_evidence | tojson(indent=2) }}</pre>
+</details>
+{% else %}
+<p class="muted">No automated test has run for this control. It is proven by evidence.</p>
+{% endfor %}
+
+<h2>Evidence</h2>
+{% if status.evidence %}
+<table>
+  <thead><tr><th scope="col">Item</th><th scope="col">Type</th><th scope="col">Collected</th><th scope="col">Renews</th></tr></thead>
+  <tbody>
+  {% for e in status.evidence %}
+    <tr><td>{{ e.title }} <span class="muted">({{ e.kind }})</span></td><td>{{ e.evidence_type }}</td><td>{{ e.collected_on }}</td>
+      <td>{{ e.renews_on or "no renewal" }}{% if not e.current %} <span class="badge s-evidence_expired">Past renewal</span>{% endif %}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing on file yet. Expected: {{ ctl.evidence_types | join(", ") }}. Uploads arrive in the next build step.</p>
+{% endif %}
+
+<h2>Requirements it covers</h2>
+<ul>
+{% for r in requirements %}
+  <li><code>{{ r.framework_id }} {{ r.code }}</code>{% if r.summary %}: {{ r.summary }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endblock %}

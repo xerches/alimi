@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_status.html" import badge %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>{{ me.org_name }}</h1>
+<p class="lead">Where the company stands on its {{ total }} controls, from the latest scan and the evidence on file. The readiness scores arrive in a later build step.</p>
+
+<section class="tiles" aria-label="Controls by status">
+  {% for key, label in STATUSES.items() %}
+  <a class="tile s-{{ key }}" href="/controls"><strong>{{ counts.get(key, 0) }}</strong><span>{{ label }}</span></a>
+  {% endfor %}
+</section>
+
+<h2>Connected systems</h2>
+{% for i in integrations %}
+<section class="card">
+  <h3>{{ i.display_name }}</h3>
+  <p class="muted">
+    {{ "Mock connection" if i.mode == "mock" else "Live connection" }}{% if i.fixture %} using the scanner's "{{ i.fixture }}" sample tenant{% endif %}.
+    Read-only scopes: {{ i.scopes | join(", ") }}.
+    Token {{ "stored encrypted" if i.has_token else "not stored" }}.
+  </p>
+  <p>Last scan: {{ i.last_sync_at.strftime("%b %d, %Y %H:%M UTC") if i.last_sync_at else "never" }}</p>
+  <button hx-post="/integrations/{{ i.id }}/scan" hx-target="#scan-{{ i.id }}" hx-swap="innerHTML" hx-disabled-elt="this">Run checks now</button>
+  <div id="scan-{{ i.id }}" class="scan-out" aria-live="polite">
+    {% if last_run %}<p class="muted">Latest scan: <a href="/scans/{{ last_run.id }}">{{ last_run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</a>.</p>{% endif %}
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

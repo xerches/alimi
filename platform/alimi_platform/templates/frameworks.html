@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Frameworks{% endblock %}
+{% block content %}
+<h1>Frameworks</h1>
+<p class="lead">The catalog from config/frameworks.yaml. The insurer questionnaire is built end to end first; the others are mapped in later build steps.</p>
+<table>
+  <thead><tr><th scope="col">Framework</th><th scope="col">What it is</th><th scope="col">In the platform</th></tr></thead>
+  <tbody>
+  {% for f in frameworks %}
+  <tr>
+    <td>{% if f.id == "insurer" %}<a href="/frameworks/insurer">{{ f.name }}</a>{% else %}{{ f.name }}{% endif %}</td>
+    <td>{{ f.summary }}{% if f.always_included %} <span class="muted">Alimi's own recommendations, not an accredited framework or a certification.</span>{% endif %}</td>
+    <td>{% if f.id == "insurer" %}Built{% elif f.always_included %}Scored in a later step{% elif f.mapped %}Requirement IDs loaded{% else %}Before launch{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

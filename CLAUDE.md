@@ -36,7 +36,7 @@ Prices live in `config/pricing.yaml` and the framework catalog in `config/framew
 /tools/scanner        Python package alimi_scanner + thin typer CLI: findings schema, checks engine, m365 and gws connectors, mock connector. The platform imports it.
 /tools/report         findings JSON -> insurer-ready HTML/PDF report, also importable by the platform
 /demo                 platform demo: Astro, sample company "Saltmarsh Payroll", every module, built from the real scanner run and policy library; noindex, linked from the site as "See the product" since Nov 2, 2026
-/platform             hosted web app (phase 3+): FastAPI, HTMX pages, Postgres; orgs, login, scheduled runs, controls, evidence, policies, people, dashboard
+/platform             hosted web app: FastAPI, HTMX pages, Postgres with row-level security; 12a foundation built (mock mode, `docker compose up`); login, worker, policies, people and dashboards follow in 12b-14
 /tools/ai-policy      AI governance module (prompts 15-16, not started): policy generator + AI app inventory, inside the platform behind sign-in; nothing ships free
 /policies             policy library (the platform's policy module): Markdown + YAML front matter mapped to SOC 2, ISO 27001, ISO 42001, HIPAA and insurer IDs; coverage matrix; build to DOCX/PDF
 /kits/payment-fraud   payment fraud procedure, scripts, poster, training script; a policy-module document and the finance lesson of the training module, not public; build script to PDF
@@ -79,8 +79,8 @@ Order changed Nov 1, 2026: scanner first, then the documents and kits, and from 
 | 7a | Platform demo for prospects (`/demo`): sample company, every module, from the real scanner and policy data | | done Nov 1, 2026, PR #10, merged Nov 2 |
 | 7b | Review round: per-user tiers, framework catalog and Posture Score, indigo palette, Compare and For resellers pages, no free resources or policy text, reseller incentives, training lesson plan | | done Nov 2, 2026, PR #14 |
 | 7c | Site-scan actions: score renamed to the Alimi Recommended Security Posture Score, trust page to Gold, questionnaire allowances, included frameworks named, demo linked, Compare widened to 11 complaints, Who it is for, agenda file, dogfooding plan | | done Nov 2, 2026, PR #15 |
-| 8 | Platform foundation (prompt 12a): models, row-level security, mock scans with evidence on every test; the demo is the spec | Mar 2027 | next |
-| 8a | Platform: login, nightly worker, reseller view, evidence with renewal dates, recurring tasks, false-positive notes (prompt 12b) | Mar 2027 | not started |
+| 8 | Platform foundation (prompt 12a): models, row-level security, mock scans with evidence on every test; the demo is the spec | Mar 2027 | done Nov 2, 2026 in mock mode (`docker compose up` in `/platform`), PR #16 |
+| 8a | Platform: login, nightly worker, reseller view, evidence with renewal dates, recurring tasks, false-positive notes (prompt 12b) | Mar 2027 | next |
 | 8b | Platform: insurer readiness dashboard with two scores (audit readiness and the Alimi Recommended Security Posture Score), in-app report, export pack, data-quality page (prompt 12c, pulled forward from prompt 14) | Apr 2027 | not started |
 | 9 | Platform: policies and people (prompt 13), then the framework catalog: SOC 2 and ISO 27001 first, the rest of `config/frameworks.yaml` as customers ask (prompt 14) | Apr 2027 | not started |
 | 9a | Security awareness training module: eight lessons with quizzes and completion tracking (prompt 18; plan in `docs/training-modules.md`) | May 2027 | not started |

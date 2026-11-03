@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_status.html" import badge %}
+{% block title %}Controls{% endblock %}
+{% block content %}
+<h1>Controls</h1>
+<p class="lead">Each control's status is computed: tested controls from the latest scan, the rest from evidence that has not passed its renewal date.</p>
+<table>
+  <thead><tr><th scope="col">Control</th><th scope="col">Area</th><th scope="col">How often</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  {% for c in controls %}
+    <tr id="{{ c.id }}">
+      <td><a href="/controls/{{ c.id }}">{{ c.id }}</a> {{ c.name }}</td>
+      <td>{{ domains.get(c.domain, c.domain) }}</td>
+      <td>{{ c.frequency }}</td>
+      <td>{{ badge(c.status) }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
