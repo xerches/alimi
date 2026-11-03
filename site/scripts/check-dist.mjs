@@ -1,6 +1,6 @@
 // Post-build checks on every page in dist/ (subfolders included): lang, one h1, a title and a description; Netlify form
-// names are unique across the site; and no color is hardcoded anywhere outside the :root token block
-// that the layout inlines from brand.yaml. Prints the TODO count for prompt 11. Exits 1 on a failure.
+// names are unique across the site; and no color is hardcoded anywhere outside the token block (light
+// and dark themes) that the layout inlines from brand.yaml. Prints the TODO count for prompt 11. Exits 1 on a failure.
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,7 +19,7 @@ if (pages.length === 0) {
 const failures = [];
 const forms = new Map();
 let todos = 0;
-const TOKEN_BLOCK = /<style>:root\{[^}]*\}<\/style>/;
+const TOKEN_BLOCK = /<style data-tokens>:root\{[\s\S]*?<\/style>/;
 // Hex colors, rgb()/hsl() functions and CSS named colors in style contexts.
 const HARDCODED = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\(|\b(?:color|background(?:-color)?|border(?:-color)?|fill|stroke|outline(?:-color)?)\s*:\s*(?!var\(|inherit|transparent|currentColor|currentcolor|none|initial|unset|\d|[a-z-]*\s*var\()/g;
 
@@ -32,6 +32,8 @@ for (const page of pages) {
   if (!/<title>[^<]+<\/title>/.test(html)) failures.push(`${where}: missing <title>`);
   if (!/<meta name="description" content="[^"]{20,}"/.test(html)) failures.push(`${where}: missing or short meta description`);
   if (!TOKEN_BLOCK.test(html)) failures.push(`${where}: brand token block not inlined`);
+  if (!/\[data-theme="dark"\]/.test(html)) failures.push(`${where}: dark theme tokens not inlined`);
+  if (!/<script src="\/theme\.js"><\/script>/.test(html)) failures.push(`${where}: theme script not loaded`);
   todos += (html.match(/data-todo/g) ?? []).length;
 
   for (const match of html.matchAll(/<form\b[^>]*>/g)) {

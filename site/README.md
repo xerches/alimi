@@ -1,6 +1,6 @@
 # Alimi marketing site
 
-Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No webfonts, no server, and no client JavaScript except the pricing calculator, which is a progressive enhancement (the page shows worked examples without it). One offer, the Alimi platform. Prices, the framework catalog, partner terms, the insurer questions and the policy titles are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/frameworks.yaml`, `config/checks.yaml`, `config/controls.yaml` or `/policies`. No policy text is rendered anywhere (Nov 2, 2026).
+Static [Astro](https://astro.build) site for https://alimibeta.netlify.app (the beta host until the domain exists). No webfonts, no server, and no client JavaScript except the pricing calculator and the theme toggle, both progressive enhancements (the page shows worked examples without the one, and follows the device's light or dark setting without the other). One offer, the Alimi platform. Prices, the framework catalog, partner terms, the insurer questions and the policy titles are read from the repo at build time, so the site cannot drift from `config/pricing.yaml`, `config/frameworks.yaml`, `config/checks.yaml`, `config/controls.yaml` or `/policies`. No policy text is rendered anywhere (Nov 2, 2026).
 
 ## Run it
 
@@ -19,7 +19,7 @@ Node 22 or newer. Lighthouse needs a Chrome; set `CHROME_PATH` if it is not on t
 
 | What | Source | Read by |
 | --- | --- | --- |
-| Colors and fonts | `config/brand.yaml` `colors`, `typography` | `src/lib/tokens.js` turns them into `--color-*` and `--font-*` custom properties, inlined in `<head>` by `src/layouts/Base.astro` |
+| Colors and fonts, in two themes | `config/brand.yaml` `colors` (light, the default), `colors_dark`, `typography` | `src/lib/tokens.js` turns a map into `--color-*` and `--font-*` custom properties; `src/lib/theme.js` inlines the light set as the default and the dark set under `prefers-color-scheme: dark` and under `[data-theme="dark"]`, in `<head>` by `src/layouts/Base.astro` |
 | Per-user tiers, framework add-on pricing, billing terms, services, partner and reseller terms and incentives | `config/pricing.yaml` | `src/lib/config.js` (`platform()`, `quote()`, `frameworkPricing()`, `services()`, `partners()`, `resellerTiers()`, `retainer()`) |
 | Framework catalog (49 entries in six categories, the Alimi Recommended Security Posture Score first) | `config/frameworks.yaml` | `src/lib/config.js` (`frameworkCatalog()`, `choosableFrameworks()`, `frameworksByCategory()`, `frameworkBySlug()`, `alwaysIncludedFrameworks()`) |
 | Header menus, footer columns, the 404 and thank-you link lists | `src/lib/nav.js` | `Header.astro`, `Footer.astro`; `tests/nav.test.mjs` checks every path has a page |
@@ -36,17 +36,22 @@ Since Nov 3, 2026 the site wears the product's shell (the "B+" layout chosen for
 
 - **Header, row one:** the app's ink strip of captioned icons, one per top-level menu (`icon` in `src/lib/nav.js`, drawn in `src/lib/icons.js`). The current section carries the app's highlight bar. Dropdowns are `<details>` elements, so they work without JavaScript; one bundled script closes the others when one opens.
 - **Header, row two:** the app's light bar, here with a breadcrumb trail (`breadcrumbs()` in `nav.js`: Home, the menu that lists the page, the page) and the two links every page wants: "See the product" and "Work out your price".
-- **Page:** the app's canvas (`background_alt`), white cards with a 10px radius, number tiles with a colored top edge (`.tile`), status pills with a dot (`.pill`), the app's buttons, tables and callouts. The home page opens like the app's Home: the demo company's renewal countdown, readiness and "this week" list, labelled as a sample.
+- **Page:** the app's canvas (`background_alt`), white cards with a 10px radius, number tiles with a colored top edge (`.tile`), status pills with a dot (`.pill`), the app's buttons, tables and callouts.
+- **Home hero (Nov 3, evening):** the product itself, beside the copy: the app's Home for the demo's sample company in a frame (`.frame`), with the renewal countdown, readiness with a bar (`.meter`), the Posture Score tile and the month's three items, labelled as a sample. On a wide screen the strip stays stuck to the top and the light bar scrolls away.
+- **Motion:** CSS only, in the "Motion" block at the end of `global.css`, and none of it under `prefers-reduced-motion: reduce`: the hero settles on load, the bar fills, a linked card lifts under the pointer, and browsers that support scroll-driven animations reveal cards as they scroll in. Everything ends in its resting state.
 - No webfonts, as before: `typography` in brand.yaml names Inter with system fallbacks, and the demo renders the same way.
 
-## Color system
+## Color system and themes
 
 One source of truth: the `colors` map in `config/brand.yaml`, grouped by purpose (brand, backgrounds and surfaces, text, borders, semantic, interactive states). Components use `var(--color-…)` only. Dark bands (header, footer, the `.dark` sections) switch to the `*_on_dark`, `*_inverse` and `*_dark` tokens through CSS, not through a second palette.
 
-Two checks keep it honest:
+Two themes since Nov 3, 2026. `colors` is the light theme and the default. `colors_dark` lists the same keys for the dark theme; `src/lib/theme.js` inlines it under `@media (prefers-color-scheme: dark)` (for `:root:not([data-theme="light"])`) and under `:root[data-theme="dark"]`, so the site follows the device setting unless the visitor picks the other theme with the toggle in the top bar. `public/theme.js` (loaded synchronously in `<head>` from the site's own origin, as the Content Security Policy allows no inline script) sets `data-theme` on `<html>` before first paint, keeps the choice in `localStorage` under `alimi-theme` only when it differs from the device setting, and marks the toggle pressed when the dark theme is on. Without JavaScript the toggle is hidden and the device setting applies. The stylesheet never branches on the theme: only the tokens change. Two tokens exist for the labels whose background changes hue between themes: `primary_contrast` (white on indigo, ink on periwinkle) and `primary_on_dark_contrast` (ink on periwinkle in both).
 
-- `tests/contrast.test.mjs` computes the WCAG ratio of every pairing the stylesheet relies on and fails under 4.5:1 for text and 3:1 for controls and focus rings.
-- `scripts/check-dist.mjs` fails the build if any hex, `rgb()`, `hsl()` or named color appears in a style context of the built HTML (every page, document pages included) outside the inlined token block. The favicon is generated from the same tokens by `src/pages/favicon.svg.js`.
+Three checks keep it honest:
+
+- `tests/contrast.test.mjs` computes the WCAG ratio of every pairing the stylesheet relies on, in both themes, and fails under 4.5:1 for text and 3:1 for controls and focus rings.
+- `tests/theme.test.mjs` checks the inlined block carries both themes, the two maps share their keys, and the theme script stays small and plain.
+- `scripts/check-dist.mjs` fails the build if any hex, `rgb()`, `hsl()` or named color appears in a style context of the built HTML (every page, document pages included) outside the inlined token block, and if a page lacks the dark tokens or the theme script. The favicon is generated from the same tokens by `src/pages/favicon.svg.js`.
 
 ## Pages and forms
 

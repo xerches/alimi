@@ -1,5 +1,7 @@
 /* Alimi site. Every color comes from config/brand.yaml, inlined as --color-* custom properties in
-   <head> by the layout. No hex, rgb or named colors live in this file or in any component.
+   <head> by the layout. No hex, rgb or named colors live in this file or in any component. Two
+   themes since Nov 3, 2026: the tokens change under the dark theme (brand.yaml colors_dark), this
+   file does not; the ".dark" class below means a dark band on the page, not the dark theme.
 
    Look (Nov 3, 2026): the site follows the product's B+ shell so a prospect sees one product from the
    first page to the app. The page sits on the app's canvas (background_alt); content lives on white
@@ -303,19 +305,19 @@ a:active {
 .button--primary {
   background: var(--color-primary);
   border-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--primary:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--primary:active {
   background: var(--color-primary-active);
   border-color: var(--color-primary-active);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--secondary {
@@ -336,14 +338,14 @@ a:active {
 .dark .button--primary {
   background: var(--color-primary-on-dark);
   border-color: var(--color-primary-on-dark);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
 }
 
 .dark .button--primary:hover,
 .dark .button--primary:active {
   background: var(--color-primary-on-dark-hover);
   border-color: var(--color-primary-on-dark-hover);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
 }
 
 .dark .button--secondary {
@@ -506,7 +508,7 @@ a:active {
 /* Contact is the one filled item, the strip's periwinkle on ink. */
 .nav__link--button {
   background: var(--color-primary-on-dark);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
   font-weight: 600;
   margin-left: 0.25rem;
 }
@@ -514,7 +516,7 @@ a:active {
 .nav__link--button:hover,
 .nav__link--button.nav__link--current {
   background: var(--color-primary-on-dark-hover);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
   box-shadow: none;
 }
 
@@ -716,7 +718,7 @@ a:active {
   padding: 0.3rem 0.75rem;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
@@ -724,12 +726,79 @@ a:active {
 
 .topbar__button:hover {
   background: var(--color-primary-hover);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
+}
+
+/* The theme toggle: a small pressed-or-not button, "Dark theme" on, hidden until public/theme.js has
+   run because it does nothing without it. On a phone only the icon shows. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: var(--color-background-alt);
+  color: var(--color-text);
+}
+
+.theme-toggle[aria-pressed="true"] {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.theme-toggle__icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+html:not([data-theme-active]) .theme-toggle {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 40rem) {
   .topbar__link {
     display: none;
+  }
+  .theme-toggle__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
@@ -934,7 +1003,7 @@ a:active {
   height: 1.75rem;
   border-radius: 50%;
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-size: 0.875rem;
   font-weight: 600;
   grid-row: 1 / span 2;
@@ -1117,12 +1186,12 @@ a:active {
 
 .pill--ink {
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 .tag {
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 /* The count block (the app's renewal countdown), on ink. */
@@ -1209,7 +1278,7 @@ a:active {
   height: 1.5rem;
   border-radius: 50%;
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-size: 0.75rem;
   font-weight: 600;
   grid-row: 1 / span 2;
@@ -1325,7 +1394,7 @@ a:active {
   padding: 0.1rem 0.55rem;
   border-radius: 999px;
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 .badge--service {
