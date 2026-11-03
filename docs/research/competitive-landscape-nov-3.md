@@ -50,7 +50,7 @@ Also seen: Cyber Verify (MSPAlliance), Enactia (flat fee per client, EU framewor
 | Named expert or vCISO | Oneleet, Scytale, Cynomi, Alimi | Alimi's strongest point; say "a person, not an agent" louder |
 | AI agents doing the work | Vanta, Drata, Sprinto, Scrut, Hyperproof, Delve | Partly; users rate them flaky. Scope the assistant to three jobs: explain a failed test, draft a questionnaire answer, draft a policy |
 | MCP server for Claude, ChatGPT, Cursor | Vanta (May 2026), Drata (Sep 2026) | Year two; cheap on FastAPI |
-| AI agent governance | Drata (Aug 2026), Vanta | Yes; the Platinum AI governance module. Add AIUC-1 to the catalog when it ships |
+| AI agent governance | Drata (Aug 2026), Vanta | Yes; the Platinum AI governance module. AIUC-1 is already in the catalog, unmapped; map it when the module ships |
 | Privacy operations (ROPA, DPIA) | Vanta Privacy, OneTrust, Drata | Only once GDPR is mapped |
 | Device agent | Vanta, Drata, Secureframe, Comp AI | Most-complained-about feature; Alimi reads Intune and Google endpoint management instead. Say so on Integrations |
 | Customer trust management | Vanta, Drata SafeBase, Scrut, Sprinto | Gold has the trust page; per-customer commitments is enterprise |
@@ -93,10 +93,10 @@ For the B+ shell: keep the rail and the monthly Home with two scores; make the f
 ## Where the field is going, 2026 to 2027
 
 - Agents in every product (Vanta Agent 2.0, Agent for Risk Jun 2026, personnel agent tools Aug 2026; Drata agentic TPRM and AI questionnaire assistance Sep 2026; Sprinto, Scrut, Hyperproof, Secureframe). episki's State of GRC 2026: agents "in marketing decks more than production".
-- AI governance as a framework family: Drata AI agent governance (Aug 2026) and AIUC-1 (Oct 2026); ISO 42001, EU AI Act, NIST AI RMF already in Alimi's catalog; add AIUC-1 when the module ships.
+- AI governance as a framework family: Drata AI agent governance (Aug 2026) and AIUC-1 (Oct 2026). ISO 42001, the EU AI Act, the NIST AI RMF and AIUC-1 are all in Alimi's catalog; only ISO 42001 is mapped, so the mapping order is the decision.
 - Compliance data in the customer's own AI assistant via MCP (Vanta May 2026, Drata Sep 2026): year two for Alimi.
 - Privacy operations folded in (Vanta Privacy, May 2026): relevant once GDPR is mapped.
-- Regulation keeps adding frameworks: Drata EU CRA support (Sep 2026); NIS2 and DORA in every European list; CMMC Phase 2 suspended July 2026 (playbook research), defense demand uncertain.
+- Regulation keeps adding frameworks: Drata EU CRA support (Sep 2026); NIS2 and DORA in every European list; all three are in Alimi's catalog, unmapped. CMMC Phase 2 suspended July 2026 (playbook research), defense demand uncertain.
 - Incumbents move up: Vanta Organizations Center, Customer Commitments, Forrester Leader; Drata enterprise TPRM. The under-50 segment is left to challengers and MSP tools.
 - Insurers run their own monitoring: Coalition Control free with the policy; At-Bay, Cowbell, Resilience bundle services. Expect evidence by feed within two years; the insurer report should be forwardable today and API-readable later.
 - MSP platforms get AI: Cynomi AI coworkers (Jun 2026); ControlMap per-client pricing; Kaseya bundles. Resellers compare Alimi's wholesale price to these.
