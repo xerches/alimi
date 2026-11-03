@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_trust.html" import readonly_note %}
+{% block title %}Questions · Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Questions and answers</h1>
+{% if saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+<p class="lead">The questions you are asked most, answered once in plain English. A published answer shows on the page; an unpublished one waits here. Markdown works in the answer.</p>
+{{ readonly_note(can_manage) }}
+{% for q in questions %}
+<section class="card">
+  <p class="eyebrow">{{ q.category or "General" }}{% if not q.published %} · <span class="badge v-private">Not published</span>{% endif %}</p>
+  <h2>{{ q.question }}</h2>
+  {{ q.answer_html | safe }}
+  {% if can_manage %}
+  <details>
+    <summary class="muted">Edit</summary>
+    <form class="form" method="post" action="/trust/questions/{{ q.id }}">
+      <div class="row2">
+        <div class="field"><label for="c-{{ q.id }}">Category</label><input id="c-{{ q.id }}" name="category" type="text" maxlength="60" value="{{ q.category or '' }}"></div>
+        <div class="field"><label for="q-{{ q.id }}">Question</label><input id="q-{{ q.id }}" name="question" type="text" required maxlength="300" value="{{ q.question }}"></div>
+      </div>
+      <div class="field wide"><label for="a-{{ q.id }}">Answer</label><textarea id="a-{{ q.id }}" name="answer" rows="4" required maxlength="4000">{{ q.answer }}</textarea></div>
+      <div class="checks"><label><input type="checkbox" name="published"{% if q.published %} checked{% endif %}> Published</label></div>
+      <button type="submit">Save</button>
+    </form>
+  </details>
+  {% endif %}
+</section>
+{% else %}
+<p class="muted">No questions yet.</p>
+{% endfor %}
+{% if can_manage %}
+<details class="card" id="new">
+  <summary><h2 class="inline">Add a question</h2></summary>
+  <form class="form" method="post" action="/trust/questions">
+    <div class="row2">
+      <div class="field"><label for="category">Category</label><input id="category" name="category" type="text" maxlength="60" placeholder="Access, Data, Incidents"></div>
+      <div class="field"><label for="question">Question</label><input id="question" name="question" type="text" required maxlength="300"></div>
+    </div>
+    <div class="field wide"><label for="answer">Answer</label><textarea id="answer" name="answer" rows="4" required maxlength="4000"></textarea></div>
+    <div class="checks"><label><input type="checkbox" name="published" checked> Published</label></div>
+    <button type="submit">Add</button>
+  </form>
+</details>
+{% endif %}
+{% endblock %}

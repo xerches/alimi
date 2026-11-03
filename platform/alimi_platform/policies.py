@@ -13,8 +13,9 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Any
 from uuid import UUID
 
-from markdown_it import MarkdownIt
 from sqlalchemy import Connection, text
+
+from .markdown import MD
 
 STATUSES: dict[str, str] = {"draft": "Draft", "in_review": "Awaiting approval", "approved": "Approved", "retired": "Retired"}
 VIEWS: dict[str, str] = {"all": "All policies", "approved": "Approved", "in_review": "Awaiting approval", "draft": "Drafts", "mine": "Needs my acknowledgement"}
@@ -31,8 +32,6 @@ BODY_LIMIT = 200_000
 # company's owner or admin edit and submit; only the company's owner or admin approves.
 CAN_ACKNOWLEDGE = ("owner", "admin", "member")
 CAN_APPROVE = ("owner", "admin")
-
-_md = MarkdownIt("js-default", {"html": False, "linkify": False})
 
 
 def fill(text_: str, values: dict[str, str]) -> str:
@@ -63,7 +62,7 @@ def render(body: str) -> tuple[str, list[dict[str, str]]]:
     Headings move down one level because the page already has an h1 (the policy's title), so the
     document's own title becomes an h2 and its sections h3.
     """
-    tokens = _md.parse(body)
+    tokens = MD.parse(body)
     outline: list[dict[str, str]] = []
     used: set[str] = set()
     for i, tok in enumerate(tokens):
@@ -76,7 +75,7 @@ def render(body: str) -> tuple[str, list[dict[str, str]]]:
         tok.tag = tokens[i + 2].tag = f"h{min(level + 1, 6)}"
         if level == 2:
             outline.append({"id": anchor, "text": title})
-    return _md.renderer.render(tokens, _md.options, {}), outline
+    return MD.renderer.render(tokens, MD.options, {}), outline
 
 
 # ------------------------------------------------------------------ queries

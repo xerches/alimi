@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Access request · {{ company }}{% endblock %}
+{% block content %}
+<div class="public">
+  <p class="eyebrow">Security at {{ company }}</p>
+  {% if errors %}
+  <h1>{% if outcome == "blocked" %}Request not accepted{% else %}Something is missing{% endif %}</h1>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  <p><a href="/trust/{{ slug }}#request">Back to the page</a></p>
+  {% elif outcome == "approved" %}
+  <h1>Access granted</h1>
+  <p>Your email domain is on {{ company }}'s approved list, so the documents are open to you now. Keep this link; it works until {{ expires_on.strftime("%b %d, %Y") }} and is shown only here.</p>
+  <div class="keybox"><p><a href="{{ link }}">Open the documents</a></p><p><code>{{ link }}</code></p></div>
+  {% else %}
+  <h1>Request sent</h1>
+  <p>Thank you. {{ company }} will review it, usually within one business day, and send the link to the address you gave{% if contact %}; questions go to <a href="mailto:{{ contact }}">{{ contact }}</a>{% endif %}.</p>
+  <p><a href="/trust/{{ slug }}">Back to the page</a></p>
+  {% endif %}
+</div>
+{% endblock %}

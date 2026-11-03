@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ doc.title }} · {{ company }}{% endblock %}
+{% block content %}
+<div class="public">
+  <p class="eyebrow"><a href="/trust/{{ slug }}{% if key %}?key={{ key }}{% endif %}">Security at {{ company }}</a> · {{ doc.folder_name or "Documents" }}</p>
+  <h1>{{ doc.title }}</h1>
+  <p class="muted">Version {{ doc.policy_version }}{% if doc.policy_approved_at %}, approved {{ doc.policy_approved_at.strftime("%b %d, %Y") }}{% endif %}. Shared with {{ access.name }}{% if access.company %}, {{ access.company }}{% endif %} under the agreement, until {{ access.expires_on.strftime("%b %d, %Y") }}. Not for further distribution.</p>
+  <div class="doc-wrap">
+    <nav class="toc" aria-label="In this document">
+      <p class="column-title">In this document</p>
+      <ol>{% for h in outline %}<li><a href="#{{ h.id }}">{{ h.text }}</a></li>{% endfor %}</ol>
+    </nav>
+    <article class="doc card">{{ document | safe }}</article>
+  </div>
+</div>
+{% endblock %}

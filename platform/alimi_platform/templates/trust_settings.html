@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% from "_trust.html" import readonly_note %}
+{% block title %}Settings · Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Settings</h1>
+{% if saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+<p class="lead">The address, the words at the top of the page, who to contact, and the rules for access requests. Nothing is public until the page is switched on.</p>
+{{ readonly_note(can_manage) }}
+<form class="form" method="post" action="/trust/settings">
+  <div class="field">
+    <label for="slug">Public address</label>
+    <input id="slug" name="slug" type="text" required pattern="[a-z0-9][a-z0-9-]{1,60}[a-z0-9]" value="{{ entry.slug if entry else default_slug }}">
+    <p class="muted">The page lives at <code>/trust/<em>address</em></code>. Lowercase letters, digits and hyphens.</p>
+  </div>
+  <div class="checks">
+    <label><input type="checkbox" name="enabled"{% if entry and entry.enabled %} checked{% endif %}> <span>Public page is on <small>Off, and the address answers with nothing. Your documents and answers stay as they are.</small></span></label>
+    <label><input type="checkbox" name="show_controls"{% if tp.show_controls %} checked{% endif %}> <span>Show that Alimi monitors the company <small>"N controls monitored across M areas, last check on <em>date</em>": the count and the date, never which controls fail.</small></span></label>
+  </div>
+  <div class="field">
+    <label for="headline">Headline</label>
+    <input id="headline" name="headline" type="text" maxlength="160" value="{{ tp.headline or '' }}" placeholder="How we protect the data you trust us with">
+  </div>
+  <div class="field wide">
+    <label for="statement">Statement</label>
+    <textarea id="statement" name="statement" rows="8" maxlength="8000" placeholder="Two or three short paragraphs in plain English: what you protect, how, and who answers questions. Markdown works.">{{ tp.statement or '' }}</textarea>
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="contact_name">Security contact</label>
+      <input id="contact_name" name="contact_name" type="text" maxlength="80" value="{{ tp.contact_name or '' }}">
+    </div>
+    <div class="field">
+      <label for="contact_email">Contact email</label>
+      <input id="contact_email" name="contact_email" type="email" maxlength="120" value="{{ tp.contact_email or '' }}">
+    </div>
+  </div>
+  <fieldset class="field">
+    <legend>Access requests</legend>
+    <p>A visitor who asks for the on-request documents reads the agreement below, ticks the box and sends the request. You approve or deny it under Access requests; an approved visitor gets a link that works for the number of days below.</p>
+    <div class="field wide">
+      <label for="nda_text">Agreement text <span class="muted">(blank means no click-through)</span></label>
+      <textarea id="nda_text" name="nda_text" rows="4" maxlength="4000">{{ tp.nda_text or '' }}</textarea>
+    </div>
+    <div class="row3">
+      <div class="field">
+        <label for="access_days">Access lasts, in days</label>
+        <input id="access_days" name="access_days" type="number" min="1" max="730" value="{{ tp.access_days }}">
+      </div>
+      <div class="field">
+        <label for="auto_approve_domains">Approve at once from these email domains</label>
+        <textarea id="auto_approve_domains" name="auto_approve_domains" rows="3" placeholder="one per line, e.g. yourbank.com">{{ tp.auto_approve_domains | join("\n") }}</textarea>
+      </div>
+      <div class="field">
+        <label for="blocked_domains">Refuse these domains</label>
+        <textarea id="blocked_domains" name="blocked_domains" rows="3" placeholder="one per line">{{ tp.blocked_domains | join("\n") }}</textarea>
+      </div>
+    </div>
+  </fieldset>
+  {% if can_manage %}<button type="submit">Save</button>{% endif %}
+</form>
+{% endblock %}

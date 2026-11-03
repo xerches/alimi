@@ -1,0 +1,9 @@
+{% macro visibility(v) -%}
+<span class="badge v-{{ v }}">{{ VISIBILITIES.get(v, v) }}</span>
+{%- endmacro %}
+{% macro request_status(s) -%}
+<span class="badge x-{{ s }}">{{ REQUEST_STATUSES.get(s, s) }}</span>
+{%- endmacro %}
+{% macro readonly_note(can_manage) -%}
+{% if not can_manage %}<p class="muted">You can read the trust center; a company owner or admin changes it.</p>{% endif %}
+{%- endmacro %}
