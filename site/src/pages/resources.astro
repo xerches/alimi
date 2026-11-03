@@ -1,0 +1,85 @@
+---
+// The resource library: framework guides, the glossary, help, the academy, the community, customer
+// stories, webinars and the blog. Added Nov 2, 2026. Nothing here is a free download (founder's
+// rule): templates and policies live inside the platform and the services.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { brand, choosableFrameworks, framework, frameworkHref } from "../lib/config.js";
+
+const catalogCount = choosableFrameworks().length;
+const featured = ["soc2", "iso27001", "hipaa", "iso42001", "gdpr", "pci_dss", "cyber_essentials", "hitrust", "cmmc", "fedramp", "insurer", "nist_csf"].map((id) => ({ ...framework(id), href: frameworkHref(id) }));
+
+const library = [
+  { href: "/frameworks", title: "Framework guides", text: `One page per framework, ${catalogCount} in all: what it is, who needs it, how the platform handles it and what it costs.` },
+  { href: "/glossary", title: "Glossary", text: "Every term that appears on this site, explained in plain English for the owner who signs the renewal." },
+  { href: "/customers", title: "Customer stories", text: "None yet, by rule; a sample company you can click through, and the pilots that come first." },
+  { href: "/help", title: "Help center", text: "Answers to the questions people ask before and after they sign up." },
+  { href: "/academy", title: "Alimi Academy", text: "Product training for customers and partners, and the security lessons staff take inside the platform." },
+  { href: "/community", title: "Alimi Community", text: "Where customers and partners will compare notes. Not open yet." },
+];
+
+const templates = [
+  "The policy library, mapped to the frameworks by criterion ID, with staff acknowledgement tracking",
+  "The payment verification procedure, the callback scripts and the staff poster",
+  "The pilot authorization letter and the read-only setup guides for each integration",
+  "Questionnaire answers drafted from your own evidence, from the Gold tier",
+];
+---
+
+<Base title="Resources" description={`The Alimi resource library: guides to ${catalogCount} frameworks, a plain-English glossary, help, the academy, the community, customer stories, webinars and the blog.`} path="/resources">
+  <Hero eyebrow="Resources" title="Guides, definitions and help, in plain English">
+    <p class="lede">Everything {brand.display_name} publishes to help a company without a security team understand what it is being asked for. Templates and policies are not here: they live inside the platform, where they are kept current and signed.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/frameworks">Framework guides</a>
+      <a class="button button--secondary" href="/glossary">Glossary</a>
+    </div>
+  </Hero>
+
+  <Section id="library" tone="alt" title="The library">
+    <div class="grid">
+      {library.map((l) => (
+        <a class="card card--link" href={l.href}>
+          <h3>{l.title}</h3>
+          <p>{l.text}</p>
+          <span class="card__cta">Open</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="guides" title="Compliance resources" lede="The frameworks people ask about most. Each guide says what the framework is, who needs it, how the platform handles it and what it costs.">
+    <div class="grid">
+      {featured.map((f) => (
+        <a class="card card--link" href={f.href}>
+          <h3>{f.short}</h3>
+          <p>{f.summary}</p>
+          <span class="card__cta">The {f.short} guide</span>
+        </a>
+      ))}
+    </div>
+    <p style="margin-top:1.5rem"><a href="/frameworks">All {catalogCount} frameworks</a></p>
+  </Section>
+
+  <Section id="templates" tone="alt" title="Templates" lede="Inside the platform and the services, not as downloads.">
+    <ul class="checklist">
+      {templates.map((t) => <li>{t}</li>)}
+    </ul>
+    <p class="measure muted">A policy you download once goes stale; one that lives in the platform carries its version, its owner and who has signed it. That is why nothing on this page is a file.</p>
+  </Section>
+
+  <Section id="webinars" title="Webinars and events">
+    <p class="measure">None scheduled yet. The first will be a 30-minute session for insurance brokers and their clients on what the renewal questionnaire actually asks, in early 2027; the payment fraud workshop for finance teams is run as a <a href="/pricing#services">service</a> in the meantime.</p>
+  </Section>
+
+  <Section id="blog" tone="alt" title="Blog">
+    <p class="measure">Nothing published yet. The first posts are written as the pilots teach us something worth writing down; the founder would rather publish one useful post a month than a weekly one for search engines.</p>
+  </Section>
+
+  <Section id="next" tone="dark" title="Ask the question the guide does not answer" lede="A reply within two business days, from the founder.">
+    <div class="actions">
+      <a class="button button--primary" href="/contact">Contact</a>
+      <a class="button button--secondary" href="/help">Help center</a>
+    </div>
+  </Section>
+</Base>

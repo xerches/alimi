@@ -1,0 +1,52 @@
+---
+// Legal: the index of what exists (the website privacy notice), what comes with the platform (terms,
+// the data-handling terms) and the trademark note. Every legal text on the site carries the draft
+// header from CLAUDE.md until a Massachusetts attorney has reviewed it. Added Nov 2, 2026.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand } from "../lib/config.js";
+
+const documents = [
+  { title: "Website privacy notice", href: "/privacy", state: "Draft, on the site", text: "What the forms collect, where it goes, and how to have it deleted. No cookies, no analytics." },
+  { title: "Terms of service", href: null, state: "With the platform", text: "The terms a customer accepts when the hosted platform opens. Until then every engagement runs under a signed pilot authorization letter or a statement of work." },
+  { title: "Data-handling terms", href: null, state: "With the platform", text: "What the platform holds, where, for how long, and what happens to it at termination. Passed through to a reseller's clients unchanged." },
+  { title: "Pilot authorization letter", href: null, state: "Provided before a pilot", text: "One page: scope, read-only access, data handling, no fee, either side may stop. Sent to each pilot company for signature." },
+  { title: "Reseller and referral agreements", href: null, state: "Provided to partners", text: "The published tiers and incentives, as a contract. Sent at the first partner conversation." },
+];
+---
+
+<Base title="Legal" description="Alimi's legal documents: the website privacy notice, the terms and data-handling terms that arrive with the platform, the pilot letter and partner agreements, and the trademark note. All drafts pending review by a Massachusetts attorney." path="/legal">
+  <Hero eyebrow="Legal" title="Legal and privacy">
+    <p class="lede">What exists, what arrives with the platform, and the state each is in. {brand.display_name} is a company in formation, so every document here is a draft until an attorney has reviewed it, and says so.</p>
+  </Hero>
+
+  <Section id="documents" tone="alt" title="Documents">
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th scope="col">Document</th><th scope="col">State</th><th scope="col">What it covers</th></tr></thead>
+        <tbody>
+          {documents.map((d) => (
+            <tr>
+              <th scope="row">{d.href ? <a href={d.href}>{d.title}</a> : d.title}</th>
+              <td>{d.state}</td>
+              <td>{d.text}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <Callout label="Draft" tone="warning">
+      <p>DRAFT. Not legal advice. Every document above is reviewed by a Massachusetts attorney before the company forms and before any customer signs it.</p>
+    </Callout>
+  </Section>
+
+  <Section id="trademarks" title="Trademarks and fair use">
+    <p class="measure">Vanta and Drata are trademarks of their owners, and {brand.display_name} is not affiliated with either; they appear on the <a href="/compare">comparison page</a> for comparison only. Microsoft 365, Google Workspace and the other products named on the integrations page belong to their owners. {brand.display_name} is a working name; the trademark search is one of the gates before the company forms.</p>
+  </Section>
+
+  <Section id="contact" tone="alt" title="Questions">
+    <p class="measure">Legal questions, corrections and requests to delete your data go through the <a href="/contact">contact form</a>. A reply within two business days.</p>
+  </Section>
+</Base>

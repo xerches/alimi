@@ -1,0 +1,66 @@
+---
+// The glossary: every term the site uses, in plain English, in our own words. Added Nov 2, 2026.
+// Brand rule: explain a term the first time it appears; this is where every page can point.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { brand, alwaysIncludedFrameworks } from "../lib/config.js";
+
+const posture = alwaysIncludedFrameworks()[0];
+
+const terms = [
+  { term: "Access review", text: "A scheduled check, with a record, that each person's access to a system is still the access they need. Auditors and insurers ask when it was last done." },
+  { term: "Attestation", text: "A written statement, with a date and a name, that a control is in place when no system can prove it automatically. A screenshot of a backup setting is a typical one." },
+  { term: "Audit", text: "An outside firm's examination of your controls against a framework, ending in a report or a certificate. The platform gets you ready for it; the firm does the audit for its own fee." },
+  { term: "Audit log", text: "The record a system keeps of who did what and when. Insurers ask that it is switched on and kept for at least 90 days." },
+  { term: "BEC (business email compromise)", text: "Fraud by email: an attacker, often from a real but hijacked mailbox, asks finance to change bank details or pay an invoice. The payment verification procedure exists to stop it." },
+  { term: "Compliance automation", text: "Software that connects to your systems, tests your controls on a schedule and collects the evidence an auditor asks for, so the work is not done by hand every year." },
+  { term: "Conditional Access", text: "Microsoft 365 rules that decide who may sign in from where and on what: for example, MFA required for everyone, and admin accounts blocked from unknown devices." },
+  { term: "Control", text: "One thing a company does to manage a risk, stated so it can be checked: 'MFA is enforced for every account', 'backups are tested every quarter'. Frameworks are lists of controls under different names." },
+  { term: "EDR (endpoint detection and response)", text: "Software on each computer that watches for an attack in progress and can stop it, a step beyond antivirus. The question every insurer now asks." },
+  { term: "Evidence", text: "What proves a control is in place: a setting read from your tenant, an export, a screenshot, a signed policy, a training record. Each piece has an owner and a date it goes stale." },
+  { term: "Framework", text: "A named list of requirements someone can ask you to meet: an insurer's questionnaire, SOC 2, ISO 27001, HIPAA. The same controls answer most of them." },
+  { term: "GRC (governance, risk and compliance)", text: "The umbrella term for deciding who is responsible for what, which risks you accept, and which rules you follow. The platforms built for larger companies sell it as a category." },
+  { term: "HIPAA", text: "The US law that protects health information. Its Security and Privacy Rules set what a healthcare provider, its software vendors and its business associates must do." },
+  { term: "Identity provider", text: "The system that holds the accounts and signs people in: Microsoft Entra ID for Microsoft 365, Google for Workspace, Okta or JumpCloud at some companies. The people list comes from it." },
+  { term: "Incident response plan", text: "A written plan for what the company does when something goes wrong: who is called, what is switched off, who tells the insurer, the customers and the regulator. Insurers ask for it, and for proof it was practised." },
+  { term: "ISO 27001", text: "The international standard for an information security management system, ending in a certificate from an accredited body. Customers in Europe and in regulated industries ask for it." },
+  { term: "Legacy authentication", text: "Old sign-in methods, such as basic authentication for mail, that cannot use MFA. Attackers use them to get around MFA; the fix is to switch them off." },
+  { term: "MDM (mobile device management)", text: "Software that manages company computers and phones: encryption, screen lock, updates. Microsoft Intune and Jamf are examples. The platform reads it rather than installing an agent." },
+  { term: "MFA (multi-factor authentication)", text: "A second proof at sign-in besides the password: a code from an app, a prompt on a phone, a hardware key. The single control insurers weigh most." },
+  { term: "Phishing", text: "An email, text or call that pretends to be someone you trust to make you click, pay or hand over a password. Training and MFA are the two controls that blunt it." },
+  { term: "Policy", text: "A written rule the company adopts and staff acknowledge: who may access what, how data is handled, what to do in an incident. Frameworks ask for policies by name; the platform tracks versions and signatures." },
+  { term: "Readiness", text: "How much of a framework you can prove today, computed from the controls mapped to it: the share that are in order, and what is missing." },
+  { term: "Read-only permission", text: "An access right that lets a system look but not change. Every Alimi integration uses only these, so a bug on our side cannot alter your tenant." },
+  { term: "Risk register", text: "The list of what could go wrong, written in plain sentences, with a score, an owner and the controls that treat each one. Auditors ask to see it; the platform keeps it current." },
+  { term: "Row-level security", text: "A database rule that decides which rows a query may see. The platform uses it to keep each company's data separate inside the database itself, not only in the application." },
+  { term: "Secure Score", text: "Microsoft's own score of a tenant's security settings against its recommendations. The platform reads it; the " + posture.name + " is Alimi's broader equivalent." },
+  { term: "Security questionnaire", text: "A form a customer, a bank or an insurer sends before a contract or a renewal, asking how you protect data. The platform drafts the answers from the evidence you already have." },
+  { term: "SOC 2", text: "A report by a CPA firm on a service company's controls against the Trust Services Criteria. Type I describes the controls at a point in time; Type II tests them over a period, usually a year." },
+  { term: "Tabletop exercise", text: "A practice run of the incident response plan around a table: a scenario, the people who would be involved, and what each would do. Insurers ask when it was last held." },
+  { term: "Tenant", text: "Your company's own instance of Microsoft 365 or Google Workspace: its accounts, settings, mail and files. The platform connects to it read-only." },
+  { term: "TPRM (third-party risk management)", text: "Knowing which vendors hold your data, how much could go wrong if they failed, and checking them on a schedule that matches. The vendors module." },
+  { term: "Trust page", text: "A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full documents." },
+];
+---
+
+<Base title="Glossary" description="Every security and compliance term used on the Alimi site, explained in plain English for a business owner: MFA, EDR, BEC, SOC 2, ISO 27001, HIPAA, controls, evidence, frameworks, readiness, trust page and more." path="/glossary">
+  <Hero eyebrow="Glossary" title="Every term, in plain English">
+    <p class="lede">{brand.display_name}'s rule is to explain a term the first time it appears. This page is where every page can point, written for the owner who signs the renewal, not the auditor.</p>
+  </Hero>
+
+  <Section id="terms" tone="alt">
+    <dl class="glossary">
+      {terms.map((t) => (
+        <div class="glossary__entry" id={t.term.toLowerCase().replace(/\s*\(.*\)\s*/, "").replace(/[^a-z0-9]+/g, "-")}>
+          <dt>{t.term}</dt>
+          <dd>{t.text}</dd>
+        </div>
+      ))}
+    </dl>
+  </Section>
+
+  <Section id="missing" title="A term missing?">
+    <p class="measure">If a word on this site or in a questionnaire you received is not here, <a href="/contact">ask</a>. It will be added, with the plain-English version, within a week.</p>
+  </Section>
+</Base>

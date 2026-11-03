@@ -1,0 +1,106 @@
+---
+// Integrations: what each read-only connection reads today, what it never reads, and what comes next
+// in the order customers ask. Added Nov 2, 2026. No integration count is printed (founder's rule);
+// the connected systems are named instead.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, platform } from "../lib/config.js";
+import { insurerQuestions } from "../lib/content.js";
+
+const plat = platform();
+const [silver, gold, platinum] = plat.tiers;
+const questions = insurerQuestions();
+
+const connected = [
+  {
+    title: "Microsoft 365",
+    sub: "Entra ID, Exchange Online, SharePoint and OneDrive, through Microsoft Graph",
+    reads: ["Who has an account, who is an admin, and which roles are assigned", "MFA registration and Conditional Access policies, security defaults, legacy sign-in", "External mail forwarding and inbox rules", "Anonymous and external sharing links, guest users", "Audit log status and the tenant's Secure Score"],
+    access: "A read-only app registration with the exact permissions listed in the setup guide, approved by your own admin.",
+  },
+  {
+    title: "Google Workspace",
+    sub: "Through the Admin SDK with a read-only service account",
+    reads: ["2-Step Verification enforcement and super admin accounts", "External forwarding and third-party apps with their scopes", "External Drive sharing settings and less-secure app access", "Audit log availability"],
+    access: "A read-only service account with domain-wide delegation, scoped to the exact read permissions in the setup guide.",
+  },
+];
+
+const never = [
+  "The contents of any mailbox, chat, file or document",
+  "Passwords, recovery codes or session cookies",
+  "Anything requiring a write permission; the connection cannot change a setting",
+  "Personal devices, home networks or anything outside the company tenant",
+];
+
+const next = [
+  { title: "Identity", items: ["Okta", "JumpCloud"], text: "Account status, MFA and the onboarding and offboarding dates, when the directory is not Microsoft or Google." },
+  { title: "Devices", items: ["Microsoft Intune", "Jamf", "Kandji"], text: "Disk encryption, screen lock, updates and endpoint protection, read from the device management you already run. No agent on anyone's laptop." },
+  { title: "Endpoint protection", items: ["Microsoft Defender", "CrowdStrike"], text: "Coverage of the EDR question every insurer asks, with the dates to prove it." },
+  { title: "Code and cloud", items: ["GitHub", "AWS", "Azure", "Google Cloud"], text: "Branch protection, two-factor on the code host, public storage, encryption and logging in the cloud account." },
+  { title: "People", items: ["Gusto", "Rippling", "BambooHR"], text: "Start and end dates, so onboarding and offboarding checks have a date to compare against." },
+  { title: "Work tracking", items: ["Jira", "Linear", "Slack"], text: "Change tickets and the security channel, as evidence for the controls that need them." },
+  { title: "Backups and passwords", items: ["Datto", "Veeam", "Backblaze", "1Password", "Bitwarden"], text: "The backup and password-manager questions, answered from the tool rather than a promise." },
+];
+---
+
+<Base title="Integrations" description={`What each Alimi integration reads through a read-only connection: Microsoft 365 and Google Workspace today, and the identity, device, endpoint, cloud, HR and work-tracking systems that follow in the order customers ask. ${silver.integrationsLabel} on ${silver.name}, ${gold.integrationsLabel.toLowerCase()} on ${gold.name}, unlimited from ${platinum.name}.`} path="/integrations">
+  <Hero eyebrow="Integrations" title="Read-only connections, and exactly what each one reads">
+    <p class="lede">{brand.display_name} starts where most companies keep their identities, mail and files, and adds the next system in the order customers ask for it. Every permission is listed before you approve it, and none of them can change a setting.</p>
+    <div class="actions">
+      <a class="button button--primary" href="#connected">Connected today</a>
+      <a class="button button--secondary" href="#next">What comes next</a>
+    </div>
+  </Hero>
+
+  <Section id="connected" tone="alt" title="Connected today">
+    <div class="grid grid--two">
+      {connected.map((c) => (
+        <article class="card">
+          <h3>{c.title}</h3>
+          <p class="muted">{c.sub}</p>
+          <ul class="checklist">
+            {c.reads.map((r) => <li>{r}</li>)}
+          </ul>
+          <p class="small"><strong>Access.</strong> {c.access}</p>
+        </article>
+      ))}
+    </div>
+    <p style="margin-top:1.5rem" class="measure">Together they answer the questions an insurer asks: {questions.map((q) => q.id.replace(/_/g, " ")).join(", ")}. Where no API exposes the setting, the control asks for a dated screenshot instead and says so.</p>
+  </Section>
+
+  <Section id="never" title="What a connection never reads">
+    <ul class="checklist">
+      {never.map((n) => <li>{n}</li>)}
+    </ul>
+    <p class="measure muted">The exact permission names, the setup steps and the revocation steps are in the setup guide you receive with the authorization letter, and on the <a href="/security">security page</a>.</p>
+  </Section>
+
+  <Section id="next" tone="alt" title="What comes next" lede="Planned, in the order customers ask. None of these is connected yet; a name here is a plan, not a promise of a date.">
+    <div class="grid">
+      {next.map((n) => (
+        <article class="card">
+          <h3>{n.title}</h3>
+          <p class="muted small">{n.items.join(", ")}</p>
+          <p>{n.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="own" title="Your own systems">
+    <Callout label="API and custom connections" tone="brand">
+      <p>From the {platinum.name} tier, an API lets you or your IT provider push users, devices and evidence from a system {brand.display_name} does not connect to, and resellers can connect the monitoring tools they already run. The same read-only rule applies: the platform accepts data; it never reaches into a system it was not given.</p>
+    </Callout>
+    <p class="muted small">Integrations per tier: {silver.integrationsLabel.toLowerCase()} on {silver.name}, {gold.integrationsLabel.toLowerCase()} on {gold.name}, unlimited from {platinum.name}. <a href="/pricing">Pricing</a>.</p>
+  </Section>
+
+  <Section id="start" tone="dark" title="Connect in one session" lede="The founder walks you through the read-only setup on a call; it takes under an hour and nothing changes in your tenant.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="/contact">Ask about a system</a>
+    </div>
+  </Section>
+</Base>

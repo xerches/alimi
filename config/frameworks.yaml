@@ -1,150 +1,371 @@
 # The framework catalog: what a customer can pick as the included framework or add as an add-on.
-# Added Nov 2, 2026 at the founder's request ("include all frameworks: HIPAA, PCI DSS, GDPR etc.").
+# Added Nov 2, 2026 at the founder's request ("include all frameworks: HIPAA, PCI DSS, GDPR etc.") and
+# widened the same evening to everything Vanta and Drata list ("include all frameworks below to my page").
 # Only IDs, names and Alimi's own one-line summaries live here; the standards' text is copyrighted
 # and is never copied in (CLAUDE.md). `mapped: true` means the policy library and the control catalog
 # already carry requirement IDs for it (policies/requirements.yaml); the rest get their requirement
-# lists in prompt 14. `audience` is who usually needs it, in the buyer's words. `always_included: true`
-# marks Alimi's own posture score: in every plan, outside the framework count and the add-on price.
-# The site reads this file for the frameworks table and the pricing calculator; the platform loads it
-# as the Framework table; the demo lists it on the Frameworks page.
+# lists in prompt 14. `audience` is who usually needs it, in the buyer's words. `category` groups the
+# catalog on the site (security, privacy, ai, government, financial, industry; the list and its order
+# live in site/src/lib/config.js). `always_included: true` marks Alimi's own posture score: in every
+# plan, outside the framework count and the add-on price.
+# The site reads this file for the frameworks pages and the pricing calculator; the platform loads it
+# as the Framework table; the demo lists it on the Frameworks page. The number of frameworks is the one
+# figure the site is allowed to print (founder's rule, Nov 2, 2026: no scalable counts on the site).
 
 frameworks:
   - id: alimi_posture
-    name: Alimi Security Posture Score
+    name: Alimi Recommended Security Posture Score
     short: Posture score
+    category: security
     summary: Alimi's own scored set of controls that go beyond what any standard asks, in the spirit of Microsoft Secure Score; compliance is not security, and this is where the gap shows.
     audience: Every customer; it is in every plan and does not count toward the framework total
     mapped: true
     always_included: true   # added Nov 2, 2026 at the founder's request; not accredited, never an add-on
+
+  # ---------- Security ----------
   - id: insurer
     name: Cyber insurance questionnaire
     short: Insurer
+    category: security
     summary: The questions every carrier asks at renewal, answered from your own tenant and evidence.
     audience: Every company with a cyber policy or a renewal coming
     mapped: true
   - id: soc2
     name: SOC 2 (Trust Services Criteria)
     short: SOC 2
+    category: security
     summary: The report a software or service company's customers ask for before they sign.
     audience: Companies that sell to other businesses
     mapped: true
   - id: iso27001
     name: ISO/IEC 27001:2022
     short: ISO 27001
+    category: security
     summary: The international certificate for an information security management system.
     audience: Companies with customers in Europe or in regulated industries
     mapped: true
-  - id: iso27701
-    name: ISO/IEC 27701
-    short: ISO 27701
-    summary: The privacy extension to ISO 27001, for companies that process personal data for others.
-    audience: Processors and controllers of personal data
+  - id: iso27017
+    name: ISO/IEC 27017
+    short: ISO 27017
+    category: security
+    summary: The cloud-specific additions to ISO 27001, for providers and customers of cloud services.
+    audience: Cloud service providers that already hold or pursue ISO 27001
     mapped: false
-  - id: iso42001
-    name: ISO/IEC 42001:2023
-    short: ISO 42001
-    summary: The management system for a company that builds or uses AI in its products or decisions.
-    audience: Companies using AI in a product or a regulated decision
-    mapped: true
-  - id: hipaa
-    name: HIPAA Security and Privacy Rules
-    short: HIPAA
-    summary: The safeguards a company that handles protected health information has to show.
-    audience: Healthcare providers, their software vendors and business associates
-    mapped: true
   - id: pci_dss
     name: PCI DSS v4.0.1
     short: PCI DSS
+    category: security
     summary: The card brands' requirements for anyone who stores, processes or transmits card data.
     audience: Companies that take card payments, from SAQ A upward
     mapped: false
-  - id: gdpr
-    name: GDPR
-    short: GDPR
-    summary: The EU's data protection regulation, for companies with customers or staff in the EU.
-    audience: Companies with EU customers, users or employees
-    mapped: false
-  - id: ccpa
-    name: CCPA and CPRA
-    short: CCPA
-    summary: California's consumer privacy law, with the notices, rights and security it expects.
-    audience: Companies above the California thresholds or selling to them
+  - id: hitrust
+    name: HITRUST CSF (e1, i1, r2)
+    short: HITRUST
+    category: security
+    summary: The healthcare industry's certifiable framework, in three sizes, that hospital systems and health plans ask their vendors for.
+    audience: Vendors to hospital systems, health plans and large healthcare companies
     mapped: false
   - id: nist_csf
     name: NIST Cybersecurity Framework 2.0
     short: NIST CSF
+    category: security
     summary: The maturity picture a board, a bank or a parent company asks for.
     audience: Companies asked for a maturity assessment
-    mapped: false
-  - id: nist_800_53
-    name: NIST SP 800-53 Rev. 5
-    short: NIST 800-53
-    summary: The federal control catalog, for companies whose public-sector customers require it.
-    audience: Suppliers to federal and state agencies
-    mapped: false
-  - id: nist_800_171
-    name: NIST SP 800-171 Rev. 3
-    short: NIST 800-171
-    summary: Protection of controlled unclassified information for defence and federal suppliers.
-    audience: Defence subcontractors and federal suppliers
-    mapped: false
-  - id: cmmc
-    name: CMMC 2.0 (Levels 1 and 2)
-    short: CMMC
-    summary: The Department of Defense certification built on NIST 800-171.
-    audience: Companies in the defence supply chain
     mapped: false
   - id: cis
     name: CIS Controls v8.1
     short: CIS Controls
+    category: security
     summary: The prioritised safeguards an IT provider or an insurer points a small company to first.
     audience: Companies starting a security programme with their IT provider
     mapped: false
   - id: cyber_essentials
     name: UK Cyber Essentials
     short: Cyber Essentials
+    category: security
     summary: The UK government's baseline certification, asked of suppliers to UK organisations.
     audience: Companies selling to UK customers or the UK public sector
+    mapped: false
+  - id: essential_eight
+    name: Essential Eight
+    short: Essential Eight
+    category: security
+    summary: The Australian government's eight baseline mitigations, assessed at three maturity levels.
+    audience: Suppliers to Australian government bodies
+    mapped: false
+  - id: cyber_fundamentals
+    name: CyberFundamentals (Belgium)
+    short: CyberFundamentals
+    category: security
+    summary: Belgium's cybersecurity baseline in four levels, from basic hygiene up to the NIS 2 requirements.
+    audience: Companies operating or selling in Belgium
     mapped: false
   - id: nis2
     name: NIS 2 Directive
     short: NIS 2
+    category: security
     summary: The EU's security rules for essential and important entities and their suppliers.
     audience: Suppliers to EU operators in regulated sectors
     mapped: false
-  - id: ftc_safeguards
-    name: FTC Safeguards Rule
-    short: FTC Safeguards
-    summary: The written security programme the FTC requires of non-bank financial businesses.
-    audience: CPAs, tax preparers, mortgage brokers, auto dealers, lenders
+  - id: eu_cra
+    name: EU Cyber Resilience Act
+    short: EU CRA
+    category: security
+    summary: The EU product law that puts security requirements on software and connected hardware sold in the EU.
+    audience: Makers of software and connected products with EU customers
+    mapped: false
+  - id: bsi_c5
+    name: BSI C5
+    short: BSI C5
+    category: security
+    summary: The German federal security office's catalogue for cloud providers, asked for across Germany, Austria and Switzerland.
+    audience: Cloud providers with customers in the DACH region
+    mapped: false
+  - id: csa_ccm
+    name: CSA Cloud Controls Matrix
+    short: CSA CCM
+    category: security
+    summary: The Cloud Security Alliance's control matrix for cloud providers, the basis of a STAR registry listing.
+    audience: Cloud providers asked for a STAR listing
+    mapped: false
+  - id: mvsp
+    name: Minimum Viable Secure Product
+    short: MVSP
+    category: security
+    summary: A short baseline checklist of controls that enterprise buyers use to screen B2B software vendors.
+    audience: Software vendors facing a first enterprise security review
+    mapped: false
+  - id: aws_ftr
+    name: AWS Foundational Technical Review
+    short: AWS FTR
+    category: security
+    summary: Amazon's technical review of a software partner's product, required for the AWS partner programmes.
+    audience: Software companies in the AWS Partner Network
+    mapped: false
+
+  # ---------- Privacy ----------
+  - id: gdpr
+    name: GDPR
+    short: GDPR
+    category: privacy
+    summary: The EU's data protection regulation, for companies with customers or staff in the EU.
+    audience: Companies with EU customers, users or employees
+    mapped: false
+  - id: hipaa
+    name: HIPAA Security and Privacy Rules
+    short: HIPAA
+    category: privacy
+    summary: The safeguards a company that handles protected health information has to show.
+    audience: Healthcare providers, their software vendors and business associates
+    mapped: true
+  - id: ccpa
+    name: CCPA and CPRA
+    short: CCPA
+    category: privacy
+    summary: California's consumer privacy law, with the notices, rights and security it expects.
+    audience: Companies above the California thresholds or selling to them
+    mapped: false
+  - id: us_state_privacy
+    name: US state privacy laws
+    short: State privacy
+    category: privacy
+    summary: The consumer privacy laws of Virginia, Colorado, Texas and the other states that followed California, handled as one set of notices and rights.
+    audience: Companies with consumers in several US states
     mapped: false
   - id: ma_201_cmr_17
     name: Massachusetts 201 CMR 17.00
     short: 201 CMR 17
+    category: privacy
     summary: The written information security programme every company holding a Massachusetts resident's personal data must have.
     audience: Every company with Massachusetts customers or employees
     mapped: false
-  - id: nydfs_500
-    name: NY DFS 23 NYCRR 500
-    short: NYDFS 500
-    summary: New York's cybersecurity regulation for licensed financial services companies.
-    audience: Insurance agencies, lenders and other DFS licensees
+  - id: iso27701
+    name: ISO/IEC 27701
+    short: ISO 27701
+    category: privacy
+    summary: The privacy extension to ISO 27001, for companies that process personal data for others.
+    audience: Processors and controllers of personal data
     mapped: false
-  - id: sox_itgc
-    name: SOX IT general controls
-    short: SOX ITGC
-    summary: The IT controls a public company's auditor tests around financial reporting.
-    audience: Public companies and their subsidiaries
+  - id: iso27018
+    name: ISO/IEC 27018
+    short: ISO 27018
+    category: privacy
+    summary: ISO 27001 extended with controls for personal data held in a public cloud.
+    audience: Cloud providers that process personal data for their customers
     mapped: false
+  - id: microsoft_sspa
+    name: Microsoft SSPA
+    short: Microsoft SSPA
+    category: privacy
+    summary: Microsoft's data protection requirements for the suppliers that handle its personal or confidential data.
+    audience: Suppliers and contractors to Microsoft
+    mapped: false
+
+  # ---------- AI ----------
+  - id: iso42001
+    name: ISO/IEC 42001:2023
+    short: ISO 42001
+    category: ai
+    summary: The management system for a company that builds or uses AI in its products or decisions.
+    audience: Companies using AI in a product or a regulated decision
+    mapped: true
   - id: eu_ai_act
     name: EU AI Act
     short: EU AI Act
+    category: ai
     summary: The EU's obligations for providers and deployers of AI systems, by risk class.
     audience: Companies offering or using AI with EU users
     mapped: false
   - id: nist_ai_rmf
     name: NIST AI Risk Management Framework
     short: NIST AI RMF
+    category: ai
     summary: The voluntary US framework for governing, mapping, measuring and managing AI risk.
     audience: Companies asked how they govern AI by a customer or a board
+    mapped: false
+  - id: aiuc1
+    name: AIUC-1
+    short: AIUC-1
+    category: ai
+    summary: A certifiable standard for companies that build or deploy AI agents, covering their security, safety and accountability.
+    audience: Companies shipping AI agents to enterprise customers
+    mapped: false
+
+  # ---------- Government and defence ----------
+  - id: nist_800_53
+    name: NIST SP 800-53 Rev. 5
+    short: NIST 800-53
+    category: government
+    summary: The federal control catalog, for companies whose public-sector customers require it.
+    audience: Suppliers to federal and state agencies
+    mapped: false
+  - id: nist_800_171
+    name: NIST SP 800-171 Rev. 3
+    short: NIST 800-171
+    category: government
+    summary: Protection of controlled unclassified information for defence and federal suppliers.
+    audience: Defence subcontractors and federal suppliers
+    mapped: false
+  - id: cmmc
+    name: CMMC 2.0 (Levels 1 and 2)
+    short: CMMC
+    category: government
+    summary: The Department of Defense certification built on NIST 800-171.
+    audience: Companies in the defence supply chain
+    mapped: false
+  - id: fedramp
+    name: FedRAMP
+    short: FedRAMP
+    category: government
+    summary: The US federal government's authorization for cloud services, at the Low, Moderate or High impact level.
+    audience: Cloud providers selling to federal agencies
+    mapped: false
+  - id: fedramp_20x
+    name: FedRAMP 20x
+    short: FedRAMP 20x
+    category: government
+    summary: The newer, automation-first route to FedRAMP Low and Moderate authorization.
+    audience: Cloud providers starting FedRAMP now
+    mapped: false
+  - id: cjis
+    name: CJIS Security Policy
+    short: CJIS
+    category: government
+    summary: The FBI's security policy for anyone who handles criminal justice information.
+    audience: Vendors to police departments, courts and public safety agencies
+    mapped: false
+
+  # ---------- Financial services ----------
+  - id: ftc_safeguards
+    name: FTC Safeguards Rule
+    short: FTC Safeguards
+    category: financial
+    summary: The written security programme the FTC requires of non-bank financial businesses.
+    audience: CPAs, tax preparers, mortgage brokers, auto dealers, lenders
+    mapped: false
+  - id: nydfs_500
+    name: NY DFS 23 NYCRR 500
+    short: NYDFS 500
+    category: financial
+    summary: New York's cybersecurity regulation for licensed financial services companies.
+    audience: Insurance agencies, lenders and other DFS licensees
+    mapped: false
+  - id: sox_itgc
+    name: SOX IT general controls
+    short: SOX ITGC
+    category: financial
+    summary: The IT controls a public company's auditor tests around financial reporting.
+    audience: Public companies and their subsidiaries
+    mapped: false
+  - id: ffiec
+    name: FFIEC IT examination handbook
+    short: FFIEC
+    category: financial
+    summary: The US banking examiners' IT handbook and assessment tool, used in bank examinations.
+    audience: Banks, credit unions and their technology suppliers
+    mapped: false
+  - id: cri_profile
+    name: CRI Profile
+    short: CRI Profile
+    category: financial
+    summary: The Cyber Risk Institute's profile for financial services, built on NIST CSF, in four tiers by size.
+    audience: Banks, credit unions, insurers and their suppliers
+    mapped: false
+  - id: dora
+    name: DORA
+    short: DORA
+    category: financial
+    summary: The EU's rules for how banks, insurers and their technology suppliers withstand IT disruptions.
+    audience: Suppliers to EU financial firms
+    mapped: false
+  - id: ofdss
+    name: Open Finance Data Security Standard
+    short: OFDSS
+    category: financial
+    summary: A security standard written for fintech and open-finance companies that connect to banks.
+    audience: Fintechs that connect to bank data
+    mapped: false
+  - id: cps234
+    name: APRA CPS 234
+    short: CPS 234
+    category: financial
+    summary: The Australian prudential regulator's information security rules for banks, insurers and their suppliers.
+    audience: Suppliers to Australian financial institutions
+    mapped: false
+  - id: cps230
+    name: APRA CPS 230
+    short: CPS 230
+    category: financial
+    summary: The Australian prudential regulator's rules for operational risk, continuity and third-party oversight.
+    audience: Suppliers to Australian financial institutions
+    mapped: false
+
+  # ---------- Industry and operations ----------
+  - id: iso22301
+    name: ISO 22301
+    short: ISO 22301
+    category: industry
+    summary: The certificate for a business continuity management system, which is how you keep running through an outage, a fire or a ransomware event.
+    audience: Companies whose customers ask for continuity guarantees
+    mapped: false
+  - id: iso9001
+    name: ISO 9001
+    short: ISO 9001
+    category: industry
+    summary: The quality management certificate, often asked for alongside ISO 27001 by manufacturers and public-sector buyers.
+    audience: Suppliers to manufacturers and public bodies
+    mapped: false
+  - id: tisax
+    name: TISAX
+    short: TISAX
+    category: industry
+    summary: The European automotive industry's information security assessment, required by the large car makers of their suppliers.
+    audience: Suppliers to European car makers
+    mapped: false
+  - id: cobit
+    name: COBIT 2019
+    short: COBIT
+    category: industry
+    summary: ISACA's governance framework for enterprise IT, the one internal auditors work from.
+    audience: Companies whose auditors work from COBIT
     mapped: false

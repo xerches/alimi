@@ -1,0 +1,85 @@
+---
+// Alimi's own trust page: the state of its own programme, its subprocessors, how to request documents
+// and how to report a problem. The customer-facing rules are on /security. Added Nov 2, 2026; the
+// programme itself runs in the platform after the LLC (decided Nov 2, 2026 from the site scan).
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, alwaysIncludedFrameworks } from "../lib/config.js";
+
+const posture = alwaysIncludedFrameworks()[0];
+const status = [
+  { label: "Company", value: "In formation; working name" },
+  { label: "Customer data held", value: "None, by rule, until the outside review" },
+  { label: "Certifications", value: "None yet; SOC 2 Type I planned" },
+  { label: "Own programme", value: "Runs in the platform after the entity exists" },
+];
+const subprocessors = [
+  { name: "Netlify", purpose: "Hosts this site and the demo; receives form submissions (name, email, company, message)", where: "United States" },
+  { name: "GitHub", purpose: "Holds the source code in a private repository with secret scanning", where: "United States" },
+  { name: "Platform host", purpose: "Not chosen yet; a free tier until paying customers cover the bill, in the United States, named here before any customer data is held", where: "To be named" },
+];
+const controls = [
+  "Every integration read-only; tokens encrypted at rest with a key outside the database; one company per query, enforced in the database",
+  "No credential, token or tenant identifier in the source code; secret scanning on every commit",
+  "This site: static, strict content security policy, no cookies, no analytics, no third-party scripts",
+  "The policy library applied to Alimi itself, with the founder as owner and approver, once the entity exists",
+  `The ${posture.name} run against Alimi's own tenant, published here`,
+];
+---
+
+<Base title="Trust page" description="Alimi's own trust page: where its security programme stands, its subprocessors, the controls it runs on itself, how to request documents and how to report a problem. Pre-launch and honest about it." path="/trust">
+  <Hero eyebrow="Trust page" title={`${brand.display_name}'s own programme, in public`}>
+    <p class="lede">The same page a customer of {brand.display_name} gets for their own company, applied to {brand.display_name}. It is pre-launch, so most of it is plan rather than proof; the plan is written down so you can hold us to it.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/contact">Request documents</a>
+      <a class="button button--secondary" href="/security">How your data is protected</a>
+    </div>
+  </Hero>
+
+  <Section id="status" tone="alt" title="Where it stands">
+    <dl class="facts">
+      {status.map((s) => (
+        <div>
+          <dt>{s.label}</dt>
+          <dd>{s.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </Section>
+
+  <Section id="controls" title="The controls Alimi runs on itself">
+    <ul class="checklist">
+      {controls.map((c) => <li>{c}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="subprocessors" tone="alt" title="Subprocessors" lede="The companies that hold data on Alimi's behalf. The list is short because there is little data; it is updated here before a new one is used.">
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th scope="col">Company</th><th scope="col">Purpose</th><th scope="col">Location</th></tr></thead>
+        <tbody>
+          {subprocessors.map((s) => (
+            <tr>
+              <th scope="row">{s.name}</th>
+              <td>{s.purpose}</td>
+              <td>{s.where}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="documents" title="Documents">
+    <Callout label="What you can request" tone="brand">
+      <p>The policy library as applied to {brand.display_name}, the read-only permission lists for each integration, the data-handling terms, and the outside security review's summary once it exists. <a href="/contact">Ask through the contact form</a>; the founder sends them under a short NDA where one is needed.</p>
+    </Callout>
+    <p class="muted small">A SOC 2 report of {brand.display_name}'s own is planned once revenue covers the audit fee. Until then no badge appears here, because none has been earned.</p>
+  </Section>
+
+  <Section id="report" tone="alt" title="Report a problem">
+    <p class="measure">A security problem on this site, in the demo or in the platform: <a href="/security#report">the responsible-disclosure note</a> says how. An incident, once there is a service to have one, is published on the <a href="/status">status page</a>.</p>
+  </Section>
+</Base>

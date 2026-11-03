@@ -1,0 +1,64 @@
+---
+// Alimi Academy: product training for customers and partners, and the security awareness lessons
+// staff take inside the platform. Lesson titles only; the lesson text sits behind sign-in (founder's
+// rule, Nov 2, 2026). Added Nov 2, 2026.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { brand } from "../lib/config.js";
+
+const lessons = [
+  "Phishing and payment fraud: the email that asks you to pay or change bank details",
+  "Passwords and MFA: why the second factor matters more than the password",
+  "Handling customer data: what to keep, where, and for how long",
+  "Working safely from anywhere: home networks, cafés, personal devices",
+  "Using AI tools at work: what may go into them and what may not",
+  "When something looks wrong: who to tell and what not to touch",
+  "For finance: the payment verification procedure, with the callback script",
+  "For admins: privileged accounts, logging and the changes that need a second pair of eyes",
+];
+
+const tracks = [
+  { title: "For staff", text: "Short security awareness lessons, each under ten minutes with a quiz at the end, assigned on day one and renewed every year. Completion is tracked per person in the platform, so the insurer's training question is answered with dates." },
+  { title: "For the person who runs the platform", text: "A guided first month: connecting the tenant, assigning owners, filing the first evidence, reading a failed test and fixing it, sending the first export pack. Delivered by the founder on calls, written up as the help center fills." },
+  { title: "For partners", text: "Partner training with a certificate for account managers and technicians: what the platform does, what it does not, how to run a client's first scan, how to read readiness, and how to hand the second-line question to Alimi." },
+];
+---
+
+<Base title="Alimi Academy" description="Alimi Academy: security awareness lessons for every member of staff, a guided first month for the person who runs the platform, and partner training with a certificate. Opens with the platform." path="/academy">
+  <Hero eyebrow="Alimi Academy" title="Deepen your security knowledge and learn new skills">
+    <p class="lede">Three tracks: lessons for staff, a guided first month for the person who runs the platform, and certification for partners. The staff lessons are inside the platform; the rest opens with it.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="/for-partners">Partner training</a>
+    </div>
+  </Hero>
+
+  <Section id="tracks" tone="alt" title="The tracks">
+    <div class="grid">
+      {tracks.map((t) => (
+        <article class="card">
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="lessons" title="The staff lessons" lede="Titles only here; the lessons themselves live behind sign-in, where completion is tracked.">
+    <ol class="numbered">
+      {lessons.map((l) => <li>{l}</li>)}
+    </ol>
+    <p class="measure muted">Each lesson has a quiz; a pass is recorded with a date against the person. Which lessons are mandatory for which framework is set per framework in the platform.</p>
+  </Section>
+
+  <Section id="live" tone="alt" title="Instructor-led training">
+    <p class="measure">Live, in a room or on a call: the payment fraud workshop for finance teams, the policy adoption workshop for leadership, and the AI policy session for everyone. They are fixed-fee <a href="/pricing#services">services</a>, delivered by the founder.</p>
+  </Section>
+
+  <Section id="next" tone="dark" title="Training that leaves a record" lede={`${brand.display_name} answers the insurer's training question with dates, not a promise.`}>
+    <div class="actions">
+      <a class="button button--primary" href="/platform#people">People and training in the platform</a>
+    </div>
+  </Section>
+</Base>

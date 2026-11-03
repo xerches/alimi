@@ -49,6 +49,26 @@ Neither page shows a price. Both end in "get a demo".
 10. **Channel is a live front**: Vanta's new Trusted Network (Nov 17, 2026) promises tiered incentives and co-selling. Alimi's reseller page now publishes its incentives; watch the Vanta webinar and adjust before the first MSP conversation.
 11. **Both pages segment by stage (startup, growth, enterprise) and industry.** Alimi segments by what the buyer has to prove (insurer, customer, auditor), which is the right axis for 10 to 200 people; no change, but a "Who it is for" block by referral channel (broker's client, CPA's client, MSP's client) would help partners.
 
+## Decisions, Nov 2, 2026
+
+The founder accepted all eleven recommendations the same evening, with one change: the trust page sits in Gold, not Silver (finding 8). Where each landed:
+
+1. Assistant: the site says it drafts and a person decides, and the named compliance lead stays the headline; prompt 13 carries the two bounded assistant tasks (a questionnaire answer from evidence, a policy change summary for staff) and the rule that the assistant says what it searched when it finds nothing.
+2. Included framework: the pricing page names the five mapped today and marks the rest "before launch" (`frameworkPricing().includedChoices` in the site library); the platform page says the same.
+3. Questionnaires: published allowances, 24 a year on Gold, 100 on Platinum, unlimited on Diamond (`questionnaires_per_year` in `config/pricing.yaml`; a pricing FAQ and a Compare row).
+4. Risk register: stays in Gold. An item in `docs/agenda.md` asks whether it should come with any included framework that requires a risk assessment, after a PeerSpot reviewer of Drata paid for ISO 27001 and found the risk module an upsell.
+5. Dogfooding: after the LLC, Alimi runs its own programme in the platform on the founder's tenant, publishes its trust page and pursues SOC 2 Type I when revenue covers the fee; prompt 12a seeds the Alimi organization (CLAUDE.md gates, `docs/agenda.md`).
+6. Demo: linked from the site as "See the product" on the home page, the platform page and the footer, noindex kept; `demo_url` in `config/brand.yaml`.
+7. Honest claims: the Compare page's side-by-side table gained an "Outcome numbers on the website" row and a callout on why there are none here.
+8. Trust page: moved from Silver to Gold (the founder's change to the recommendation).
+9. Multi-entity: unchanged, Diamond and the reseller view.
+10. Channel: the Nov 17, 2026 Vanta Trusted Network webinar is a dated item in `docs/agenda.md`, to be watched before the first MSP conversation.
+11. Who it is for: a block on the home page by the person who sent the buyer (broker, accountant, customer or attorney, IT provider).
+
+## Site map gaps, Nov 2, 2026 evening
+
+The founder asked for every section the two sites have that Alimi's did not, "even if there's no content for now". The vendor sites could not be fetched from the second session (network policy), so the list comes from the founder's screenshots of Vanta's Resources menu (Customers: customer stories, help center, academy, community, instructor-led training; Company: about, security, press, careers; Compliance resources: SOC 2, GRC, CMMC, trust, ISO 27001, Cyber Essentials, HIPAA, ISO 42001, HITRUST, TPRM, GDPR, FedRAMP; All resources), the search index of drata.com (`llms.txt`: enterprise GRC, compliance automation, trust center, questionnaire assistance, TPRM, risk, Drata AI, integrations, resource library, blog, learning, help center, customer stories, webinars; solutions by stage and industry; partners and auditor alliance; company, careers, newsroom) and the Nov 2 scan above. Added to the site: Platform menu (overview, integrations, frameworks, security, demo, the modules), Solutions (by who sent you, industry, size, framework), Frameworks with a page each, Partners menu, the Resources menu as in the screenshots, and the pages customers, help, academy, community, press, careers, trust, status, legal, privacy. Each placeholder says what exists and what comes when; nothing claims a customer, a certificate or a date that does not exist.
+
 ## Sources
 
 - https://www.vanta.com/ and https://www.vanta.com/pricing, fetched Nov 2, 2026
