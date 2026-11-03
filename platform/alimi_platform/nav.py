@@ -4,7 +4,7 @@ A captioned icon strip on the left, a second column only where a section has chi
 and the company switcher in the top bar, and on a phone a bottom bar with the four most used
 sections plus a menu. This file mirrors demo/src/lib/nav.js so the demo and the platform never
 drift; the strip lists only the sections the platform has built so far, in the demo's order, and
-the rest (evidence, people, risk, assets, trust, the assistant) join it with their prompts.
+the rest (evidence, people, risk, assets, the assistant) join it with their prompts.
 
 Everything a badge or a column shows is computed from this organization's rows inside org_scope;
 nothing is typed in.
@@ -22,6 +22,7 @@ from .policies import VIEWS as POLICY_VIEWS
 from .policies import counts as policy_counts
 from .status import ControlStatus, control_statuses, latest_results
 from .tasks import VIEWS, counts as task_counts, projects_with_counts
+from .trust import counts as trust_counts, directory_entry
 
 # The same paths as demo/src/lib/nav.js ICONS, so the two products look alike.
 ICONS: dict[str, str] = {
@@ -31,6 +32,7 @@ ICONS: dict[str, str] = {
     "policies": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z"/><path d="M12 2.5V6h3.5"/><path d="M7.5 9.5h5M7.5 12.5h5M7.5 15.5h3"/></svg>',
     "monitoring": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 10h3l2-5 3 10 2-5h5"/></svg>',
     "tasks": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5l1.5 1.5L7 4.5M3 10.5l1.5 1.5L7 9.5M3 15.5l1.5 1.5L7 14.5"/><path d="M9.5 6h7.5M9.5 11h7.5M9.5 16h7.5"/></svg>',
+    "trust": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.5l6 2.5v4.5c0 3.5-2.5 6.2-6 7.5-3.5-1.3-6-4-6-7.5V5z"/><path d="M7.5 10l1.8 1.8L12.8 8"/></svg>',
     "settings": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>',
     "menu": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>',
     # The theme toggle: the moon offers dark, the sun offers light.
@@ -56,6 +58,7 @@ SECTIONS: tuple[Section, ...] = (
     Section("policies", "Policies", "/policies", "policies", column=True),
     Section("monitoring", "Monitoring", "/monitoring", "monitoring"),
     Section("tasks", "Tasks", "/tasks", "tasks", column=True),
+    Section("trust", "Trust", "/trust", "trust", column=True),
     Section("settings", "Settings", "/settings", "settings", column=True),
 )
 
@@ -79,6 +82,13 @@ PAGE_SECTIONS: dict[str, tuple[str, str | None]] = {
     "task": ("tasks", None),
     "projects": ("tasks", "projects"),
     "project": ("tasks", None),
+    "trust": ("trust", "overview"),
+    "trust_settings": ("trust", "settings"),
+    "trust_documents": ("trust", "documents"),
+    "trust_questions": ("trust", "questions"),
+    "trust_subprocessors": ("trust", "subprocessors"),
+    "trust_updates": ("trust", "updates"),
+    "trust_requests": ("trust", "requests"),
     "settings": ("settings", "settings"),
     "audit": ("settings", "audit"),
     # The person's own pages, reached from the account menu in the top bar; no strip item is current.
@@ -225,6 +235,24 @@ def _policies_column(conn: Connection, user_id) -> dict[str, Any]:
     return {"title": "Policies", "groups": [{"label": None, "items": items}], "add": None}
 
 
+def _trust_column(conn: Connection) -> dict[str, Any]:
+    n = trust_counts(conn)
+    entry = directory_entry(conn)
+    items = [
+        {"key": "overview", "label": "Overview", "href": "/trust", "sub": "Public page is on" if entry and entry["enabled"] else "Public page is off"},
+        {"key": "documents", "label": "Documents", "href": "/trust/documents", "count": n["public"] + n["on_request"] + n["private"], "sub": f"{n['public']} public, {n['on_request']} on request"},
+        {"key": "questions", "label": "Questions", "href": "/trust/questions", "count": n["questions"], "sub": "Published answers"},
+        {"key": "subprocessors", "label": "Subprocessors", "href": "/trust/subprocessors", "count": n["subprocessors"]},
+        {"key": "updates", "label": "Updates", "href": "/trust/updates", "count": n["updates"], "sub": f"{n['subscribers']} subscriber{'s' if n['subscribers'] != 1 else ''}"},
+        {"key": "requests", "label": "Access requests", "href": "/trust/requests", "count": n["pending"], "sub": "Waiting for a decision" if n["pending"] else "Nothing waiting"},
+        {"key": "settings", "label": "Settings", "href": "/trust/settings", "sub": "Headline, statement, NDA, domains"},
+    ]
+    groups: list[dict[str, Any]] = [{"label": None, "items": items}]
+    if entry:
+        groups.append({"label": "Public", "items": [{"key": "public", "label": "View the public page", "href": f"/trust/{entry['slug']}", "sub": f"/trust/{entry['slug']}"}]})
+    return {"title": "Trust center", "groups": groups, "add": None}
+
+
 def _tasks_column(conn: Connection, user_id) -> dict[str, Any]:
     n = task_counts(conn, user_id)
     views = [
@@ -262,11 +290,13 @@ def shell(conn: Connection, settings, page: str, item: str | None = None, contro
     failing = sum(1 for r in latest_results(conn).values() if r["status"] == "fail")
     overdue = task_counts(conn, user_id)["overdue"]
     unread = policy_counts(conn, user_id)["mine"]
+    pending = trust_counts(conn)["pending"]
     badges = {
         "controls": {"n": not_ok, "tone": "neutral", "what": "controls that need something"},
         "policies": {"n": unread, "tone": "neutral", "what": "policies waiting for your acknowledgement"},
         "monitoring": {"n": failing, "tone": "danger", "what": "failing tests"},
         "tasks": {"n": overdue, "tone": "danger", "what": "overdue tasks"},
+        "trust": {"n": pending, "tone": "neutral", "what": "access requests waiting"},
     }
     sections = [
         {
@@ -291,6 +321,8 @@ def shell(conn: Connection, settings, page: str, item: str | None = None, contro
     elif section_key == "tasks":
         column = _tasks_column(conn, user_id)
         item = item or "open"
+    elif section_key == "trust":
+        column = _trust_column(conn)
     elif section_key == "settings":
         column = STATIC_COLUMNS["settings"]
     elif section_key == "account":

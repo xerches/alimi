@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "_trust.html" import visibility, readonly_note %}
+{% block title %}Documents · Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Documents</h1>
+{% if saved == "folder" %}<p class="notice" role="status">Folder added.</p>{% elif saved == "document" %}<p class="notice" role="status">Saved.</p>{% elif saved == "policies" %}<p class="notice" role="status">Your approved policies are on the page, on request.</p>{% endif %}
+<p class="lead">In folders, each document <strong>public</strong> (a link on the page), <strong>on request</strong> (shown to an approved visitor only) or <strong>private</strong> (kept here). Policy text is never public: at most on request, behind the agreement and your approval. File uploads arrive with the evidence module; until then a document is a link to where the file lives.</p>
+{{ readonly_note(can_manage) }}
+
+{% for g in groups %}
+<section class="card">
+  <h2>{{ g.name }} <small class="muted">{{ g["items"] | length }}</small></h2>
+  <table class="doc-table">
+    <thead><tr><th scope="col">Document</th><th scope="col">Kind</th><th scope="col">Visibility</th>{% if can_manage %}<th scope="col">Change</th>{% endif %}</tr></thead>
+    <tbody>
+    {% for d in g["items"] %}
+    <tr>
+      <td>{{ d.title }}{% if d.description %}<br><small class="muted">{{ d.description }}</small>{% endif %}</td>
+      <td>{% if d.kind == "policy" %}Policy{% if d.policy_slug %} · <a href="/policies/{{ d.policy_slug }}">v{{ d.policy_version }}{% if d.policy_status != "approved" %}, not approved now{% endif %}</a>{% endif %}{% else %}<a href="{{ d.url }}" rel="noopener" target="_blank">Link ↗</a>{% endif %}</td>
+      <td>{{ visibility(d.visibility) }}</td>
+      {% if can_manage %}
+      <td>
+        <details>
+          <summary class="muted">Edit</summary>
+          <form class="form" method="post" action="/trust/documents/{{ d.id }}">
+            <div class="field"><label for="t-{{ d.id }}">Title</label><input id="t-{{ d.id }}" name="title" type="text" required maxlength="160" value="{{ d.title }}"></div>
+            <div class="field"><label for="d-{{ d.id }}">Description</label><input id="d-{{ d.id }}" name="description" type="text" maxlength="600" value="{{ d.description or '' }}"></div>
+            <div class="row2">
+              <div class="field"><label for="f-{{ d.id }}">Folder</label><select id="f-{{ d.id }}" name="folder"><option value="">None</option>{% for f in folders %}<option value="{{ f.id }}"{% if f.id == d.folder_id %} selected{% endif %}>{{ f.name }}</option>{% endfor %}</select></div>
+              <div class="field"><label for="v-{{ d.id }}">Visibility</label><select id="v-{{ d.id }}" name="visibility">{% for key, label in visibilities.items() %}{% if not (d.kind == "policy" and key == "public") %}<option value="{{ key }}"{% if key == d.visibility %} selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></div>
+            </div>
+            {% if d.kind == "link" %}<div class="field"><label for="u-{{ d.id }}">Link</label><input id="u-{{ d.id }}" name="url" type="url" maxlength="400" value="{{ d.url }}"></div>{% endif %}
+            <button type="submit">Save</button>
+          </form>
+        </details>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% else %}
+<p class="muted">No documents yet.</p>
+{% endfor %}
+
+{% if can_manage %}
+<div class="cards">
+  <details class="card" id="new-document">
+    <summary><h2 class="inline">Add a document</h2></summary>
+    <form class="form" method="post" action="/trust/documents">
+      <div class="field"><label for="title">Title</label><input id="title" name="title" type="text" required maxlength="160"></div>
+      <div class="field"><label for="description">Description</label><input id="description" name="description" type="text" maxlength="600" placeholder="One line on what it is and who it is for"></div>
+      <div class="row2">
+        <div class="field"><label for="kind">Kind</label><select id="kind" name="kind">{% for key, label in kinds.items() %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="visibility">Visibility</label><select id="visibility" name="visibility">{% for key, label in visibilities.items() %}<option value="{{ key }}"{% if key == "on_request" %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="folder">Folder</label><select id="folder" name="folder"><option value="">None</option>{% for f in folders %}<option value="{{ f.id }}">{{ f.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="policy">Policy <span class="muted">(policy kind)</span></label><select id="policy" name="policy"><option value="">Pick an approved policy</option>{% for p in policies %}<option value="{{ p.id }}">{{ p.template_id }} {{ p.title }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="field"><label for="url">Link <span class="muted">(link kind)</span></label><input id="url" name="url" type="url" maxlength="400" placeholder="https://"></div>
+      <button type="submit">Add</button>
+    </form>
+  </details>
+  <details class="card" id="new-folder">
+    <summary><h2 class="inline">Add a folder</h2></summary>
+    <form class="form" method="post" action="/trust/folders">
+      <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" required maxlength="80" placeholder="Reports and certificates"></div>
+      <button type="submit">Add</button>
+    </form>
+  </details>
+  <section class="card">
+    <h2>Approved policies</h2>
+    <p>Put every approved policy on the page at once, on request, in a Policies folder. {{ policies | length }} approved now.</p>
+    <form method="post" action="/trust/documents/policies"><button type="submit" class="secondary">Add the approved policies</button></form>
+  </section>
+</div>
+{% endif %}
+{% endblock %}

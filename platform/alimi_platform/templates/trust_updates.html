@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_trust.html" import readonly_note %}
+{% block title %}Updates · Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Updates</h1>
+{% if saved %}<p class="notice" role="status">Published.</p>{% endif %}
+<p class="lead">Short notes for the people who watch your page: a new certificate, a policy approved, a vendor added. {{ subscribers }} subscriber{{ "s" if subscribers != 1 }} asked to be told; the emails go out once real sign-in and sending exist, and the notes show on the page now.</p>
+{{ readonly_note(can_manage) }}
+{% for u in updates %}
+<section class="card">
+  <p class="eyebrow">{{ u.published_on.strftime("%b %d, %Y") }}</p>
+  <h2>{{ u.title }}</h2>
+  {{ u.body_html | safe }}
+</section>
+{% else %}
+<p class="muted">No updates yet.</p>
+{% endfor %}
+{% if can_manage %}
+<details class="card" id="new">
+  <summary><h2 class="inline">Publish an update</h2></summary>
+  <form class="form" method="post" action="/trust/updates">
+    <div class="row2">
+      <div class="field"><label for="title">Title</label><input id="title" name="title" type="text" required maxlength="160"></div>
+      <div class="field"><label for="published_on">Date</label><input id="published_on" name="published_on" type="date" value="{{ today.isoformat() }}"></div>
+    </div>
+    <div class="field wide"><label for="body">Note</label><textarea id="body" name="body" rows="4" maxlength="4000"></textarea></div>
+    <button type="submit">Publish</button>
+  </form>
+</details>
+{% endif %}
+{% endblock %}

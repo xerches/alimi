@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from "_trust.html" import request_status, readonly_note %}
+{% block title %}Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Your public page</h1>
+<p class="lead">What a customer, a bank or a broker sees without an account: your statement, the documents you mark public, the ones they can request behind the agreement, your answers, your subprocessors and your updates. It answers the first round of questions before anyone sends a questionnaire.</p>
+{{ readonly_note(can_manage) }}
+
+<div class="cards">
+  <section class="card">
+    <h2>Public page</h2>
+    {% if entry %}
+    <p>{% if entry.enabled %}<span class="badge x-approved">On</span>{% else %}<span class="badge v-private">Off</span>{% endif %} <a href="/trust/{{ entry.slug }}">/trust/{{ entry.slug }}</a></p>
+    <p class="muted">{{ tp.headline or "No headline yet." }}</p>
+    {% else %}
+    <p class="muted">Not set up yet. Give the page an address and switch it on under Settings.</p>
+    {% endif %}
+    <p><a href="/trust/settings">Settings</a>{% if entry %} · <a href="/trust/{{ entry.slug }}" target="_blank" rel="noopener">Open the public page ↗</a>{% endif %}</p>
+  </section>
+  <section class="card">
+    <h2>What is on it</h2>
+    <ul class="plain">
+      <li><a href="/trust/documents">{{ n.public }} public document{{ "s" if n.public != 1 }}, {{ n.on_request }} on request</a> <span class="muted">· {{ n.private }} private, in {{ n.folders }} folder{{ "s" if n.folders != 1 }}</span></li>
+      <li><a href="/trust/questions">{{ n.questions }} published answer{{ "s" if n.questions != 1 }}</a></li>
+      <li><a href="/trust/subprocessors">{{ n.subprocessors }} subprocessor{{ "s" if n.subprocessors != 1 }}</a></li>
+      <li><a href="/trust/updates">{{ n.updates }} update{{ "s" if n.updates != 1 }}</a> <span class="muted">· {{ n.subscribers }} subscriber{{ "s" if n.subscribers != 1 }}</span></li>
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Views, last {{ views.days }} days</h2>
+    <p class="big">{{ views.total }}</p>
+    <div class="bars" role="img" aria-label="Views per day over the last {{ views.days }} days, {{ views.total }} in all">
+      {% for d in views.by_day %}<span style="height:{{ (100 * d.views / views.peak) | round | int if views.peak else 0 }}%" title="{{ d.day }}: {{ d.views }}"></span>{% endfor %}
+    </div>
+    <p class="muted">Counted on the server, one per page load; no cookies, no tracker.</p>
+  </section>
+  <section class="card">
+    <h2>Access requests</h2>
+    <p>{% if n.pending %}<strong>{{ n.pending }} waiting</strong> for a decision{% else %}Nothing waiting{% endif %}; {{ n.approved }} approved so far.</p>
+    {% if pending %}
+    <ul class="plain">
+      {% for r in pending %}<li>{{ r.name }}{% if r.company %}, {{ r.company }}{% endif %} <span class="muted">· {{ r.created_at.strftime("%b %d") }}</span> {{ request_status(r.status) }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    <p><a href="/trust/requests">Decide</a></p>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_trust.html" import request_status, readonly_note %}
+{% block title %}Access requests · Trust center{% endblock %}
+{% block content %}
+<p class="eyebrow">Trust center</p>
+<h1>Access requests</h1>
+{% if saved == "denied" %}<p class="notice" role="status">Denied. The visitor is not told why; you can email them if you want to.</p>{% endif %}
+{% if issued %}
+<div class="keybox" role="status">
+  <p><strong>Approved.</strong> {{ issued.name }}{% if issued.company %} of {{ issued.company }}{% endif %} can open the on-request documents with this link until {{ issued.expires_on.strftime("%b %d, %Y") }}. It is shown once; send it to {{ issued.email }} yourself (the email goes out from Alimi once real sign-in and sending exist).</p>
+  <p><code>{{ link }}</code></p>
+</div>
+{% endif %}
+<p class="lead">Visitors who asked for the on-request documents after reading the agreement. Approving issues a link that works for {{ tp.access_days }} days; each request also arrived as a task, which closes when you decide.</p>
+{{ readonly_note(can_manage) }}
+{% if requests %}
+<table>
+  <thead><tr><th scope="col">Who</th><th scope="col">Why</th><th scope="col">Asked</th><th scope="col">Status</th>{% if can_manage %}<th scope="col">Decide</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for r in requests %}
+  <tr>
+    <td>{{ r.name }}{% if r.company %}<br><small class="muted">{{ r.company }}</small>{% endif %}<br><small class="muted">{{ r.email }}{% if r.nda_accepted %} · agreement accepted{% endif %}</small></td>
+    <td>{{ r.reason or '<span class="muted">No reason given</span>' | safe }}</td>
+    <td class="nowrap">{{ r.created_at.strftime("%b %d, %Y") }}</td>
+    <td class="nowrap">{{ request_status(r.status) }}{% if r.status == "approved" and r.expires_on %}<br><small class="muted">until {{ r.expires_on.strftime("%b %d, %Y") }}{% if r.expires_on < today %}, expired{% endif %}</small>{% endif %}{% if r.decided_by_name %}<br><small class="muted">by {{ r.decided_by_name }}</small>{% endif %}</td>
+    {% if can_manage %}
+    <td class="nowrap">{% if r.status == "pending" %}<form class="inline-form" method="post" action="/trust/requests/{{ r.id }}/approve"><button type="submit">Approve</button></form> <form class="inline-form" method="post" action="/trust/requests/{{ r.id }}/deny"><button type="submit" class="secondary">Deny</button></form>{% else %}<span class="muted">Decided</span>{% endif %}</td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No requests yet.</p>
+{% endif %}
+{% endblock %}

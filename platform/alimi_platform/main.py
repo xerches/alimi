@@ -22,6 +22,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Engine, text
+from sqlalchemy.exc import IntegrityError
 from starlette.middleware.sessions import SessionMiddleware
 
 from .audit import record
@@ -55,6 +56,35 @@ from .policies import STATUSES as POLICY_STATUSES
 from .policies import VIEWS as POLICY_VIEWS
 from .policies import counts as policy_counts
 from .status import STATUSES, control_statuses, latest_results, requirement_statuses
+from .markdown import to_html
+from .trust import (
+    CAN_MANAGE,
+    DOCUMENT_KINDS,
+    EMAIL,
+    REQUEST_STATUSES,
+    RESERVED_SLUGS,
+    SLUG,
+    VISIBILITIES,
+    access_for_key,
+    decide_request,
+    directory_entry,
+    documents_of,
+    folders_of,
+    get_request,
+    grouped,
+    lines,
+    page_of,
+    questions_of,
+    requests_of,
+    resolve_slug,
+    submit_request,
+    subprocessors_of,
+    subscribe,
+    updates_of,
+    views_recent,
+)
+from .trust import count_view as count_trust_view
+from .trust import counts as trust_counts
 from .tasks import (
     EXTERNAL,
     KINDS,
@@ -134,6 +164,8 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
     templates.env.globals["TASK_STATUSES"] = TASK_STATUSES
     templates.env.globals["TASK_KINDS"] = KINDS
     templates.env.globals["POLICY_STATUSES"] = POLICY_STATUSES
+    templates.env.globals["VISIBILITIES"] = VISIBILITIES
+    templates.env.globals["REQUEST_STATUSES"] = REQUEST_STATUSES
     app.state.settings = settings
     app.state.engine = engine
 
@@ -153,7 +185,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
         with org_scope(engine, org_id, user_id) as conn:
             me = conn.execute(
                 text(
-                    "SELECT u.id, u.display_name, u.email, u.job_title, m.role, o.id AS org_id, o.name AS org_name "
+                    "SELECT u.id, u.display_name, u.email, u.job_title, m.role, o.id AS org_id, o.name AS org_name, o.slug AS org_slug "
                     "FROM memberships m JOIN users u ON u.id = m.user_id JOIN organizations o ON o.id = m.organization_id "
                     "WHERE m.user_id = :u"
                 ),
@@ -165,8 +197,8 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
                 raise NotSignedIn()
             yield conn, {**me, "initials": initials(me["display_name"])}
 
-    def render(request: Request, name: str, **context) -> HTMLResponse:
-        return templates.TemplateResponse(request, name, context)
+    def render(request: Request, name: str, status_code: int = 200, **context) -> HTMLResponse:
+        return templates.TemplateResponse(request, name, context, status_code=status_code)
 
     # ------------------------------------------------------------------ sign-in (mock only)
 
@@ -760,6 +792,418 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             number = new_version(conn, p, body + "\n", note, me["id"])
             record(conn, me["org_id"], me["id"], "policy.version", f"policy:{p['id']}", {"version": number, "note": note})
         return RedirectResponse(f"/policies/{slug}?done=saved", status_code=303)
+
+    # ------------------------------------------------------------------ trust center, the admin side
+
+    def manage_or_403(me: dict) -> None:
+        if me["role"] not in CAN_MANAGE:
+            raise HTTPException(status_code=403, detail="Only a company owner or admin changes the trust center.")
+
+    def trust_crumbs(*rest):
+        return [{"label": "Trust center", "href": "/trust" if rest else None}, *({"label": r} for r in rest)]
+
+    @app.get("/trust", response_class=HTMLResponse)
+    def trust_overview(request: Request):
+        with scope(request) as (conn, me):
+            return page(
+                request, "trust.html", conn, me, "trust", crumbs=trust_crumbs(), tp=page_of(conn), entry=directory_entry(conn),
+                n=trust_counts(conn), views=views_recent(conn), pending=requests_of(conn, "pending")[:5], can_manage=me["role"] in CAN_MANAGE,
+            )
+
+    @app.get("/trust/settings", response_class=HTMLResponse)
+    def trust_settings(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            entry = directory_entry(conn)
+            return page(
+                request, "trust_settings.html", conn, me, "trust_settings", crumbs=trust_crumbs("Settings"), tp=page_of(conn), entry=entry,
+                default_slug=me["org_slug"], saved=bool(saved), can_manage=me["role"] in CAN_MANAGE,
+            )
+
+    @app.post("/trust/settings")
+    async def trust_settings_save(request: Request):
+        form = await request.form()
+        slug = field(form, "slug", 64).lower()
+        if not SLUG.match(slug) or slug in RESERVED_SLUGS:
+            raise HTTPException(status_code=400, detail="The public address is 3 to 62 lowercase letters, digits or hyphens, and not a word the app uses.")
+        contact_email = field(form, "contact_email", 120)
+        if contact_email and not EMAIL.match(contact_email):
+            raise HTTPException(status_code=400, detail="The contact email does not look like an address.")
+        try:
+            access_days = int(str(form.get("access_days", "365")).strip() or 365)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Access days is a number.") from None
+        if not 1 <= access_days <= 730:
+            raise HTTPException(status_code=400, detail="Access lasts between 1 and 730 days.")
+        values = {
+            "headline": field(form, "headline", 160) or None, "statement": field(form, "statement", 8000) or None,
+            "contact_name": field(form, "contact_name", 80) or None, "contact_email": contact_email or None,
+            "show_controls": "show_controls" in form, "nda_text": field(form, "nda_text", 4000) or None, "access_days": access_days,
+            "auto": lines(str(form.get("auto_approve_domains", ""))), "blocked": lines(str(form.get("blocked_domains", ""))),
+        }
+        enabled = "enabled" in form
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            page_of(conn)
+            try:
+                if directory_entry(conn):
+                    conn.execute(text("UPDATE trust_directory SET slug = :slug, enabled = :on WHERE organization_id = app_org()"), {"slug": slug, "on": enabled})
+                else:
+                    conn.execute(text("INSERT INTO trust_directory (slug, organization_id, enabled) VALUES (:slug, :org, :on)"), {"slug": slug, "org": me["org_id"], "on": enabled})
+            except IntegrityError:
+                raise HTTPException(status_code=409, detail="That public address is taken by another company. Pick another.") from None
+            conn.execute(
+                text(
+                    "UPDATE trust_pages SET headline = :headline, statement = :statement, contact_name = :contact_name, contact_email = :contact_email, "
+                    "show_controls = :show_controls, nda_text = :nda_text, access_days = :access_days, auto_approve_domains = :auto, blocked_domains = :blocked, "
+                    "updated_at = now() WHERE organization_id = app_org()"
+                ),
+                values,
+            )
+            record(conn, me["org_id"], me["id"], "trust.settings", f"trust:{slug}", {"enabled": enabled, "slug": slug})
+        return RedirectResponse("/trust/settings?saved=1", status_code=303)
+
+    def approved_policies(conn):
+        return conn.execute(text("SELECT id, title, template_id FROM policies WHERE status = 'approved' ORDER BY template_id, title")).mappings().all()
+
+    @app.get("/trust/documents", response_class=HTMLResponse)
+    def trust_documents(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            folders = folders_of(conn)
+            return page(
+                request, "trust_documents.html", conn, me, "trust_documents", crumbs=trust_crumbs("Documents"), folders=folders,
+                groups=grouped(documents_of(conn)), policies=approved_policies(conn), kinds=DOCUMENT_KINDS, visibilities=VISIBILITIES,
+                saved=saved, can_manage=me["role"] in CAN_MANAGE,
+            )
+
+    @app.post("/trust/folders")
+    async def trust_folder_create(request: Request):
+        form = await request.form()
+        name = field(form, "name", 80)
+        if not name:
+            raise HTTPException(status_code=400, detail="A folder needs a name.")
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            position = len(folders_of(conn))
+            conn.execute(text("INSERT INTO trust_folders (organization_id, name, position) VALUES (:org, :name, :pos)"), {"org": me["org_id"], "name": name, "pos": position})
+            record(conn, me["org_id"], me["id"], "trust.folder", "trust:folders", {"name": name})
+        return RedirectResponse("/trust/documents?saved=folder", status_code=303)
+
+    def document_fields(form, conn) -> dict:
+        title = field(form, "title", 160)
+        if not title:
+            raise HTTPException(status_code=400, detail="A document needs a title.")
+        kind = choice(form, "kind", DOCUMENT_KINDS, "link")
+        visibility = choice(form, "visibility", VISIBILITIES, "private")
+        url = field(form, "url", 400)
+        if url and not url.startswith(("https://", "http://")):
+            raise HTTPException(status_code=400, detail="The link must start with https://.")
+        folder = an_id(form, "folder", {f["id"] for f in folders_of(conn)})
+        policy = an_id(form, "policy", {p["id"] for p in approved_policies(conn)})
+        if kind == "link" and not url:
+            raise HTTPException(status_code=400, detail="A link document needs its address.")
+        if kind == "policy":
+            if policy is None:
+                raise HTTPException(status_code=400, detail="Pick one of the approved policies.")
+            if visibility == "public":
+                raise HTTPException(status_code=400, detail="Policy text is shared on request, after the NDA and an approval, never publicly.")
+        return {
+            "title": title, "description": field(form, "description", 600) or None, "kind": kind, "visibility": visibility,
+            "url": url if kind == "link" else None, "policy": str(policy) if kind == "policy" else None, "folder": str(folder) if folder else None,
+        }
+
+    @app.post("/trust/documents")
+    async def trust_document_create(request: Request):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            f = document_fields(form, conn)
+            conn.execute(
+                text(
+                    "INSERT INTO trust_documents (organization_id, folder_id, title, description, visibility, kind, url, policy_id, position) "
+                    "VALUES (:org, :folder, :title, :description, :visibility, :kind, :url, :policy, (SELECT count(*) FROM trust_documents))"
+                ),
+                {**f, "org": me["org_id"]},
+            )
+            record(conn, me["org_id"], me["id"], "trust.document", "trust:documents", {"title": f["title"], "visibility": f["visibility"]})
+        return RedirectResponse("/trust/documents?saved=document", status_code=303)
+
+    @app.post("/trust/documents/policies")
+    def trust_documents_from_policies(request: Request):
+        """Every approved policy that is not on the page yet, on request, in a Policies folder."""
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            folder = next((f["id"] for f in folders_of(conn) if f["name"].lower() == "policies"), None)
+            if folder is None:
+                folder = conn.execute(
+                    text("INSERT INTO trust_folders (organization_id, name, position) VALUES (:org, 'Policies', (SELECT count(*) FROM trust_folders)) RETURNING id"),
+                    {"org": me["org_id"]},
+                ).scalar()
+            have = {d["policy_id"] for d in documents_of(conn) if d["policy_id"]}
+            added = 0
+            for p in approved_policies(conn):
+                if p["id"] in have:
+                    continue
+                conn.execute(
+                    text(
+                        "INSERT INTO trust_documents (organization_id, folder_id, title, visibility, kind, policy_id, position) "
+                        "VALUES (:org, :folder, :title, 'on_request', 'policy', :policy, (SELECT count(*) FROM trust_documents))"
+                    ),
+                    {"org": me["org_id"], "folder": str(folder), "title": p["title"], "policy": str(p["id"])},
+                )
+                added += 1
+            record(conn, me["org_id"], me["id"], "trust.document", "trust:documents", {"policies_added": added})
+        return RedirectResponse("/trust/documents?saved=policies", status_code=303)
+
+    @app.post("/trust/documents/{document_id}")
+    async def trust_document_edit(request: Request, document_id: UUID):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            current = next((d for d in documents_of(conn) if d["id"] == document_id), None)
+            if current is None:
+                raise HTTPException(status_code=404, detail="No such document.")
+            # The kind and, for a policy document, the policy do not change; make a new document instead.
+            form = dict(form)
+            form["kind"] = current["kind"]
+            if current["kind"] == "policy":
+                form["policy"] = str(current["policy_id"])
+            f = document_fields(form, conn)
+            conn.execute(
+                text("UPDATE trust_documents SET folder_id = :folder, title = :title, description = :description, visibility = :visibility, url = :url, updated_at = now() WHERE id = :id"),
+                {**f, "id": str(document_id)},
+            )
+            record(conn, me["org_id"], me["id"], "trust.document", f"trust_document:{document_id}", {"title": f["title"], "visibility": f["visibility"]})
+        return RedirectResponse("/trust/documents?saved=document", status_code=303)
+
+    @app.get("/trust/questions", response_class=HTMLResponse)
+    def trust_questions(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            return page(request, "trust_questions.html", conn, me, "trust_questions", crumbs=trust_crumbs("Questions"), questions=questions_of(conn), saved=bool(saved), can_manage=me["role"] in CAN_MANAGE)
+
+    def question_fields(form) -> dict:
+        question, answer = field(form, "question", 300), field(form, "answer", 4000)
+        if not question or not answer:
+            raise HTTPException(status_code=400, detail="A question needs its text and an answer.")
+        return {"category": field(form, "category", 60) or None, "question": question, "answer": answer, "published": "published" in form}
+
+    @app.post("/trust/questions")
+    async def trust_question_create(request: Request):
+        form = await request.form()
+        f = question_fields(form)
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            conn.execute(
+                text("INSERT INTO trust_questions (organization_id, category, question, answer, published, position) VALUES (:org, :category, :question, :answer, :published, (SELECT count(*) FROM trust_questions))"),
+                {**f, "org": me["org_id"]},
+            )
+            record(conn, me["org_id"], me["id"], "trust.question", "trust:questions", {"question": f["question"]})
+        return RedirectResponse("/trust/questions?saved=1", status_code=303)
+
+    @app.post("/trust/questions/{question_id}")
+    async def trust_question_edit(request: Request, question_id: UUID):
+        form = await request.form()
+        f = question_fields(form)
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            result = conn.execute(
+                text("UPDATE trust_questions SET category = :category, question = :question, answer = :answer, published = :published, updated_at = now() WHERE id = :id"),
+                {**f, "id": str(question_id)},
+            )
+            if result.rowcount == 0:
+                raise HTTPException(status_code=404, detail="No such question.")
+            record(conn, me["org_id"], me["id"], "trust.question", f"trust_question:{question_id}", {"published": f["published"]})
+        return RedirectResponse("/trust/questions?saved=1", status_code=303)
+
+    @app.get("/trust/subprocessors", response_class=HTMLResponse)
+    def trust_subprocessors(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            return page(request, "trust_subprocessors.html", conn, me, "trust_subprocessors", crumbs=trust_crumbs("Subprocessors"), subprocessors=subprocessors_of(conn), saved=bool(saved), can_manage=me["role"] in CAN_MANAGE)
+
+    def subprocessor_fields(form) -> dict:
+        name, purpose = field(form, "name", 120), field(form, "purpose", 300)
+        if not name or not purpose:
+            raise HTTPException(status_code=400, detail="A subprocessor needs a name and what it does for you.")
+        url = field(form, "url", 400)
+        if url and not url.startswith(("https://", "http://")):
+            raise HTTPException(status_code=400, detail="The link must start with https://.")
+        return {"name": name, "purpose": purpose, "location": field(form, "location", 120) or None, "url": url or None}
+
+    @app.post("/trust/subprocessors")
+    async def trust_subprocessor_create(request: Request):
+        form = await request.form()
+        f = subprocessor_fields(form)
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            conn.execute(
+                text("INSERT INTO trust_subprocessors (organization_id, name, purpose, location, url, position) VALUES (:org, :name, :purpose, :location, :url, (SELECT count(*) FROM trust_subprocessors))"),
+                {**f, "org": me["org_id"]},
+            )
+            record(conn, me["org_id"], me["id"], "trust.subprocessor", "trust:subprocessors", {"name": f["name"]})
+        return RedirectResponse("/trust/subprocessors?saved=1", status_code=303)
+
+    @app.post("/trust/subprocessors/{subprocessor_id}")
+    async def trust_subprocessor_edit(request: Request, subprocessor_id: UUID):
+        form = await request.form()
+        f = subprocessor_fields(form)
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            result = conn.execute(
+                text("UPDATE trust_subprocessors SET name = :name, purpose = :purpose, location = :location, url = :url, updated_at = now() WHERE id = :id"),
+                {**f, "id": str(subprocessor_id)},
+            )
+            if result.rowcount == 0:
+                raise HTTPException(status_code=404, detail="No such subprocessor.")
+            record(conn, me["org_id"], me["id"], "trust.subprocessor", f"trust_subprocessor:{subprocessor_id}", {"name": f["name"]})
+        return RedirectResponse("/trust/subprocessors?saved=1", status_code=303)
+
+    @app.get("/trust/updates", response_class=HTMLResponse)
+    def trust_updates(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            n = trust_counts(conn)
+            return page(request, "trust_updates.html", conn, me, "trust_updates", crumbs=trust_crumbs("Updates"), updates=updates_of(conn), subscribers=n["subscribers"], today=date.today(), saved=bool(saved), can_manage=me["role"] in CAN_MANAGE)
+
+    @app.post("/trust/updates")
+    async def trust_update_create(request: Request):
+        form = await request.form()
+        title = field(form, "title", 160)
+        if not title:
+            raise HTTPException(status_code=400, detail="An update needs a title.")
+        body = field(form, "body", 4000) or None
+        published_on = a_date(form, "published_on") or date.today()
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            conn.execute(
+                text("INSERT INTO trust_updates (organization_id, title, body, published_on, created_by) VALUES (:org, :title, :body, :on, :by)"),
+                {"org": me["org_id"], "title": title, "body": body, "on": published_on, "by": me["id"]},
+            )
+            record(conn, me["org_id"], me["id"], "trust.update", "trust:updates", {"title": title})
+        return RedirectResponse("/trust/updates?saved=1", status_code=303)
+
+    @app.get("/trust/requests", response_class=HTMLResponse)
+    def trust_requests(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            return page(request, "trust_requests.html", conn, me, "trust_requests", crumbs=trust_crumbs("Access requests"), requests=requests_of(conn), tp=page_of(conn), saved=saved, can_manage=me["role"] in CAN_MANAGE, today=date.today())
+
+    @app.post("/trust/requests/{request_id}/{decision}", response_class=HTMLResponse)
+    def trust_request_decide(request: Request, request_id: UUID, decision: str):
+        if decision not in ("approve", "deny"):
+            raise HTTPException(status_code=404, detail="No such action.")
+        with scope(request) as (conn, me):
+            manage_or_403(me)
+            req = get_request(conn, request_id)
+            if req is None:
+                raise HTTPException(status_code=404, detail="No such request.")
+            if req["status"] != "pending":
+                raise HTTPException(status_code=409, detail="This request was already decided.")
+            key = decide_request(conn, req, approve=decision == "approve", by=me["id"], page=page_of(conn))
+            record(conn, me["org_id"], me["id"], f"trust.request.{decision}", f"trust_request:{request_id}", {"email": req["email"]})
+            if decision == "deny":
+                return RedirectResponse("/trust/requests?saved=denied", status_code=303)
+            # The key is shown once, on this response, and never put in a URL or a log.
+            entry = directory_entry(conn)
+            link = f"{str(request.base_url).rstrip('/')}/trust/{entry['slug']}?key={key}" if entry else None
+            return page(
+                request, "trust_requests.html", conn, me, "trust_requests", crumbs=trust_crumbs("Access requests"), requests=requests_of(conn), tp=page_of(conn),
+                issued=get_request(conn, request_id), link=link, can_manage=True, today=date.today(),
+            )
+
+    # ------------------------------------------------------------------ trust center, the public page
+
+    def public_org(slug: str) -> UUID:
+        if slug in RESERVED_SLUGS:
+            raise HTTPException(status_code=404, detail="No such page.")
+        with engine.begin() as conn:  # no organization context: trust_directory is readable by design
+            org_id = resolve_slug(conn, slug)
+        if org_id is None:
+            raise HTTPException(status_code=404, detail="No such page.")
+        return org_id
+
+    def public_context(conn, slug: str, key: str | None) -> dict:
+        tp = conn.execute(text("SELECT * FROM trust_pages WHERE organization_id = app_org()")).mappings().first()
+        if tp is None:
+            raise HTTPException(status_code=404, detail="No such page.")
+        org = conn.execute(text("SELECT name FROM organizations WHERE id = app_org()")).mappings().first()
+        access = access_for_key(conn, key)
+        # On-request documents are listed by title for everyone (that is what a visitor asks for);
+        # only the link to open one needs the key. Private documents never leave the admin side.
+        docs = documents_of(conn, visible_to=("public", "on_request"))
+        on_request = sum(1 for d in docs if d["visibility"] == "on_request")
+        summary = None
+        if tp["show_controls"]:
+            statuses = control_statuses(conn)
+            runs = runs_of(conn, 1)
+            summary = {"controls": len(statuses), "areas": len({c.domain for c in statuses}), "last_scan": runs[0]["started_at"] if runs else None}
+        return {
+            "slug": slug, "tp": {**tp, "statement_html": to_html(tp["statement"]), "nda_html": to_html(tp["nda_text"])}, "company": org["name"].replace(" (sample)", ""),
+            "access": access, "key": key if access else None, "groups": grouped(docs), "on_request_count": on_request,
+            "questions": questions_of(conn, published_only=True), "subprocessors": subprocessors_of(conn), "updates": updates_of(conn, 10), "summary": summary,
+        }
+
+    @app.get("/trust/{slug}", response_class=HTMLResponse)
+    def trust_public(request: Request, slug: str, key: str | None = None, subscribed: str | None = None):
+        org_id = public_org(slug)
+        with org_scope(engine, org_id) as conn:
+            context = public_context(conn, slug, key)
+            count_trust_view(conn, org_id)
+        return render(request, "trust_public.html", me=None, subscribed=bool(subscribed), **context)
+
+    @app.get("/trust/{slug}/documents/{document_id}", response_class=HTMLResponse)
+    def trust_public_document(request: Request, slug: str, document_id: UUID, key: str | None = None):
+        org_id = public_org(slug)
+        with org_scope(engine, org_id) as conn:
+            access = access_for_key(conn, key)
+            doc = next((d for d in documents_of(conn, visible_to=("public", "on_request") if access else ("public",)) if d["id"] == document_id), None)
+            if doc is None:
+                raise HTTPException(status_code=404, detail="No such document, or it needs an access key.")
+            if doc["kind"] == "link":
+                return RedirectResponse(doc["url"], status_code=303)
+            version = version_of(conn, doc["policy_id"], doc["policy_version"]) if doc["policy_status"] == "approved" else None
+            if version is None:
+                raise HTTPException(status_code=404, detail="This policy is not approved right now.")
+            html, outline = render_policy(version["body"])
+            org = conn.execute(text("SELECT name FROM organizations WHERE id = app_org()")).mappings().first()
+        return render(request, "trust_document.html", me=None, slug=slug, key=key, doc=doc, document=html, outline=outline, access=access, company=org["name"].replace(" (sample)", ""))
+
+    @app.post("/trust/{slug}/request", response_class=HTMLResponse)
+    async def trust_public_request(request: Request, slug: str):
+        org_id = public_org(slug)
+        form = await request.form()
+        name, email = field(form, "name", 80), field(form, "email", 120).lower()
+        company, reason = field(form, "company", 120) or None, field(form, "reason", 1000) or None
+        nda_accepted = "nda" in form
+        with org_scope(engine, org_id) as conn:
+            tp = page_of(conn)
+            errors = []
+            if not name:
+                errors.append("Your name.")
+            if not EMAIL.match(email):
+                errors.append("A working email address.")
+            if tp["nda_text"] and not nda_accepted:
+                errors.append("The agreement box has to be ticked.")
+            org = conn.execute(text("SELECT name FROM organizations WHERE id = app_org()")).mappings().first()
+            company_name = org["name"].replace(" (sample)", "")
+            if errors:
+                return render(request, "trust_requested.html", me=None, slug=slug, company=company_name, errors=errors, outcome=None, status_code=400)
+            owner = conn.execute(text("SELECT user_id FROM memberships WHERE role = 'owner' ORDER BY created_at LIMIT 1")).scalar()
+            try:
+                req, key = submit_request(conn, org_id, tp, name=name, email=email, company=company, reason=reason, nda_accepted=nda_accepted, owner_id=owner)
+            except PermissionError as exc:
+                return render(request, "trust_requested.html", me=None, slug=slug, company=company_name, errors=[str(exc)], outcome="blocked", status_code=403)
+            record(conn, org_id, None, "trust.request", f"trust_request:{req['id']}", {"email": email, "status": req["status"]})
+            link = f"{str(request.base_url).rstrip('/')}/trust/{slug}?key={key}" if key else None
+        return render(request, "trust_requested.html", me=None, slug=slug, company=company_name, errors=[], outcome=req["status"], link=link, expires_on=req["expires_on"], contact=tp["contact_email"])
+
+    @app.post("/trust/{slug}/subscribe")
+    async def trust_public_subscribe(request: Request, slug: str):
+        org_id = public_org(slug)
+        form = await request.form()
+        email = field(form, "email", 120).lower()
+        if not EMAIL.match(email):
+            raise HTTPException(status_code=400, detail="That does not look like an email address.")
+        with org_scope(engine, org_id) as conn:
+            if subscribe(conn, org_id, email):
+                record(conn, org_id, None, "trust.subscribe", "trust:subscribers")
+        return RedirectResponse(f"/trust/{slug}?subscribed=1#updates", status_code=303)
 
     # ------------------------------------------------------------------ the person's own pages
 

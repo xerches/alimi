@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Security at {{ company }}{% endblock %}
+{% block content %}
+<div class="public">
+  <section class="hero">
+    <p class="eyebrow">Security at {{ company }}</p>
+    <h1>{{ tp.headline or "How we protect the data you trust us with" }}</h1>
+    <div class="statement">{{ tp.statement_html | safe }}</div>
+    {% if summary %}<p><strong>Monitored by Alimi:</strong> {{ summary.controls }} controls across {{ summary.areas }} areas{% if summary.last_scan %}, last check {{ summary.last_scan.strftime("%b %d, %Y") }}{% endif %}.</p>{% endif %}
+    {% if tp.contact_name or tp.contact_email %}<p>Security questions: {{ tp.contact_name or "" }}{% if tp.contact_email %}{% if tp.contact_name %}, {% endif %}<a href="mailto:{{ tp.contact_email }}">{{ tp.contact_email }}</a>{% endif %}.</p>{% endif %}
+  </section>
+
+  {% if access %}
+  <p class="notice" role="status">Shared with {{ access.name }}{% if access.company %}, {{ access.company }}{% endif %} under the agreement, until {{ access.expires_on.strftime("%b %d, %Y") }}. The on-request documents are open below.</p>
+  {% endif %}
+
+  <h2 id="documents">Documents</h2>
+  {% if groups %}
+  {% for g in groups %}
+  <h3>{{ g.name }}</h3>
+  <ul class="doc-list">
+    {% for d in g["items"] %}
+    <li>
+      <span class="grow">{{ d.title }}{% if d.description %}<small>{{ d.description }}</small>{% endif %}{% if d.kind == "policy" and d.policy_version %}<small>Version {{ d.policy_version }}{% if d.policy_approved_at %}, approved {{ d.policy_approved_at.strftime("%b %d, %Y") }}{% endif %}</small>{% endif %}</span>
+      {% if d.visibility == "public" %}<a href="/trust/{{ slug }}/documents/{{ d.id }}" rel="noopener">Open ↗</a>
+      {% elif access %}<a href="/trust/{{ slug }}/documents/{{ d.id }}?key={{ key }}">Open</a>
+      {% else %}<a href="#request">Request</a>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+  {% else %}
+  <p class="muted">No public documents yet.</p>
+  {% endif %}
+  {% if on_request_count and not access %}<p class="muted">{{ on_request_count }} document{{ "s" if on_request_count != 1 }} marked <em>Request</em> {{ "are" if on_request_count != 1 else "is" }} shared after a short agreement and {{ company }}'s approval: <a href="#request">ask for access</a>.</p>{% endif %}
+
+  {% if questions %}
+  <h2 id="questions">Questions we are asked</h2>
+  {% for q in questions %}
+  <details class="q">
+    <summary>{{ q.question }}</summary>
+    {{ q.answer_html | safe }}
+  </details>
+  {% endfor %}
+  {% endif %}
+
+  {% if subprocessors %}
+  <h2 id="subprocessors">Subprocessors</h2>
+  <p class="muted">Vendors that handle data on our behalf, each under contract and reviewed every year.</p>
+  <table>
+    <thead><tr><th scope="col">Subprocessor</th><th scope="col">Purpose</th><th scope="col">Location</th></tr></thead>
+    <tbody>{% for v in subprocessors %}<tr><td>{% if v.url %}<a href="{{ v.url }}" rel="noopener">{{ v.name }}</a>{% else %}{{ v.name }}{% endif %}</td><td>{{ v.purpose }}</td><td>{{ v.location or "" }}</td></tr>{% endfor %}</tbody>
+  </table>
+  {% endif %}
+
+  <h2 id="updates">Updates</h2>
+  {% for u in updates %}
+  <article class="update">
+    <h3>{{ u.title }}</h3>
+    <p class="muted">{{ u.published_on.strftime("%b %d, %Y") }}</p>
+    {{ u.body_html | safe }}
+  </article>
+  {% else %}
+  <p class="muted">No updates yet.</p>
+  {% endfor %}
+  {% if subscribed %}<p class="notice" role="status">Thank you. We will tell you when something changes.</p>{% endif %}
+  <form class="form" method="post" action="/trust/{{ slug }}/subscribe">
+    <div class="field">
+      <label for="sub-email">Get an email when this page changes</label>
+      <input id="sub-email" name="email" type="email" required maxlength="120" placeholder="you@yourcompany.com">
+    </div>
+    <button type="submit" class="secondary">Subscribe</button>
+  </form>
+
+  {% if not access %}
+  <h2 id="request">Request access</h2>
+  <p>For the documents marked <em>request</em>: tell us who you are and why, and {{ company }} will approve or decline, usually within one business day.</p>
+  <form class="form" method="post" action="/trust/{{ slug }}/request">
+    <div class="row2">
+      <div class="field"><label for="req-name">Your name</label><input id="req-name" name="name" type="text" required maxlength="80"></div>
+      <div class="field"><label for="req-email">Work email</label><input id="req-email" name="email" type="email" required maxlength="120"></div>
+    </div>
+    <div class="field"><label for="req-company">Company</label><input id="req-company" name="company" type="text" maxlength="120"></div>
+    <div class="field"><label for="req-reason">Why you need the documents</label><textarea id="req-reason" name="reason" rows="3" maxlength="1000"></textarea></div>
+    {% if tp.nda_text %}
+    <div class="field"><span class="label">Agreement</span><div class="card">{{ tp.nda_html | safe }}</div></div>
+    <div class="checks"><label><input type="checkbox" name="nda" required> I agree</label></div>
+    {% endif %}
+    <button type="submit">Send the request</button>
+  </form>
+  {% endif %}
+
+  <footer>Trust page by <a href="https://alimi.com" rel="noopener">Alimi</a>. {{ company }} decides what is public, what is on request and what stays private.</footer>
+</div>
+{% endblock %}
