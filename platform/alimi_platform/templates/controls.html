@@ -2,15 +2,16 @@
 {% from "_status.html" import badge %}
 {% block title %}Controls{% endblock %}
 {% block content %}
-<h1>Controls</h1>
-<p class="lead">Each control's status is computed: tested controls from the latest scan, the rest from evidence that has not passed its renewal date.</p>
+<p class="eyebrow">Compliance</p>
+<h1>{% if domain %}{{ domains[domain] }}{% else %}Controls{% endif %}</h1>
+<p class="lead">{% if domain %}{{ shown | length }} of {{ controls | length }} controls are in this area. {% endif %}Each control's status is computed: tested controls from the latest scan, the rest from evidence that has not passed its renewal date.</p>
 <table>
   <thead><tr><th scope="col">Control</th><th scope="col">Area</th><th scope="col">How often</th><th scope="col">Status</th></tr></thead>
   <tbody>
-  {% for c in controls %}
-    <tr id="{{ c.id }}">
+  {% for c in shown %}
+    <tr id="{{ c.id }}" data-domain="{{ c.domain }}">
       <td><a href="/controls/{{ c.id }}">{{ c.id }}</a> {{ c.name }}</td>
-      <td>{{ domains.get(c.domain, c.domain) }}</td>
+      <td><a href="/controls?domain={{ c.domain }}">{{ domains.get(c.domain, c.domain) }}</a></td>
       <td>{{ c.frequency }}</td>
       <td>{{ badge(c.status) }}</td>
     </tr>

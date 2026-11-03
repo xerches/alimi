@@ -2,7 +2,7 @@
 {% from "_status.html" import badge, result_badge %}
 {% block title %}{{ ctl.id }}{% endblock %}
 {% block content %}
-<p><a href="/controls">All controls</a></p>
+<p class="eyebrow">{{ domains.get(ctl.domain, ctl.domain) }}</p>
 <h1>{{ ctl.id }} {{ ctl.name }} {{ badge(status.status) }}</h1>
 <p>{{ ctl.description }}</p>
 {% if ctl.implementation %}<p class="muted">How it is usually run: {{ ctl.implementation }}</p>{% endif %}

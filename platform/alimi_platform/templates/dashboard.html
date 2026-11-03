@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% from "_status.html" import badge %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
+<p class="eyebrow">Home</p>
 <h1>{{ me.org_name }}</h1>
-<p class="lead">Where the company stands on its {{ total }} controls, from the latest scan and the evidence on file. The readiness scores arrive in a later build step.</p>
+<p class="lead">Where the company stands on its {{ total }} controls, from the latest scan and the evidence on file. The month's list and the two readiness scores arrive in later build steps; the demo shows what they look like.</p>
 
 <section class="tiles" aria-label="Controls by status">
   {% for key, label in STATUSES.items() %}
@@ -11,20 +12,24 @@
   {% endfor %}
 </section>
 
-<h2>Connected systems</h2>
-{% for i in integrations %}
-<section class="card">
-  <h3>{{ i.display_name }}</h3>
-  <p class="muted">
-    {{ "Mock connection" if i.mode == "mock" else "Live connection" }}{% if i.fixture %} using the scanner's "{{ i.fixture }}" sample tenant{% endif %}.
-    Read-only scopes: {{ i.scopes | join(", ") }}.
-    Token {{ "stored encrypted" if i.has_token else "not stored" }}.
-  </p>
-  <p>Last scan: {{ i.last_sync_at.strftime("%b %d, %Y %H:%M UTC") if i.last_sync_at else "never" }}</p>
-  <button hx-post="/integrations/{{ i.id }}/scan" hx-target="#scan-{{ i.id }}" hx-swap="innerHTML" hx-disabled-elt="this">Run checks now</button>
-  <div id="scan-{{ i.id }}" class="scan-out" aria-live="polite">
-    {% if last_run %}<p class="muted">Latest scan: <a href="/scans/{{ last_run.id }}">{{ last_run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</a>.</p>{% endif %}
-  </div>
-</section>
-{% endfor %}
+<div class="cards">
+  <section class="card">
+    <h2>Last scan</h2>
+    {% if last_run %}
+    <p><a href="/scans/{{ last_run.id }}">{{ last_run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</a>: {{ last_run.passed }} passed, {{ last_run.failed }} failed, {{ last_run.attest }} need an attestation{% if last_run.errors %}, {{ last_run.errors }} could not run{% endif %}.</p>
+    {% else %}
+    <p class="muted">No scan yet.</p>
+    {% endif %}
+    <p><a href="/monitoring">Monitoring: every test, its latest result, and the button that runs the checks</a></p>
+  </section>
+  <section class="card">
+    <h2>Connected systems</h2>
+    <ul class="plain">
+      {% for i in integrations %}
+      <li>{{ i.display_name }} <span class="muted">· {{ "mock connection" if i.mode == "mock" else "live connection" }}, read-only{% if i.last_sync_at %}, last scan {{ i.last_sync_at.strftime("%b %d, %Y") }}{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+    <p><a href="/settings">Permissions and tokens</a></p>
+  </section>
+</div>
 {% endblock %}
