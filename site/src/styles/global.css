@@ -1,5 +1,17 @@
 /* Alimi site. Every color comes from config/brand.yaml, inlined as --color-* custom properties in
-   <head> by the layout. No hex, rgb or named colors live in this file or in any component. */
+   <head> by the layout. No hex, rgb or named colors live in this file or in any component.
+
+   Look (Nov 3, 2026): the site follows the product's B+ shell so a prospect sees one product from the
+   first page to the app. The page sits on the app's canvas (background_alt); content lives on white
+   cards with a 10px radius and a hairline border; numbers sit on tiles with a colored top edge; status
+   is a pill with a dot; the menu is the app's ink strip of captioned icons, run across the top
+   instead of down the side, with the app's light bar (breadcrumbs here) under it. */
+
+:root {
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px var(--color-secondary-soft), 0 6px 20px var(--color-secondary-soft);
+}
 
 *,
 *::before,
@@ -21,38 +33,40 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--color-background-alt);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Type */
+/* Type: the app's scale, a step larger for reading on a marketing page. */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-heading);
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0 0 0.5em;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2rem, 1.2rem + 3.5vw, 3.25rem);
+  font-size: clamp(1.75rem, 1.25rem + 1.8vw, 2.5rem);
   font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
 h2 {
-  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.125rem);
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.625rem);
   font-weight: 700;
 }
 
 h3,
 .h3 {
-  font-size: 1.25rem;
-  font-weight: 650;
+  font-size: 1.0625rem;
+  font-weight: 600;
 }
 
 p,
@@ -65,7 +79,7 @@ figure {
 
 small,
 .small {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
 }
 
 .measure {
@@ -73,7 +87,7 @@ small,
 }
 
 .lede {
-  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
   color: var(--color-text-secondary);
   max-width: 40rem;
 }
@@ -86,10 +100,10 @@ small,
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
 }
 
 /* Links and focus */
@@ -128,7 +142,7 @@ a:active {
   background: var(--color-surface);
   color: var(--color-primary);
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 /* Layout */
@@ -138,25 +152,32 @@ a:active {
 }
 
 .section {
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
 }
 
+/* The canvas is the gray of the app; an "alt" band is a white sheet on it, so the rhythm of the page stays. */
 .section--alt {
-  background: var(--color-background-alt);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section--alt + .section--alt {
+  border-top: 0;
 }
 
 .section--tight {
-  padding-block: clamp(2rem, 4vw, 3rem);
+  padding-block: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 
 .section__heading {
   max-width: 44rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .grid {
   display: grid;
-  gap: 1rem;
+  gap: 0.875rem;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
 }
 
@@ -171,11 +192,11 @@ a:active {
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.625rem;
   align-items: center;
 }
 
-/* Dark bands: the secondary color carries the earlier teal identity. */
+/* Dark bands: the indigo ink of the app's strip and count block. */
 .dark {
   background: var(--color-secondary);
   color: var(--color-text-inverse);
@@ -203,28 +224,39 @@ a:active {
   outline-color: var(--color-focus-ring-on-dark);
 }
 
-/* Cards */
+/* Cards: the app's card, white with a hairline and a 10px radius. */
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: var(--radius);
+  padding: 1rem 1.125rem;
 }
 
 .card > :last-child {
   margin-bottom: 0;
 }
 
+.card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.card p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}
+
 .card--link {
   display: block;
   color: inherit;
   text-decoration: none;
-  transition: border-color 120ms ease, transform 120ms ease;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .card--link:hover {
   color: inherit;
   border-color: var(--color-primary);
+  box-shadow: var(--shadow);
 }
 
 .card--link:hover .card__cta {
@@ -244,17 +276,22 @@ a:active {
   border-color: var(--color-border-dark);
 }
 
-/* Buttons */
+.dark .card p {
+  color: var(--color-text-inverse-muted);
+}
+
+/* Buttons: the app's, with a 40px minimum height so they stay easy to tap. */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.7rem 1.25rem;
-  border-radius: 8px;
-  border: 2px solid transparent;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
   font: inherit;
-  font-weight: 600;
+  font-size: 0.9375rem;
+  font-weight: 500;
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
@@ -263,23 +300,26 @@ a:active {
 
 .button--primary {
   background: var(--color-primary);
+  border-color: var(--color-primary);
   color: var(--color-text-inverse);
 }
 
 .button--primary:hover {
   background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
   color: var(--color-text-inverse);
 }
 
 .button--primary:active {
   background: var(--color-primary-active);
+  border-color: var(--color-primary-active);
   color: var(--color-text-inverse);
 }
 
 .button--secondary {
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-primary);
-  border-color: currentColor;
+  border-color: var(--color-primary);
 }
 
 .button--secondary:hover {
@@ -293,16 +333,19 @@ a:active {
 
 .dark .button--primary {
   background: var(--color-primary-on-dark);
+  border-color: var(--color-primary-on-dark);
   color: var(--color-text);
 }
 
 .dark .button--primary:hover,
 .dark .button--primary:active {
   background: var(--color-primary-on-dark-hover);
+  border-color: var(--color-primary-on-dark-hover);
   color: var(--color-text);
 }
 
 .dark .button--secondary {
+  background: transparent;
   color: var(--color-text-inverse);
   border-color: var(--color-text-inverse-muted);
 }
@@ -314,20 +357,19 @@ a:active {
   border-color: var(--color-text-inverse);
 }
 
-/* Header */
+/* Header, row one: the app's ink strip of captioned icons, across the top. */
 .site-header {
-  background: var(--color-secondary);
+  background: var(--color-background-dark);
   color: var(--color-text-inverse);
-  border-bottom: 1px solid var(--color-border-dark);
 }
 
-.site-header .container {
+.site-header__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  padding-block: 0.75rem;
+  gap: 0.25rem 1.5rem;
+  padding-block: 0.4rem;
 }
 
 .brand {
@@ -336,8 +378,8 @@ a:active {
   gap: 0.55rem;
   color: var(--color-text-inverse);
   font-weight: 700;
-  font-size: 1.375rem;
-  letter-spacing: -0.02em;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
   text-decoration: none;
   padding: 0.25rem 0;
 }
@@ -347,17 +389,19 @@ a:active {
 }
 
 .brand__mark {
-  width: 1.5rem;
-  height: 1.5rem;
-  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-on-dark);
+  color: var(--color-background-dark);
+  font-size: 0.9375rem;
+  font-weight: 700;
 }
 
-.brand__mark-back {
-  fill: var(--color-accent);
-}
-
-.brand__mark-front {
-  fill: var(--color-primary-on-dark);
+.brand:focus-visible {
+  outline-color: var(--color-focus-ring-on-dark);
 }
 
 .nav ul {
@@ -366,90 +410,383 @@ a:active {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.125rem 0.25rem;
+  gap: 0.125rem;
 }
 
-.nav a {
-  display: inline-block;
-  padding: 0.55rem 0.6rem;
-  border-radius: 6px;
-  color: var(--color-text-inverse);
-  font-size: 0.95rem;
+.nav__item {
+  position: relative;
+}
+
+/* A top-level item: icon over caption, 64px wide, like the strip's captioned icons. */
+.nav__link {
+  display: grid;
+  grid-template-rows: 20px auto;
+  gap: 4px;
+  justify-items: center;
+  align-content: center;
+  min-width: 4rem;
+  min-height: 3.25rem;
+  padding: 0.4rem 0.35rem 0.35rem;
+  border-radius: 8px;
+  color: var(--color-text-inverse-muted);
+  font-size: 0.6875rem;
   font-weight: 500;
+  line-height: 1;
   text-decoration: none;
-  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  list-style: none;
 }
 
-.nav a:hover {
-  color: var(--color-primary-on-dark-hover);
+.nav__link::-webkit-details-marker {
+  display: none;
+}
+
+.nav__icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav__link:hover,
+.nav__menu[open] > .nav__link {
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
+  text-decoration: none;
+}
+
+.nav__link--current {
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 var(--color-primary-on-dark);
+}
+
+/* A menu's caption carries a small chevron, so it reads as a menu and not a page. */
+.nav__link--menu .nav__caption::after {
+  content: "";
+  display: inline-block;
+  width: 0.3em;
+  height: 0.3em;
+  margin-left: 0.35em;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-0.15em) rotate(45deg);
+}
+
+.nav__menu[open] > .nav__link--menu .nav__caption::after {
+  transform: translateY(0.1em) rotate(-135deg);
+}
+
+.nav__link:focus-visible {
+  outline-color: var(--color-focus-ring-on-dark);
+  outline-offset: -3px;
+}
+
+/* Contact is the one filled item, the strip's periwinkle on ink. */
+.nav__link--button {
+  background: var(--color-primary-on-dark);
+  color: var(--color-text);
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+.nav__link--button:hover,
+.nav__link--button.nav__link--current {
+  background: var(--color-primary-on-dark-hover);
+  color: var(--color-text);
+  box-shadow: none;
+}
+
+/* Dropdown panels: the app's context column, laid flat. On narrow screens the panel opens in the
+   flow under its item and takes the row; from 56rem it floats under the strip. */
+.nav__panel {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0.75rem 0.875rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 0.875rem 1.5rem;
+}
+
+.nav__group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.125rem;
+}
+
+.nav__group-title {
+  margin: 0 0.5rem 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.nav__panel a {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.nav__panel a:hover {
+  background: var(--color-background-alt);
+  color: var(--color-primary-hover);
+  text-decoration: none;
+}
+
+.nav__panel a[aria-current="page"] {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.nav__panel a:focus-visible {
+  outline-color: var(--color-focus-ring);
+}
+
+.nav__link-label {
+  display: block;
+  font-weight: 500;
+}
+
+.nav__link-text {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.nav__all {
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+  grid-column: 1 / -1;
+  font-size: 0.875rem;
+}
+
+.nav__all a {
+  display: inline-block;
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
-.nav a[aria-current="page"] {
-  border-bottom-color: var(--color-accent);
+@media (max-width: 55.98rem) {
+  .nav__item:has(.nav__menu[open]) {
+    flex-basis: 100%;
+  }
 }
 
-.nav a:focus-visible {
-  outline-color: var(--color-focus-ring-on-dark);
+@media (min-width: 56rem) {
+  .nav__panel {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 20;
+    min-width: 18rem;
+    width: max-content;
+    max-width: min(92vw, 48rem);
+    margin: 0;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+  .nav__item:nth-last-child(-n + 3) .nav__panel {
+    left: auto;
+    right: 0;
+  }
+  .nav__panel--wide {
+    grid-template-columns: repeat(4, minmax(11rem, 1fr));
+    max-width: min(92vw, 64rem);
+  }
 }
 
-/* Hero */
+/* Header, row two: the app's light bar, with the breadcrumb trail and the two links every page wants. */
+.topbar {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.8125rem;
+}
+
+.topbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  min-height: 2.5rem;
+  padding-block: 0.2rem;
+}
+
+.crumbs {
+  min-width: 0;
+  flex: 1;
+}
+
+.crumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 0.1rem;
+  color: var(--color-text-muted);
+}
+
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.crumbs li + li::before {
+  content: "/";
+  margin: 0 0.35rem;
+  color: var(--color-border-strong);
+}
+
+.crumbs a,
+.crumbs span {
+  display: inline-block;
+  padding: 0.35rem 0.25rem;
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  text-decoration: underline;
+}
+
+.crumbs span[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.topbar__links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: none;
+}
+
+.topbar__link {
+  padding: 0.35rem 0.25rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topbar__link:hover {
+  text-decoration: underline;
+}
+
+.topbar__link::after {
+  content: " \2197";
+}
+
+.topbar__button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topbar__button:hover {
+  background: var(--color-primary-hover);
+  color: var(--color-text-inverse);
+}
+
+@media (max-width: 40rem) {
+  .topbar__link {
+    display: none;
+  }
+}
+
+/* Hero: the app's page header, eyebrow, title, lede and actions, on the canvas. */
 .hero {
-  padding-block: clamp(3rem, 8vw, 6rem);
+  padding-block: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
 }
 
 .hero h1 {
-  max-width: 22ch;
+  max-width: 24ch;
 }
 
 .hero .actions {
-  margin-top: 1.75rem;
+  margin-top: 1.5rem;
 }
 
-/* Steps (how it works) */
+/* Steps (how it works): the app's numbered "this week" list, one card. */
 .steps {
   list-style: none;
   counter-reset: step;
   margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  padding: 0.25rem 1.125rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
 }
 
 .steps li {
   counter-increment: step;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.25rem 0.875rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.steps li:first-child {
+  border-top: 0;
 }
 
 .steps li::before {
   content: counter(step);
   display: inline-grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin-bottom: 0.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 50%;
   background: var(--color-primary);
   color: var(--color-text-inverse);
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 600;
+  grid-row: 1 / span 2;
 }
 
 .steps h3 {
-  margin-bottom: 0.35rem;
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
 }
 
 .steps p {
   margin: 0;
   color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  grid-column: 2;
+}
+
+.dark .steps {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
 }
 
 .dark .steps li {
-  background: var(--color-surface-dark);
-  border-color: var(--color-border-dark);
+  border-top-color: var(--color-border-dark);
 }
 
 .dark .steps li::before {
@@ -461,10 +798,306 @@ a:active {
   color: var(--color-text-inverse-muted);
 }
 
+/* Tiles: the app's number tiles, a label, a value, a note; a score tile carries a colored top edge. */
+.tile,
+.facts div,
+.stat {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  padding: 0.875rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.tile--score {
+  border-top: 3px solid var(--color-primary);
+}
+
+.tile--alt {
+  border-top: 3px solid var(--color-accent-deep);
+}
+
+.tile__label,
+.facts dt,
+.stat__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.tile__value,
+.facts dd,
+.stat__value {
+  display: block;
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.tile__value small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: 0.25rem;
+}
+
+.tile__note {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.facts {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  margin: 0 0 1.5rem;
+}
+
+/* A fact is words as often as a number, so it sits a step below the tile value. */
+.facts dd {
+  font-size: 1.25rem;
+}
+
+.stats {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  margin: 1.5rem 0;
+}
+
+.stat__label {
+  display: block;
+  margin-top: 0;
+  letter-spacing: 0.05em;
+}
+
+.dark .stat,
+.dark .tile {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+}
+
+.dark .stat__value,
+.dark .tile__value {
+  color: var(--color-text-inverse);
+}
+
+.dark .stat__label,
+.dark .tile__label,
+.dark .tile__note {
+  color: var(--color-text-inverse-muted);
+}
+
+/* Pills: the app's status pill, a dot and a word. */
+.pill,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.pill::before,
+.tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.pill--ok,
+.tag--ready {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.pill--warn {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.pill--bad {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.pill--info {
+  background: var(--color-info-soft);
+  color: var(--color-info);
+}
+
+.pill--ink {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+}
+
+.tag {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+}
+
+/* The sample panel on the home page: the app's Home, with the demo company's data. */
+.sample {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.sample__hero {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+}
+
+.count {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius);
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
+}
+
+.count__big {
+  font-size: 2.125rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.count__big small {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--color-text-inverse-muted);
+  margin-left: 0.4rem;
+}
+
+.count__sub {
+  font-size: 0.8125rem;
+  color: var(--color-text-inverse-muted);
+}
+
+.count__accent {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-top: 0.25rem;
+}
+
+.card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__head h3 {
+  margin: 0;
+}
+
+.card__head .muted {
+  font-size: 0.75rem;
+}
+
+.todo-list {
+  list-style: none;
+  counter-reset: todo;
+  margin: 0;
+  padding: 0;
+}
+
+.todo-list li {
+  counter-increment: todo;
+  display: grid;
+  grid-template-columns: 1.5rem 1fr auto;
+  gap: 0.15rem 0.75rem;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.todo-list li:first-child {
+  border-top: 0;
+}
+
+.todo-list li::before {
+  content: counter(todo);
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: 0.75rem;
+  font-weight: 600;
+  grid-row: 1 / span 2;
+}
+
+.todo__title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.todo__meta {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.todo__meta b {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.todo-list .pill {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+.sample__caption {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 30rem) {
+  .todo-list li {
+    grid-template-columns: 1.5rem 1fr;
+  }
+  .todo-list .pill {
+    grid-column: 2;
+    grid-row: auto;
+    justify-self: start;
+  }
+}
+
 /* Pricing */
 .tiers {
   display: grid;
-  gap: 1rem;
+  gap: 0.875rem;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
 }
 
@@ -480,8 +1113,10 @@ a:active {
 .tier__price {
   font-size: 1.75rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
   margin: 0.25rem 0 0;
+  color: var(--color-text);
 }
 
 .tier__note {
@@ -522,10 +1157,10 @@ a:active {
 /* Badges, callouts, markers */
 .badge {
   display: inline-block;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  line-height: 1.4;
-  padding: 0.15rem 0.6rem;
+  line-height: 1.5;
+  padding: 0.1rem 0.55rem;
   border-radius: 999px;
   background: var(--color-secondary-soft);
   color: var(--color-secondary);
@@ -543,11 +1178,12 @@ a:active {
 }
 
 .callout {
-  padding: 1rem 1.25rem;
-  border-left: 4px solid var(--color-info);
-  border-radius: 0 10px 10px 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--color-info);
+  border-radius: 0 8px 8px 0;
   background: var(--color-info-soft);
   color: var(--color-text);
+  font-size: 0.9375rem;
 }
 
 .callout > :last-child {
@@ -613,31 +1249,38 @@ a:active {
   letter-spacing: 0.04em;
 }
 
-/* Tables */
+/* Tables: the app's table, uppercase column heads on a white sheet. */
 .table-wrap {
   overflow-x: auto;
   margin-bottom: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin: 0;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  font-size: 0.9375rem;
 }
 
 .table th,
 .table td {
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.875rem;
   border-bottom: 1px solid var(--color-border);
   vertical-align: top;
 }
 
 .table th {
-  background: var(--color-background-alt);
-  font-weight: 650;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .table tr:last-child td {
@@ -658,6 +1301,7 @@ a:active {
 .field label,
 .field legend {
   font-weight: 600;
+  font-size: 0.9375rem;
 }
 
 .field input,
@@ -665,12 +1309,12 @@ a:active {
 .field textarea {
   width: 100%;
   min-height: 44px;
-  padding: 0.65rem 0.75rem;
+  padding: 0.6rem 0.75rem;
   font: inherit;
   color: var(--color-text);
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .field textarea {
@@ -694,7 +1338,7 @@ a:active {
 
 .field .hint {
   color: var(--color-text-muted);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .form__row {
@@ -714,27 +1358,29 @@ a:active {
 .form__privacy {
   margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .hidden-field {
   display: none;
 }
 
-/* Footer */
+/* Footer: the deep ink of the strip. */
 .site-footer {
   background: var(--color-background-dark);
   color: var(--color-text-inverse-muted);
-  padding-block: 3rem 2rem;
+  padding-block: 2.5rem 1.75rem;
   border-top: 1px solid var(--color-border-dark);
+  font-size: 0.9rem;
 }
 
 .site-footer h2 {
-  font-size: 0.9375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-inverse);
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-inverse-muted);
+  margin-bottom: 0.6rem;
 }
 
 .site-footer ul {
@@ -744,7 +1390,7 @@ a:active {
 }
 
 .site-footer li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .site-footer a {
@@ -763,19 +1409,19 @@ a:active {
 
 .site-footer__grid {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  margin-bottom: 2rem;
+  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  margin-bottom: 1.75rem;
 }
 
 .site-footer__bottom {
   border-top: 1px solid var(--color-border-dark);
-  padding-top: 1.5rem;
-  font-size: 0.9375rem;
+  padding-top: 1.25rem;
+  font-size: 0.8125rem;
 }
 
 .site-footer__bottom p {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 /* Links inside the running text of the bottom line are underlined, so color is not the only cue. */
@@ -785,122 +1431,46 @@ a:active {
 }
 
 /* Definition lists and misc */
-.facts {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  margin: 0 0 1.5rem;
-}
-
-.facts div {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-}
-
-.facts dt {
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.facts dd {
-  margin: 0.25rem 0 0;
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
 .questions {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.625rem;
 }
 
 .questions li {
   display: grid;
   gap: 0.25rem;
-  padding: 1rem 1.25rem;
+  padding: 0.875rem 1.125rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
-}
-
-@media print {
-  .site-header,
-  .site-footer,
-  .skip-link,
-  form {
-    display: none;
-  }
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
 }
 
 /* Platform tiers and stats (added with the platform rework, Nov 1, 2026) */
 .tier--featured {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 1px var(--color-primary);
+  border-top: 3px solid var(--color-primary);
 }
 
 .tier__meta {
   margin: 0.25rem 0 0.5rem;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
 }
 
 .tier__per {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 400;
   color: var(--color-text-muted);
+  letter-spacing: 0;
 }
 
 .tier .button {
   margin-top: auto;
   align-self: flex-start;
-}
-
-.stats {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-  margin: 1.5rem 0;
-}
-
-.stat {
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  background: var(--color-surface);
-}
-
-.stat__value {
-  display: block;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--color-text);
-}
-
-.stat__label {
-  display: block;
-  margin-top: 0.25rem;
-  color: var(--color-text-secondary);
-  font-size: 0.9375rem;
-}
-
-.dark .stat {
-  background: var(--color-surface-dark);
-  border-color: var(--color-border-dark);
-}
-
-.dark .stat__value {
-  color: var(--color-text-inverse);
-}
-
-.dark .stat__label {
-  color: var(--color-text-inverse-muted);
 }
 
 /* Documents rendered from the repo (free policies and the payment fraud procedure) */
@@ -910,12 +1480,12 @@ a:active {
 
 .document h2 {
   margin-top: 2.5rem;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .document h3 {
   margin-top: 1.75rem;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
 }
 
 .document p,
@@ -926,9 +1496,9 @@ a:active {
 .document blockquote {
   margin: 0 0 1.5rem;
   padding: 0.75rem 1rem;
-  border-left: 4px solid var(--color-warning);
+  border-left: 3px solid var(--color-warning);
   background: var(--color-warning-soft);
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0 8px 8px 0;
 }
 
 .document blockquote p {
@@ -978,6 +1548,8 @@ a:active {
 @media print {
   .site-header,
   .site-footer,
+  .skip-link,
+  form,
   .hero .actions,
   .document-actions {
     display: none;
@@ -1001,7 +1573,10 @@ a:active {
 .table--compact th,
 .table--compact td {
   padding: 0.5rem 0.6rem;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
+}
+.table--compact th {
+  font-size: 0.6875rem;
 }
 .calculator__result {
   display: block;
@@ -1013,11 +1588,12 @@ a:active {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   margin: 0 0 0.25rem;
 }
 .compare-grid {
   display: grid;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 .compare-grid .card h3 {
   margin-top: 0;
@@ -1031,165 +1607,6 @@ a:active {
 }
 .sources li {
   margin-bottom: 0.35rem;
-}
-
-/* Header menus (Nov 2, 2026): <details> dropdowns, so they work without JavaScript. On narrow screens
-   the panel opens in the flow under its summary; from 56rem it floats under the header. */
-.nav__item {
-  position: relative;
-}
-.nav__menu summary {
-  list-style: none;
-  cursor: pointer;
-  display: inline-block;
-  padding: 0.55rem 0.6rem;
-  border-radius: 6px;
-  color: var(--color-text-inverse);
-  font-size: 0.95rem;
-  font-weight: 500;
-  border-bottom: 2px solid transparent;
-}
-.nav__menu summary::-webkit-details-marker {
-  display: none;
-}
-.nav__menu summary::after {
-  content: "";
-  display: inline-block;
-  width: 0.45em;
-  height: 0.45em;
-  margin-left: 0.4em;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateY(-0.15em) rotate(45deg);
-}
-.nav__menu[open] summary::after {
-  transform: translateY(0.1em) rotate(-135deg);
-}
-.nav__menu summary:hover,
-.nav__menu[open] summary {
-  color: var(--color-primary-on-dark-hover);
-  text-decoration: underline;
-}
-.nav__menu--current summary {
-  border-bottom-color: var(--color-accent);
-}
-.nav__menu summary:focus-visible {
-  outline-color: var(--color-focus-ring-on-dark);
-}
-.nav__panel {
-  margin: 0.25rem 0 0.5rem;
-  padding: 1rem 1.25rem;
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  display: grid;
-  gap: 1rem 2rem;
-}
-.nav__group ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.125rem;
-}
-.nav__group-title {
-  margin: 0 0 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-muted);
-}
-.nav__panel a {
-  display: block;
-  padding: 0.4rem 0.5rem;
-  border-radius: 6px;
-  color: var(--color-text);
-  text-decoration: none;
-  border-bottom: 0;
-  font-size: 0.95rem;
-}
-.nav__panel a:hover {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-hover);
-  text-decoration: none;
-}
-.nav__panel a[aria-current="page"] {
-  color: var(--color-primary);
-  font-weight: 650;
-}
-.nav__panel a:focus-visible {
-  outline-color: var(--color-focus-ring);
-}
-.nav__link-label {
-  display: block;
-  font-weight: 600;
-}
-.nav__link-text {
-  display: block;
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
-.nav__all {
-  margin: 0;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--color-border);
-  grid-column: 1 / -1;
-}
-.nav__all a {
-  display: inline-block;
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-.nav__button {
-  background: var(--color-primary-on-dark);
-  color: var(--color-text) !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-  margin-left: 0.25rem;
-}
-.nav__button:hover {
-  background: var(--color-primary-on-dark-hover);
-  text-decoration: none !important;
-}
-@media (min-width: 56rem) {
-  .nav__panel {
-    position: absolute;
-    top: calc(100% + 0.25rem);
-    left: 0;
-    z-index: 20;
-    min-width: 18rem;
-    width: max-content;
-    max-width: min(92vw, 48rem);
-    margin: 0;
-    box-shadow: 0 12px 32px var(--color-secondary-soft);
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  }
-  .nav__item:nth-last-child(-n + 3) .nav__panel {
-    left: auto;
-    right: 0;
-  }
-  .nav__panel--wide {
-    grid-template-columns: repeat(4, minmax(11rem, 1fr));
-    max-width: min(92vw, 64rem);
-  }
-}
-
-/* Status tags on the frameworks tables */
-.tag {
-  display: inline-block;
-  padding: 0.1rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  background: var(--color-secondary-soft);
-  color: var(--color-secondary);
-  white-space: nowrap;
-}
-.tag--ready {
-  background: var(--color-success-soft);
-  color: var(--color-success);
 }
 
 /* About: the story as a timeline, the founder card */
@@ -1215,14 +1632,14 @@ a:active {
   height: 0.875rem;
   border-radius: 50%;
   background: var(--color-primary);
-  border: 2px solid var(--color-background);
+  border: 2px solid var(--color-background-alt);
 }
 .timeline__when {
   display: block;
-  font-size: 0.8125rem;
-  font-weight: 700;
+  font-size: 0.6875rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--color-primary);
   margin-bottom: 0.25rem;
 }
@@ -1262,13 +1679,13 @@ a:active {
 .glossary {
   margin: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.625rem;
 }
 .glossary__entry {
-  padding: 1rem 1.25rem;
+  padding: 0.875rem 1.125rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: var(--radius);
 }
 .glossary dt {
   font-weight: 700;

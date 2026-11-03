@@ -34,7 +34,7 @@ const fullTitle = path === "/" ? `${brand.display_name}: ${brand.tagline}` : `${
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header current={path} />
+    <Header current={path} title={title} />
     <main id="main">
       <slot />
     </main>

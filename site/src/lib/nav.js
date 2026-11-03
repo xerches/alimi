@@ -10,10 +10,12 @@ const demo = decided(brand.demo_url);
 /** A framework's guide page link, from its catalog id. */
 const guide = (id) => ({ href: frameworkHref(id), label: framework(id).short });
 
-/** Header menus. A top-level entry with `items` is a dropdown; one without is a plain link. */
+/** Header menus. A top-level entry with `groups` is a dropdown; one without is a plain link. `icon` names a
+ * drawing in icons.js; the header shows it above the label, as the product's menu strip does (Nov 3, 2026). */
 export const MENUS = [
   {
     label: "Platform",
+    icon: "platform",
     href: "/platform",
     groups: [
       {
@@ -43,6 +45,7 @@ export const MENUS = [
   },
   {
     label: "Solutions",
+    icon: "solutions",
     href: "/solutions",
     groups: [
       {
@@ -76,11 +79,12 @@ export const MENUS = [
       },
     ],
   },
-  { label: "Frameworks", href: "/frameworks" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Compare", href: "/compare" },
+  { label: "Frameworks", icon: "frameworks", href: "/frameworks" },
+  { label: "Pricing", icon: "pricing", href: "/pricing" },
+  { label: "Compare", icon: "compare", href: "/compare" },
   {
     label: "Partners",
+    icon: "partners",
     href: "/for-partners",
     groups: [
       {
@@ -96,6 +100,7 @@ export const MENUS = [
   },
   {
     label: "Resources",
+    icon: "resources",
     href: "/resources",
     wide: true,
     groups: [
@@ -148,7 +153,7 @@ export const MENUS = [
       },
     ],
   },
-  { label: "Contact", href: "/contact", button: true },
+  { label: "Contact", icon: "contact", href: "/contact", button: true },
 ];
 
 /** Footer columns. */
@@ -236,4 +241,23 @@ export function siteMapPaths() {
   for (const column of FOOTER) for (const item of column.items) add(item.href);
   for (const page of MAIN_PAGES) add(page.href);
   return [...out].sort();
+}
+
+/**
+ * The breadcrumb trail for a page, for the light bar under the header: Home, then the top-level menu
+ * that lists the page (if any), then the page itself. Derived from the menus, so no page spells it out.
+ */
+export function breadcrumbs(path, title) {
+  const clean = (href) => href.split("#")[0];
+  const trail = [{ href: "/", label: "Home" }];
+  if (path === "/") return trail;
+  // A page under a menu's own path (a framework page under /frameworks) belongs to that menu, even when
+  // another menu also links to it, so the trail agrees with the highlighted item in the strip.
+  const menu =
+    MENUS.find((m) => clean(m.href) === path) ??
+    MENUS.find((m) => clean(m.href) !== "/" && path.startsWith(`${clean(m.href)}/`)) ??
+    MENUS.find((m) => (m.groups ?? []).some((g) => g.items.some((i) => !i.external && clean(i.href) === path)));
+  if (menu && clean(menu.href) !== path) trail.push({ href: clean(menu.href), label: menu.label });
+  trail.push({ href: path, label: title, current: true });
+  return trail;
 }

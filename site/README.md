@@ -30,6 +30,15 @@ Node 22 or newer. Lighthouse needs a Chrome; set `CHROME_PATH` if it is not on t
 
 A value of `TODO` in brand.yaml (domain, contact email, LinkedIn) renders as absent, so nothing fake ships. Placeholder copy, if any is ever needed again, goes in the `<Todo>` component, visible on purpose; the build prints how many remain (zero since prompt 11).
 
+## Layout
+
+Since Nov 3, 2026 the site wears the product's shell (the "B+" layout chosen for the demo and the platform), so a prospect sees one product from the first page to the app, with one difference the founder asked for: the menu runs across the top, not down the side.
+
+- **Header, row one:** the app's ink strip of captioned icons, one per top-level menu (`icon` in `src/lib/nav.js`, drawn in `src/lib/icons.js`). The current section carries the app's highlight bar. Dropdowns are `<details>` elements, so they work without JavaScript; one bundled script closes the others when one opens.
+- **Header, row two:** the app's light bar, here with a breadcrumb trail (`breadcrumbs()` in `nav.js`: Home, the menu that lists the page, the page) and the two links every page wants: "See the product" and "Work out your price".
+- **Page:** the app's canvas (`background_alt`), white cards with a 10px radius, number tiles with a colored top edge (`.tile`), status pills with a dot (`.pill`), the app's buttons, tables and callouts. The home page opens like the app's Home: the demo company's renewal countdown, readiness and "this week" list, labelled as a sample.
+- No webfonts, as before: `typography` in brand.yaml names Inter with system fallbacks, and the demo renders the same way.
+
 ## Color system
 
 One source of truth: the `colors` map in `config/brand.yaml`, grouped by purpose (brand, backgrounds and surfaces, text, borders, semantic, interactive states). Components use `var(--color-…)` only. Dark bands (header, footer, the `.dark` sections) switch to the `*_on_dark`, `*_inverse` and `*_dark` tokens through CSS, not through a second palette.
