@@ -16,7 +16,7 @@ title: Reseller Agreement Outline
 
 ## 2. Appointment
 
-Alimi appoints the Reseller as a non-exclusive reseller of the products and services listed in Schedule A (the current price list) to companies of 10 to 200 people. No territory is exclusive. The Reseller may not appoint sub-resellers without written consent.
+Alimi appoints the Reseller as a non-exclusive reseller of the products and services listed in Schedule A (the current price list) to companies of 10 people and up. No territory is exclusive. The Reseller may not appoint sub-resellers without written consent.
 
 ## 3. Pricing and tiers
 

@@ -77,17 +77,48 @@ export const PRODUCT_PAGES = {
 
 // ----- frameworks: the catalog in config/frameworks.yaml and how they are priced -----
 
-/** Every framework in the catalog, in order. IDs, names and our own summaries only. */
-export function frameworkCatalog() {
-  return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included) }));
+/** The catalog's categories in display order, our own grouping in the buyer's words (Nov 2, 2026). */
+export const FRAMEWORK_CATEGORIES = [
+  { id: "security", name: "Security", text: "The standards a customer, an insurer or a buyer's security team asks for." },
+  { id: "privacy", name: "Privacy", text: "Laws and standards about personal data, by country, state and industry." },
+  { id: "ai", name: "AI", text: "How a company governs the AI it builds or uses." },
+  { id: "government", name: "Government and defence", text: "What federal, state and defence customers require of their suppliers." },
+  { id: "financial", name: "Financial services", text: "Rules for banks, insurers, lenders, fintechs and the companies that serve them." },
+  { id: "industry", name: "Industry and operations", text: "Continuity, quality and sector standards that arrive with a particular customer." },
+];
+
+const CATEGORY_IDS = new Set(FRAMEWORK_CATEGORIES.map((c) => c.id));
+for (const f of catalog) {
+  if (!CATEGORY_IDS.has(f.category)) throw new Error(`frameworks.yaml: "${f.id}" has an unknown category "${f.category}"`);
 }
 
-/** The frameworks a customer picks from: the catalog without Alimi's own posture score, which every plan carries. */
+/** The page for one framework: /frameworks/<id with hyphens>. */
+export function frameworkHref(id) {
+  return `/frameworks/${String(id).replace(/_/g, "-")}`;
+}
+
+/** Every framework in the catalog, in order. IDs, names and our own summaries only. */
+export function frameworkCatalog() {
+  return catalog.map((f) => ({ ...f, always_included: Boolean(f.always_included), slug: String(f.id).replace(/_/g, "-"), href: frameworkHref(f.id) }));
+}
+
+/** The framework whose page is /frameworks/<slug>, or null. */
+export function frameworkBySlug(slug) {
+  return frameworkCatalog().find((f) => f.slug === slug) ?? null;
+}
+
+/** The choosable frameworks grouped by category, in category order; categories with no entry are left out. */
+export function frameworksByCategory() {
+  const choosable = choosableFrameworks();
+  return FRAMEWORK_CATEGORIES.map((c) => ({ ...c, frameworks: choosable.filter((f) => f.category === c.id) })).filter((c) => c.frameworks.length > 0);
+}
+
+/** The frameworks a customer picks from: the catalog without the Alimi Recommended Security Posture Score, which every plan carries. */
 export function choosableFrameworks() {
   return frameworkCatalog().filter((f) => !f.always_included);
 }
 
-/** The frameworks in every plan regardless of tier (Alimi's security posture score). */
+/** The frameworks in every plan regardless of tier (the Alimi Recommended Security Posture Score). */
 export function alwaysIncludedFrameworks() {
   return frameworkCatalog().filter((f) => f.always_included);
 }
@@ -101,7 +132,14 @@ export function framework(id) {
 /** id -> name, for pages that print a framework by its ID. */
 export const FRAMEWORK_LABELS = Object.fromEntries(catalog.map((f) => [f.id, f.name]));
 
-/** The add-on price, the included count, the volume discounts and the cap, with text for the page. */
+/** "A", "A and B", "A, B and C": names in a sentence. */
+export function listNames(names) {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+/** The add-on price, the included count, the volume discounts and the cap, with text for the page. The included
+ *  framework is chosen from the frameworks that are mapped today (finding 2 of the Nov 2, 2026 site scan). */
 export function frameworkPricing() {
   const f = pricing.products.platform.frameworks;
   const discounts = [...f.discounts].sort((a, b) => a.from_total - b.from_total);
@@ -112,11 +150,18 @@ export function frameworkPricing() {
     discounts: discounts.map((d) => ({ fromTotal: d.from_total, off: d.discount, offText: percent(d.discount) })),
     max: f.max,
     rule: f.rule,
+    includedChoices: choosableFrameworks().filter((c) => c.mapped).map((c) => c.name),
+    pendingCount: choosableFrameworks().filter((c) => !c.mapped).length,
+    // Two sentences, trimmed at the founder's request on Nov 2, 2026; the mapped-today list is a pricing FAQ.
     text:
-      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, and so is the Alimi Security Posture Score. Each further framework is ${money(f.addon_per_user_month)} per user a month. ` +
-      discounts.map((d) => `With ${d.from_total} or more frameworks, every added framework is ${percent(d.discount)} off`).join("; ") +
-      `. Up to ${f.max} frameworks on one account, not counting the posture score.`,
+      `${f.included === 1 ? "One framework of your choice is" : `${f.included} frameworks of your choice are`} included in every plan, and the ${alwaysIncludedFrameworks()[0].name} comes with all of them. ` +
+      `Each further framework is ${money(f.addon_per_user_month)} per user a month, ${discounts.map((d) => `${percent(d.discount)} off from the ${ordinal(d.from_total)}`).join(" and ")}, up to ${f.max} on one account.`,
   };
+}
+
+function ordinal(n) {
+  const words = { 1: "first", 2: "second", 3: "third", 4: "fourth", 5: "fifth", 6: "sixth", 7: "seventh", 8: "eighth", 9: "ninth", 10: "tenth" };
+  return words[n] ?? `${n}th`;
 }
 
 /** The discount on add-on frameworks for an account holding `total` frameworks (the included one counts). */
@@ -178,8 +223,28 @@ function decorate(tier) {
         ? "Unlimited integrations"
         : `${tier.integrations} integration${tier.integrations === 1 ? "" : "s"}`;
     out.examples = EXAMPLE_SIZES.map((users) => ({ users, ...quote({ tierId: tier.id, users }) }));
+    // Questionnaire allowance (Nov 2, 2026): 0 = not in the tier, a number = per year, "unlimited" = no cap.
+    const q = tier.questionnaires_per_year;
+    if (q === "unlimited") {
+      out.questionnairesShort = "unlimited";
+      out.questionnairesLabel = "Unlimited questionnaires";
+    } else if (typeof q === "number" && q > 0) {
+      out.questionnairesShort = `${q} a year`;
+      out.questionnairesLabel = `${q} questionnaires a year`;
+    } else {
+      out.questionnairesShort = null;
+      out.questionnairesLabel = null;
+    }
   }
   return out;
+}
+
+/** "24 a year on Gold, 100 a year on Platinum, unlimited on Diamond": the questionnaire allowances in one phrase. */
+export function questionnaireAllowances() {
+  return platform()
+    .tiers.filter((t) => t.questionnairesShort)
+    .map((t) => `${t.questionnairesShort} on ${t.name}`)
+    .join(", ");
 }
 
 export function product(key) {

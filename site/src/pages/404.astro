@@ -2,18 +2,12 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-const pages = [
-  { href: "/platform", label: "The platform" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/compare", label: "Compare" },
-  { href: "/for-partners", label: "For partners" },
-  { href: "/about", label: "About" },
-];
+import { MAIN_PAGES } from "../lib/nav.js";
 ---
 
-<Base title="Page not found" description="That page does not exist on Alimi. The platform, pricing, the comparison with Vanta and Drata, partner terms and contact page are one click away." path="/404">
+<Base title="Page not found" description="That page does not exist on Alimi. The platform, frameworks, solutions, pricing, the comparison with Vanta and Drata, partner terms, resources and the contact page are one click away." path="/404">
   <Hero eyebrow="404" title="That page is not here">
-    <p class="lede">The address may have changed while the site is in beta. Everything that exists is linked below.</p>
+    <p class="lede">The address may have changed while the site is in beta. The main pages are linked below, and the menus at the top list everything.</p>
     <div class="actions">
       <a class="button button--primary" href="/">Home</a>
       <a class="button button--secondary" href="/contact">Contact</a>
@@ -21,7 +15,7 @@ const pages = [
   </Hero>
   <Section id="links" tone="alt" title="Pages">
     <ul>
-      {pages.map((p) => (
+      {MAIN_PAGES.map((p) => (
         <li><a href={p.href}>{p.label}</a></li>
       ))}
     </ul>

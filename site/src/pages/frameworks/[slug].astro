@@ -1,0 +1,92 @@
+---
+// One page per framework in config/frameworks.yaml: the "compliance resources" guides of the Resources
+// menu. Each page carries our own summary, who needs it, how Alimi handles it and what it costs; the
+// plain-English guide itself is marked as coming, honestly, until it is written. No standard's text.
+import Base from "../../layouts/Base.astro";
+import Hero from "../../components/Hero.astro";
+import Section from "../../components/Section.astro";
+import Callout from "../../components/Callout.astro";
+import { brand, platform, frameworkCatalog, FRAMEWORK_CATEGORIES, money } from "../../lib/config.js";
+
+export function getStaticPaths() {
+  return frameworkCatalog().map((f) => ({ params: { slug: f.slug }, props: { framework: f } }));
+}
+
+const { framework: f } = Astro.props;
+const plat = platform();
+const fw = plat.frameworks;
+const category = FRAMEWORK_CATEGORIES.find((c) => c.id === f.category);
+const related = frameworkCatalog().filter((o) => o.category === f.category && o.id !== f.id && !o.always_included);
+const gold = plat.tiers[1];
+const platinum = plat.tiers[2];
+
+const handling = f.always_included
+  ? "The score is in every plan and counts nothing toward the framework total. Its controls are the ones security teams recommend beyond what any standard asks, scored by severity and insurer impact, so you can see the gap between passing an audit and being hard to break into."
+  : f.mapped
+    ? "The policy library and the control catalog already carry this framework's requirement IDs. Readiness is computed per control from the tests and the evidence, the policies that answer each requirement are mapped by criterion ID, and the export pack for an auditor or a broker is one filter away."
+    : "The requirement list for this framework is being mapped to the control catalog and the policy library before launch. The same controls, evidence and policies will answer it once the mapping lands; nothing has to be collected twice.";
+
+const cost = f.always_included
+  ? "In every plan, at no charge."
+  : `As the one framework included in any plan, or as an add-on at ${money(fw.addon)} per user a month on top of another framework, with the discounts from the fifth framework on the account.`;
+---
+
+<Base title={f.name} description={`${f.name}: ${f.summary} Who needs it, how the Alimi platform handles it and what it costs.`} path={f.href}>
+  <Hero eyebrow={f.always_included ? "In every plan" : category.name} title={f.name}>
+    <p class="lede">{f.summary}</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#calculator">Work out your price</a>
+      <a class="button button--secondary" href="/frameworks">All frameworks</a>
+    </div>
+  </Hero>
+
+  <Section id="who" tone="alt" title="Who usually needs it">
+    <p class="measure">{f.audience}.</p>
+    {!f.always_included && <p class="measure muted">If a customer, an insurer or a regulator has asked you for {f.short} by name, that is usually the whole brief. If you are not sure which framework you were asked for, <a href="/contact">send the request</a> and the founder will say.</p>}
+  </Section>
+
+  <Section id="alimi" title={`How ${brand.display_name} handles it`}>
+    <p class="measure">{handling}</p>
+    <dl class="facts">
+      <div>
+        <dt>Status</dt>
+        <dd>{f.always_included ? "In every plan" : f.mapped ? "Ready" : "Before launch"}</dd>
+      </div>
+      <div>
+        <dt>Costs</dt>
+        <dd>{f.always_included ? "Included" : `${money(fw.addon)} per user a month as an add-on`}</dd>
+      </div>
+      <div>
+        <dt>Trust page and questionnaires</dt>
+        <dd>From {gold.name}</dd>
+      </div>
+      <div>
+        <dt>Custom additions</dt>
+        <dd>From {platinum.name}</dd>
+      </div>
+    </dl>
+    <p class="measure">{cost}</p>
+  </Section>
+
+  <Section id="guide" tone="alt" title={`The ${f.short} guide`}>
+    <Callout label="Being written" tone="info">
+      <p>A plain-English guide to {f.short} for a company without a security team, with what is asked, what it costs, how long it takes and where companies your size usually stumble, is on its way. Until it is published, the founder answers the same questions by email, and the <a href="/glossary">glossary</a> explains the terms.</p>
+    </Callout>
+    <p class="muted small">Requirement IDs and our own summaries only; the standard's text is copyrighted and stays with its owners.</p>
+  </Section>
+
+  {related.length > 0 && (
+    <Section id="related" title={`Other ${category.name.toLowerCase()} frameworks`}>
+      <ul class="columns">
+        {related.map((o) => <li><a href={o.href}>{o.name}</a></li>)}
+      </ul>
+    </Section>
+  )}
+
+  <Section id="next" tone="dark" title="Start with the price" lede="Per user a month, with one framework included and the whole policy library.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#calculator">Work out your price</a>
+      <a class="button button--secondary" href="/platform">How the platform works</a>
+    </div>
+  </Section>
+</Base>

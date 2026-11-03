@@ -8,7 +8,7 @@ On Nov 2, 2026 prompt 12 was split into 12a, 12b and 12c, and 12c takes the insu
 
 Later on Nov 1, 2026 the founder made the platform the only product (see CLAUDE.md, "What Alimi is"). Prompt 11 became the one-platform site rework and is done; prompts 15 and 16 build the AI governance module of the platform rather than a separate kit; the payment fraud kit and the policy library are platform modules, not products.
 
-On the evening of Nov 2, 2026 a review round (PR #14) changed the packaging, not the order: prices are per user a month in four tiers (Silver, Gold, Platinum, Diamond) with one framework included and the rest as add-ons; `config/frameworks.yaml` lists 23 frameworks, led by the Alimi Security Posture Score (our own, not accredited, in every plan; the "security posture" score in 12c is this score); there are no free resources and no policy text in public, so nothing in prompts 15 to 17 ships as free content; the site gained Compare and For resellers pages and the indigo palette; prompt 14 now covers the whole framework catalog; and end-user training is prompt 18.
+On the evening of Nov 2, 2026 a review round (PR #14) changed the packaging, not the order: prices are per user a month in four tiers (Silver, Gold, Platinum, Diamond) with one framework included and the rest as add-ons; `config/frameworks.yaml` lists 23 frameworks, led by the Alimi Recommended Security Posture Score (our own, not accredited, in every plan; the "security posture" score in 12c is this score); there are no free resources and no policy text in public, so nothing in prompts 15 to 17 ships as free content; the site gained Compare and For resellers pages and the indigo palette; prompt 14 now covers the whole framework catalog; and end-user training is prompt 18.
 
 ## Phase 1: Foundation (weeks 1-2)
 
@@ -167,7 +167,7 @@ metric until it is attributed to the employer it came from), Contact. The old pr
 redirect. Every TODO replaced; check-dist counts them and the build fails on a typed color.
 ```
 
-**11a. Policy Pack demo** (added Nov 1, 2026 at the founder's request; done Nov 1, 2026)
+**11a. Policy Pack demo** (added Nov 1, 2026 at the founder's request; done Nov 1, 2026; since Nov 2, 2026 the demo is linked from the site as "See the product", noindex kept)
 ```
 Read CLAUDE.md, /policies, /config and the scanner. In /demo, build an unlisted static demo of
 the platform around the Policy Pack, modelled on how Vanta, Drata and Secureframe show their
@@ -195,7 +195,8 @@ the criterion IDs and the check's version. First framework: the insurer question
 the insurer mapping in /config/checks.yaml and the controls in /config/controls.yaml, with
 criterion IDs and our own plain-English summaries only. Login is a mock-mode user picker that
 refuses to load unless ALIMI_MODE=mock; real login is 12b. Seed two sample organizations so the
-isolation tests mean something. One `docker compose up` runs app and database on mock data; CI
+isolation tests mean something, and a third, Alimi itself, that reads the founder's own tenant when
+the operator points it there, so the company runs its own programme in the product from day one. One `docker compose up` runs app and database on mock data; CI
 runs the tests against a Postgres service container on every PR. Show me the plan first.
 ```
 
@@ -216,7 +217,7 @@ the audit log and carried into the export. Mock data, tests, plain-English page 
 **12c. Insurer readiness dashboard, two scores, export pack** (pulled forward from prompt 14 on Nov 2, 2026)
 ```
 Extend /platform. A readiness dashboard for the insurer framework: audit readiness (share of
-requirements whose controls are Ok) and the Alimi Security Posture Score (check results weighted
+requirements whose controls are Ok) and the Alimi Recommended Security Posture Score (check results weighted
 by severity and insurer impact; our own score, not an accredited framework, in every plan, the
 first entry of /config/frameworks.yaml), each defined in one plain-English line on the page; every requirement with its
 controls and status; top five fixes. Render the insurer-ready report by calling alimi_report
@@ -237,7 +238,11 @@ mapping), versions, an approver, and staff acceptance tracking with reminders. P
 the staff list from the connected Microsoft 365 or Google Workspace tenant, an onboarding and
 offboarding checklist per person, and training completion (a date per person per lesson;
 prompt 18 supplies the lessons, so leave the field and the reminder in place). Link policies
-and people to controls so the dashboard can score them. Mock data, tests, plain-English page copy.
+and people to controls so the dashboard can score them. Two assistant tasks, each a draft a person
+accepts and each showing its sources: a questionnaire answer drafted from the evidence on file, and a
+plain-English summary of a policy change for the staff who must re-acknowledge it; the questionnaire
+allowance per tier is questionnaires_per_year in /config/pricing.yaml, and the assistant says what it
+searched when it finds nothing. Mock data, tests, plain-English page copy.
 ```
 
 **14. The framework catalog: SOC 2 and ISO 27001 first** (the dashboard, in-app report and export pack moved to 12c on Nov 2, 2026; widened the same day from two frameworks to the catalog)
@@ -248,7 +253,7 @@ and policies. Then the rest of /config/frameworks.yaml in the order customers as
 requirement IDs and our own one-line summaries only, mapped to the same controls; a framework
 not yet mapped shows as "available to add", never as ready. Price frameworks from the frameworks
 block of /config/pricing.yaml: one included, each further one an add-on per user, the discounts
-from five and ten frameworks on the account, the cap at ten; the Alimi Security Posture Score is
+from five and ten frameworks on the account, the cap at ten; the Alimi Recommended Security Posture Score is
 in every plan and never counted. The dashboard from 12c shows every framework on the account,
 and the export pack adds the adopted policies and the per-framework readiness. Tests on mock data.
 ```
@@ -293,7 +298,7 @@ AI policy? A 10-minute answer." Run Lighthouse and fix anything under 95.
 
 ## Phase 7b: Security awareness training module (after prompt 13)
 
-**18. Security awareness training module** (added Nov 2, 2026 at the founder's request; lesson plan in docs/training-modules.md)
+**18. Security awareness training module** (added Nov 2, 2026 at the founder's request; lesson plan in docs/training-modules.md; the founder first reviews the lessons against the requirement table in docs/agenda.md)
 ```
 Read CLAUDE.md and docs/training-modules.md. In /training, write the eight lessons as Markdown
 with YAML front matter (id, title, audience, minutes, policies, controls, version), each with a

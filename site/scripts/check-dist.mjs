@@ -66,7 +66,31 @@ for (const page of pages) {
 const favicon = readFileSync(path.join(dist, "favicon.svg"), "utf8");
 if ((favicon.match(/#[0-9A-Fa-f]{6}/g) ?? []).length !== 2) failures.push("dist/favicon.svg: expected exactly two brand colors");
 
-console.log(`check-dist: ${pages.length} pages, ${forms.size} Netlify forms (${[...forms.keys()].join(", ")}), ${todos} TODO markers for prompt 11`);
+// Every internal link resolves to a built page (and every fragment to an id on it). Added Nov 2, 2026
+// with the menus and the new pages, so a renamed page cannot leave a dead link behind.
+const built = new Set(pages.map((p) => "/" + p.replace(/\.html$/, "").replace(/\\/g, "/")).map((p) => (p === "/index" ? "/" : p)));
+const idsByPage = new Map();
+for (const page of pages) {
+  const html = readFileSync(path.join(dist, page), "utf8");
+  const where = `dist/${page}`;
+  for (const match of html.matchAll(/href="(\/[^"]*)"/g)) {
+    const href = match[1];
+    if (href.startsWith("/_astro/") || href === "/favicon.svg") continue;
+    const [target, fragment] = href.split("#");
+    const pagePath = target === "" ? "/" + page.replace(/\.html$/, "").replace(/^index$/, "") : target.replace(/\/$/, "") || "/";
+    if (!built.has(pagePath)) {
+      failures.push(`${where}: link to ${href} but no page is built at ${pagePath}`);
+      continue;
+    }
+    if (fragment) {
+      const file = pagePath === "/" ? "index.html" : `${pagePath.slice(1)}.html`;
+      if (!idsByPage.has(file)) idsByPage.set(file, new Set([...readFileSync(path.join(dist, file), "utf8").matchAll(/\sid="([^"]+)"/g)].map((m) => m[1])));
+      if (!idsByPage.get(file).has(fragment)) failures.push(`${where}: link to ${href} but ${file} has no id "${fragment}"`);
+    }
+  }
+}
+
+console.log(`check-dist: ${pages.length} pages, ${forms.size} Netlify forms (${[...forms.keys()].join(", ")}), ${todos} TODO markers for prompt 11, internal links checked`);
 if (failures.length) {
   for (const f of failures) console.error(`  FAIL ${f}`);
   process.exit(1);

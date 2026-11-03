@@ -9,7 +9,7 @@ The scanner and report commands below are the ones in `tools/scanner/README.md` 
 - [ ] The gates are met: the scanner and report run from your laptop (`alimi-scan m365`, `alimi-scan gws`, `alimi-report demo` all work in mock mode), the laptop has full-disk encryption on, and `pre-commit` is installed so nothing secret can be committed by accident.
 - [ ] You have three pilot slots at most at any one time. A pilot is an hour of the client's admin time and about four hours of yours including the debrief.
 - [ ] The pilot is free, read-only and produces a report. Fixing things, tabletops and anything that needs write access are paid services under an SOW and wait for the LLC and insurance.
-- [ ] The prospect runs Microsoft 365 or Google Workspace, has 10 to 200 staff, and has a reason to care now: an insurance renewal, a customer questionnaire, a near miss. Write the reason down; it is the first line of the case study.
+- [ ] The prospect runs Microsoft 365 or Google Workspace, has 10 or more staff, and has a reason to care now: an insurance renewal, a customer questionnaire, a near miss. Write the reason down; it is the first line of the case study.
 
 ## 1. Days before: the letter and the prep email (15 minutes of your time)
 

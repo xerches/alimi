@@ -1,7 +1,7 @@
 ---
 import { brand, decided } from "../lib/config.js";
+import { FOOTER } from "../lib/nav.js";
 const email = decided(brand.contact_email);
-const github = decided(brand.social?.github);
 const linkedin = decided(brand.social?.linkedin);
 const year = new Date().getUTCFullYear();
 ---
@@ -9,36 +9,28 @@ const year = new Date().getUTCFullYear();
 <footer class="site-footer">
   <div class="container">
     <div class="site-footer__grid">
-      <div>
-        <h2>Product</h2>
-        <ul>
-          <li><a href="/platform">The platform</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-          <li><a href="/pricing#services">Services</a></li>
-          <li><a href="/compare">Compare with Vanta and Drata</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2>Company</h2>
-        <ul>
-          <li><a href="/about">About</a></li>
-          <li><a href="/for-partners">For partners</a></li>
-          <li><a href="/for-resellers">For resellers</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
+      {FOOTER.map((column) => (
+        <div>
+          <h2>{column.title}</h2>
+          <ul>
+            {column.items.map((item) => (
+              <li><a href={item.href} rel={item.external ? "noopener" : undefined}>{item.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
       <div>
         <h2>Elsewhere</h2>
         <ul>
-          {github && <li><a href={github} rel="noopener">GitHub</a></li>}
           {linkedin && <li><a href={linkedin} rel="noopener">LinkedIn</a></li>}
           {email ? <li><a href={`mailto:${email}`}>{email}</a></li> : <li>Email address coming with the domain</li>}
+          <li><a href="/contact">Contact form</a></li>
         </ul>
       </div>
     </div>
     <div class="site-footer__bottom">
       <p>{brand.display_name}, {brand.location}. {brand.tagline}</p>
-      <p>Working name of a company in formation. Prices are published; every connection is read-only.</p>
+      <p>Working name of a company in formation. Prices are published; every connection is read-only. <a href="/privacy">Privacy</a> · <a href="/legal">Legal</a></p>
       <p>&copy; {year} {brand.founder}</p>
     </div>
   </div>

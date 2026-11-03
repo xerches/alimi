@@ -13,6 +13,7 @@ location: Boston, MA
 domain: TODO
 contact_email: TODO
 site_url: https://alimibeta.netlify.app   # beta host until the domain exists
+demo_url: https://alimi-demo.netlify.app  # the product demo; linked from the site as "See the product" since Nov 2, 2026 (founder's decision), noindex kept until the hosted app exists
 
 voice:
   - Plain English a business owner understands.

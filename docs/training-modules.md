@@ -8,7 +8,7 @@ Why it belongs in the product: every cyber insurance questionnaire asks whether 
 
 - Under ten minutes. One habit per lesson, named in the title. A quiz of five questions; pass at four; retake allowed.
 - Plain English, every term defined the first time (phishing, MFA, BEC), no fear, no hooded figures, no red triangles. Brand colours from `config/brand.yaml`.
-- Written for a 10 to 200 person company where the learner is the receptionist, the bookkeeper and the owner, not an engineer.
+- Written for a company of 10 people and up where the learner is the receptionist, the bookkeeper and the owner, not an engineer.
 - Scenarios are composites built from public sources (FBI IC3, CISA, FTC), never a client story. Figures carry their source and year on the slide.
 - Each lesson maps to the policies it teaches (by POL ID) and the controls it proves, so completion lands on the right row of the frameworks.
 - New hire: lessons 1 to 4 within 30 days of the start date (the onboarding checklist in the People module). Everyone: all eight once a year; the yearly cycle resets on the anniversary of completion. Finance and admins get their role lesson too.
@@ -47,6 +47,10 @@ Each lesson follows the same shape: the scene (90 seconds), why it works on busy
 **7. Something looks wrong.** Scene: the laptop fan is loud, files have strange names, a colleague's email asks for something odd. Habit: report early, to the named person, with the four facts (what, when, which device or account, what you did); do not investigate, do not switch off (unplug the network instead if told to); nobody is in trouble for reporting, including a false alarm. Quiz on the four facts, who to tell, "I only clicked, nothing happened" (report anyway), the ransom note on screen, the false alarm.
 
 **8. Role lessons.** Admins (10 minutes): separate admin accounts without mailboxes, least privilege and reviews, MFA that cannot be bypassed, logging on and read the alerts, change control. Finance (20 minutes): the full PFK-05 training with the drill. Managers (8 minutes): the day-one checklist for a hire, the same-day checklist for a leaver, approving access, acknowledging policies for the team.
+
+## What the frameworks require, and the review before building
+
+The founder reviews the eight lessons against each framework's training requirement before prompt 18 runs (agenda item of Nov 2, 2026). The table of requirement IDs, our one-line summaries and the lessons that answer each is in `docs/agenda.md` under "The training review"; once verified it moves here and the lessons' front matter carries the IDs, so a completion record lands on the right requirement of every framework the customer holds.
 
 ## Build (prompt 18, after prompt 13)
 

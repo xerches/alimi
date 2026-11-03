@@ -1,45 +1,131 @@
 ---
+// About, rebuilt on Nov 2, 2026 on the pattern of a larger vendor's company page (mission, what we
+// do, our story, what we believe, leadership, where we are, security, press, careers). Honest-claims
+// rule: past employers only, no metrics, no customers until there are case studies.
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
-import { brand } from "../lib/config.js";
+import { brand, platform } from "../lib/config.js";
 
-const rules = [
-  { title: "Read-only, always", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. Alimi never holds a customer's passwords, and connection tokens are encrypted with a key kept outside the database." },
-  { title: "Only tenants with a signed letter", text: "No scan runs without a signed authorization letter, however friendly the request." },
-  { title: "Plain English", text: "Every term is explained the first time it appears: MFA, EDR, BEC. Reports are written for the owner who signs the renewal." },
-  { title: "Honest claims", text: "Results from past employment are described as such. There will be case studies when there are clients, and not before." },
-  { title: "No framework text", text: "Policies and reports map to SOC 2 and ISO 27001 by criterion number and our own summaries. The standards themselves are copyrighted and are never copied in." },
-  { title: "One company per query", text: "Every query in the platform is scoped to one organization and enforced in the database, so a bug cannot show one company another's data." },
+const plat = platform();
+const silver = plat.tiers[0];
+
+const facts = [
+  { label: "Founded", value: "2026" },
+  { label: "Home", value: brand.location },
+  { label: "Built for", value: "Companies of 10 people and up" },
+  { label: "Prices", value: "Published, per user" },
+];
+
+const story = [
+  { when: "October 2026", what: "The idea takes shape", text: "After years of running SOC 2, ISO 27001 and HIPAA programs from the inside, the founder writes down the pattern he kept seeing: the companies that needed the most help were too small to hire him, and the platforms built for larger companies quoted them out of reach." },
+  { when: "November 2026", what: "The platform is built in the open, on sample data", text: "A read-only scanner for Microsoft 365 and Google Workspace, an insurer-ready report, a policy library mapped to the frameworks by criterion ID, a control catalog, a sample company anyone can click through, and prices published on this site." },
+  { when: "January 2027", what: "Pilots and partners", text: "Free pilots under a signed authorization letter, and the first conversations with the brokers, accountants, attorneys and IT providers whose clients ask them about security." },
+  { when: "Next", what: "The company, then customer data", text: "The entity, insurance and an outside security review come before the hosted platform holds any customer data. Until then Alimi runs on sample data and the founder's own tenants." },
+  { when: "After that", what: "Our own report", text: "Alimi runs its own security programme in its own platform, publishes its trust page, and pursues a SOC 2 report of its own when revenue covers the audit fee." },
+];
+
+const beliefs = [
+  { title: "Plain English", text: "Written for the owner who signs the renewal, not the auditor. Every term is explained the first time it appears: MFA, EDR, BEC." },
+  { title: "Published prices", text: "The price is on the site, per user a month. No sales call to learn it, no automatic increase at renewal, no module to discover after the sale." },
+  { title: "Read-only, always", text: "Every integration uses read-only permissions, listed before you approve them. Alimi never holds a password and never reads mail or files." },
+  { title: "Honest claims", text: "No outcome statistic appears until a named customer has agreed to it. Results from past employment are described as such." },
+  { title: "A person in the loop", text: "Software can collect evidence; it cannot decide what is in scope or which policy fits. A named compliance lead makes those calls with you." },
+  { title: "Nothing copied in", text: "Policies and reports map to the standards by criterion ID and our own summaries. The standards' own text stays with its owners." },
+];
+
+const background = [
+  "Information Security Manager at Exclaimer, a software company: ran the SOC 2 and ISO 27001 programs that customer deals depended on",
+  "Information Security Manager at Boston IT Services, a managed IT provider: built the security practice for client companies of exactly the size Alimi serves",
+  "Today in security at a biopharma company, with SOC 2, ISO 27001, ISO 27018, HIPAA, GDPR and ISO 42001 behind him",
+  "Security+ and CySA+ certified; works in English, French and Russian",
 ];
 ---
 
-<Base title="About" description="Alimi is built in Boston by Alex Dennis: a compliance platform for companies of 10 to 200 people that cannot hire a security team, with the founder as the compliance lead. Who is behind it and the rules it works by." path="/about">
-  <Hero eyebrow="About" title={brand.tagline_alt}>
-    <p class="lede">{brand.display_name} is built in {brand.location} by {brand.founder}, for the owner or operations lead who has to answer an insurer, a customer or a bank, and has no one to hand it to.</p>
+<Base title="About" description={`Alimi is built in Boston by Alex Dennis: a security and compliance platform for companies of 10 people and up that cannot hire a security team, with the founder as the compliance lead. The mission, the story, what we believe, and who is behind it.`} path="/about">
+  <Hero eyebrow="About Alimi" title="Our mission is to give small companies the security program larger ones take for granted">
+    <p class="lede">{brand.display_name} is a security and compliance platform for the owner or operations lead who has to answer an insurer, a customer or an auditor, and has no one to hand it to. It is built in {brand.location} by {brand.founder}, who is also the compliance lead on every account.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/platform">What the platform does</a>
+      <a class="button button--secondary" href="/contact">Talk to the founder</a>
+    </div>
   </Hero>
 
-  <Section id="founder" tone="alt" title="Who is behind it">
-    <p class="measure">
-      I am {brand.founder}. I have spent my career running security and compliance programs from the inside. As Information Security Manager at Exclaimer, a software company, I ran the SOC 2 and ISO 27001 programs that customer deals depended on. At Boston IT Services, a managed IT provider, I built the security practice for client companies of exactly the size {brand.display_name} serves. Today I work in security at a biopharma company, with SOC 2, ISO 27001, ISO 27018, HIPAA, GDPR and ISO 42001 behind me.
-    </p>
-    <p class="measure">
-      The pattern was the same everywhere: the companies that needed the most help were the ones too small to hire me, and the platforms built for larger companies quoted them out of reach. {brand.display_name} is the platform I wished I could have handed them, with the scoping and policy calls made by a person rather than left to a checklist. I work in English, French and Russian.
-    </p>
+  <Section id="what" tone="alt" title="What Alimi does">
+    <p class="measure">{brand.display_name} watches a company's Microsoft 365 or Google Workspace through a read-only connection, keeps its policies signed and its evidence current, and turns that into the answers an insurer, a customer or an auditor asks for: the renewal questionnaire, a SOC 2 or ISO 27001 readiness picture, a trust page, a security questionnaire drafted from evidence you already have. It is priced per user a month, from {silver.perUser}, and the whole price list is on this site.</p>
+    <dl class="facts">
+      {facts.map((f) => (
+        <div>
+          <dt>{f.label}</dt>
+          <dd>{f.value}</dd>
+        </div>
+      ))}
+    </dl>
   </Section>
 
-  <Section id="status" title="Where Alimi is today">
-    <p class="measure">{brand.display_name} is a working name for a company in formation. Until the entity and insurance exist, the work is limited to building the platform, free pilots under a signed authorization letter, and conversations with the brokers, accountants, attorneys and IT providers whose clients ask them about security. Prices are published now so that nobody has to ask.</p>
+  <Section id="story" title="Our story" lede="Short so far, and written down as it happens.">
+    <ol class="timeline">
+      {story.map((s) => (
+        <li>
+          <span class="timeline__when">{s.when}</span>
+          <h3>{s.what}</h3>
+          <p>{s.text}</p>
+        </li>
+      ))}
+    </ol>
   </Section>
 
-  <Section id="rules" tone="alt" title="The rules it works by">
+  <Section id="beliefs" tone="alt" title="What we believe" lede="The rules the product is built under, written down before the first customer.">
     <div class="grid">
-      {rules.map((r) => (
+      {beliefs.map((b) => (
         <article class="card">
-          <h3>{r.title}</h3>
-          <p>{r.text}</p>
+          <h3>{b.title}</h3>
+          <p>{b.text}</p>
         </article>
       ))}
+    </div>
+  </Section>
+
+  <Section id="leadership" title="Leadership">
+    <article class="card team">
+      <div class="team__mark" aria-hidden="true">{brand.founder.split(" ").map((w) => w[0]).join("")}</div>
+      <div>
+        <h3>{brand.founder}</h3>
+        <p class="muted">Founder and compliance lead</p>
+        <p class="measure">I have spent my career running security and compliance programs from the inside, at companies with a security team and at companies without one. {brand.display_name} is the platform I wished I could have handed the second kind, with the scoping and policy calls made by a person rather than left to a checklist.</p>
+        <ul class="checklist">
+          {background.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    </article>
+  </Section>
+
+  <Section id="where" tone="alt" title="Where we are">
+    <p class="measure">{brand.location}. Remote-first; on site in Greater Boston when a workshop needs a room. {brand.display_name} is a working name for a company in formation; the entity, insurance and an outside security review come before the hosted platform holds any customer data.</p>
+  </Section>
+
+  <Section id="more" title="More about the company">
+    <div class="grid">
+      <a class="card card--link" href="/security">
+        <h3>Security</h3>
+        <p>How the platform protects your tenant and your data, and how Alimi secures itself.</p>
+        <span class="card__cta">Read the rules</span>
+      </a>
+      <a class="card card--link" href="/trust">
+        <h3>Trust page</h3>
+        <p>Alimi's own programme, its subprocessors and how to request documents.</p>
+        <span class="card__cta">See the trust page</span>
+      </a>
+      <a class="card card--link" href="/press">
+        <h3>Press</h3>
+        <p>Boilerplate, facts and the media contact.</p>
+        <span class="card__cta">Press page</span>
+      </a>
+      <a class="card card--link" href="/careers">
+        <h3>Careers</h3>
+        <p>Who joins first, and when.</p>
+        <span class="card__cta">Careers page</span>
+      </a>
     </div>
   </Section>
 

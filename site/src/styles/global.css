@@ -778,6 +778,12 @@ a:active {
   margin-bottom: 0.5rem;
 }
 
+/* Links inside the running text of the bottom line are underlined, so color is not the only cue. */
+.site-footer__bottom a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 /* Definition lists and misc */
 .facts {
   display: grid;
@@ -1025,4 +1031,255 @@ a:active {
 }
 .sources li {
   margin-bottom: 0.35rem;
+}
+
+/* Header menus (Nov 2, 2026): <details> dropdowns, so they work without JavaScript. On narrow screens
+   the panel opens in the flow under its summary; from 56rem it floats under the header. */
+.nav__item {
+  position: relative;
+}
+.nav__menu summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.55rem 0.6rem;
+  border-radius: 6px;
+  color: var(--color-text-inverse);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+}
+.nav__menu summary::-webkit-details-marker {
+  display: none;
+}
+.nav__menu summary::after {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 0.45em;
+  margin-left: 0.4em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-0.15em) rotate(45deg);
+}
+.nav__menu[open] summary::after {
+  transform: translateY(0.1em) rotate(-135deg);
+}
+.nav__menu summary:hover,
+.nav__menu[open] summary {
+  color: var(--color-primary-on-dark-hover);
+  text-decoration: underline;
+}
+.nav__menu--current summary {
+  border-bottom-color: var(--color-accent);
+}
+.nav__menu summary:focus-visible {
+  outline-color: var(--color-focus-ring-on-dark);
+}
+.nav__panel {
+  margin: 0.25rem 0 0.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  display: grid;
+  gap: 1rem 2rem;
+}
+.nav__group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.125rem;
+}
+.nav__group-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+.nav__panel a {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 0;
+  font-size: 0.95rem;
+}
+.nav__panel a:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  text-decoration: none;
+}
+.nav__panel a[aria-current="page"] {
+  color: var(--color-primary);
+  font-weight: 650;
+}
+.nav__panel a:focus-visible {
+  outline-color: var(--color-focus-ring);
+}
+.nav__link-label {
+  display: block;
+  font-weight: 600;
+}
+.nav__link-text {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+.nav__all {
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+  grid-column: 1 / -1;
+}
+.nav__all a {
+  display: inline-block;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+.nav__button {
+  background: var(--color-primary-on-dark);
+  color: var(--color-text) !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  margin-left: 0.25rem;
+}
+.nav__button:hover {
+  background: var(--color-primary-on-dark-hover);
+  text-decoration: none !important;
+}
+@media (min-width: 56rem) {
+  .nav__panel {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    z-index: 20;
+    min-width: 18rem;
+    width: max-content;
+    max-width: min(92vw, 48rem);
+    margin: 0;
+    box-shadow: 0 12px 32px var(--color-secondary-soft);
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+  .nav__item:nth-last-child(-n + 3) .nav__panel {
+    left: auto;
+    right: 0;
+  }
+  .nav__panel--wide {
+    grid-template-columns: repeat(4, minmax(11rem, 1fr));
+    max-width: min(92vw, 64rem);
+  }
+}
+
+/* Status tags on the frameworks tables */
+.tag {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+  white-space: nowrap;
+}
+.tag--ready {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+/* About: the story as a timeline, the founder card */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+.timeline li {
+  position: relative;
+  padding-left: 2rem;
+  border-left: 2px solid var(--color-border);
+  margin-left: 0.5rem;
+}
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: 0.35rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-background);
+}
+.timeline__when {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+.timeline h3 {
+  margin-bottom: 0.25rem;
+}
+.timeline p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  max-width: 60ch;
+}
+.team {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+}
+.team__mark {
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 40rem) {
+  .team {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glossary and numbered lists */
+.glossary {
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.glossary__entry {
+  padding: 1rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+.glossary dt {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.glossary dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+.numbered {
+  padding-left: 1.5rem;
+  display: grid;
+  gap: 0.5rem;
 }

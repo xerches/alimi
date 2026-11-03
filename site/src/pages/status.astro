@@ -1,0 +1,42 @@
+---
+// Status: there is no hosted service yet, so there is nothing to report; the page says what is
+// hosted where and where the status page will live. Added Nov 2, 2026.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import { brand, decided } from "../lib/config.js";
+
+const demo = decided(brand.demo_url);
+const services = [
+  { name: "This site", state: "Static, served by Netlify", note: "Netlify publishes its own status page; an outage there is an outage here." },
+  { name: "The product demo", state: demo ? "Static, served by Netlify" : "Not linked yet", note: "A sample company; nothing is saved, so nothing can be lost." },
+  { name: "The platform", state: "Not hosted yet", note: "Runs on sample data and the founder's own tenants until the company, its insurance and an outside security review exist." },
+];
+---
+
+<Base title="Status" description="Alimi service status: the site and the demo are static pages on Netlify; the hosted platform does not exist yet, so there is nothing to report. The status page proper arrives with the platform." path="/status">
+  <Hero eyebrow="Status" title="Nothing to report, because there is nothing hosted yet">
+    <p class="lede">A status page lists incidents and uptime for a running service. {brand.display_name} has no hosted service yet; this page says what exists and where the real status page will live.</p>
+  </Hero>
+
+  <Section id="services" tone="alt" title="What exists">
+    <div class="table-wrap">
+      <table class="table table--compact">
+        <thead><tr><th scope="col">Service</th><th scope="col">State</th><th scope="col">Note</th></tr></thead>
+        <tbody>
+          {services.map((s) => (
+            <tr>
+              <th scope="row">{s.name}</th>
+              <td>{s.state}</td>
+              <td>{s.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="later" title="When the platform is hosted">
+    <p class="measure">The status page will show the platform, the scheduled scans and the integrations, each with its last successful run, and every incident with its timeline and what changed afterwards. Customers can subscribe by email. It will be linked from here and from the <a href="/trust">trust page</a>.</p>
+  </Section>
+</Base>
