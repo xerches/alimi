@@ -24,8 +24,9 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# The four product pages of Oct 31 became the platform on Nov 1, 2026; the free resources pages were
-# removed on Nov 2, 2026 (the founder stopped publishing policy text). Everything old lands on the platform page.
+# The four product pages of Oct 31 became the platform on Nov 1, 2026; the free resources document pages were
+# removed on Nov 2, 2026 (the founder stopped publishing policy text) and land on the resource library, which
+# came back the same evening as a hub of guides with no downloads. Everything else old lands on the platform page.
 [[redirects]]
   from = "/workspace-security-scan"
   to = "/platform"
@@ -47,17 +48,6 @@
   status = 301
 
 [[redirects]]
-  from = "/resources"
-  to = "/platform"
-  status = 301
-
-[[redirects]]
   from = "/resources/*"
-  to = "/platform"
-  status = 301
-
-# The home-buyer closing-day checklist was removed on Nov 2, 2026 (consumer content outside compliance).
-[[redirects]]
-  from = "/resources/closing-day-checklist"
   to = "/resources"
   status = 301

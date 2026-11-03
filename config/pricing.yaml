@@ -29,7 +29,7 @@ products:
       price_lock_months: 24
     audit_note: CPA audit fees are separate, as with every platform on the market.
     included_everywhere:
-      - The full policy library, 23 policies with staff acknowledgement tracking
+      - The full policy library, with staff acknowledgement tracking
       - Security awareness lessons for every user, with completion tracking and a yearly cycle
       - Read-only integrations; Alimi never holds a password
       - An owner, a status, tasks and reminders for every control

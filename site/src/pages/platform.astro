@@ -1,33 +1,26 @@
 ---
+// The platform page: how it works and what is inside, module by module. Trimmed on Nov 2, 2026 at
+// the founder's request: the frameworks table lives on /frameworks, the data-protection rules on
+// /security, the integrations on /integrations, and no scalable count (checks, controls, policies,
+// requirement IDs) is printed anywhere on the site; the framework count is the one number allowed.
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Steps from "../components/Steps.astro";
-import Callout from "../components/Callout.astro";
-import { brand, decided, platform, frameworkCatalog, questionnaireAllowances } from "../lib/config.js";
-import { policies, checkCounts, insurerQuestions, mappedFrameworks, controlSummary } from "../lib/content.js";
+import { brand, decided, platform, choosableFrameworks, alwaysIncludedFrameworks, questionnaireAllowances } from "../lib/config.js";
 
 const plat = platform();
-const policyCount = policies().length;
-const checks = checkCounts();
-const questions = insurerQuestions();
-const automatedQuestions = questions.filter((q) => q.automated).length;
-const controls = controlSummary();
-const catalog = frameworkCatalog();
-const choosable = catalog.filter((f) => !f.always_included);
-const mapped = mappedFrameworks();
-const requirementTotal = mapped.reduce((sum, f) => sum + f.requirementCount, 0);
-const requirementCount = (id) => mapped.find((f) => f.id === id)?.requirementCount ?? null;
-const posture = catalog.find((f) => f.always_included);
+const frameworkCount = choosableFrameworks().length;
+const posture = alwaysIncludedFrameworks()[0];
 const demo = decided(brand.demo_url);
 const allowances = questionnaireAllowances();
+const gold = plat.tiers[1];
 
 const modules = [
   {
     id: "controls",
     title: "Controls and monitoring",
-    text: `${controls.total} controls across ${controls.domains.length} areas, from governance and access to payments, devices, vendors and AI. Each has one owner, one status and one source of truth: ${controls.automated} are tested automatically on every scan of your tenant, the rest by evidence with a renewal date. A failing test becomes a task with a plain-English fix and a due date. Nothing is typed as a status; it is computed.`,
-    detail: `Today's scanner runs ${checks.total} checks on Microsoft 365 and Google Workspace: ${checks.m365} on Microsoft 365, ${checks.gws} on Google Workspace, ${checks.attestation} that need a dated screenshot because no API exposes the setting. They cover ${automatedQuestions} of the ${questions.length} questions insurers ask.`,
+    text: "A control catalog that covers governance, access, email, devices, payments, vendors, resilience and AI. Each control has one owner, one status and one source of truth: tested automatically on every scan of your tenant where an API exposes the setting, proven by evidence with a renewal date where none does. A failing test becomes a task with a plain-English fix and a due date. Nothing is typed as a status; it is computed.",
   },
   {
     id: "evidence",
@@ -37,22 +30,18 @@ const modules = [
   {
     id: "policies",
     title: "Policies",
-    text: `${policyCount} policies written for a company of 10 to 200 people, from information security and acceptable use to incident response, vendor risk and AI governance. Each is mapped by criterion ID to SOC 2, ISO 27001, ISO 42001, HIPAA and the insurer questions, carries a version, an owner and an approver, and tracks who has acknowledged it. Staff sign in the platform; the yearly review is a task like any other.`,
+    text: "A policy library written for a company of 10 to 200 people, from information security and acceptable use to incident response, vendor risk and AI governance. Each policy is mapped by criterion ID to the frameworks, carries a version, an owner and an approver, and tracks who has acknowledged it. Staff sign in the platform; the yearly review is a task like any other.",
   },
   {
     id: "people",
     title: "People and training",
-    text: "Everyone from your identity provider, one row each: policies accepted, training current, MFA registered, device compliant, background check done. Onboarding is a checklist with due dates; offboarding is a check that access actually ended.",
-  },
-  {
-    id: "training",
-    title: "Training",
-    text: "Short security awareness lessons for every user, each under ten minutes with a quiz at the end: phishing and payment fraud, passwords and MFA, handling customer data, working safely from anywhere, using AI tools at work, and what to do when something looks wrong. Completion is tracked per person on a yearly cycle, a new hire gets the lessons on day one, and the insurer's training question is answered with dates rather than a promise. Role lessons for finance and admins follow.",
+    text: "Everyone from your identity provider, one row each: policies accepted, training current, MFA registered, device compliant, background check done. Onboarding is a checklist with due dates; offboarding is a check that access actually ended. Short security awareness lessons for every user, each under ten minutes with a quiz: phishing and payment fraud, passwords and MFA, handling customer data, working safely from anywhere, using AI tools at work, and what to do when something looks wrong. Completion is tracked per person on a yearly cycle, so the insurer's training question is answered with dates rather than a promise.",
   },
   {
     id: "frameworks",
     title: "Frameworks",
-    text: `${choosable.length} frameworks in the catalog, one included in every plan (chosen today from the ${mapped.length} that are mapped; the pricing page names them) and the rest as add-ons, all answered by one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the others are answered by the same controls and policies when a customer or a regulator asks. Readiness is the share of mapped controls in order, per framework. Alongside them, in every plan, the ${posture.name} scores the controls security teams recommend beyond what any standard asks, because compliance is not security; it is Alimi's own and not an accreditation. The standards' own text is never copied in; you see the ID and our plain-English summary. ${requirementTotal} requirement IDs are mapped to the policy library so far, across ${mapped.length} frameworks; the rest are being mapped before launch.`,
+    text: `${frameworkCount} frameworks in the catalog, one included in every plan and the rest as add-ons, all answered by one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the others are answered by the same controls and policies when a customer or a regulator asks. Readiness is the share of mapped controls in order, per framework. Alongside them, in every plan, the ${posture.name} scores the controls security teams recommend beyond what any standard asks, because compliance is not security.`,
+    link: { href: "/frameworks", label: "The catalog, by who asks for each" },
   },
   {
     id: "vendors",
@@ -67,7 +56,7 @@ const modules = [
   {
     id: "trust",
     title: "Trust page and questionnaires",
-    text: `A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack, from the ${plat.tiers[1].name} tier. Security questionnaires are answered from the evidence you already have, with the draft marked for review and every answer pointing at its source: ${allowances}. A questionnaire is one customer's or insurer's form, however long.`,
+    text: `A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack, from the ${gold.name} tier. Security questionnaires are answered from the evidence you already have, with the draft marked for review and every answer pointing at its source: ${allowances}. A questionnaire is one customer's or insurer's form, however long.`,
   },
   {
     id: "assistant",
@@ -77,21 +66,21 @@ const modules = [
 ];
 
 const steps = [
-  { title: "Connect", text: "A read-only connection to Microsoft 365 or Google Workspace, with the exact permissions listed before you approve them. Nothing is read beyond settings and directory data. Intune, Jamf, GitHub, AWS and HR systems follow as customers need them." },
-  { title: "Watch", text: `${checks.total} checks run weekly and after every change you ask about. Every control shows its owner, its status and the evidence behind it; the home screen shows what needs attention and what is due in the next 30 days.` },
+  { title: "Connect", text: "A read-only connection to Microsoft 365 or Google Workspace, with the exact permissions listed before you approve them. Nothing is read beyond settings and directory data. Identity, device, code, cloud and HR systems follow as customers need them." },
+  { title: "Watch", text: "Checks run weekly and after every change you ask about: MFA coverage, legacy sign-in, admin accounts, mail forwarding, sharing links, audit logs. Every control shows its owner, its status and the evidence behind it; the home screen shows what needs attention and what is due in the next 30 days." },
   { title: "Fix", text: "A failing check or an expired piece of evidence is a task with an owner, a plain-English fix and a reminder on Monday and three days before it is due. Do it yourself, hand it to your IT provider, or have Alimi do it for a fixed fee." },
   { title: "Prove", text: "Readiness per framework, the export pack for the broker or auditor, the trust page for prospects, and questionnaire answers drafted from your own evidence. The CPA audit itself is a separate fee, as it is everywhere; Alimi gets you to it and sits in the room." },
 ];
 
-const trust = [
-  { title: "Read-only, documented", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. Alimi never holds a password." },
-  { title: "Your tokens, encrypted", text: "Connection tokens are encrypted at rest with a key kept outside the database, and never written to logs or error reports." },
-  { title: "One company per query", text: "Every query is scoped to one organization, enforced in the database with row-level security, so a bug cannot show one company another's data." },
-  { title: "No customer data before the review", text: "The hosted platform holds no customer data until the company, its insurance and a signed pilot letter exist and an outside security review is done. Until then it runs on sample data and the founder's own tenants." },
+const more = [
+  { href: "/integrations", title: "Integrations", text: "What each read-only connection reads, and which ones come next." },
+  { href: "/frameworks", title: "Frameworks", text: `${frameworkCount} in the catalog, grouped by who asks for each, with a page per framework.` },
+  { href: "/security", title: "Security", text: "How the platform protects your tenant and your data, written down before the first customer." },
+  { href: "/pricing", title: "Pricing", text: "Four tiers per user a month, with the calculator and the worked examples." },
 ];
 ---
 
-<Base title="The platform" description={`How the Alimi platform works: read-only connections to Microsoft 365 and Google Workspace, ${controls.total} controls with automated tests and evidence, ${policyCount} policies with sign-off, people and training, ${choosable.length} frameworks plus the ${posture.name}, vendors, AI governance, a trust page and an assistant.`} path="/platform">
+<Base title="The platform" description={`How the Alimi platform works: read-only connections to Microsoft 365 and Google Workspace, controls with automated tests and evidence, policies with sign-off, people and training, ${frameworkCount} frameworks plus the ${posture.name}, vendors, AI governance, a trust page and an assistant.`} path="/platform">
   <Hero eyebrow="The platform" title="One place that knows whether your security is in order, and can prove it">
     <p class="lede">A compliance platform of the kind larger companies buy, sized and priced for companies of 10 to 200 people, with the founder as the compliance lead who makes the scoping and policy calls.</p>
     <div class="actions">
@@ -101,64 +90,32 @@ const trust = [
     </div>
   </Hero>
 
-  <Section id="numbers" tone="alt" tight>
-    <div class="stats">
-      <div class="stat"><span class="stat__value">{controls.total}</span><span class="stat__label">controls, {controls.automated} tested automatically</span></div>
-      <div class="stat"><span class="stat__value">{checks.total}</span><span class="stat__label">tenant checks on every scan</span></div>
-      <div class="stat"><span class="stat__value">{policyCount}</span><span class="stat__label">policies with sign-off tracking</span></div>
-      <div class="stat"><span class="stat__value">{choosable.length}</span><span class="stat__label">frameworks, {requirementTotal} requirement IDs mapped so far</span></div>
-    </div>
-  </Section>
-
-  <Section id="how" title="Connect, watch, fix, prove">
+  <Section id="how" tone="alt" title="Connect, watch, fix, prove">
     <Steps steps={steps} />
   </Section>
 
-  <Section id="modules" tone="alt" title="What is inside" lede="Every module reads the same data, so a control fixed once counts for the insurer, the auditor and the customer at the same time.">
+  <Section id="modules" title="What is inside" lede="Every module reads the same data, so a control fixed once counts for the insurer, the auditor and the customer at the same time.">
     <div class="stack">
       {modules.map((m) => (
         <article class="card" id={m.id}>
           <h3>{m.title}</h3>
           <p>{m.text}</p>
-          {m.detail && <p class="muted">{m.detail}</p>}
+          {m.link && <p><a href={m.link.href}>{m.link.label}</a></p>}
         </article>
       ))}
     </div>
   </Section>
 
-  <Section id="frameworks" title="Frameworks and who needs them" lede={`${plat.frameworks.text} Requirement IDs and our own one-line summaries only; the standards' text stays with its owners.`}>
-    <div class="table-wrap">
-      <table class="table table--compact">
-        <thead><tr><th>Framework</th><th>What it is</th><th>Who usually needs it</th><th>Mapped to the policy library</th></tr></thead>
-        <tbody>
-          {catalog.map((f) => (
-            <tr>
-              <th scope="row">{f.name}</th>
-              <td>{f.summary}</td>
-              <td>{f.audience}</td>
-              <td>{f.always_included ? "Alimi's own recommended controls, in every plan" : f.mapped ? `Yes, ${requirementCount(f.id)} requirement IDs` : "Before launch"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </Section>
-
-  <Section id="trust" tone="alt" title="Built to be trusted with your tenant" lede="The rules the platform is built under, written down before the first customer.">
-    <div class="grid grid--two">
-      {trust.map((t) => (
-        <article class="card">
-          <h3>{t.title}</h3>
-          <p>{t.text}</p>
-        </article>
+  <Section id="more" tone="alt" title="Go deeper" lede="Each of these has its own page.">
+    <div class="grid">
+      {more.map((m) => (
+        <a class="card card--link" href={m.href}>
+          <h3>{m.title}</h3>
+          <p>{m.text}</p>
+          <span class="card__cta">Read more</span>
+        </a>
       ))}
     </div>
-  </Section>
-
-  <Section id="status" tight>
-    <Callout label="Where it stands" tone="brand">
-      <p>The scanner, the policy library and the control catalogue are built and tested on sample data. The hosted platform comes next; pilots open in January 2027 under a signed authorization letter, and the waitlist is the queue. Until the platform holds customer data, {brand.display_name} runs the same work for you from the founder's side, with the same outputs.</p>
-    </Callout>
   </Section>
 
   <Section id="start" tone="dark" title="See the numbers" lede="Four tiers, per user a month, paid monthly, with one framework, the policy library and the training lessons in every one.">

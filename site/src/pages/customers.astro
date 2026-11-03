@@ -1,0 +1,63 @@
+---
+// Customer stories. There are none yet, and the honest-claims rule says so on the page; the demo's
+// sample company and the pilot waitlist are what exists. Added Nov 2, 2026.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, decided } from "../lib/config.js";
+
+const demo = decided(brand.demo_url);
+const whatAStoryHolds = [
+  "Who the company is, in its own words, with its permission",
+  "What it had to prove, to whom, and by when",
+  "What the platform found, what was fixed and what was accepted as a risk",
+  "What the insurer, the customer or the auditor said at the end",
+  "Only numbers the company agreed to publish",
+];
+---
+
+<Base title="Customer stories" description="Customer stories from companies that run on Alimi. None yet: pilots open in January 2027, and a story is published only with the customer's permission and only with numbers it agreed to. Until then, a sample company you can click through." path="/customers">
+  <Hero eyebrow="Customers" title="Hear from the companies that run on Alimi">
+    <p class="lede">There are none yet, and this page says so rather than hinting otherwise. Pilots open in January 2027; the first stories follow the first results, with the customer's permission.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Join the waitlist</a>
+      {demo && <a class="button button--secondary" href={demo} rel="noopener">See the product</a>}
+    </div>
+  </Hero>
+
+  <Section id="now" tone="alt" title="What you can see today">
+    <div class="grid grid--two">
+      <article class="card">
+        <h3>A sample company, end to end</h3>
+        <p>Saltmarsh Payroll is fictional, and labelled so on every screen, but everything it shows is real: the scanner's findings on a sample tenant, the control catalog, the policy library with sign-offs, the frameworks, the vendors, the trust page and the questionnaire drafts.</p>
+        {demo ? <p><a href={demo} rel="noopener">Click through the demo, no sign-up and no sales call</a></p> : <p class="muted">The demo link arrives with the next deploy.</p>}
+      </article>
+      <article class="card">
+        <h3>The pilots</h3>
+        <p>Three free pilots under a signed authorization letter, for companies of 10 to 200 people with a renewal, a customer or an audit coming. A pilot gets the platform, the founder as compliance lead, and a say in what gets built next; {brand.display_name} gets a case study, if the pilot agrees to one.</p>
+        <p><a href="/pricing#waitlist">Reserve a place</a></p>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="rules" title="What a customer story will contain">
+    <ul class="checklist">
+      {whatAStoryHolds.map((item) => <li>{item}</li>)}
+    </ul>
+    <Callout label="Why there are no logos or quotes here yet" tone="brand">
+      <p>{brand.display_name}'s rule is that no outcome number and no customer name appears until a named customer has agreed to it. The same rule is why the <a href="/compare">comparison page</a> quotes reviewers and sources rather than its own measurements.</p>
+    </Callout>
+  </Section>
+
+  <Section id="reviews" tone="alt" title="Reviews">
+    <p class="measure">No reviews yet on G2, Capterra or anywhere else; {brand.display_name} has no customers to write them. When there are, this page will link to them, the good ones and the others.</p>
+  </Section>
+
+  <Section id="next" tone="dark" title="Be one of the first" lede="Pilots open in January 2027. One email when your turn comes, and nothing else.">
+    <div class="actions">
+      <a class="button button--primary" href="/pricing#waitlist">Join the waitlist</a>
+      <a class="button button--secondary" href="/contact">Ask a question first</a>
+    </div>
+  </Section>
+</Base>

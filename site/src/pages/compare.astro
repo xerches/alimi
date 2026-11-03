@@ -53,7 +53,7 @@ const themes = [
     id: "integrations",
     title: "Integrations that quietly stop syncing",
     reviews: "A healthcare security officer in the Drata interview set: \"when one quietly stops syncing, confidence in the dashboard drops fast.\" G2 and Capterra reviewers of both products ask for deeper integrations and report that custom setups need manual work; a 2024 Reddit thread lists connector and multi-framework frustrations.",
-    alimi: "Two integrations done properly first, Microsoft 365 and Google Workspace, with a data-quality page that shows when each one last read your tenant and what it could not read. A silent gap is shown as an error naming the permission, never as a pass.",
+    alimi: "Microsoft 365 and Google Workspace done properly first, with a data-quality page that shows when each connection last read your tenant and what it could not read. A silent gap is shown as an error naming the permission, never as a pass.",
   },
   {
     id: "agent",
@@ -65,7 +65,7 @@ const themes = [
     id: "templates",
     title: "Generic policies and a product written for auditors",
     reviews: "Capterra reviewers of Vanta say the policy templates need updating and that the policy generator loses its automation once a document is edited outside it. Interviewed Drata users warn that compliance looks \"deceptively simple during a demo\" and that someone still has to make the scope and remediation decisions.",
-    alimi: `${brand.display_name}'s 23 policies are written for a company of your size and tailored with you in a workshop; versions, approvals and sign-offs live in the platform. The scoping and policy calls that software leaves to you are made with a person, in plain English, with every term explained the first time.`,
+    alimi: `${brand.display_name}'s policies are written for a company of your size and tailored with you in a workshop; versions, approvals and sign-offs live in the platform. The scoping and policy calls that software leaves to you are made with a person, in plain English, with every term explained the first time.`,
   },
   {
     id: "audit",
@@ -98,12 +98,12 @@ const facts = [
   { label: "Frameworks", vanta: "35 and more", drata: "About 30 pre-mapped", alimi: `${catalog.length} in the catalog, one included, the rest add-ons; plus the ${posture.name} in every plan` },
   { label: "Questionnaires included", vanta: "25 a year on Plus, 144 on Professional; more as an add-on", drata: "100 with the Trust Center Foundation tier", alimi: allowances.charAt(0).toUpperCase() + allowances.slice(1) },
   { label: "Outcome numbers on the website", vanta: "'2,000 hrs. saved annually', '20% faster deal cycles', not tied to a named customer", drata: "'3x productivity', '$20M annual revenue accelerated', no method given", alimi: "None. No outcome number appears until a named customer has agreed to it" },
-  { label: "Integrations", vanta: "300 and more", drata: "200 and more", alimi: "Microsoft 365 and Google Workspace today; more as customers ask" },
+  { label: "Integrations", vanta: "300 and more", drata: "200 and more", alimi: "Microsoft 365 and Google Workspace today; the next ones are listed on the integrations page" },
   { label: "Reviews", vanta: "G2 4.6 of 5; Capterra and SoftwareAdvice 4.2 (33); Trustpilot 3.1 (33)", drata: "G2 4.7 of 5 (1,399); Capterra 4.8 (6); Gartner 4.1 (17); PeerSpot 4.0 (10); Trustpilot 2.6 (4)", alimi: "None yet; pilots open in January 2027" },
 ];
 
 const stronger = [
-  "Hundreds of integrations each, where Alimi has two. A company running AWS, GitHub, Okta and a dozen SaaS tools gets more automated evidence from either of them today.",
+  "Hundreds of integrations each, where Alimi starts with Microsoft 365 and Google Workspace. A company running AWS, GitHub, Okta and a dozen SaaS tools gets more automated evidence from either of them today.",
   "Years of audits behind them, large auditor networks and a SOC 2 report of their own. Alimi is a company in formation with no customers yet.",
   "Enterprise features Alimi does not plan to build: multiple business units, hundreds of custom tests, SCIM provisioning at scale.",
 ];

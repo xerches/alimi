@@ -1,0 +1,65 @@
+---
+// How the platform protects a customer's tenant and data, and how Alimi secures itself. The rules
+// moved here from the platform and About pages on Nov 2, 2026; they come from CLAUDE.md and are
+// written down before the first customer.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand } from "../lib/config.js";
+
+const rules = [
+  { title: "Read-only, documented", text: "Every integration uses read-only permissions, listed in the documentation before you approve them. Alimi reads settings and directory data, never mail or files, and never holds a password." },
+  { title: "Only tenants with a signed letter", text: "No scan runs without a signed authorization letter from the company that owns the tenant, however friendly the request." },
+  { title: "Your tokens, encrypted", text: "Connection tokens are encrypted at rest with a key kept outside the database, and are never written to logs or error reports." },
+  { title: "One company per query", text: "Every query is scoped to one organization and enforced in the database itself with row-level security, so an application bug cannot show one company another company's data." },
+  { title: "No customer data before the review", text: "The hosted platform holds no customer data until the company, its insurance and a signed pilot letter exist and an outside security review is done. Until then it runs on sample data and the founder's own tenants." },
+  { title: "Your data trains nothing", text: "The assistant reads your own tables and shows its sources; your data never leaves the platform to train a model, and the assistant never changes a record on its own." },
+  { title: "Nothing copied in", text: "Policies and reports map to the standards by criterion ID and our own summaries. The standards' text is copyrighted and is never stored." },
+  { title: "Honest by rule", text: "No outcome statistic appears on this site until a named customer has agreed to it, and no feature is described as finished before it is." },
+];
+
+const ourselves = [
+  "The marketing site is static, served by Netlify with a strict content security policy, no cookies and no analytics; the forms go through Netlify Forms and are read only to reply.",
+  "The source code lives in a private repository with secret scanning on every commit; no credential, token or tenant identifier is ever committed.",
+  "The platform's own programme runs in the platform itself, on the founder's tenant, once the company exists: the same controls, evidence and policies a customer sees, with a public trust page.",
+  "A SOC 2 report of Alimi's own is planned once revenue covers the audit fee; until then this page and the trust page say exactly where things stand.",
+];
+---
+
+<Base title="Security" description="How the Alimi platform protects a customer's tenant and data: read-only permissions, encrypted tokens, one company per query enforced in the database, no customer data before an outside review, and how Alimi secures itself." path="/security">
+  <Hero eyebrow="Security" title="Built to be trusted with your tenant">
+    <p class="lede">The rules the platform is built under, written down before the first customer and checked against every change. This page is about how {brand.display_name} protects you; the <a href="/trust">trust page</a> is about {brand.display_name}'s own programme.</p>
+  </Hero>
+
+  <Section id="rules" tone="alt" title="How the platform protects your data">
+    <div class="grid grid--two">
+      {rules.map((r) => (
+        <article class="card">
+          <h3>{r.title}</h3>
+          <p>{r.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="ourselves" title={`How ${brand.display_name} secures itself`}>
+    <ul class="checklist">
+      {ourselves.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="report" tone="alt" title="Report a security problem">
+    <Callout label="Responsible disclosure" tone="brand">
+      <p>If you find a security problem on this site, in the demo or, later, in the platform, <a href="/contact">tell the founder through the contact form</a> with "security" in the subject. You will get a reply within two business days and a fix date with it. Please do not test against any tenant you do not own.</p>
+    </Callout>
+    <p class="muted small">A dedicated security address arrives with the domain; the <a href="/status">status page</a> and the <a href="/trust">trust page</a> are where incidents and documents will be published.</p>
+  </Section>
+
+  <Section id="next" tone="dark" title="See the platform" lede="Connect, watch, fix, prove; every module reads the same data.">
+    <div class="actions">
+      <a class="button button--primary" href="/platform">How it works</a>
+      <a class="button button--secondary" href="/integrations">What each integration reads</a>
+    </div>
+  </Section>
+</Base>

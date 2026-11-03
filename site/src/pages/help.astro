@@ -1,0 +1,64 @@
+---
+// Help center. The product help opens with the platform; until then this page gathers the answers
+// that already exist on the site and routes the rest to the founder. Added Nov 2, 2026.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand, platform } from "../lib/config.js";
+
+const plat = platform();
+const topics = [
+  { title: "Prices, tiers and what a user is", href: "/pricing#faq", text: "What counts as a user, which framework is included, how add-ons work, whether the audit is included, how to pay." },
+  { title: "Which framework you were asked for", href: "/frameworks", text: "One page per framework: what it is, who needs it, how the platform handles it and what it costs." },
+  { title: "What each integration reads", href: "/integrations", text: "The read-only permissions for Microsoft 365 and Google Workspace, what is never read, and what comes next." },
+  { title: "How your data is protected", href: "/security", text: "Encrypted tokens, one company per query, no customer data before the outside review." },
+  { title: "Reselling or referring", href: "/for-resellers#faq", text: "Who supports the client, how the tier is worked out, what the client signs." },
+  { title: "The words", href: "/glossary", text: "MFA, EDR, BEC, SOC 2 and the rest, in plain English." },
+];
+const soon = [
+  "Connecting a tenant: the read-only setup for Microsoft 365 and Google Workspace, step by step, with the revocation steps",
+  "Reading a failed test: the raw evidence, the rule, the fix, and how to mark a false positive with a reason",
+  "Evidence, owners and renewals: filing a screenshot, setting a renewal date, what the four states mean",
+  "Policies and sign-off: tailoring the library, approving a version, chasing acknowledgements",
+  "The export pack: what a broker or an auditor receives and how to send it",
+  "Access for your auditor, your broker and your IT provider",
+];
+---
+
+<Base title="Help center" description="Help for Alimi customers and partners: the answers already on the site, what the product help center will cover when the platform opens, and how to reach the founder for the rest." path="/help">
+  <Hero eyebrow="Help center" title="Find the help you need to get started">
+    <p class="lede">The product help center opens with the platform. Until then, the answers that exist are gathered here, and the founder answers the rest within two business days.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/contact">Ask a question</a>
+      <a class="button button--secondary" href="#topics">Browse the answers</a>
+    </div>
+  </Hero>
+
+  <Section id="topics" tone="alt" title="Answers on the site">
+    <div class="grid">
+      {topics.map((t) => (
+        <a class="card card--link" href={t.href}>
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+          <span class="card__cta">Read</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="product" title="Product help, when the platform opens">
+    <ul class="checklist">
+      {soon.map((s) => <li>{s}</li>)}
+    </ul>
+    <Callout label="Support that is included" tone="brand">
+      <p>Every tier has a named compliance lead: email support and a quarterly call on {plat.tiers[0].name}, a monthly call from {plat.tiers[1].name}, priority support on {plat.tiers[2].name}, and a one-business-day response on {plat.tiers[3].name}. The founder answers the support address; there is no queue to climb.</p>
+    </Callout>
+  </Section>
+
+  <Section id="next" tone="dark" title="Still stuck?" lede="Say what you are trying to prove and to whom; that is usually the whole brief.">
+    <div class="actions">
+      <a class="button button--primary" href="/contact">Contact {brand.display_name}</a>
+    </div>
+  </Section>
+</Base>
