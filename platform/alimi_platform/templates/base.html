@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>{% block title %}Alimi{% endblock %} · Alimi</title>
+  <link rel="stylesheet" href="/theme.css">
   <link rel="stylesheet" href="/static/app.css">
+  {#- theme.js runs before the first paint on purpose (no defer): a saved dark choice never flashes light. -#}
+  <script src="/static/theme.js"></script>
   <script src="/static/htmx.min.js" defer></script>
+  <script src="/static/shell.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 {#- The shell chosen Nov 3, 2026 (the demo's): a captioned icon strip, a second column only where the
-    section has children, the mock-mode banner and a top bar with the company, breadcrumbs and the
-    viewer. The user picker has no session, so it gets the banner and the content only. -#}
+    section has children, the mock-mode banner and a top bar with the company, breadcrumbs, the theme
+    toggle and the account menu. The user picker has no session, so it gets the banner and the content only. -#}
 <div class="shell"{% if not (me and shell) %} data-bare{% endif %}>
   {% if me and shell %}
   <nav class="strip" id="nav" aria-label="Main">
@@ -48,8 +52,23 @@
         {% for c in crumbs or [] %}<span aria-hidden="true">/</span>{% if c.href %}<a href="{{ c.href }}">{{ c.label }}</a>{% else %}<span>{{ c.label }}</span>{% endif %}{% endfor %}
       </nav>
       <div class="who">
-        <span>Viewing as {{ me.display_name }}, {{ me.role }}</span>
-        <form method="post" action="/logout"><button class="link" type="submit">Switch user</button></form>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" title="Switch between light and dark">
+          <span class="ticon icon-moon">{{ shell.icons.moon | safe }}</span><span class="ticon icon-sun">{{ shell.icons.sun | safe }}</span>
+          <span class="sr-only">Dark mode</span>
+        </button>
+        <details class="menu">
+          <summary aria-label="Account menu for {{ me.display_name }}">
+            <span class="who-text">Viewing as {{ me.display_name }}, {{ me.job_title or me.role }}</span>
+            <span class="avatar" aria-hidden="true">{{ me.initials }}</span>
+          </summary>
+          <div class="menu-panel">
+            <p class="menu-head"><strong>{{ me.display_name }}</strong><span>{{ me.email }}</span><span>{{ me.role }} at {{ me.org_name }}</span></p>
+            {% for entry in shell.menu %}
+            <a href="{{ entry.href }}"{% if entry.external %} target="_blank" rel="noopener"{% endif %}{% if entry.key == shell.item and shell.section == "account" %} aria-current="page"{% endif %}>{{ entry.label }}{% if entry.external %} <span class="muted">↗</span>{% endif %}</a>
+            {% endfor %}
+            <form method="post" action="/logout"><button class="menu-signout" type="submit">Sign out</button></form>
+          </div>
+        </details>
       </div>
     </div>
     {% if shell.column %}

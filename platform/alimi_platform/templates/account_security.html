@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_status.html" import result_badge %}
+{% block title %}Security{% endblock %}
+{% block content %}
+<p class="eyebrow">Account</p>
+<h1>Security</h1>
+<p class="lead">How you sign in to Alimi, whether multi-factor authentication (MFA, a second proof of identity beyond the password) protects your account, and the session you are in now.</p>
+
+<div class="cards">
+  <section class="card">
+    <h2>How you sign in</h2>
+    <p>Mock mode: the sample user picker, no password. Real sign-in with your Microsoft 365 or Google Workspace account arrives in the next build step; Alimi will not keep a password of its own.</p>
+    <h2>Multi-factor authentication</h2>
+    {% if mfa %}
+    <p>Your sign-in provider enforces MFA, so the check that matters is the one on the tenant:</p>
+    <ul class="plain">
+      {% for r in mfa %}
+      <li>{{ result_badge(r.status) }} <strong>{{ r.title }}</strong> <span class="muted">{{ r.summary }} ({{ r.collected_at.strftime("%b %d, %Y") }})</span></li>
+      {% endfor %}
+    </ul>
+    <p><a href="/monitoring">All checks on the Monitoring page</a></p>
+    {% else %}
+    <p class="muted">No scan has run yet, so there is no MFA result for the tenant. <a href="/monitoring">Run the checks</a>.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>This session</h2>
+    <dl>
+      <dt>Signed in</dt><dd>{% if signed_in_at %}{{ signed_in_at.strftime("%b %d, %Y %H:%M UTC") }}{% else %}<span class="muted">unknown</span>{% endif %}</dd>
+      <dt>Ends</dt><dd>After {{ session_hours }} hours, or when you sign out</dd>
+      <dt>Device</dt><dd>This browser only. A list of every device, with a sign-out for each, arrives with real sign-in.</dd>
+    </dl>
+    <form method="post" action="/logout" class="inline"><button type="submit">Sign out</button></form>
+  </section>
+</div>
+{% endblock %}

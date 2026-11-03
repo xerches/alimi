@@ -28,6 +28,9 @@ ICONS: dict[str, str] = {
     "monitoring": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 10h3l2-5 3 10 2-5h5"/></svg>',
     "settings": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>',
     "menu": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>',
+    # The theme toggle: the moon offers dark, the sun offers light.
+    "moon": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.5A7 7 0 017.5 3.5a7 7 0 109 9z"/></svg>',
+    "sun": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"/></svg>',
 }
 
 
@@ -64,7 +67,22 @@ PAGE_SECTIONS: dict[str, tuple[str, str | None]] = {
     "scan": ("monitoring", None),
     "settings": ("settings", "settings"),
     "audit": ("settings", "audit"),
+    # The person's own pages, reached from the account menu in the top bar; no strip item is current.
+    "account": ("account", "profile"),
+    "account_security": ("account", "security"),
+    "account_notifications": ("account", "notifications"),
 }
+
+# Sections that have pages and a column but no item in the strip.
+OFF_STRIP: frozenset[str] = frozenset({"account"})
+
+# The account menu in the top bar, in order. "My tasks" joins it with the tasks module.
+ACCOUNT_MENU: tuple[dict[str, Any], ...] = (
+    {"key": "profile", "label": "Profile", "href": "/account"},
+    {"key": "security", "label": "Security", "href": "/account/security"},
+    {"key": "notifications", "label": "Notifications", "href": "/account/notifications"},
+    {"key": "help", "label": "Help center", "href": "{site_url}/help", "external": True},
+)
 
 STATIC_COLUMNS: dict[str, dict[str, Any]] = {
     "settings": {
@@ -75,6 +93,20 @@ STATIC_COLUMNS: dict[str, dict[str, Any]] = {
                 "items": [
                     {"key": "settings", "label": "Company", "href": "/settings", "sub": "Your company, your role, what is connected"},
                     {"key": "audit", "label": "Audit log", "href": "/audit", "sub": "Who changed what, when"},
+                ],
+            }
+        ],
+        "add": None,
+    },
+    "account": {
+        "title": "Account",
+        "groups": [
+            {
+                "label": None,
+                "items": [
+                    {"key": "profile", "label": "Profile", "href": "/account", "sub": "Your name, title and time zone"},
+                    {"key": "security", "label": "Security", "href": "/account/security", "sub": "How you sign in, MFA, this session"},
+                    {"key": "notifications", "label": "Notifications", "href": "/account/notifications", "sub": "What arrives by email"},
                 ],
             }
         ],
@@ -194,6 +226,10 @@ def shell(conn: Connection, settings, page: str, item: str | None = None, contro
         item = item or "all"
     elif section_key == "settings":
         column = STATIC_COLUMNS["settings"]
+    elif section_key == "account":
+        column = STATIC_COLUMNS["account"]
+    site_url = str(getattr(settings, "site_url", "") or "").rstrip("/")
+    menu = [{**entry, "href": entry["href"].format(site_url=site_url)} for entry in ACCOUNT_MENU]
     return {
         "section": section_key,
         "item": item,
@@ -201,5 +237,7 @@ def shell(conn: Connection, settings, page: str, item: str | None = None, contro
         "bottom": [s for s in sections if s["key"] in BOTTOM_BAR],
         "in_bottom": section_key in BOTTOM_BAR,
         "menu_icon": ICONS["menu"],
+        "icons": {"sun": ICONS["sun"], "moon": ICONS["moon"]},
+        "menu": menu,
         "column": column,
     }

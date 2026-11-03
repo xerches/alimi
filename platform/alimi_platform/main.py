@@ -12,11 +12,13 @@ from __future__ import annotations
 import logging
 from collections import Counter
 from contextlib import contextmanager
+from dataclasses import replace
+from datetime import datetime, timezone
 from pathlib import Path
 from uuid import UUID
 
 from fastapi import FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Engine, text
@@ -31,9 +33,38 @@ from .scans import ScanRefused, run_scan
 from .seed import SAMPLE_ORGS
 from .nav import shell
 from .status import STATUSES, control_statuses, latest_results, requirement_statuses
+from .theme import load_brand, theme_css
 
 HERE = Path(__file__).parent
 log = logging.getLogger("alimi.platform")
+
+# The time zones the Profile page offers. A short list on purpose: the sample companies are in the US,
+# and the full IANA list arrives with real sign-in.
+TIME_ZONES: tuple[str, ...] = (
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Phoenix",
+    "America/Los_Angeles",
+    "America/Anchorage",
+    "Pacific/Honolulu",
+    "America/Toronto",
+    "Europe/London",
+    "Europe/Paris",
+    "UTC",
+)
+NOTIFICATION_KEYS: tuple[str, ...] = (
+    "notify_failed_tests",
+    "notify_renewals",
+    "notify_policy_acknowledgements",
+    "notify_access_requests",
+    "notify_weekly_digest",
+)
+
+
+def initials(name: str) -> str:
+    parts = [p for p in name.replace("(", " ").replace(")", " ").split() if p[0].isalnum()]
+    return "".join(p[0].upper() for p in parts[:2]) or "?"
 
 
 class NotSignedIn(Exception):
@@ -46,6 +77,11 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
         raise ConfigError("The mock-mode user picker only loads when ALIMI_MODE=mock.")
     install_log_redaction()
     engine = engine or make_engine(settings.database_url)
+    brand = load_brand(settings.repo_root)
+    if not settings.site_url:
+        settings = replace(settings, site_url=str(brand.get("site_url", "")))
+    # Both themes, built once from config/brand.yaml; served at /theme.css ahead of app.css.
+    stylesheet = theme_css(brand)
 
     app = FastAPI(title="Alimi platform (mock mode)", docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(
@@ -78,7 +114,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
         with org_scope(engine, org_id, user_id) as conn:
             me = conn.execute(
                 text(
-                    "SELECT u.id, u.display_name, m.role, o.id AS org_id, o.name AS org_name "
+                    "SELECT u.id, u.display_name, u.email, u.job_title, m.role, o.id AS org_id, o.name AS org_name "
                     "FROM memberships m JOIN users u ON u.id = m.user_id JOIN organizations o ON o.id = m.organization_id "
                     "WHERE m.user_id = :u"
                 ),
@@ -88,7 +124,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
                 # The membership is gone (or the cookie names an org the user is not in).
                 request.session.clear()
                 raise NotSignedIn()
-            yield conn, dict(me)
+            yield conn, {**me, "initials": initials(me["display_name"])}
 
     def render(request: Request, name: str, **context) -> HTMLResponse:
         return templates.TemplateResponse(request, name, context)
@@ -117,13 +153,17 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
                 raise HTTPException(status_code=400, detail="That sample user is not set up. Run the seed first.")
             record(conn, org_id, user_id, "login.mock", f"user:{user_id}")
         request.session.clear()
-        request.session.update({"user_id": user_id, "org_id": org_id})
+        request.session.update({"user_id": user_id, "org_id": org_id, "signed_in_at": datetime.now(timezone.utc).isoformat()})
         return RedirectResponse("/dashboard", status_code=303)
 
     @app.post("/logout")
     def logout(request: Request):
         request.session.clear()
         return RedirectResponse("/login", status_code=303)
+
+    @app.get("/theme.css", include_in_schema=False)
+    def theme_stylesheet():
+        return PlainTextResponse(stylesheet, media_type="text/css", headers={"Cache-Control": "public, max-age=3600"})
 
     # ------------------------------------------------------------------ pages
 
@@ -320,6 +360,69 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             ).mappings().all()
             crumbs = [{"label": "Settings", "href": "/settings"}, {"label": "Audit log"}]
             return page(request, "audit.html", conn, me, "audit", crumbs=crumbs, entries=entries)
+
+    # ------------------------------------------------------------------ the person's own pages
+
+    def preferences_of(conn, me: dict) -> dict:
+        """The person's settings row, created with the defaults the first time it is asked for."""
+        query = text("SELECT * FROM user_settings WHERE user_id = :u")
+        row = conn.execute(query, {"u": me["id"]}).mappings().first()
+        if row is None:
+            conn.execute(text("INSERT INTO user_settings (user_id) VALUES (:u)"), {"u": me["id"]})
+            row = conn.execute(query, {"u": me["id"]}).mappings().first()
+        return dict(row)
+
+    @app.get("/account", response_class=HTMLResponse)
+    def account(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            prefs = preferences_of(conn, me)
+            crumbs = [{"label": "Account", "href": "/account"}, {"label": "Profile"}]
+            return page(request, "account.html", conn, me, "account", crumbs=crumbs, prefs=prefs, saved=bool(saved), time_zones=TIME_ZONES)
+
+    @app.post("/account")
+    def account_save(request: Request, display_name: str = Form(...), job_title: str = Form(""), time_zone: str = Form(...)):
+        name, title = " ".join(display_name.split()), " ".join(job_title.split())
+        if not 1 <= len(name) <= 80 or len(title) > 80:
+            raise HTTPException(status_code=400, detail="A name is 1 to 80 characters; a title up to 80.")
+        if time_zone not in TIME_ZONES:
+            raise HTTPException(status_code=400, detail="Pick a time zone from the list.")
+        with scope(request) as (conn, me):
+            preferences_of(conn, me)
+            # WHERE id = the signed-in user: the row policy would let a member rename a colleague, this route does not.
+            conn.execute(text("UPDATE users SET display_name = :n, job_title = :t WHERE id = :u"), {"n": name, "t": title or None, "u": me["id"]})
+            conn.execute(text("UPDATE user_settings SET time_zone = :tz, updated_at = now() WHERE user_id = :u"), {"tz": time_zone, "u": me["id"]})
+            record(conn, me["org_id"], me["id"], "account.profile", f"user:{me['id']}", {"display_name": name, "job_title": title, "time_zone": time_zone})
+        return RedirectResponse("/account?saved=1", status_code=303)
+
+    @app.get("/account/security", response_class=HTMLResponse)
+    def account_security(request: Request):
+        with scope(request) as (conn, me):
+            mfa = [{"id": test_id, **row} for test_id, row in latest_results(conn).items() if ".mfa." in test_id]
+            signed_in_at = request.session.get("signed_in_at")
+            crumbs = [{"label": "Account", "href": "/account"}, {"label": "Security"}]
+            return page(
+                request, "account_security.html", conn, me, "account_security", crumbs=crumbs,
+                mfa=mfa, signed_in_at=datetime.fromisoformat(signed_in_at) if signed_in_at else None, session_hours=8,
+            )
+
+    @app.get("/account/notifications", response_class=HTMLResponse)
+    def account_notifications(request: Request, saved: str | None = None):
+        with scope(request) as (conn, me):
+            prefs = preferences_of(conn, me)
+            crumbs = [{"label": "Account", "href": "/account"}, {"label": "Notifications"}]
+            return page(request, "account_notifications.html", conn, me, "account_notifications", crumbs=crumbs, prefs=prefs, saved=bool(saved))
+
+    @app.post("/account/notifications")
+    async def account_notifications_save(request: Request):
+        form = await request.form()
+        # A checkbox that is off is simply absent from the form, so "present" means on.
+        choices = {key: key in form for key in NOTIFICATION_KEYS}
+        with scope(request) as (conn, me):
+            preferences_of(conn, me)
+            sets = ", ".join(f"{key} = :{key}" for key in NOTIFICATION_KEYS)
+            conn.execute(text(f"UPDATE user_settings SET {sets}, updated_at = now() WHERE user_id = :u"), {**choices, "u": me["id"]})
+            record(conn, me["org_id"], me["id"], "account.notifications", f"user:{me['id']}", choices)
+        return RedirectResponse("/account/notifications?saved=1", status_code=303)
 
     @app.get("/healthz", include_in_schema=False)
     def healthz():

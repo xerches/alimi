@@ -8,7 +8,7 @@ import re
 from sqlalchemy import text
 
 from alimi_platform.db import org_scope
-from alimi_platform.nav import BOTTOM_BAR, PAGE_SECTIONS, SECTIONS
+from alimi_platform.nav import ACCOUNT_MENU, BOTTOM_BAR, OFF_STRIP, PAGE_SECTIONS, SECTIONS
 
 STRIP = re.compile(r'<nav class="strip".*?</nav>', re.S)
 COLUMN = re.compile(r'<aside class="column".*?</aside>', re.S)
@@ -92,17 +92,18 @@ def test_controls_column_filters_by_area(signed_in, orgs, app_engine):
 def test_every_strip_and_column_link_answers(signed_in):
     client = signed_in("alimi")
     seen: set[str] = set()
-    for path in ("/dashboard", "/frameworks", "/controls", "/monitoring", "/settings"):
+    for path in ("/dashboard", "/frameworks", "/controls", "/monitoring", "/settings", "/account"):
         r = client.get(path)
         assert r.status_code == 200
         chrome = STRIP.search(r.text).group(0) + (COLUMN.search(r.text).group(0) if COLUMN.search(r.text) else "")
+        chrome += MENU.search(r.text).group(0)
         for href in HREFS.findall(chrome):
             target = href.split("#")[0]
-            if not target or target in seen:
+            if not target or target in seen or target.startswith("http"):
                 continue
             seen.add(target)
             assert client.get(target).status_code == 200, f"{path} links to {href}"
-    assert "/audit" in seen and "/frameworks/insurer" in seen
+    assert "/audit" in seen and "/frameworks/insurer" in seen and "/account/notifications" in seen
 
 
 def test_badges_are_computed_from_this_companys_rows(signed_in):
@@ -114,7 +115,32 @@ def test_badges_are_computed_from_this_companys_rows(signed_in):
 
 
 def test_page_keys_resolve_to_strip_sections():
-    keys = {s.key for s in SECTIONS}
+    keys = {s.key for s in SECTIONS} | OFF_STRIP
     for page, (section, _item) in PAGE_SECTIONS.items():
         assert section in keys, page
     assert set(BOTTOM_BAR) <= keys and len(BOTTOM_BAR) == 4
+
+
+MENU = re.compile(r'<details class="menu".*?</details>', re.S)
+
+
+def test_account_menu_and_theme_toggle_sit_on_every_page(signed_in):
+    client = signed_in("saltmarsh")
+    for path in ("/dashboard", "/controls", "/account/security"):
+        r = client.get(path)
+        assert r.status_code == 200
+        assert 'data-theme-toggle' in r.text and 'aria-pressed="false"' in r.text
+        menu = MENU.search(r.text).group(0)
+        assert "Viewing as Dana Whitcomb, Owner and CEO" in menu and ">DW<" in menu
+        assert "dana.whitcomb@saltmarsh.example" in menu
+        for entry in ACCOUNT_MENU:
+            assert f">{entry['label']}" in menu, entry
+        assert 'href="https://' in menu and '/help"' in menu and 'rel="noopener"' in menu
+        assert 'action="/logout"' in menu and ">Sign out<" in menu
+    # The account pages have a column of their own and no strip item is current.
+    r = client.get("/account")
+    column = COLUMN.search(r.text).group(0)
+    assert CURRENT.findall(column) == ["/account"]
+    assert "Profile" in column and "Security" in column and "Notifications" in column
+    assert CURRENT.findall(STRIP.search(r.text).group(0)) == []
+    assert 'href="/account/security" aria-current="page"' in MENU.search(client.get("/account/security").text).group(0)

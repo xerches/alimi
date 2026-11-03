@@ -25,6 +25,7 @@ class Settings:
     token_key: str             # Fernet key for integration tokens; never stored in the database
     session_secret: str        # signs the session cookie
     repo_root: Path
+    site_url: str = ""         # the marketing site, for the Help center link; blank means read config/brand.yaml
 
     @property
     def is_mock(self) -> bool:
