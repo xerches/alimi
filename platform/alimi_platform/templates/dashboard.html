@@ -24,6 +24,11 @@
     <p><a href="/tasks?view=mine">My tasks</a> · <a href="/tasks">Everything open</a> · <a href="/projects">Projects</a></p>
   </section>
   <section class="card">
+    <h2>Policies</h2>
+    <p>{{ policies.approved }} of {{ policies.total }} approved{% if policies.in_review %}, {{ policies.in_review }} awaiting approval{% endif %}{% if policies.past_due %}, <strong>{{ policies.past_due }} past review</strong>{% endif %}.{% if policies.mine %} <strong>{{ policies.mine }}</strong> waiting for your acknowledgement.{% endif %}</p>
+    <p>{% if policies.mine %}<a href="/policies?view=mine">Read and acknowledge</a> · {% endif %}<a href="/policies">The policy set</a>{% if policies.in_review %} · <a href="/policies?view=in_review">Awaiting approval</a>{% endif %}</p>
+  </section>
+  <section class="card">
     <h2>Last scan</h2>
     {% if last_run %}
     <p><a href="/scans/{{ last_run.id }}">{{ last_run.started_at.strftime("%b %d, %Y %H:%M UTC") }}</a>: {{ last_run.passed }} passed, {{ last_run.failed }} failed, {{ last_run.attest }} need an attestation{% if last_run.errors %}, {{ last_run.errors }} could not run{% endif %}.</p>

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% from "_policies.html" import policy_status, review_due %}
+{% from "_status.html" import badge %}
+{% block title %}{{ p.title }}{% endblock %}
+{% block content %}
+<p class="eyebrow">{{ p.label }} · version {{ p.current_version }}{% if p.template_version %} · from library template v{{ p.template_version }}{% endif %}</p>
+<h1>{{ p.title }} {{ policy_status(p.status) }}</h1>
+{% if done == "approved" %}<p class="notice" role="status">Approved. Everyone in scope is now asked to acknowledge version {{ p.current_version }}.</p>
+{% elif done == "submitted" %}<p class="notice" role="status">Sent for approval to {{ p.approver_name or "the company owner" }}.</p>
+{% elif done == "acknowledged" %}<p class="notice" role="status">Thank you. Your acknowledgement of version {{ p.current_version }} is on record.</p>
+{% elif done == "saved" %}<p class="notice" role="status">Saved as version {{ p.current_version }}. It is a draft again: send it for approval when the text is right.</p>
+{% elif done == "unchanged" %}<p class="notice" role="status">Nothing changed, so no new version was made.</p>{% endif %}
+<p class="lead">
+  {% if p.status == "approved" %}Approved {{ p.approved_at.strftime("%b %d, %Y") }}{% if version.approved_at and versions and versions[0].approver %} by {{ versions[0].approver }}{% endif %}; next review {{ p.next_review_on.strftime("%b %d, %Y") }}{% if p.past_due %} (past due){% endif %}. {{ p.acknowledged }} of {{ p.audience }} people have acknowledged this version.
+  {% elif p.status == "in_review" %}Version {{ p.current_version }} is with {{ p.approver_name or "the approver" }} for approval. Acknowledgements start once it is approved.
+  {% elif p.status == "draft" %}A draft: adopted from the Alimi library with {{ me.org_name }}'s names filled in. Adapt the text to how the company really works, have the marked statements reviewed, then send it for approval.
+  {% else %}Retired. Kept for the record; nobody is asked to acknowledge it.{% endif %}
+</p>
+
+<div class="actions">
+  {% if p.status == "approved" and can_acknowledge %}
+    {% if p.acknowledged_by_me %}<span class="badge q-approved">You acknowledged version {{ p.current_version }}</span>
+    {% else %}<form class="inline-form" method="post" action="/policies/{{ p.slug }}/acknowledge"><button type="submit">Acknowledge: I have read this policy and will follow it</button></form>{% endif %}
+  {% endif %}
+  {% if p.status == "draft" and can_edit %}<form class="inline-form" method="post" action="/policies/{{ p.slug }}/submit"><button type="submit" class="secondary">Send for approval</button></form>{% endif %}
+  {% if p.status in ("draft", "in_review") and can_approve %}<form class="inline-form" method="post" action="/policies/{{ p.slug }}/approve"><button type="submit">Approve version {{ p.current_version }}</button></form>{% endif %}
+  {% if can_edit %}<a class="button-link secondary" href="/policies/{{ p.slug }}/edit">Edit the text (new version)</a>{% endif %}
+  <a class="button-link secondary" href="/policies/{{ p.slug }}/download">Download Markdown</a>
+</div>
+
+<nav class="chips" aria-label="Sections">
+  <a class="chip" href="#details">Details</a><a class="chip" href="#document">Document</a><a class="chip" href="#requirements">Requirements</a><a class="chip" href="#controls">Controls ({{ linked | length }})</a><a class="chip" href="#acknowledgements">Acknowledgements</a><a class="chip" href="#versions">Versions</a>
+</nav>
+
+<div class="cards">
+  <section class="card" id="details">
+    <h2>Details</h2>
+    <dl class="facts">
+      <dt>Owner</dt><dd>{{ p.owner_name or '<span class="muted">nobody yet</span>' | safe }}</dd>
+      <dt>Approver</dt><dd>{{ p.approver_name or '<span class="muted">nobody yet</span>' | safe }}</dd>
+      <dt>Status</dt><dd>{{ policy_status(p.status) }}</dd>
+      <dt>Approved</dt><dd>{% if p.approved_at %}{{ p.approved_at.strftime("%b %d, %Y") }}{% else %}<span class="muted">Not yet</span>{% endif %}</dd>
+      <dt>Review</dt><dd>{{ p.cycle_label }}; next {{ review_due(p) }}</dd>
+      <dt>Applies to</dt><dd>{{ p.applies_to or "everyone" }}</dd>
+      {% if related %}<dt>Related</dt><dd>{% for r in related %}<a href="/policies/{{ r.slug }}">{{ r.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</dd>{% endif %}
+    </dl>
+  </section>
+  <section class="card" id="acknowledgements">
+    <h2>Acknowledgements</h2>
+    {% if p.status == "approved" %}
+    <p class="big">{{ p.acknowledged }} of {{ p.audience }}</p>
+    <p><span class="progress" role="img" aria-label="{{ p.percent }} percent acknowledged"><span style="width:{{ p.percent }}%"></span></span> {{ p.percent }}%</p>
+    <ul class="plain">
+      {% for person in people %}
+      <li>{{ person.display_name }} <span class="muted">{{ person.job_title or person.role }}</span> · {% if person.acknowledged_at %}<span class="badge q-approved">Accepted {{ person.acknowledged_at.strftime("%b %d, %Y") }}</span>{% else %}<span class="badge q-draft">Not yet</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">Acknowledgements start once the policy is approved. {{ p.audience }} {{ "person" if p.audience == 1 else "people" }} will be asked.</p>
+    {% endif %}
+  </section>
+</div>
+
+<h2 id="document">Document</h2>
+{% if p.status != "approved" %}
+<p class="callout"><strong>Draft.</strong> Adapt before adopting.{% if markers %} {{ markers }} statement{{ "s" if markers != 1 }} marked <em>[HR or legal review]</em> need{{ "s" if markers == 1 }} a human reviewer before approval.{% endif %}{% if placeholders %} Unfilled placeholders: {{ placeholders | join(", ") }}; approval is refused until they are filled.{% endif %}</p>
+{% elif markers %}
+<p class="callout"><strong>Note.</strong> {{ markers }} statement{{ "s" if markers != 1 }} still carr{{ "y" if markers != 1 else "ies" }} the <em>[HR or legal review]</em> marker. A new version can remove it once a reviewer has signed off.</p>
+{% endif %}
+<div class="doc-wrap">
+  <nav class="toc" aria-label="In this policy">
+    <p class="column-title">In this policy</p>
+    <ol>{% for h in outline %}<li><a href="#{{ h.id }}">{{ h.text }}</a></li>{% endfor %}</ol>
+  </nav>
+  <article class="doc card">
+    {{ document | safe }}
+  </article>
+</div>
+
+<section class="card" id="requirements">
+  <h2>Requirements this policy answers</h2>
+  <p class="muted">Requirement IDs with Alimi's own one-line summary of each; the frameworks' text is not reproduced.</p>
+  {% for g in requirements %}
+  <h3>{{ g.short_name }} <small class="muted">{{ g["items"] | length }}</small></h3>
+  <dl class="facts">
+    {% for r in g["items"] %}<dt><code>{{ r.code }}</code></dt><dd>{{ r.summary or '<span class="muted">summary to come</span>' | safe }}</dd>{% endfor %}
+  </dl>
+  {% else %}
+  <p class="muted">No requirement mappings.</p>
+  {% endfor %}
+</section>
+
+<section class="card" id="controls">
+  <h2>Controls that carry it out</h2>
+  {% if linked %}
+  <ul class="plain">
+    {% for c in linked %}<li><a href="/controls/{{ c.id }}">{{ c.name }}</a> <code class="muted">{{ c.id }}</code> {{ badge(c.status) }}</li>{% endfor %}
+  </ul>
+  {% else %}<p class="muted">No control maps to this policy yet.</p>{% endif %}
+</section>
+
+<section class="card" id="versions">
+  <h2>Versions</h2>
+  <table>
+    <thead><tr><th scope="col">Version</th><th scope="col">Date</th><th scope="col">Change</th><th scope="col">Author</th><th scope="col">Approved</th><th scope="col">Acknowledged</th></tr></thead>
+    <tbody>
+    {% for v in versions %}
+    <tr><td class="nowrap">v{{ v.number }}{% if v.number == p.current_version %} <span class="muted">(current)</span>{% endif %}</td><td class="nowrap">{{ v.created_at.strftime("%b %d, %Y") }}</td><td>{{ v.change_note or "" }}</td><td>{{ v.author or "" }}</td>
+      <td class="nowrap">{% if v.approved_at %}{{ v.approved_at.strftime("%b %d, %Y") }}{% if v.approver %} by {{ v.approver }}{% endif %}{% elif v.number == p.current_version and p.status == "in_review" %}<span class="muted">Awaiting {{ p.approver_name or "approval" }}</span>{% else %}<span class="muted">No</span>{% endif %}</td>
+      <td>{{ v.acknowledged }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<p class="muted">{% if prev %}<a href="/policies/{{ prev.slug }}">← {{ prev.title }}</a>{% endif %}{% if prev and next %} · {% endif %}{% if next %}<a href="/policies/{{ next.slug }}">{{ next.title }} →</a>{% endif %}</p>
+{% endblock %}

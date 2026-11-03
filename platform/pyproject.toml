@@ -20,6 +20,7 @@ dependencies = [
   "psycopg[binary]>=3.2",
   "cryptography>=42",
   "PyYAML>=6.0",
+  "markdown-it-py>=3.0",      # renders the policy text; raw HTML stays off
 ]
 
 [project.optional-dependencies]

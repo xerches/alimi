@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_policies.html" import policy_status %}
+{% block title %}Edit · {{ p.title }}{% endblock %}
+{% block content %}
+<p class="eyebrow">{{ p.label }} · editing version {{ p.current_version }}</p>
+<h1>{{ p.title }} {{ policy_status(p.status) }}</h1>
+<p class="lead">The text is Markdown: <code>#</code> for headings, <code>1.</code> for numbered statements, <code>|</code> for tables. Saving makes version {{ p.current_version + 1 }}; the policy becomes a draft again, so the approval and every acknowledgement start over. Nothing is overwritten: every earlier version stays on the Versions list.</p>
+<form class="form editor" method="post" action="/policies/{{ p.slug }}/edit">
+  <div class="field">
+    <label for="change_note">What changed</label>
+    <input id="change_note" name="change_note" type="text" maxlength="300" placeholder="Named the IT provider; removed the office section; reviewed by counsel">
+  </div>
+  <div class="field wide">
+    <label for="body">Policy text</label>
+    <textarea id="body" name="body" rows="36" required maxlength="{{ limit }}" spellcheck="true">{{ version.body }}</textarea>
+  </div>
+  <div class="actions">
+    <button type="submit">Save as version {{ p.current_version + 1 }}</button>
+    <a class="button-link secondary" href="/policies/{{ p.slug }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

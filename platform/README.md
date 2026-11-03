@@ -32,14 +32,15 @@ passing). `docker compose down -v` wipes the database and the generated keys.
 | App shell | `alimi_platform/nav.py`, `templates/base.html`, `static/app.css` | the layout chosen Nov 3, 2026, the same as the demo's: a captioned icon strip, a second column where a section has children, breadcrumbs, a phone bottom bar, the account menu and the theme toggle in the top bar; `nav.py` mirrors `demo/src/lib/nav.js` |
 | Themes | `alimi_platform/theme.py`, `static/theme.js` | both themes are generated from `config/brand.yaml` (`colors`, `colors_dark`) and served at `/theme.css`; `app.css` types no color (`tests/test_theme.py`). Light is the default, the device setting applies, and the toggle in the top bar overrides it per browser (localStorage key `alimi-theme`), the same script as the site |
 | Tasks and projects | `alimi_platform/tasks.py`, `templates/tasks.html`, `task.html`, `projects.html`, `project.html`, `migrations/0004_tasks.sql` | the ticketing system: tasks (Fix, Renew, Decide, or your own) with an assignee, a due date, a status, comments and a link to the control, evidence or policy they are about; projects that group them with a progress bar; an external ticket field per task and project for Jira or Monday.com until a live sync exists; the seed raises the sample company's tasks from its first scan |
+| Policies | `alimi_platform/policies.py`, `templates/policies.html`, `policy.html`, `policy_edit.html`, `migrations/0005_policies.sql` | the policy module: the 23-policy library in `../policies` is loaded as templates by `catalog.py` (front matter, requirement IDs, the Markdown with its placeholders); each company adopts its own copy with its name and people filled in, and keeps every version of the text, who approved which version and who acknowledged it. The full text is rendered from Markdown with raw HTML off, for signed-in members only; the download is the Markdown in force. Approval is refused while a placeholder is unfilled; `[HR or legal review]` markers are counted and shown. A new version puts the policy back to draft, so approval and acknowledgements start over |
 | Account | `templates/account*.html`, `migrations/0003_account.sql` | the person's own pages (Profile, Security, Notifications) from the menu under their initials; `user_settings` is keyed by user with a "your own row" policy |
 | Sample data | `alimi_platform/seed.py` | fixed IDs, so the mock picker can list users without the database |
 
 ## Pages
 
 Every signed-in page sits in the same shell (`templates/base.html`): the strip on the left lists the
-sections the platform has built, in the demo's order (Home, Frameworks, Controls, Monitoring,
-Tasks, Settings); Policies, Evidence, People, Risk, Assets, Trust and the Assistant join it with their
+sections the platform has built, in the demo's order (Home, Frameworks, Controls, Policies, Monitoring,
+Tasks, Settings); Evidence, People, Risk, Assets, Trust and the Assistant join it with their
 prompts. A second column appears only where a section has children: Frameworks lists the Posture
 Score, the insurer questionnaire with its readiness and the mapped frameworks; Controls lists the
 areas and filters the table through `?domain=`; Settings holds Company and the Audit log. The top
@@ -52,6 +53,7 @@ badges on the strip and everything in the column are computed from the organizat
 | `/dashboard` | Home: controls by status, the last scan, what is connected |
 | `/frameworks`, `/frameworks/insurer` | the catalog; the insurer questionnaire with each question's status and the controls that answer it |
 | `/controls`, `/controls?domain=<area>`, `/controls/<id>` | every control with its computed status, filtered by area; a control's tests, evidence and requirements |
+| `/policies`, `/policies?view=mine`, `/policies/<slug>`, `/policies/<slug>/edit`, `/policies/<slug>/download` | the policy set with its status tiles and views; a policy's details, acknowledgements, the full document with its outline, the requirement IDs it answers, the controls that carry it out and its versions, with the Approve, Send for approval and Acknowledge buttons; the Markdown editor that makes the next version; the Markdown download |
 | `/monitoring`, `/scans/<id>` | the connected systems with **Run checks now**, the latest result per test, every scan; a scan's results with the raw evidence each check read |
 | `/tasks`, `/tasks?view=mine`, `/tasks/<id>`, `/projects`, `/projects/<id>` | the ticketing system: open, mine, done or all tasks; a task with its status buttons, comments and edit form; projects with progress and a board by status |
 | `/settings`, `/audit` | the company, who has access, what is connected; the append-only audit log |
@@ -106,5 +108,6 @@ CI runs the same against a Postgres service container (`.github/workflows/tests.
 
 Real login, the nightly worker, the reseller view and its policy, evidence uploads, recurring
 tasks and false-positive notes are prompt 12b. Readiness scores, the Alimi Security Posture Score,
-the in-app report, the export pack and the data-quality page are 12c. Policies and people are 13.
-Control owners are not modelled yet, so no control shows "Needs owner".
+the in-app report, the export pack and the data-quality page are 12c. People (the identity-provider
+view, training, onboarding and offboarding) are 13; the policy module is in. Control owners are not
+modelled yet, so no control shows "Needs owner".

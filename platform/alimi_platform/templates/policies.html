@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from "_policies.html" import policy_status, review_due, ack_bar %}
+{% block title %}{{ views[view] }} · Policies{% endblock %}
+{% block content %}
+<p class="eyebrow">Policies</p>
+<h1>{{ views[view] }}</h1>
+<p class="lead">
+  {% if view == "mine" %}Approved policies you have not accepted yet. Read each one, then press Acknowledge at the top of it; the acknowledgement is dated and kept with that version.
+  {% elif view == "approved" %}In force, with the date each one comes back for review. A yearly review is what every framework and the insurer questionnaire ask for.
+  {% elif view == "in_review" %}Sent to the approver and waiting. Approving dates the version and starts the acknowledgements.
+  {% elif view == "draft" %}Adopted from the Alimi library with {{ me.org_name }}'s names filled in, not yet in force. Adapt the text, then send it for approval.
+  {% else %}The policy set, adopted from the Alimi library: each one has an owner, an approver, a version, a status and an acknowledgement count. Staff accept a policy once it is approved and again when a new version is.{% endif %}
+</p>
+
+<section class="tiles" aria-label="Policies by status">
+  <a class="tile q-approved" href="/policies?view=approved"><strong>{{ n.approved }}</strong><span>Approved of {{ n.total }}</span></a>
+  <a class="tile q-in_review" href="/policies?view=in_review"><strong>{{ n.in_review }}</strong><span>Awaiting approval</span></a>
+  <a class="tile q-draft" href="/policies?view=draft"><strong>{{ n.draft }}</strong><span>Drafts</span></a>
+  <a class="tile q-review" href="/policies?view=approved"><strong>{{ n.past_due + n.renews_soon }}</strong><span>Reviews due{% if n.past_due %}, {{ n.past_due }} past{% endif %}</span></a>
+  <a class="tile q-mine" href="/policies?view=mine"><strong>{{ n.mine }}</strong><span>For you to acknowledge</span></a>
+</section>
+
+<nav class="chips" aria-label="Views">
+  {% for key, label in views.items() %}<a class="chip" href="/policies{% if key != 'all' %}?view={{ key }}{% endif %}"{% if key == view %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+</nav>
+
+{% if policies %}
+<table>
+  <thead><tr><th scope="col">Policy</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Version</th><th scope="col">Acknowledged</th><th scope="col">Next review</th><th scope="col">Maps to</th></tr></thead>
+  <tbody>
+  {% for p in policies %}
+  <tr id="{{ p.slug }}">
+    <td><a href="/policies/{{ p.slug }}">{{ p.title }}</a><br><small class="muted"><code>{{ p.label }}</code></small></td>
+    <td>{{ policy_status(p.status) }}</td>
+    <td>{{ p.owner_name or '<span class="muted">nobody yet</span>' | safe }}</td>
+    <td class="nowrap">v{{ p.current_version }}</td>
+    <td class="nowrap">{{ ack_bar(p) }}</td>
+    <td class="nowrap">{{ review_due(p) }}</td>
+    <td class="nowrap"><span class="muted">{{ p.requirement_count }} IDs · {{ p.control_count }} controls</span></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing here{% if view == "mine" %}: you have acknowledged every approved policy{% endif %}.</p>
+{% endif %}
+
+<section class="card">
+  <h2>Exporting the set</h2>
+  <p>Each policy page has a <strong>Download Markdown</strong> link for the version in force. The pack for a broker or an auditor, every approved policy as DOCX and PDF with the acknowledgement record, arrives with the export pack in the insurer dashboard step.</p>
+</section>
+{% endblock %}

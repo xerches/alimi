@@ -1,0 +1,9 @@
+{% macro policy_status(status) -%}
+<span class="badge q-{{ status }}">{{ POLICY_STATUSES.get(status, status) }}</span>
+{%- endmacro %}
+{% macro review_due(p) -%}
+{% if p.status == "approved" and p.next_review_on %}{{ p.next_review_on.strftime("%b %d, %Y") }}{% if p.past_due %} <span class="badge s-failing">Past due</span>{% elif p.renews_soon %} <span class="badge s-needs_evidence">This month</span>{% endif %}{% else %}<span class="muted">After approval</span>{% endif %}
+{%- endmacro %}
+{% macro ack_bar(p) -%}
+{% if p.status == "approved" %}{{ p.acknowledged }} of {{ p.audience }} <span class="progress" role="img" aria-label="{{ p.acknowledged }} of {{ p.audience }} acknowledged"><span style="width:{{ p.percent }}%"></span></span>{% else %}<span class="muted">After approval</span>{% endif %}
+{%- endmacro %}

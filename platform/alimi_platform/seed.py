@@ -24,6 +24,7 @@ from .audit import record
 from .config import Settings
 from .crypto import TokenBox
 from .db import org_scope
+from .policies import seed_policies
 from .scans import run_scan
 from .status import control_statuses
 from .tasks import seed_tasks
@@ -196,6 +197,8 @@ def seed(owner_engine: Engine, settings: Settings, run_scans: bool = True) -> No
                 _evidence_for(org, today),
             )
             record(conn, org.id, None, "seed.sample_data", f"organization:{org.slug}", {"users": len(org.users)})
+            # The policy library, adopted with the company's name and people filled in, part way approved.
+            seed_policies(conn, org.id, org.name.replace(" (sample)", ""), list(org.users), today)
             if run_scans:
                 run_scan(conn, settings, org.integration_id, None)
                 # The month's list: a renewal project and the tasks the first scan raises.
