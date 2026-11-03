@@ -32,6 +32,28 @@ from .db import make_engine, org_scope
 from .scans import ScanRefused, run_scan
 from .seed import SAMPLE_ORGS
 from .nav import shell
+from .policies import (
+    BODY_LIMIT,
+    CAN_ACKNOWLEDGE,
+    CAN_APPROVE,
+    acknowledge,
+    acknowledgements_of,
+    approve,
+    control_ids_of,
+    get_policy,
+    list_policies,
+    markers_left,
+    new_version,
+    placeholders_left,
+    render as render_policy,
+    requirements_of,
+    submit,
+    version_of,
+    versions_of,
+)
+from .policies import STATUSES as POLICY_STATUSES
+from .policies import VIEWS as POLICY_VIEWS
+from .policies import counts as policy_counts
 from .status import STATUSES, control_statuses, latest_results, requirement_statuses
 from .tasks import (
     EXTERNAL,
@@ -111,6 +133,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
     templates.env.globals["STATUSES"] = STATUSES
     templates.env.globals["TASK_STATUSES"] = TASK_STATUSES
     templates.env.globals["TASK_KINDS"] = KINDS
+    templates.env.globals["POLICY_STATUSES"] = POLICY_STATUSES
     app.state.settings = settings
     app.state.engine = engine
 
@@ -228,6 +251,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
                 request, "dashboard.html", conn, me, "dashboard", controls=controls,
                 integrations=integrations, last_run=runs[0] if runs else None, counts=counts, total=len(controls),
                 tasks=task_counts(conn, me["id"]), mine=list_tasks(conn, view="mine", user_id=me["id"])[:5],
+                policies=policy_counts(conn, me["id"]),
             )
 
     @app.post("/integrations/{integration_id}/scan", response_class=HTMLResponse)
@@ -609,6 +633,133 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             )
             record(conn, me["org_id"], me["id"], "project.update", f"project:{project_id}", {"name": f["name"], "status": f["status"]})
         return RedirectResponse(f"/projects/{project_id}?saved=1", status_code=303)
+
+    # ------------------------------------------------------------------ policies
+
+    def policy_or_404(conn, slug: str, me: dict) -> dict:
+        p = get_policy(conn, slug, me["id"])
+        if p is None:
+            raise HTTPException(status_code=404, detail="No such policy.")
+        return p
+
+    def may_edit(me: dict, p: dict) -> bool:
+        return me["role"] in CAN_APPROVE or (p["owner_user_id"] == me["id"] and me["role"] in CAN_ACKNOWLEDGE)
+
+    @app.get("/policies", response_class=HTMLResponse)
+    def policies_page(request: Request, view: str = "all"):
+        if view not in POLICY_VIEWS:
+            raise HTTPException(status_code=404, detail="No such view.")
+        with scope(request) as (conn, me):
+            items = list_policies(conn, view=view, user_id=me["id"])
+            crumbs = [{"label": "Policies", "href": "/policies" if view != "all" else None}]
+            if view != "all":
+                crumbs.append({"label": POLICY_VIEWS[view]})
+            return page(
+                request, "policies.html", conn, me, "policies", item=view, crumbs=crumbs,
+                policies=items, view=view, views=POLICY_VIEWS, n=policy_counts(conn, me["id"]), today=date.today(),
+            )
+
+    @app.get("/policies/{slug}", response_class=HTMLResponse)
+    def policy_page(request: Request, slug: str, done: str | None = None):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            version = version_of(conn, p["id"], p["current_version"])
+            html, outline = render_policy(version["body"])
+            items = control_statuses(conn)
+            linked = control_ids_of(conn, p["template_id"])
+            controls_linked = [c for c in items if c.id in linked]
+            everything = list_policies(conn, user_id=me["id"])
+            index = next((i for i, x in enumerate(everything) if x["id"] == p["id"]), 0)
+            crumbs = [{"label": "Policies", "href": "/policies"}, {"label": p["label"] if p["template_id"] else p["title"]}]
+            return page(
+                request, "policy.html", conn, me, "policy", crumbs=crumbs, controls=items,
+                p=p, version=version, document=html, outline=outline, placeholders=placeholders_left(version["body"]),
+                markers=markers_left(version["body"]), requirements=requirements_of(conn, p["template_id"]), linked=controls_linked,
+                people=acknowledgements_of(conn, p), versions=versions_of(conn, p["id"]), related=[x for x in everything if x["template_id"] in (p["related"] or [])],
+                prev=everything[index - 1] if index > 0 else None, next=everything[index + 1] if index + 1 < len(everything) else None,
+                can_edit=may_edit(me, p), can_approve=me["role"] in CAN_APPROVE, can_acknowledge=me["role"] in CAN_ACKNOWLEDGE, done=done,
+            )
+
+    @app.get("/policies/{slug}/download")
+    def policy_download(request: Request, slug: str):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            version = version_of(conn, p["id"], p["current_version"])
+            record(conn, me["org_id"], me["id"], "policy.download", f"policy:{p['id']}", {"version": p["current_version"]})
+            head = f"<!-- {p['title']}, version {p['current_version']}, {POLICY_STATUSES[p['status']]}. Exported from Alimi for {me['org_name']}. -->\n\n"
+            return PlainTextResponse(
+                head + version["body"], media_type="text/markdown; charset=utf-8",
+                headers={"Content-Disposition": f'attachment; filename="{slug}-v{p["current_version"]}.md"'},
+            )
+
+    @app.post("/policies/{slug}/submit")
+    def policy_submit(request: Request, slug: str):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            if not may_edit(me, p):
+                raise HTTPException(status_code=403, detail="Only the policy's owner or a company owner or admin sends a policy for approval.")
+            if p["status"] != "draft":
+                raise HTTPException(status_code=409, detail="Only a draft is sent for approval.")
+            submit(conn, p)
+            record(conn, me["org_id"], me["id"], "policy.submit", f"policy:{p['id']}", {"version": p["current_version"]})
+        return RedirectResponse(f"/policies/{slug}?done=submitted", status_code=303)
+
+    @app.post("/policies/{slug}/approve")
+    def policy_approve(request: Request, slug: str):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            if me["role"] not in CAN_APPROVE:
+                raise HTTPException(status_code=403, detail="Only a company owner or admin approves a policy.")
+            if p["status"] not in ("draft", "in_review"):
+                raise HTTPException(status_code=409, detail="This version is already approved.")
+            try:
+                approve(conn, p, me["id"])
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from None
+            record(conn, me["org_id"], me["id"], "policy.approve", f"policy:{p['id']}", {"version": p["current_version"]})
+        return RedirectResponse(f"/policies/{slug}?done=approved", status_code=303)
+
+    @app.post("/policies/{slug}/acknowledge")
+    def policy_acknowledge(request: Request, slug: str):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            if me["role"] not in CAN_ACKNOWLEDGE:
+                raise HTTPException(status_code=403, detail="An auditor reads policies; staff acknowledge them.")
+            if p["status"] != "approved":
+                raise HTTPException(status_code=409, detail="A policy is acknowledged once it is approved.")
+            if acknowledge(conn, p, me["id"]):
+                record(conn, me["org_id"], me["id"], "policy.acknowledge", f"policy:{p['id']}", {"version": p["current_version"]})
+        return RedirectResponse(f"/policies/{slug}?done=acknowledged", status_code=303)
+
+    @app.get("/policies/{slug}/edit", response_class=HTMLResponse)
+    def policy_edit(request: Request, slug: str):
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            if not may_edit(me, p):
+                raise HTTPException(status_code=403, detail="Only the policy's owner or a company owner or admin edits a policy.")
+            version = version_of(conn, p["id"], p["current_version"])
+            crumbs = [{"label": "Policies", "href": "/policies"}, {"label": p["label"], "href": f"/policies/{slug}"}, {"label": "Edit"}]
+            return page(request, "policy_edit.html", conn, me, "policy_edit", crumbs=crumbs, p=p, version=version, limit=BODY_LIMIT)
+
+    @app.post("/policies/{slug}/edit")
+    async def policy_save(request: Request, slug: str):
+        form = await request.form()
+        body = str(form.get("body", "")).replace("\r\n", "\n").strip()
+        note = field(form, "change_note", 300) or None
+        if not body:
+            raise HTTPException(status_code=400, detail="The policy text cannot be empty.")
+        if len(body) > BODY_LIMIT:
+            raise HTTPException(status_code=400, detail=f"The policy text is longer than {BODY_LIMIT} characters.")
+        with scope(request) as (conn, me):
+            p = policy_or_404(conn, slug, me)
+            if not may_edit(me, p):
+                raise HTTPException(status_code=403, detail="Only the policy's owner or a company owner or admin edits a policy.")
+            current = version_of(conn, p["id"], p["current_version"])
+            if current and current["body"].strip() == body:
+                return RedirectResponse(f"/policies/{slug}?done=unchanged", status_code=303)
+            number = new_version(conn, p, body + "\n", note, me["id"])
+            record(conn, me["org_id"], me["id"], "policy.version", f"policy:{p['id']}", {"version": number, "note": note})
+        return RedirectResponse(f"/policies/{slug}?done=saved", status_code=303)
 
     # ------------------------------------------------------------------ the person's own pages
 

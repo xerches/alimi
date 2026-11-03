@@ -3,8 +3,11 @@
 Sources, all already in the repo and shared with the site, the demo and the scanner:
   config/frameworks.yaml       the 23-entry framework catalog (IDs, names, our summaries)
   policies/requirements.yaml   criterion IDs with our own one-line summaries (never framework text)
-  config/controls.yaml         40 controls, the requirement IDs each satisfies and the tests behind it
+  config/controls.yaml         40 controls, the requirement IDs each satisfies, the tests behind it
+                               and the policies that set its rule
   config/checks.yaml           the scanner checks, which become Tests
+  policies/NN-<slug>.md        the 23-policy library: front matter (IDs, roles, requirement mappings)
+                               and the Markdown text with its placeholders, as templates a company adopts
 
 The first framework built end to end is the insurer questionnaire: its requirements are the
 underwriting questions (mfa, admin_access, ...), and controls map to them through the
@@ -18,6 +21,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -47,6 +51,47 @@ class CatalogData:
     control_requirements: set[tuple[str, str]] = field(default_factory=set)
     tests: list[dict] = field(default_factory=list)
     control_tests: set[tuple[str, str]] = field(default_factory=set)
+    policy_templates: list[dict] = field(default_factory=list)
+    policy_requirements: set[tuple[str, str]] = field(default_factory=set)
+    control_policies: set[tuple[str, str]] = field(default_factory=set)
+
+
+# The policy files: YAML front matter between --- lines, then the TEMPLATE header line, then the text.
+FRONT_MATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
+TEMPLATE_HEADER = re.compile(r"^> \*\*TEMPLATE\. Adapt before adopting\..*\*\*\n\n?", re.MULTILINE)
+
+
+def load_policy_templates(repo_root: Path) -> list[dict]:
+    """The library as rows: the front matter's fields plus the body with placeholders left in.
+
+    The TEMPLATE header is dropped here because the platform shows a policy's status in its own
+    words (draft, awaiting approval, approved) rather than as a line inside the document.
+    """
+    rows = []
+    for position, path in enumerate(sorted((repo_root / "policies").glob("[0-9][0-9]-*.md"))):
+        text_ = path.read_text(encoding="utf-8")
+        match = FRONT_MATTER.match(text_)
+        if not match:
+            raise ValueError(f"{path.name}: no YAML front matter")
+        meta = yaml.safe_load(match.group(1)) or {}
+        body = TEMPLATE_HEADER.sub("", text_[match.end():], count=1).strip() + "\n"
+        rows.append(
+            {
+                "id": str(meta["id"]),
+                "slug": str(meta["slug"]),
+                "title": str(meta["title"]),
+                "version": str(meta.get("version", "1.0")),
+                "owner_role": meta.get("owner_role"),
+                "approver_role": meta.get("approver_role"),
+                "review_cycle": str(meta.get("review_cycle", "annual")),
+                "applies_to": meta.get("applies_to"),
+                "related": [str(r) for r in (meta.get("related") or [])],
+                "position": position,
+                "body": body,
+                "_requirements": {fw: [str(c) for c in (codes or [])] for fw, codes in (meta.get("requirements") or {}).items()},
+            }
+        )
+    return rows
 
 
 def _read_yaml(path: Path) -> dict:
@@ -103,6 +148,21 @@ def load(repo_root: Path) -> CatalogData:
         )
     known_tests = {t["id"] for t in data.tests}
 
+    for row in load_policy_templates(repo_root):
+        requirements = row.pop("_requirements")
+        data.policy_templates.append(row)
+        for fw_id, codes in requirements.items():
+            if fw_id not in known_frameworks:
+                continue
+            for code in codes:
+                req_id = f"{fw_id}:{code}"
+                data.requirements.setdefault(
+                    req_id,
+                    {"id": req_id, "framework_id": fw_id, "code": str(code), "summary": None, "position": 1000},
+                )
+                data.policy_requirements.add((row["id"], req_id))
+    known_policies = {p["id"] for p in data.policy_templates}
+
     controls_yaml = _read_yaml(repo_root / "config" / "controls.yaml")["controls"]
     for ctl in controls_yaml:
         data.controls.append(
@@ -132,6 +192,10 @@ def load(repo_root: Path) -> CatalogData:
             if test_id not in known_tests:
                 raise ValueError(f"{ctl['id']} lists test {test_id}, which is not in config/checks.yaml")
             data.control_tests.add((ctl["id"], test_id))
+        for policy_id in ctl.get("policies") or []:
+            if policy_id not in known_policies:
+                raise ValueError(f"{ctl['id']} lists policy {policy_id}, which is not in /policies")
+            data.control_policies.add((ctl["id"], policy_id))
 
     return data
 
@@ -160,9 +224,12 @@ def sync(conn: Connection, data: CatalogData) -> None:
     _upsert(conn, "requirements", "id", list(data.requirements.values()))
     _upsert(conn, "controls", "id", data.controls)
     _upsert(conn, "tests", "id", data.tests)
+    _upsert(conn, "policy_templates", "id", data.policy_templates)
     # Link tables are small: replace them wholesale so a removed mapping disappears.
     conn.execute(text("DELETE FROM control_requirements"))
     conn.execute(text("DELETE FROM control_tests"))
+    conn.execute(text("DELETE FROM policy_requirements"))
+    conn.execute(text("DELETE FROM control_policies"))
     if data.control_requirements:
         conn.execute(
             text("INSERT INTO control_requirements (control_id, requirement_id) VALUES (:c, :r)"),
@@ -172,4 +239,14 @@ def sync(conn: Connection, data: CatalogData) -> None:
         conn.execute(
             text("INSERT INTO control_tests (control_id, test_id) VALUES (:c, :t)"),
             [{"c": c, "t": t} for c, t in sorted(data.control_tests)],
+        )
+    if data.policy_requirements:
+        conn.execute(
+            text("INSERT INTO policy_requirements (policy_id, requirement_id) VALUES (:p, :r)"),
+            [{"p": p, "r": r} for p, r in sorted(data.policy_requirements)],
+        )
+    if data.control_policies:
+        conn.execute(
+            text("INSERT INTO control_policies (control_id, policy_id) VALUES (:c, :p)"),
+            [{"c": c, "p": p} for c, p in sorted(data.control_policies)],
         )
