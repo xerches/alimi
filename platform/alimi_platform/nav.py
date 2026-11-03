@@ -19,6 +19,7 @@ from sqlalchemy import Connection, text
 
 from .catalog import domain_labels
 from .status import ControlStatus, control_statuses, latest_results
+from .tasks import VIEWS, counts as task_counts, projects_with_counts
 
 # The same paths as demo/src/lib/nav.js ICONS, so the two products look alike.
 ICONS: dict[str, str] = {
@@ -26,6 +27,7 @@ ICONS: dict[str, str] = {
     "frameworks": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5"/><path d="M3 13.5L10 17l7-3.5"/></svg>',
     "controls": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M6.5 10l2.5 2.5 4.5-5"/></svg>',
     "monitoring": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 10h3l2-5 3 10 2-5h5"/></svg>',
+    "tasks": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5l1.5 1.5L7 4.5M3 10.5l1.5 1.5L7 9.5M3 15.5l1.5 1.5L7 14.5"/><path d="M9.5 6h7.5M9.5 11h7.5M9.5 16h7.5"/></svg>',
     "settings": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>',
     "menu": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>',
     # The theme toggle: the moon offers dark, the sun offers light.
@@ -49,6 +51,7 @@ SECTIONS: tuple[Section, ...] = (
     Section("frameworks", "Frameworks", "/frameworks", "frameworks", column=True),
     Section("controls", "Controls", "/controls", "controls", column=True),
     Section("monitoring", "Monitoring", "/monitoring", "monitoring"),
+    Section("tasks", "Tasks", "/tasks", "tasks", column=True),
     Section("settings", "Settings", "/settings", "settings", column=True),
 )
 
@@ -65,6 +68,10 @@ PAGE_SECTIONS: dict[str, tuple[str, str | None]] = {
     "control": ("controls", None),
     "monitoring": ("monitoring", None),
     "scan": ("monitoring", None),
+    "tasks": ("tasks", None),       # the item is the view or the project, passed by the route
+    "task": ("tasks", None),
+    "projects": ("tasks", "projects"),
+    "project": ("tasks", None),
     "settings": ("settings", "settings"),
     "audit": ("settings", "audit"),
     # The person's own pages, reached from the account menu in the top bar; no strip item is current.
@@ -81,6 +88,7 @@ ACCOUNT_MENU: tuple[dict[str, Any], ...] = (
     {"key": "profile", "label": "Profile", "href": "/account"},
     {"key": "security", "label": "Security", "href": "/account/security"},
     {"key": "notifications", "label": "Notifications", "href": "/account/notifications"},
+    {"key": "tasks", "label": "My tasks", "href": "/tasks?view=mine"},
     {"key": "help", "label": "Help center", "href": "{site_url}/help", "external": True},
 )
 
@@ -196,16 +204,46 @@ def _controls_column(controls: list[ControlStatus], labels: dict[str, str]) -> d
     return {"title": "Controls", "groups": [{"label": None, "items": [everything]}, {"label": "By area", "items": areas}], "add": None}
 
 
-def shell(conn: Connection, settings, page: str, item: str | None = None, controls: list[ControlStatus] | None = None) -> dict[str, Any]:
+def _tasks_column(conn: Connection, user_id) -> dict[str, Any]:
+    n = task_counts(conn, user_id)
+    views = [
+        {"key": "mine", "label": VIEWS["mine"], "href": "/tasks?view=mine", "count": n["mine"], "sub": "Assigned to you, not done"},
+        {"key": "open", "label": VIEWS["open"], "href": "/tasks?view=open", "count": n["open"], "sub": f"{n['overdue']} overdue" if n["overdue"] else "Nothing overdue"},
+        {"key": "done", "label": VIEWS["done"], "href": "/tasks?view=done", "count": n["done"]},
+        {"key": "all", "label": VIEWS["all"], "href": "/tasks?view=all"},
+    ]
+    projects = [{"key": "projects", "label": "All projects", "href": "/projects"}]
+    for p in projects_with_counts(conn):
+        if p["status"] == "archived":
+            continue
+        projects.append(
+            {
+                "key": f"project:{p['id']}",
+                "label": p["name"],
+                "href": f"/projects/{p['id']}",
+                "count": p["open_count"],
+                "sub": f"{p['done_count']} of {p['total']} done" if p["total"] else "No tasks yet",
+            }
+        )
+    return {
+        "title": "Tasks",
+        "groups": [{"label": None, "items": views}, {"label": "Projects", "items": projects}],
+        "add": {"label": "+ New project", "href": "/projects#new", "sub": ""},
+    }
+
+
+def shell(conn: Connection, settings, page: str, item: str | None = None, controls: list[ControlStatus] | None = None, user_id=None) -> dict[str, Any]:
     """Everything base.html needs for one page: the strip with its badges, the column, the current item."""
     section_key, default_item = PAGE_SECTIONS[page]
     item = item or default_item
     controls = control_statuses(conn) if controls is None else controls
     not_ok = sum(1 for c in controls if c.status != "ok")
     failing = sum(1 for r in latest_results(conn).values() if r["status"] == "fail")
+    overdue = task_counts(conn, user_id)["overdue"]
     badges = {
         "controls": {"n": not_ok, "tone": "neutral", "what": "controls that need something"},
         "monitoring": {"n": failing, "tone": "danger", "what": "failing tests"},
+        "tasks": {"n": overdue, "tone": "danger", "what": "overdue tasks"},
     }
     sections = [
         {
@@ -224,6 +262,9 @@ def shell(conn: Connection, settings, page: str, item: str | None = None, contro
     elif section_key == "controls":
         column = _controls_column(controls, domain_labels(settings.repo_root))
         item = item or "all"
+    elif section_key == "tasks":
+        column = _tasks_column(conn, user_id)
+        item = item or "open"
     elif section_key == "settings":
         column = STATIC_COLUMNS["settings"]
     elif section_key == "account":

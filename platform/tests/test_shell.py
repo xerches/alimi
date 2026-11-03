@@ -33,6 +33,8 @@ def test_every_page_marks_its_section_in_the_strip(signed_in):
         "/controls": "/controls",
         "/controls/CTL-09": "/controls",
         "/monitoring": "/monitoring",
+        "/tasks": "/tasks",
+        "/projects": "/tasks",
         "/settings": "/settings",
         "/audit": "/settings",
     }
@@ -92,7 +94,7 @@ def test_controls_column_filters_by_area(signed_in, orgs, app_engine):
 def test_every_strip_and_column_link_answers(signed_in):
     client = signed_in("alimi")
     seen: set[str] = set()
-    for path in ("/dashboard", "/frameworks", "/controls", "/monitoring", "/settings", "/account"):
+    for path in ("/dashboard", "/frameworks", "/controls", "/monitoring", "/tasks", "/settings", "/account"):
         r = client.get(path)
         assert r.status_code == 200
         chrome = STRIP.search(r.text).group(0) + (COLUMN.search(r.text).group(0) if COLUMN.search(r.text) else "")
@@ -103,7 +105,7 @@ def test_every_strip_and_column_link_answers(signed_in):
                 continue
             seen.add(target)
             assert client.get(target).status_code == 200, f"{path} links to {href}"
-    assert "/audit" in seen and "/frameworks/insurer" in seen and "/account/notifications" in seen
+    assert "/audit" in seen and "/frameworks/insurer" in seen and "/account/notifications" in seen and "/projects" in seen
 
 
 def test_badges_are_computed_from_this_companys_rows(signed_in):

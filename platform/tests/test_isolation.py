@@ -14,7 +14,7 @@ from sqlalchemy.exc import DBAPIError, ProgrammingError
 
 from alimi_platform.db import org_scope
 
-CUSTOMER_TABLES = ["memberships", "integrations", "scan_runs", "test_results", "evidence", "audit_log"]
+CUSTOMER_TABLES = ["memberships", "integrations", "scan_runs", "test_results", "evidence", "audit_log", "projects", "tasks", "task_comments"]
 
 
 def test_app_role_cannot_bypass_row_level_security(app_engine):

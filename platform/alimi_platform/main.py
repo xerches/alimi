@@ -13,7 +13,7 @@ import logging
 from collections import Counter
 from contextlib import contextmanager
 from dataclasses import replace
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from uuid import UUID
 
@@ -33,6 +33,20 @@ from .scans import ScanRefused, run_scan
 from .seed import SAMPLE_ORGS
 from .nav import shell
 from .status import STATUSES, control_statuses, latest_results, requirement_statuses
+from .tasks import (
+    EXTERNAL,
+    KINDS,
+    PRIORITIES,
+    TRANSITIONS,
+    VIEWS,
+    comments_of,
+    create_task,
+    get_task,
+    list_tasks,
+    projects_with_counts,
+)
+from .tasks import STATUSES as TASK_STATUSES
+from .tasks import counts as task_counts
 from .theme import load_brand, theme_css
 
 HERE = Path(__file__).parent
@@ -95,6 +109,8 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
     app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
     templates = Jinja2Templates(directory=HERE / "templates")
     templates.env.globals["STATUSES"] = STATUSES
+    templates.env.globals["TASK_STATUSES"] = TASK_STATUSES
+    templates.env.globals["TASK_KINDS"] = KINDS
     app.state.settings = settings
     app.state.engine = engine
 
@@ -172,7 +188,12 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
         if controls is None:
             controls = control_statuses(conn)
         context.setdefault("controls", controls)
-        return render(request, name, me=me, shell=shell(conn, settings, key, item, controls), crumbs=list(crumbs), **context)
+        return render(request, name, me=me, shell=shell(conn, settings, key, item, controls, user_id=me["id"]), crumbs=list(crumbs), **context)
+
+    def members_of(conn):
+        return conn.execute(
+            text("SELECT u.id, u.display_name, m.role FROM memberships m JOIN users u ON u.id = m.user_id ORDER BY u.display_name")
+        ).mappings().all()
 
     def integrations_of(conn):
         return conn.execute(
@@ -206,6 +227,7 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             return page(
                 request, "dashboard.html", conn, me, "dashboard", controls=controls,
                 integrations=integrations, last_run=runs[0] if runs else None, counts=counts, total=len(controls),
+                tasks=task_counts(conn, me["id"]), mine=list_tasks(conn, view="mine", user_id=me["id"])[:5],
             )
 
     @app.post("/integrations/{integration_id}/scan", response_class=HTMLResponse)
@@ -360,6 +382,233 @@ def create_app(settings: Settings | None = None, engine: Engine | None = None) -
             ).mappings().all()
             crumbs = [{"label": "Settings", "href": "/settings"}, {"label": "Audit log"}]
             return page(request, "audit.html", conn, me, "audit", crumbs=crumbs, entries=entries)
+
+    # ------------------------------------------------------------------ tasks and projects
+
+    def field(form, name: str, limit: int = 160) -> str:
+        value = " ".join(str(form.get(name, "")).split()) if name != "detail" and name != "description" and name != "body" else str(form.get(name, "")).strip()
+        if len(value) > limit:
+            raise HTTPException(status_code=400, detail=f"{name} is longer than {limit} characters.")
+        return value
+
+    def choice(form, name: str, allowed, default: str = "") -> str:
+        value = str(form.get(name, default) or default)
+        if value and value not in allowed:
+            raise HTTPException(status_code=400, detail=f"{name}: pick one of {', '.join(allowed)}.")
+        return value
+
+    def a_date(form, name: str):
+        value = str(form.get(name, "") or "").strip()
+        if not value:
+            return None
+        try:
+            return date.fromisoformat(value)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"{name} must be a date, YYYY-MM-DD.") from None
+
+    def an_id(form, name: str, allowed_ids) -> UUID | None:
+        value = str(form.get(name, "") or "").strip()
+        if not value:
+            return None
+        try:
+            parsed = UUID(value)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"{name} is not an id.") from None
+        if parsed not in allowed_ids:
+            raise HTTPException(status_code=404, detail=f"No such {name}.")
+        return parsed
+
+    def external_fields(form) -> dict:
+        system = choice(form, "external_system", EXTERNAL)
+        key = field(form, "external_key", 60)
+        url = field(form, "external_url", 400)
+        if url and not url.startswith(("https://", "http://")):
+            raise HTTPException(status_code=400, detail="The ticket link must start with https://.")
+        return {"external_system": system or None, "external_key": key or None, "external_url": url or None}
+
+    def task_fields(form, conn) -> dict:
+        title = field(form, "title")
+        if not title:
+            raise HTTPException(status_code=400, detail="A task needs a title.")
+        members = {m["id"] for m in members_of(conn)}
+        projects = {p["id"] for p in projects_with_counts(conn)}
+        return {
+            "title": title,
+            "detail": field(form, "detail", 4000) or None,
+            "kind": choice(form, "kind", KINDS, "custom"),
+            "priority": choice(form, "priority", PRIORITIES, "normal"),
+            "assignee_user_id": an_id(form, "assignee", members),
+            "due_on": a_date(form, "due_on"),
+            "project_id": an_id(form, "project", projects),
+            **external_fields(form),
+        }
+
+    @app.get("/tasks", response_class=HTMLResponse)
+    def tasks_page(request: Request, view: str = "open", project: str | None = None, created: str | None = None):
+        if view not in VIEWS:
+            raise HTTPException(status_code=404, detail="No such view.")
+        with scope(request) as (conn, me):
+            projects = projects_with_counts(conn)
+            current = None
+            if project:
+                current = next((p for p in projects if str(p["id"]) == project), None)
+                if current is None:
+                    raise HTTPException(status_code=404, detail="No such project.")
+            items = list_tasks(conn, view=view, user_id=me["id"], project_id=current["id"] if current else None)
+            crumbs = [{"label": "Tasks", "href": "/tasks" if (view != "open" or current) else None}]
+            if current:
+                crumbs.append({"label": current["name"], "href": f"/projects/{current['id']}"})
+            if view != "open" or current:
+                crumbs.append({"label": VIEWS[view]})
+            return page(
+                request, "tasks.html", conn, me, "tasks", item=f"project:{current['id']}" if current else view, crumbs=crumbs,
+                tasks=items, view=view, views=VIEWS, project=current, projects=projects, members=members_of(conn),
+                kinds=KINDS, priorities=PRIORITIES, external=EXTERNAL, statuses=TASK_STATUSES, created=bool(created),
+            )
+
+    @app.post("/tasks")
+    async def task_create(request: Request):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            fields = task_fields(form, conn)
+            task_id = create_task(conn, me["org_id"], me["id"], **fields)
+            number = conn.execute(text("SELECT number FROM tasks WHERE id = :id"), {"id": str(task_id)}).scalar()
+            record(conn, me["org_id"], me["id"], "task.create", f"task:{task_id}", {"number": number, "title": fields["title"]})
+        return RedirectResponse(f"/tasks/{task_id}?created=1", status_code=303)
+
+    @app.get("/tasks/{task_id}", response_class=HTMLResponse)
+    def task_detail(request: Request, task_id: UUID, saved: str | None = None, created: str | None = None):
+        with scope(request) as (conn, me):
+            t = get_task(conn, task_id)
+            if t is None:
+                raise HTTPException(status_code=404, detail="No such task.")
+            crumbs = [{"label": "Tasks", "href": "/tasks"}]
+            if t["project_id"]:
+                crumbs.append({"label": t["project_name"], "href": f"/projects/{t['project_id']}"})
+            crumbs.append({"label": t["label"]})
+            return page(
+                request, "task.html", conn, me, "task", item=f"project:{t['project_id']}" if t["project_id"] else "open", crumbs=crumbs,
+                t=t, comments=comments_of(conn, task_id), transitions=TRANSITIONS[t["status"]], projects=projects_with_counts(conn),
+                members=members_of(conn), kinds=KINDS, priorities=PRIORITIES, external=EXTERNAL, statuses=TASK_STATUSES,
+                saved=bool(saved), created=bool(created),
+            )
+
+    @app.post("/tasks/{task_id}")
+    async def task_edit(request: Request, task_id: UUID):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            if get_task(conn, task_id) is None:
+                raise HTTPException(status_code=404, detail="No such task.")
+            f = task_fields(form, conn)
+            conn.execute(
+                text(
+                    "UPDATE tasks SET title = :title, detail = :detail, kind = :kind, priority = :priority, assignee_user_id = :assignee, "
+                    "due_on = :due_on, project_id = :project, external_system = :external_system, external_key = :external_key, "
+                    "external_url = :external_url, updated_at = now() WHERE id = :id"
+                ),
+                {**f, "assignee": str(f["assignee_user_id"]) if f["assignee_user_id"] else None, "project": str(f["project_id"]) if f["project_id"] else None, "id": str(task_id)},
+            )
+            record(conn, me["org_id"], me["id"], "task.update", f"task:{task_id}", {"title": f["title"]})
+        return RedirectResponse(f"/tasks/{task_id}?saved=1", status_code=303)
+
+    @app.post("/tasks/{task_id}/status")
+    def task_status(request: Request, task_id: UUID, status: str = Form(...), back: str = Form("")):
+        if status not in TASK_STATUSES:
+            raise HTTPException(status_code=400, detail="No such status.")
+        with scope(request) as (conn, me):
+            t = get_task(conn, task_id)
+            if t is None:
+                raise HTTPException(status_code=404, detail="No such task.")
+            conn.execute(
+                text("UPDATE tasks SET status = :s, done_at = CASE WHEN :s = 'done' THEN now() ELSE NULL END, updated_at = now() WHERE id = :id"),
+                {"s": status, "id": str(task_id)},
+            )
+            record(conn, me["org_id"], me["id"], "task.status", f"task:{task_id}", {"from": t["status"], "to": status})
+        target = back if back.startswith("/") and not back.startswith("//") else f"/tasks/{task_id}"
+        return RedirectResponse(target, status_code=303)
+
+    @app.post("/tasks/{task_id}/comments")
+    async def task_comment(request: Request, task_id: UUID):
+        form = await request.form()
+        body = field(form, "body", 4000)
+        if not body:
+            raise HTTPException(status_code=400, detail="An empty comment is not saved.")
+        with scope(request) as (conn, me):
+            if get_task(conn, task_id) is None:
+                raise HTTPException(status_code=404, detail="No such task.")
+            conn.execute(
+                text("INSERT INTO task_comments (organization_id, task_id, author_user_id, body) VALUES (:org, :task, :by, :body)"),
+                {"org": me["org_id"], "task": str(task_id), "by": me["id"], "body": body},
+            )
+            conn.execute(text("UPDATE tasks SET updated_at = now() WHERE id = :id"), {"id": str(task_id)})
+            record(conn, me["org_id"], me["id"], "task.comment", f"task:{task_id}")
+        return RedirectResponse(f"/tasks/{task_id}#comments", status_code=303)
+
+    def project_fields(form, conn) -> dict:
+        name = field(form, "name")
+        if not name:
+            raise HTTPException(status_code=400, detail="A project needs a name.")
+        members = {m["id"] for m in members_of(conn)}
+        return {
+            "name": name,
+            "description": field(form, "description", 2000) or None,
+            "status": choice(form, "status", ("active", "done", "archived"), "active"),
+            "owner": an_id(form, "owner", members),
+            "due_on": a_date(form, "due_on"),
+            **external_fields(form),
+        }
+
+    @app.get("/projects", response_class=HTMLResponse)
+    def projects_page(request: Request):
+        with scope(request) as (conn, me):
+            crumbs = [{"label": "Tasks", "href": "/tasks"}, {"label": "Projects"}]
+            return page(request, "projects.html", conn, me, "projects", crumbs=crumbs, projects=projects_with_counts(conn), members=members_of(conn), external=EXTERNAL)
+
+    @app.post("/projects")
+    async def project_create(request: Request):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            f = project_fields(form, conn)
+            project_id = conn.execute(
+                text(
+                    "INSERT INTO projects (organization_id, name, description, status, owner_user_id, due_on, external_system, external_key, external_url, created_by) "
+                    "VALUES (:org, :name, :description, :status, :owner, :due_on, :external_system, :external_key, :external_url, :by) RETURNING id"
+                ),
+                {**f, "owner": str(f["owner"]) if f["owner"] else None, "org": me["org_id"], "by": me["id"]},
+            ).scalar()
+            record(conn, me["org_id"], me["id"], "project.create", f"project:{project_id}", {"name": f["name"]})
+        return RedirectResponse(f"/projects/{project_id}?created=1", status_code=303)
+
+    @app.get("/projects/{project_id}", response_class=HTMLResponse)
+    def project_detail(request: Request, project_id: UUID, saved: str | None = None, created: str | None = None):
+        with scope(request) as (conn, me):
+            p = next((p for p in projects_with_counts(conn) if p["id"] == project_id), None)
+            if p is None:
+                raise HTTPException(status_code=404, detail="No such project.")
+            items = list_tasks(conn, view="all", project_id=project_id)
+            columns = [(key, label, [t for t in items if t["status"] == key]) for key, label in TASK_STATUSES.items()]
+            crumbs = [{"label": "Tasks", "href": "/tasks"}, {"label": "Projects", "href": "/projects"}, {"label": p["name"]}]
+            return page(
+                request, "project.html", conn, me, "project", item=f"project:{project_id}", crumbs=crumbs,
+                p=p, columns=columns, members=members_of(conn), external=EXTERNAL, statuses=TASK_STATUSES, saved=bool(saved), created=bool(created),
+            )
+
+    @app.post("/projects/{project_id}")
+    async def project_edit(request: Request, project_id: UUID):
+        form = await request.form()
+        with scope(request) as (conn, me):
+            if conn.execute(text("SELECT 1 FROM projects WHERE id = :id"), {"id": str(project_id)}).first() is None:
+                raise HTTPException(status_code=404, detail="No such project.")
+            f = project_fields(form, conn)
+            conn.execute(
+                text(
+                    "UPDATE projects SET name = :name, description = :description, status = :status, owner_user_id = :owner, due_on = :due_on, "
+                    "external_system = :external_system, external_key = :external_key, external_url = :external_url, updated_at = now() WHERE id = :id"
+                ),
+                {**f, "owner": str(f["owner"]) if f["owner"] else None, "id": str(project_id)},
+            )
+            record(conn, me["org_id"], me["id"], "project.update", f"project:{project_id}", {"name": f["name"], "status": f["status"]})
+        return RedirectResponse(f"/projects/{project_id}?saved=1", status_code=303)
 
     # ------------------------------------------------------------------ the person's own pages
 

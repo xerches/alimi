@@ -31,6 +31,7 @@ passing). `docker compose down -v` wipes the database and the generated keys.
 | Pages | `alimi_platform/main.py`, `templates/` | FastAPI, Jinja templates, HTMX (vendored, `static/htmx.min.js`, 2.0.4, BSD Zero Clause licence) |
 | App shell | `alimi_platform/nav.py`, `templates/base.html`, `static/app.css` | the layout chosen Nov 3, 2026, the same as the demo's: a captioned icon strip, a second column where a section has children, breadcrumbs, a phone bottom bar, the account menu and the theme toggle in the top bar; `nav.py` mirrors `demo/src/lib/nav.js` |
 | Themes | `alimi_platform/theme.py`, `static/theme.js` | both themes are generated from `config/brand.yaml` (`colors`, `colors_dark`) and served at `/theme.css`; `app.css` types no color (`tests/test_theme.py`). Light is the default, the device setting applies, and the toggle in the top bar overrides it per browser (localStorage key `alimi-theme`), the same script as the site |
+| Tasks and projects | `alimi_platform/tasks.py`, `templates/tasks.html`, `task.html`, `projects.html`, `project.html`, `migrations/0004_tasks.sql` | the ticketing system: tasks (Fix, Renew, Decide, or your own) with an assignee, a due date, a status, comments and a link to the control, evidence or policy they are about; projects that group them with a progress bar; an external ticket field per task and project for Jira or Monday.com until a live sync exists; the seed raises the sample company's tasks from its first scan |
 | Account | `templates/account*.html`, `migrations/0003_account.sql` | the person's own pages (Profile, Security, Notifications) from the menu under their initials; `user_settings` is keyed by user with a "your own row" policy |
 | Sample data | `alimi_platform/seed.py` | fixed IDs, so the mock picker can list users without the database |
 
@@ -38,7 +39,7 @@ passing). `docker compose down -v` wipes the database and the generated keys.
 
 Every signed-in page sits in the same shell (`templates/base.html`): the strip on the left lists the
 sections the platform has built, in the demo's order (Home, Frameworks, Controls, Monitoring,
-Settings); Policies, Evidence, People, Risk, Assets, Trust and the Assistant join it with their
+Tasks, Settings); Policies, Evidence, People, Risk, Assets, Trust and the Assistant join it with their
 prompts. A second column appears only where a section has children: Frameworks lists the Posture
 Score, the insurer questionnaire with its readiness and the mapped frameworks; Controls lists the
 areas and filters the table through `?domain=`; Settings holds Company and the Audit log. The top
@@ -52,6 +53,7 @@ badges on the strip and everything in the column are computed from the organizat
 | `/frameworks`, `/frameworks/insurer` | the catalog; the insurer questionnaire with each question's status and the controls that answer it |
 | `/controls`, `/controls?domain=<area>`, `/controls/<id>` | every control with its computed status, filtered by area; a control's tests, evidence and requirements |
 | `/monitoring`, `/scans/<id>` | the connected systems with **Run checks now**, the latest result per test, every scan; a scan's results with the raw evidence each check read |
+| `/tasks`, `/tasks?view=mine`, `/tasks/<id>`, `/projects`, `/projects/<id>` | the ticketing system: open, mine, done or all tasks; a task with its status buttons, comments and edit form; projects with progress and a board by status |
 | `/settings`, `/audit` | the company, who has access, what is connected; the append-only audit log |
 | `/account`, `/account/security`, `/account/notifications` | the person's own pages: name, title and time zone; how they sign in, the tenant's MFA check and this session; which emails they want |
 

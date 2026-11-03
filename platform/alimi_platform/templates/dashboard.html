@@ -4,7 +4,7 @@
 {% block content %}
 <p class="eyebrow">Home</p>
 <h1>{{ me.org_name }}</h1>
-<p class="lead">Where the company stands on its {{ total }} controls, from the latest scan and the evidence on file. The month's list and the two readiness scores arrive in later build steps; the demo shows what they look like.</p>
+<p class="lead">Where the company stands on its {{ total }} controls, from the latest scan and the evidence on file, and the tasks that move it. The two readiness scores arrive in a later build step; the demo shows what they look like.</p>
 
 <section class="tiles" aria-label="Controls by status">
   {% for key, label in STATUSES.items() %}
@@ -13,6 +13,16 @@
 </section>
 
 <div class="cards">
+  <section class="card">
+    <h2>Tasks</h2>
+    <p>{{ tasks.open }} open{% if tasks.overdue %}, <strong>{{ tasks.overdue }} overdue</strong>{% endif %}; {{ tasks.mine }} assigned to you.</p>
+    {% if mine %}
+    <ul class="plain">
+      {% for t in mine %}<li><a href="/tasks/{{ t.id }}">{{ t.label }} {{ t.title }}</a> <span class="muted">{% if t.due_on %}due {{ t.due_on.strftime("%b %d") }}{% endif %}{% if t.overdue %}, overdue{% endif %}</span></li>{% endfor %}
+    </ul>
+    {% endif %}
+    <p><a href="/tasks?view=mine">My tasks</a> · <a href="/tasks">Everything open</a> · <a href="/projects">Projects</a></p>
+  </section>
   <section class="card">
     <h2>Last scan</h2>
     {% if last_run %}

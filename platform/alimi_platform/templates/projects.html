@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_tasks.html" import project_form %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<p class="eyebrow">Tasks</p>
+<h1>Projects</h1>
+<p class="lead">A project groups the tasks behind one goal: the insurance renewal, a SOC 2 readiness push, a new office. Each one can mirror a board in Jira or Monday.com until a live sync exists.</p>
+
+{% if projects %}
+<table>
+  <thead><tr><th scope="col">Project</th><th scope="col">Owner</th><th scope="col">Due</th><th scope="col">Progress</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  {% for p in projects %}
+  <tr>
+    <td><a href="/projects/{{ p.id }}">{{ p.name }}</a>{% if p.external_key %}<br><small class="muted">{{ external.get(p.external_system, p.external_system) }} {{ p.external_key }}</small>{% endif %}</td>
+    <td>{{ p.owner_name or '<span class="muted">nobody yet</span>' | safe }}</td>
+    <td>{% if p.due_on %}{{ p.due_on.strftime("%b %d, %Y") }}{% else %}<span class="muted">no date</span>{% endif %}</td>
+    <td><span class="progress" role="img" aria-label="{{ p.percent }} percent done"><span style="width:{{ p.percent }}%"></span></span> <small class="muted">{{ p.done_count }} of {{ p.total }} done</small></td>
+    <td><span class="badge p-{{ p.status }}">{{ p.status }}</span></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No projects yet.</p>
+{% endif %}
+
+<details class="card" id="new">
+  <summary><h2 class="inline">New project</h2></summary>
+  {{ project_form("/projects", none, members, external, "Create the project") }}
+</details>
+{% endblock %}

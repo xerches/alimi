@@ -25,6 +25,8 @@ from .config import Settings
 from .crypto import TokenBox
 from .db import org_scope
 from .scans import run_scan
+from .status import control_statuses
+from .tasks import seed_tasks
 
 NAMESPACE = uuid.UUID("5b1f2b8e-6a0c-4c55-9a36-0a11ce000000")
 
@@ -196,3 +198,5 @@ def seed(owner_engine: Engine, settings: Settings, run_scans: bool = True) -> No
             record(conn, org.id, None, "seed.sample_data", f"organization:{org.slug}", {"users": len(org.users)})
             if run_scans:
                 run_scan(conn, settings, org.integration_id, None)
+                # The month's list: a renewal project and the tasks the first scan raises.
+                seed_tasks(conn, org.id, org.users[0].id, org.users[1].id if len(org.users) > 1 else None, control_statuses(conn), today)

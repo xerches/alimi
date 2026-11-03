@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_tasks.html" import task_status, kind_badge, due, project_form with context %}
+{% block title %}{{ p.name }}{% endblock %}
+{% block content %}
+<p class="eyebrow">Project</p>
+<h1>{{ p.name }} <span class="badge p-{{ p.status }}">{{ p.status }}</span></h1>
+{% if created %}<p class="notice" role="status">Project created.</p>{% elif saved %}<p class="notice" role="status">Saved.</p>{% endif %}
+{% if p.description %}<p class="lead">{{ p.description }}</p>{% endif %}
+<dl class="facts">
+  <dt>Owner</dt><dd>{{ p.owner_name or '<span class="muted">nobody yet</span>' | safe }}</dd>
+  <dt>Due</dt><dd>{% if p.due_on %}{{ p.due_on.strftime("%b %d, %Y") }}{% else %}<span class="muted">no date</span>{% endif %}</dd>
+  <dt>Progress</dt><dd><span class="progress" role="img" aria-label="{{ p.percent }} percent done"><span style="width:{{ p.percent }}%"></span></span> {{ p.done_count }} of {{ p.total }} done</dd>
+  {% if p.external_system or p.external_url %}<dt>Mirrors</dt><dd>{{ external.get(p.external_system, p.external_system or "") }} {% if p.external_url %}<a href="{{ p.external_url }}" rel="noopener" target="_blank">{{ p.external_key or p.external_url }} ↗</a>{% else %}{{ p.external_key }}{% endif %}</dd>{% endif %}
+</dl>
+<p><a class="button-link" href="/tasks?project={{ p.id }}#new">+ New task in this project</a></p>
+
+<div class="board">
+  {% for key, label, items in columns %}
+  <section class="col" aria-label="{{ label }}">
+    <h2>{{ label }} <small class="muted">{{ items | length }}</small></h2>
+    {% for t in items %}
+    <article class="task">
+      <a href="/tasks/{{ t.id }}"><strong>{{ t.label }}</strong> {{ t.title }}</a>
+      <p class="muted">{{ kind_badge(t.kind) }} {{ t.assignee_name or "nobody yet" }} · {{ due(t) }}</p>
+    </article>
+    {% else %}
+    <p class="muted">None</p>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+
+<details class="card" id="edit">
+  <summary><h2 class="inline">Edit the project</h2></summary>
+  {{ project_form("/projects/" ~ p.id, p, members, external, "Save") }}
+</details>
+{% endblock %}

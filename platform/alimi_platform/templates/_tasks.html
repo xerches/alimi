@@ -1,0 +1,114 @@
+{% macro task_status(status) -%}
+<span class="badge t-{{ status }}">{{ TASK_STATUSES.get(status, status) }}</span>
+{%- endmacro %}
+{% macro kind_badge(kind) -%}
+<span class="badge k-{{ kind }}">{{ TASK_KINDS.get(kind, kind) }}</span>
+{%- endmacro %}
+{% macro due(t) -%}
+{% if t.due_on %}{{ t.due_on.strftime("%b %d, %Y") }}{% if t.overdue %} <span class="badge s-failing">Overdue</span>{% elif t.soon %} <span class="badge s-needs_evidence">This week</span>{% endif %}{% else %}<span class="muted">no date</span>{% endif %}
+{%- endmacro %}
+
+{# One form for creating and editing a task. `t` is the task being edited, or none. #}
+{% macro task_form(action, t, members, projects, kinds, priorities, external, submit, project_id=none) %}
+<form class="form" method="post" action="{{ action }}">
+  <div class="field">
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" required maxlength="160" value="{{ t.title if t else '' }}" placeholder="What has to happen">
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="kind">Kind</label>
+      <select id="kind" name="kind">
+        {% for key, label in kinds.items() %}<option value="{{ key }}"{% if (t.kind if t else 'custom') == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="priority">Priority</label>
+      <select id="priority" name="priority">
+        {% for key, label in priorities.items() %}<option value="{{ key }}"{% if (t.priority if t else 'normal') == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="assignee">Assignee</label>
+      <select id="assignee" name="assignee">
+        <option value="">Nobody yet</option>
+        {% for m in members %}<option value="{{ m.id }}"{% if t and t.assignee_user_id == m.id %} selected{% endif %}>{{ m.display_name }} ({{ m.role }})</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="due_on">Due</label>
+      <input id="due_on" name="due_on" type="date" value="{{ t.due_on.isoformat() if t and t.due_on else '' }}">
+    </div>
+  </div>
+  <div class="field">
+    <label for="project">Project</label>
+    <select id="project" name="project">
+      <option value="">None</option>
+      {% for p in projects %}{% if p.status != 'archived' %}<option value="{{ p.id }}"{% if (t.project_id if t else project_id) == p.id %} selected{% endif %}>{{ p.name }}</option>{% endif %}{% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label for="detail">Detail</label>
+    <textarea id="detail" name="detail" rows="4" maxlength="4000" placeholder="What done looks like, and anything the assignee needs to know">{{ t.detail or '' if t else '' }}</textarea>
+  </div>
+  <fieldset class="field">
+    <legend>External ticket <span class="muted">(optional)</span></legend>
+    <p class="muted">Track this task in Jira or Monday.com as well: keep the link here so both sides find each other. A live sync comes after launch.</p>
+    <div class="row3">
+      <select name="external_system" aria-label="Tool">
+        <option value="">No tool</option>
+        {% for key, label in external.items() %}<option value="{{ key }}"{% if t and t.external_system == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+      <input name="external_key" type="text" maxlength="60" aria-label="Ticket key" placeholder="SEC-12" value="{{ t.external_key or '' if t else '' }}">
+      <input name="external_url" type="url" maxlength="400" aria-label="Ticket link" placeholder="https://" value="{{ t.external_url or '' if t else '' }}">
+    </div>
+  </fieldset>
+  <button type="submit">{{ submit }}</button>
+</form>
+{% endmacro %}
+
+{% macro project_form(action, p, members, external, submit) %}
+<form class="form" method="post" action="{{ action }}">
+  <div class="field">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" required maxlength="160" value="{{ p.name if p else '' }}" placeholder="Cyber insurance renewal, SOC 2 readiness, Onboarding the new office">
+  </div>
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3" maxlength="2000">{{ p.description or '' if p else '' }}</textarea>
+  </div>
+  <div class="row3">
+    <div class="field">
+      <label for="owner">Owner</label>
+      <select id="owner" name="owner">
+        <option value="">Nobody yet</option>
+        {% for m in members %}<option value="{{ m.id }}"{% if p and p.owner_user_id == m.id %} selected{% endif %}>{{ m.display_name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="p_due_on">Due</label>
+      <input id="p_due_on" name="due_on" type="date" value="{{ p.due_on.isoformat() if p and p.due_on else '' }}">
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        {% for key, label in [("active", "Active"), ("done", "Done"), ("archived", "Archived")] %}<option value="{{ key }}"{% if (p.status if p else 'active') == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+  <fieldset class="field">
+    <legend>Mirrors a board or project in <span class="muted">(optional)</span></legend>
+    <div class="row3">
+      <select name="external_system" aria-label="Tool">
+        <option value="">No tool</option>
+        {% for key, label in external.items() %}<option value="{{ key }}"{% if p and p.external_system == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+      <input name="external_key" type="text" maxlength="60" aria-label="Project key or board" placeholder="SEC" value="{{ p.external_key or '' if p else '' }}">
+      <input name="external_url" type="url" maxlength="400" aria-label="Link" placeholder="https://" value="{{ p.external_url or '' if p else '' }}">
+    </div>
+  </fieldset>
+  <button type="submit">{{ submit }}</button>
+</form>
+{% endmacro %}
