@@ -176,8 +176,9 @@ test("decided treats TODO and blanks as absent", () => {
 
 test("brand tokens cover every purpose group and render as CSS variables", () => {
   const keys = Object.keys(brand.colors);
-  for (const required of ["primary", "primary_on_dark", "secondary", "accent", "background", "background_alt", "background_dark", "surface", "text", "text_muted", "text_inverse", "border", "border_strong", "success", "warning", "danger", "info", "focus_ring", "focus_ring_on_dark"]) {
+  for (const required of ["primary", "primary_contrast", "primary_on_dark", "primary_on_dark_contrast", "secondary", "accent", "background", "background_alt", "background_dark", "surface", "text", "text_muted", "text_inverse", "border", "border_strong", "success", "warning", "danger", "info", "focus_ring", "focus_ring_on_dark"]) {
     assert.ok(keys.includes(required), `brand.yaml is missing colors.${required}`);
+    assert.ok(Object.keys(brand.colors_dark).includes(required), `brand.yaml is missing colors_dark.${required}`);
   }
   const css = cssVariables(brand);
   assert.match(css, /--color-primary:#4338CA/, "the indigo primary of Nov 2, 2026");

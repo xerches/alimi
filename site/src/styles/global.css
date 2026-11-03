@@ -1,11 +1,15 @@
 /* Alimi site. Every color comes from config/brand.yaml, inlined as --color-* custom properties in
-   <head> by the layout. No hex, rgb or named colors live in this file or in any component.
+   <head> by the layout. No hex, rgb or named colors live in this file or in any component. Two
+   themes since Nov 3, 2026: the tokens change under the dark theme (brand.yaml colors_dark), this
+   file does not; the ".dark" class below means a dark band on the page, not the dark theme.
 
    Look (Nov 3, 2026): the site follows the product's B+ shell so a prospect sees one product from the
    first page to the app. The page sits on the app's canvas (background_alt); content lives on white
    cards with a 10px radius and a hairline border; numbers sit on tiles with a colored top edge; status
    is a pill with a dot; the menu is the app's ink strip of captioned icons, run across the top
-   instead of down the side, with the app's light bar (breadcrumbs here) under it. */
+   instead of down the side, with the app's light bar (breadcrumbs here) under it. Since the evening
+   of Nov 3 the hero shows the product in a frame beside the copy, the strip stays stuck to the top of
+   wide screens, and the little motion there is runs in CSS alone (see "Motion", at the end). */
 
 :root {
   --radius: 10px;
@@ -301,19 +305,19 @@ a:active {
 .button--primary {
   background: var(--color-primary);
   border-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--primary:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--primary:active {
   background: var(--color-primary-active);
   border-color: var(--color-primary-active);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
 }
 
 .button--secondary {
@@ -334,14 +338,14 @@ a:active {
 .dark .button--primary {
   background: var(--color-primary-on-dark);
   border-color: var(--color-primary-on-dark);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
 }
 
 .dark .button--primary:hover,
 .dark .button--primary:active {
   background: var(--color-primary-on-dark-hover);
   border-color: var(--color-primary-on-dark-hover);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
 }
 
 .dark .button--secondary {
@@ -363,13 +367,27 @@ a:active {
   color: var(--color-text-inverse);
 }
 
+/* On a wide screen the strip stays at the top while the page scrolls under it, so the menu is one
+   reach away from anywhere; the light bar under it scrolls away with the page. Phones keep the
+   two-row strip in the flow, where sticking it would cost too much of the screen. */
+@media (min-width: 56rem) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  html {
+    scroll-padding-top: 4rem;
+  }
+}
+
 .site-header__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.25rem 1.5rem;
-  padding-block: 0.4rem;
+  padding-block: 0.3rem;
 }
 
 .brand {
@@ -425,8 +443,8 @@ a:active {
   justify-items: center;
   align-content: center;
   min-width: 4rem;
-  min-height: 3.25rem;
-  padding: 0.4rem 0.35rem 0.35rem;
+  min-height: 3rem;
+  padding: 0.35rem 0.35rem 0.3rem;
   border-radius: 8px;
   color: var(--color-text-inverse-muted);
   font-size: 0.6875rem;
@@ -490,7 +508,7 @@ a:active {
 /* Contact is the one filled item, the strip's periwinkle on ink. */
 .nav__link--button {
   background: var(--color-primary-on-dark);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
   font-weight: 600;
   margin-left: 0.25rem;
 }
@@ -498,7 +516,7 @@ a:active {
 .nav__link--button:hover,
 .nav__link--button.nav__link--current {
   background: var(--color-primary-on-dark-hover);
-  color: var(--color-text);
+  color: var(--color-primary-on-dark-contrast);
   box-shadow: none;
 }
 
@@ -700,7 +718,7 @@ a:active {
   padding: 0.3rem 0.75rem;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
@@ -708,12 +726,79 @@ a:active {
 
 .topbar__button:hover {
   background: var(--color-primary-hover);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
+}
+
+/* The theme toggle: a small pressed-or-not button, "Dark theme" on, hidden until the theme script (src/scripts/theme.js) has
+   run because it does nothing without it. On a phone only the icon shows. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: var(--color-background-alt);
+  color: var(--color-text);
+}
+
+.theme-toggle[aria-pressed="true"] {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.theme-toggle__icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+html:not([data-theme-active]) .theme-toggle {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 40rem) {
   .topbar__link {
     display: none;
+  }
+  .theme-toggle__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
@@ -728,6 +813,162 @@ a:active {
 
 .hero .actions {
   margin-top: 1.5rem;
+}
+
+.hero__note {
+  margin-top: 1rem;
+}
+
+.hero__note--tight {
+  margin-top: 0.5rem;
+}
+
+/* The home page's hero shows the product: the copy on the left, the app's Home for the sample company
+   in a frame on the right, side by side from 60rem and stacked below it. */
+.hero__grid {
+  display: grid;
+  gap: 2rem 3rem;
+  align-items: center;
+}
+
+@media (min-width: 60rem) {
+  .hero--split {
+    padding-block: clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
+  }
+  .hero__grid {
+    grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+  }
+}
+
+.hero__product {
+  min-width: 0;
+}
+
+/* The frame: the app's window, its ink bar with the company and the page, then the canvas with the
+   count block, the two score tiles and the month's list. Everything inside is the app's own component. */
+.frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-background-alt);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.frame__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-background-dark);
+  color: var(--color-text-inverse);
+  font-size: 0.8125rem;
+}
+
+.frame__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-on-dark);
+  color: var(--color-background-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.frame__crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  color: var(--color-text-inverse-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.frame__crumbs b {
+  color: var(--color-text-inverse);
+  font-weight: 600;
+}
+
+.frame__crumbs span::before {
+  content: "/";
+  margin-right: 0.5rem;
+  color: var(--color-border-dark);
+}
+
+.frame__tag {
+  margin-left: auto;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-dark);
+  color: var(--color-text-inverse-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.frame__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.875rem;
+}
+
+.frame__tiles {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.frame__card {
+  padding: 0.875rem 1rem;
+}
+
+.frame .count {
+  padding: 0.875rem 1rem;
+}
+
+.frame .count__big {
+  font-size: 1.875rem;
+}
+
+.frame .tile__note {
+  font-size: 0.75rem;
+}
+
+.frame .todo-list li {
+  padding: 0.55rem 0;
+}
+
+.frame .todo__title {
+  font-size: 0.875rem;
+}
+
+.frame .todo__meta {
+  font-size: 0.75rem;
+}
+
+.tile__value--text {
+  font-size: 1.25rem;
+}
+
+/* The readiness bar inside a score tile. The fill is a custom property set on the element. */
+.meter {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  overflow: hidden;
+}
+
+.meter__fill {
+  display: block;
+  height: 100%;
+  width: var(--value, 0%);
+  border-radius: inherit;
+  background: var(--color-primary);
 }
 
 /* Steps (how it works): the app's numbered "this week" list, one card. */
@@ -762,7 +1003,7 @@ a:active {
   height: 1.75rem;
   border-radius: 50%;
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-size: 0.875rem;
   font-weight: 600;
   grid-row: 1 / span 2;
@@ -945,26 +1186,15 @@ a:active {
 
 .pill--ink {
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 .tag {
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
-/* The sample panel on the home page: the app's Home, with the demo company's data. */
-.sample {
-  display: grid;
-  gap: 0.875rem;
-}
-
-.sample__hero {
-  display: grid;
-  gap: 0.875rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-}
-
+/* The count block (the app's renewal countdown), on ink. */
 .count {
   display: grid;
   gap: 0.3rem;
@@ -1010,7 +1240,8 @@ a:active {
   margin-bottom: 0.5rem;
 }
 
-.card__head h3 {
+.card__head h3,
+.card__head .h3 {
   margin: 0;
 }
 
@@ -1047,7 +1278,7 @@ a:active {
   height: 1.5rem;
   border-radius: 50%;
   background: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: var(--color-primary-contrast);
   font-size: 0.75rem;
   font-weight: 600;
   grid-row: 1 / span 2;
@@ -1163,7 +1394,7 @@ a:active {
   padding: 0.1rem 0.55rem;
   border-radius: 999px;
   background: var(--color-secondary-soft);
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 .badge--service {
@@ -1547,12 +1778,17 @@ a:active {
 
 @media print {
   .site-header,
+  .topbar,
   .site-footer,
   .skip-link,
   form,
   .hero .actions,
   .document-actions {
     display: none;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
@@ -1699,4 +1935,90 @@ a:active {
   padding-left: 1.5rem;
   display: grid;
   gap: 0.5rem;
+}
+
+/* Motion (Nov 3, 2026). CSS only, no script, and none of it for anyone whose device asks for reduced
+   motion: the hero settles into place on load, the readiness bar fills, a card lifts a little under
+   the pointer, and on browsers that support scroll-driven animations each card rises as it scrolls
+   into view. Everything ends in its resting state, so nothing depends on the animation running. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes grow {
+    from {
+      width: 0;
+    }
+  }
+
+  .hero__copy > * {
+    animation: rise 550ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .hero__copy > :nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  .hero__copy > :nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  .hero__copy > :nth-child(4) {
+    animation-delay: 180ms;
+  }
+
+  .hero__copy > :nth-child(5) {
+    animation-delay: 240ms;
+  }
+
+  .hero__product {
+    animation: rise 650ms cubic-bezier(0.2, 0.7, 0.2, 1) 160ms both;
+  }
+
+  .frame__body > * {
+    animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .frame__body > :nth-child(1) {
+    animation-delay: 360ms;
+  }
+
+  .frame__body > :nth-child(2) {
+    animation-delay: 460ms;
+  }
+
+  .frame__body > :nth-child(3) {
+    animation-delay: 560ms;
+  }
+
+  .meter__fill {
+    animation: grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 700ms both;
+  }
+
+  .card--link {
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  .card--link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  @supports (animation-timeline: view()) {
+    .section .grid > *,
+    .section .steps li,
+    .section .tier {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
 }

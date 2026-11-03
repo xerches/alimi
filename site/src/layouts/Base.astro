@@ -1,10 +1,13 @@
 ---
-// Page shell: head metadata, the brand tokens inlined as CSS custom properties, skip link, header,
-// main landmark and footer. Every page passes its own path because build.format "file" makes
-// Astro.url.pathname end in .html.
+// Page shell: head metadata, the brand tokens inlined as CSS custom properties (light theme, and the
+// dark theme under a media query and a data-theme attribute), the theme script inlined after them (so
+// it runs before first paint and costs no request; the CSP in netlify.toml allows it by hash), skip
+// link, header, main landmark and footer. Every page passes its own path because build.format "file"
+// makes Astro.url.pathname end in .html.
 import "../styles/global.css";
 import { brand } from "../lib/config.js";
-import { cssVariables } from "../lib/tokens.js";
+import { themeCss } from "../lib/theme.js";
+import themeScript from "../scripts/theme.js?raw";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
@@ -24,13 +27,15 @@ const fullTitle = path === "/" ? `${brand.display_name}: ${brand.tagline}` : `${
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content={brand.colors.secondary} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={brand.colors.background_dark} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={brand.colors_dark.background_dark} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={brand.display_name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <style is:inline set:html={cssVariables(brand)}></style>
+    <style is:inline data-tokens set:html={themeCss(brand)}></style>
+    <script is:inline set:html={themeScript}></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

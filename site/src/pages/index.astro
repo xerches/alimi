@@ -1,6 +1,5 @@
 ---
 import Base from "../layouts/Base.astro";
-import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Steps from "../components/Steps.astro";
 import Tiers from "../components/Tiers.astro";
@@ -14,106 +13,119 @@ const frameworkCount = choosableFrameworks().length;
 const posture = alwaysIncludedFrameworks()[0];
 const example = quote({ tierId: "silver", users: 25 });
 
-// The home page opens the way the product's Home does (the B+ shell, Nov 3, 2026): the renewal countdown,
-// the readiness score and this week's three items, for the demo's sample company. The figures are the
-// demo's own (Saltmarsh Payroll, scan of Oct 30, 2026), labelled as a sample, and name no control count.
+// The hero shows the product itself (Nov 3, 2026): the app's Home for the demo's sample company, in a
+// frame beside the copy. The month's list, the renewal countdown and the two scores are the demo's own
+// figures (Saltmarsh Payroll, scan of Oct 30, 2026), labelled as a sample, and name no control count.
 const sample = {
   company: "Saltmarsh Payroll",
   asOf: "Nov 1, 2026",
+  month: "November 2026",
   renewalDays: 75,
   packDays: 44,
   readiness: "80%",
-  week: [
-    { title: "Get five people registered for MFA", owner: "The IT lead", time: "about 20 minutes", why: "Clears a failing test; the insurer asks about this first", status: "Test failing", tone: "bad" },
-    { title: "Attach this quarter's vulnerability scan report", owner: "The IT lead", time: "5 minutes once the report exists", why: "Overdue since September; the control goes back to Ok", status: "Needs evidence", tone: "warn" },
+  month_items: [
+    { title: "Get five people registered for MFA", owner: "The IT lead", time: "about 20 minutes", why: "Clears a failing test the insurer asks about first", status: "Test failing", tone: "bad" },
+    { title: "Attach this quarter's vulnerability scan report", owner: "The IT lead", time: "5 minutes", why: "Overdue since September", status: "Needs evidence", tone: "warn" },
     { title: "Name an owner for the retention and office-access controls", owner: "Operations", time: "5 minutes", why: "Nothing gets done on a control nobody owns", status: "Needs owner", tone: "warn" },
   ],
 };
 
 // One line per module; the detail is on /platform. No scalable count appears on the site (founder's rule, Nov 2, 2026).
 const modules = [
-  { href: "/platform#controls", title: "Controls that check themselves", text: "Each control has one owner and one status, tested on every scan of your tenant or covered by evidence with a renewal date, so nothing quietly expires." },
-  { href: "/platform#evidence", title: "Evidence with a renewal date", text: "Every screenshot, export and report is filed against the control it proves. The export pack for a broker or auditor builds itself." },
-  { href: "/platform#policies", title: "Policies your staff actually sign", text: "A policy library written for a company your size, mapped to the frameworks by criterion ID, with acknowledgement tracking and a yearly review." },
-  { href: "/platform#people", title: "People and training", text: "One row per person, one column per check, and short security lessons with a quiz, so the insurer's training question has a date behind it." },
-  { href: "/frameworks", title: "Frameworks, insurer first", text: `${frameworkCount} frameworks in the catalog, one included, each answered by the same controls and policies.` },
-  { href: "/frameworks", title: "A security score, not only a compliance score", text: `The ${posture.name} is in every plan, so you can see the gap between passing the audit and being hard to break into.` },
-  { href: "/platform#vendors", title: "Vendors, risks and AI tools", text: "The vendors who hold your data, scored and reviewed; a risk register in plain sentences; an inventory of the AI tools in use." },
-  { href: "/platform#trust", title: "Trust page and questionnaires", text: `A public page a prospect or bank can read, and the next security questionnaire drafted from answers you already have, from the ${gold.name} tier.` },
-  { href: "/platform#assistant", title: "An assistant that drafts; you decide", text: "It reads your own data, shows its sources on every line, and never changes a record on its own. In preview." },
+  { href: "/platform#controls", title: "Controls that check themselves", text: "An owner and a status per control, tested on every scan or proven by evidence with a renewal date." },
+  { href: "/platform#evidence", title: "Evidence with a renewal date", text: "Every export and screenshot is filed against the control it proves; the broker's pack builds itself." },
+  { href: "/platform#policies", title: "Policies your staff actually sign", text: "Written for your size, mapped by criterion ID, with sign-off tracking and a yearly review." },
+  { href: "/platform#people", title: "People and training", text: "One row per person, short lessons with a quiz, and a date behind the insurer's training question." },
+  { href: "/frameworks", title: "Frameworks, insurer first", text: `${frameworkCount} frameworks in the catalog, one included, all answered by the same controls.` },
+  { href: "/frameworks", title: "A security score, not only a compliance score", text: `The ${posture.name}, in every plan: the gap between passing the audit and being hard to break into.` },
+  { href: "/platform#vendors", title: "Vendors, risks and AI tools", text: "The vendors who hold your data, a risk register in plain sentences, and the AI tools in use." },
+  { href: "/platform#trust", title: "Trust page and questionnaires", text: `A page a prospect can read, and questionnaires drafted from answers you already have, from ${gold.name}.` },
+  { href: "/platform#assistant", title: "An assistant that drafts; you decide", text: "Reads your data, cites a source on every line, never changes a record on its own. In preview." },
 ];
 const steps = [
-  { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. Alimi reads settings, never mail or files, and never holds a password." },
-  { title: "Watch and fix", text: "Checks run every week: MFA coverage, legacy sign-in, admin accounts, mail forwarding, sharing links, audit logs. A failing check becomes a task with an owner, a plain-English fix and a due date." },
-  { title: "Prove it", text: "Readiness per framework, an export pack for the broker or the auditor, a trust page for prospects, and questionnaire answers drafted from your own evidence." },
+  { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. Alimi reads settings, never mail, files or passwords." },
+  { title: "Watch and fix", text: "Weekly checks on MFA (the second step at sign-in), legacy sign-in, admin accounts, mail forwarding and sharing links. A failing check becomes a task with an owner and a due date." },
+  { title: "Prove it", text: "Readiness per framework, an export pack for the broker or the auditor, a trust page, and questionnaire answers drafted from your own evidence." },
 ];
 const audiences = [
-  { href: "/solutions#broker", title: "Your insurance broker sent you", text: `The renewal questionnaire is due and the premium depends on the answers: MFA, backups, endpoint protection, admin accounts. Start on ${silver.name} with the cyber insurance questionnaire as your framework; the report goes to the broker with the evidence attached.` },
-  { href: "/solutions#accountant", title: "Your accountant mentioned it", text: "A near-miss on a fake invoice, or a question about controls at year end. The payment verification procedure, the finance lesson and the signed policies answer both, and the controls your CPA asks about exist and have an owner." },
-  { href: "/solutions#customer", title: "A customer or your attorney asked for SOC 2 or ISO 27001", text: `A security clause in a contract, or a questionnaire from a customer's procurement team. ${gold.name} adds the second framework, the public trust page and questionnaire answers drafted from the evidence you already have.` },
-  { href: "/solutions#provider", title: "Your IT provider runs it for you", text: "Many companies arrive through the MSP that already manages their Microsoft 365 or Google Workspace. The provider resells Alimi under its own name, stays your first call, and sees every client's readiness on one screen; Alimi is the second line." },
+  { href: "/solutions#broker", title: "Your insurance broker sent you", text: `The renewal questionnaire is due and the premium depends on the answers. Start on ${silver.name} with the insurance questionnaire; the report goes to the broker with the evidence.` },
+  { href: "/solutions#accountant", title: "Your accountant mentioned it", text: "A near-miss on a fake invoice, or a question about controls at year end. The payment verification procedure and the signed policies answer both." },
+  { href: "/solutions#customer", title: "A customer or your attorney asked for SOC 2 or ISO 27001", text: `A security clause in a contract, or a procurement questionnaire. ${gold.name} adds a second framework, the trust page and drafted answers.` },
+  { href: "/solutions#provider", title: "Your IT provider runs it for you", text: "The provider that manages your Microsoft 365 or Google Workspace resells Alimi under its own name, stays your first call and sees every client on one screen." },
 ];
 const differences = [
-  { title: "A published price, per user", text: `From ${silver.perUser} per user a month, on this site: ${example.yearlyText} for a 25-person company. The platforms built for larger companies quote by sales call and start around $12,000 to $15,000 a year for the same company.` },
-  { title: "Insurer-ready first", text: "The first output is the evidence a broker or underwriter accepts. SOC 2 and ISO 27001 follow from the same work, when a customer asks for them." },
-  { title: "Plain English", text: "Written for the owner who signs the renewal, not the auditor. Every term is explained the first time it appears: MFA, EDR, BEC." },
-  { title: "A named compliance lead", text: "The scoping and policy calls that software leaves to you are made with you, by the person who built the platform." },
+  { title: "A published price, per user", text: `From ${silver.perUser} per user a month, ${example.yearlyText} for 25 people, on this site. The platforms built for larger companies quote by sales call, from about $12,000 a year.` },
+  { title: "Insurer-ready first", text: "The first output is what a broker or underwriter accepts. SOC 2 and ISO 27001 follow from the same work when a customer asks." },
+  { title: "Plain English", text: "Written for the owner who signs the renewal, not the auditor, with every term explained the first time it appears." },
+  { title: "A named compliance lead", text: "The scoping and policy calls software leaves to you are made with you, by the person who built the platform." },
 ];
 ---
 
 <Base title={brand.display_name} description={`${brand.tagline} Alimi watches your Microsoft 365 or Google Workspace, keeps policies signed and evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from ${silver.perUser} per user a month.`} path="/">
-  <Hero eyebrow="For companies that want a partner in security and compliance" title={brand.tagline}>
-    <p class="lede">
-      {brand.display_name} watches your Microsoft 365 or Google Workspace, keeps your policies signed and your evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from {silver.perUser} per user a month, and a named compliance lead who makes the calls software leaves to you.
-    </p>
-    <div class="actions">
-      <a class="button button--primary" href="/pricing">See pricing</a>
-      <a class="button button--secondary" href="/platform">How it works</a>
-    </div>
-    <p class="muted small" style="margin-top:1rem">Every connection is read-only. {brand.display_name} never holds your passwords.</p>
-    {demo && <p class="small" style="margin-top:0.5rem"><a href={demo} rel="noopener">See the product: a sample company you can click through, no sign-up and no sales call</a></p>}
-  </Hero>
-
-  <Section id="sample" tight>
-    <div class="sample" aria-labelledby="sample-title">
-      <h2 id="sample-title" class="h3" style="margin:0">What the owner sees on Monday</h2>
-      <div class="sample__hero">
-        <div class="count">
-          <span class="count__big">{sample.renewalDays}<small>days to the insurance renewal</small></span>
-          <span class="count__sub">The broker wants the evidence pack in {sample.packDays} days.</span>
-          <span class="count__accent">On track if this week's three items get done.</span>
+  <section class="hero hero--split">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">The compliance platform for companies without a security team</span>
+        <h1>{brand.tagline}</h1>
+        <p class="lede">
+          {brand.display_name} watches your Microsoft 365 or Google Workspace, keeps policies signed and evidence current, and turns it into the answers an insurer, a customer or an auditor asks for. Published prices from {silver.perUser} per user a month, a named compliance lead included.
+        </p>
+        <div class="actions">
+          <a class="button button--primary" href="/pricing">See pricing</a>
+          <a class="button button--secondary" href="/platform">How it works</a>
         </div>
-        <div class="tile tile--score">
-          <span class="tile__label">Audit readiness, insurer questionnaire</span>
-          <span class="tile__value">{sample.readiness}</span>
-          <span class="tile__note">The share of the questionnaire's requirements whose controls are in order, computed from the last scan, the evidence and the policies.</span>
-        </div>
-        <div class="tile tile--alt">
-          <span class="tile__label">{posture.name}</span>
-          <span class="tile__value" style="font-size:1.25rem">In every plan</span>
-          <span class="tile__note">Alimi's own recommendations beyond what any framework asks, scored on every scan. Not a certification.</span>
-        </div>
+        <p class="muted small hero__note">Every connection is read-only. {brand.display_name} never holds your passwords.</p>
       </div>
-      <div class="card">
-        <div class="card__head">
-          <h3>This week</h3>
-          <span class="muted">Picked by impact on the renewal, then by what is overdue</span>
-        </div>
-        <ol class="todo-list">
-          {sample.week.map((item) => (
-            <li>
-              <span class="todo__title">{item.title}</span>
-              <span class="todo__meta"><span><b>{item.owner}</b> · {item.time}</span><span>{item.why}</span></span>
-              <span class={`pill pill--${item.tone}`}>{item.status}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <p class="sample__caption">Sample company from the product demo ({sample.company}, a payroll firm in Massachusetts), data as of {sample.asOf}. Not a customer; every status in the product is computed from the scan, the evidence and the policies, never typed in.{demo && <> <a href={demo} rel="noopener">Click through the sample company</a>.</>}</p>
-    </div>
-  </Section>
 
-  <Section id="modules" tone="alt" title="One place that knows whether your security is in order" lede="Continuous monitoring of your controls, evidence that renews itself, policies with sign-off, and the frameworks answered from the same work.">
+      <div class="hero__product">
+        <div class="frame" role="group" aria-label={`What the owner sees: the home screen of the sample company ${sample.company}`}>
+          <div class="frame__bar">
+            <span class="frame__mark" aria-hidden="true">{brand.display_name.slice(0, 1)}</span>
+            <span class="frame__crumbs"><b>{sample.company}</b><span>Home</span></span>
+            <span class="frame__tag">Sample</span>
+          </div>
+          <div class="frame__body">
+            <div class="count">
+              <span class="count__big">{sample.renewalDays}<small>days to the insurance renewal</small></span>
+              <span class="count__sub">The broker wants the evidence pack in {sample.packDays} days.</span>
+              <span class="count__accent">On track if this month's three items get done.</span>
+            </div>
+            <div class="frame__tiles">
+              <div class="tile tile--score">
+                <span class="tile__label">Audit readiness, insurer questionnaire</span>
+                <span class="tile__value">{sample.readiness}</span>
+                <span class="meter" aria-hidden="true"><span class="meter__fill" style={`--value:${sample.readiness}`}></span></span>
+                <span class="tile__note">Requirements whose controls are in order, computed from the last scan.</span>
+              </div>
+              <div class="tile tile--alt">
+                <span class="tile__label">{posture.name}</span>
+                <span class="tile__value tile__value--text">In every plan</span>
+                <span class="tile__note">Our recommendations beyond any framework, scored on every scan. Not a certification.</span>
+              </div>
+            </div>
+            <div class="card frame__card">
+              <div class="card__head">
+                <p class="h3">{sample.month}</p>
+                <span class="muted">Picked by impact on the renewal</span>
+              </div>
+              <ol class="todo-list">
+                {sample.month_items.map((item) => (
+                  <li>
+                    <span class="todo__title">{item.title}</span>
+                    <span class="todo__meta"><span><b>{item.owner}</b> · {item.time}</span><span>{item.why}</span></span>
+                    <span class={`pill pill--${item.tone}`}>{item.status}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+        <p class="sample__caption">Sample company from the product demo, data as of {sample.asOf}. Not a customer. Every status is computed from the scan, the evidence and the policies, never typed in.{demo && <> <a href={demo} rel="noopener">Click through the sample company</a>.</>}</p>
+      </div>
+    </div>
+  </section>
+
+  <Section id="modules" tone="alt" title="One place that knows whether your security is in order" lede="Controls monitored continuously, evidence that renews itself, policies with sign-off, frameworks answered from the same work.">
     <div class="grid grid--two">
       {modules.map((m) => (
         <a class="card card--link" href={m.href}>
@@ -129,7 +141,7 @@ const differences = [
     <Steps steps={steps} />
   </Section>
 
-  <Section id="pricing" tone="alt" title="Published prices" lede={`Four tiers, per user a month, paid monthly on a 12-month term or month to month. One framework is included in every one, with ${frameworkCount} to choose from, and the policy library, training and a named compliance lead come with all of them.`}>
+  <Section id="pricing" tone="alt" title="Published prices" lede={`Four tiers, per user a month, one framework included in each with ${frameworkCount} to choose from. The policy library, training and a named compliance lead come with all of them.`}>
     <Tiers compact />
     <div class="actions" style="margin-top:1.5rem">
       <a class="button button--primary" href="/pricing">Full pricing and services</a>
@@ -137,7 +149,7 @@ const differences = [
     </div>
   </Section>
 
-  <Section id="why" title="Why not one of the big platforms?" lede="They are good products for companies with a security owner and a budget to match. Alimi is built for the companies they quote out of reach.">
+  <Section id="why" title="Why not one of the big platforms?" lede="Good products for companies with a security owner and a budget to match. Alimi is for the companies they quote out of reach.">
     <div class="grid grid--two">
       {differences.map((d) => (
         <article class="card">
@@ -146,10 +158,10 @@ const differences = [
         </article>
       ))}
     </div>
-    <p style="margin-top:1.5rem"><a href="/compare">Alimi, Vanta and Drata compared on what their customers complain about</a></p>
+    <p style="margin-top:1.5rem"><a href="/compare">Alimi, Vanta and Drata compared</a></p>
   </Section>
 
-  <Section id="who" title="Who it is for" lede="Most companies arrive through someone they already trust. Here is what each of them is trying to solve, and where to start.">
+  <Section id="who" title="Who it is for" lede="Most companies arrive through someone they already trust. Where each one starts.">
     <div class="grid grid--two">
       {audiences.map((a) => (
         <a class="card card--link" href={a.href}>
@@ -158,17 +170,17 @@ const differences = [
         </a>
       ))}
     </div>
-    <p style="margin-top:1.5rem"><a href="/solutions">Solutions by industry and company size</a>, and <a href="/for-partners">for the brokers, accountants, attorneys and IT providers who refer or resell</a></p>
+    <p style="margin-top:1.5rem"><a href="/solutions">Solutions by industry and company size</a>, and <a href="/for-partners">for the partners who refer or resell</a></p>
   </Section>
 
   <Section id="founder" tone="alt" title="Who is behind it">
     <p class="measure">
-      {brand.display_name} is built by {brand.founder} in {brand.location}, after years of running SOC 2, ISO 27001 and HIPAA programs from the inside at a software company, a managed IT provider and a biopharma company. The companies that needed the most help were always the ones too small to hire him.
+      {brand.display_name} is built by {brand.founder} in {brand.location}, after years running SOC 2, ISO 27001 and HIPAA programs inside a software company, an IT provider and a biopharma company. The companies that needed the most help were too small to hire him.
     </p>
     <a href="/about">More about {brand.display_name}</a>
   </Section>
 
-  <Section id="start" tone="dark" title="Start with the price" lede="Enter your headcount and the frameworks you need; the total is on the page, not in a sales call. Pilots open in January 2027.">
+  <Section id="start" tone="dark" title="Start with the price" lede="Your headcount and frameworks in, the total out, no sales call. Pilots open in January 2027.">
     <div class="actions" style="margin-top:0.5rem">
       <a class="button button--primary" href="/pricing#calculator">Work out your price</a>
       <a class="button button--secondary" href="/pricing#waitlist">Join the waitlist</a>

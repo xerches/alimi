@@ -2,7 +2,9 @@
 // The header, in two rows, after the product's B+ shell (Nov 3, 2026): the ink menu strip with a
 // captioned icon per section, turned to run across the top instead of down the side, and under it
 // the light bar the app uses for its company switcher and breadcrumbs, here carrying the breadcrumb
-// trail and the two links a prospect wants on every page. Dropdowns are <details> elements, so they
+// trail, the theme toggle (src/scripts/theme.js, a pressed-or-not button) and the two links a prospect
+// wants on every page. The strip and the bar are siblings, so the strip alone can stay stuck to the
+// top of wide screens while the bar scrolls away with the page. Dropdowns are <details> elements, so they
 // work without JavaScript; the small script below closes the others when one opens and closes them
 // all on Escape or a click outside. The menus and the trail come from src/lib/nav.js.
 import { brand, decided } from "../lib/config.js";
@@ -68,26 +70,30 @@ const linkClass = (menu, extra = "") => ["nav__link", menu.button && "nav__link-
       </ul>
     </nav>
   </div>
-  <div class="topbar">
-    <div class="container topbar__row">
-      <nav class="crumbs" aria-label="Breadcrumb">
-        <ol>
-          {trail.map((crumb) =>
-            crumb.current ? (
-              <li><span aria-current="page">{crumb.label}</span></li>
-            ) : (
-              <li><a href={crumb.href}>{crumb.label}</a></li>
-            ),
-          )}
-        </ol>
-      </nav>
-      <div class="topbar__links">
-        {demo && <a class="topbar__link" href={demo} rel="noopener">See the product</a>}
-        <a class="topbar__button" href="/pricing#calculator">Work out your price</a>
-      </div>
+</header>
+<div class="topbar">
+  <div class="container topbar__row">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        {trail.map((crumb) =>
+          crumb.current ? (
+            <li><span aria-current="page">{crumb.label}</span></li>
+          ) : (
+            <li><a href={crumb.href}>{crumb.label}</a></li>
+          ),
+        )}
+      </ol>
+    </nav>
+    <div class="topbar__links">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+        <svg class="theme-toggle__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M12.5 3.5a6.5 6.5 0 1 0 4 11.5 7 7 0 0 1-4-11.5z" /></svg>
+        <span class="theme-toggle__label">Dark theme</span>
+      </button>
+      {demo && <a class="topbar__link" href={demo} rel="noopener">See the product</a>}
+      <a class="topbar__button" href="/pricing#calculator">Work out your price</a>
     </div>
   </div>
-</header>
+</div>
 
 <script>
   // One menu open at a time; Escape and a click outside close them. Progressive enhancement only.
