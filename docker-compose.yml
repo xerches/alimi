@@ -1,0 +1,30 @@
+# Local viewing without any hosting account. Each service runs a dev server on mock data with the
+# repository mounted, so an edit shows up on reload. Nothing here needs a token, a tenant or a paid tier.
+#
+#   docker compose up demo      # the product demo, http://localhost:4321
+#   docker compose up site      # the marketing site, http://localhost:4322
+#
+# The hosted platform (/platform) has its own compose file once prompt 12a lands, because it needs Postgres.
+services:
+  demo:
+    image: node:22-alpine
+    working_dir: /app/demo
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 4321"
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - demo_node_modules:/app/demo/node_modules
+  site:
+    image: node:22-alpine
+    working_dir: /app/site
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 4322"
+    ports:
+      - "4322:4322"
+    volumes:
+      - .:/app
+      - site_node_modules:/app/site/node_modules
+
+volumes:
+  demo_node_modules:
+  site_node_modules:

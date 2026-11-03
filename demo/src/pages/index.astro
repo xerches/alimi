@@ -1,47 +1,81 @@
 ---
 import App from "../layouts/App.astro";
-import Tile from "../components/Tile.astro";
 import Pill from "../components/Pill.astro";
 import Bar from "../components/Bar.astro";
-import { questionnaires } from "../lib/data.js";
-import {
-  company, controlCounts, controls, readiness, testCounts, monitoring, peopleCounts, policyCounts, policies, tasks, taskCounts,
-  evidenceCounts, vendors, vendorCounts, aiCounts, daysUntil, formatDate, formatDateTime, href, plural, person,
-} from "../lib/data.js";
+import { company, readiness, testCounts, monitoring, peopleCounts, taskCounts, controlCounts, controls, questionnaires, formatDate, formatDateTime, href } from "../lib/data.js";
+import { posture, postureHistory, auditReadiness, scoreDefinitions } from "../lib/scores.js";
+import { month, deadline, monthItems, monthCounts, monthLead, GROUP_LABEL } from "../lib/month.js";
+import { sparkline } from "../lib/charts.js";
 
 const counts = controlCounts();
-const okPercent = Math.round((100 * counts.ok) / controls.length);
-const renewalDays = daysUntil(company.insurance.renewal);
-const packDays = daysUntil(company.insurance.questionnaire_due);
-const teamTasks = tasks.filter((t) => t.kind !== "person").slice(0, 12);
-const attention = [
-  ...monitoring.tests.filter((t) => t.status === "fail").map((t) => ({ text: `Test failing: ${t.title}`, sub: t.summary, href: href.test(t.check_id), tone: "danger", label: "Fail" })),
-  ...vendors.filter((v) => v.alerts.length).map((v) => ({ text: `Vendor alert: ${v.name}`, sub: v.alerts[0].text, href: href.vendor(v.id), tone: "danger", label: "Breach notice" })),
-  ...controls.filter((c) => c.status === "needs_owner").map((c) => ({ text: c.name, sub: c.assignmentNote, href: href.control(c.id), tone: "warning", label: "Needs owner" })),
-  ...controls.filter((c) => c.status === "needs_evidence").map((c) => ({ text: c.name, sub: `${c.evidenceItems.filter((e) => e.status !== "ready" && e.status !== "upcoming").map((e) => e.name).join("; ") || "No current evidence"}`, href: href.control(c.id), tone: "warning", label: "Needs evidence" })),
-];
 const trend = testCounts.failing - testCounts.previous;
-const bankDays = daysUntil(company.customer_review.due);
-function questionnaireProgress() {
-  return `${questionnaires.bank.drafted} of ${questionnaires.bank.questions.length}`;
-}
+const lastRun = monitoring.runs.at(-1);
+const groupTone = { fix: "danger", renew: "warning", decide: "info" };
+const spark = sparkline(postureHistory.map((h) => h.score), { label: `Posture score over the last ${postureHistory.length} scans: ${postureHistory.map((h) => h.score).join(", ")}` });
 ---
 
-<App title="Home" heading={company.short_name} path="/" section="home" eyebrow="Readiness overview"
-  description={`Readiness overview for ${company.name}: controls, failing tests, people, policies and the tasks due before the insurance renewal.`}
-  lead={`Cyber insurance renews ${formatDate(company.insurance.renewal)}, in ${renewalDays} days. The broker wants the evidence pack by ${formatDate(company.insurance.questionnaire_due)}, in ${packDays} days.`}>
-  <a slot="actions" class="button secondary" href="/questionnaires">Insurer questionnaire</a>
-  <a slot="actions" class="button" href="/controls">View tasks</a>
+<App title="Home" heading={company.short_name} path="/" section="home" eyebrow={month.label}
+  description={`What ${company.short_name} does in ${month.label}: the items that move the insurer's evidence pack, both scores, and what changed since the last scan.`}
+  lead={monthLead}>
+  <a slot="actions" class="button secondary" href="/overview">Full overview</a>
+  <a slot="actions" class="button" href="/owners">All tasks by owner</a>
 
-  <div class="grid tight">
-    <Tile label="Controls Ok" value={counts.ok} unit={`of ${controls.length}`} percent={okPercent} tone={okPercent >= 90 ? "success" : "warning"} note={`${plural(counts.needs_attention, "test failing", "with failing tests")}, ${counts.needs_evidence} need evidence, ${counts.needs_owner} need an owner`} href="/controls" linkText="Controls" />
-    <Tile label="Failing tests" value={testCounts.failing} unit={`of ${testCounts.automated}`} note={`${trend === 0 ? "No change" : trend > 0 ? `${trend} more` : `${-trend} fewer`} since last week; ${testCounts.first} failing on the first scan`} href="/monitoring" linkText="Monitoring" />
-    <Tile label="People compliant" value={peopleCounts.compliant} unit={`of ${peopleCounts.total}`} percent={Math.round((100 * peopleCounts.compliant) / peopleCounts.total)} tone="warning" note={`${peopleCounts.onboarding} started this month; the rest owe a policy or a course`} href="/people" linkText="People" />
-    <Tile label="Tasks due in 30 days" value={taskCounts.next30} note={`${plural(taskCounts.overdue, "task")} overdue across the team`} href="/owners" linkText="By owner" />
-    <Tile label="Bank review" value={questionnaireProgress()} unit="answered" note={`First Quincy Savings Bank, due ${formatDate(company.customer_review.due)} (${bankDays} days)`} href="/questionnaires#bank" linkText="Questionnaire" />
+  <div class="hero">
+    <div class="countdown">
+      <span class="big">{deadline.renewalDays}<small>days to renewal</small></span>
+      <span class="sub">{company.insurance.carrier.replace(" (fictional)", "")} renews {formatDate(company.insurance.renewal)}. The broker wants the evidence pack by {formatDate(deadline.date)}, in {deadline.days} days.</span>
+      <span class="mark">{monthCounts.insurer} of this month's {monthCounts.total} items are for that pack.</span>
+    </div>
+    <div class="tile score">
+      <span class="label">Audit readiness · {auditReadiness.short}</span>
+      <span class="value">{auditReadiness.percent}%</span>
+      <Bar percent={auditReadiness.percent} label={`${auditReadiness.short} readiness ${auditReadiness.percent} percent`} />
+      <span class="note">{scoreDefinitions.readiness} {auditReadiness.ok} of {auditReadiness.total} controls, {auditReadiness.remaining} to go.</span>
+      <a href={href.framework("insurer")}>Requirements and controls</a>
+    </div>
+    <div class="tile score alt">
+      <span class="label">Alimi Recommended Security Posture Score</span>
+      <span class="value-row"><span class="value">{posture.score}<small>of 100</small></span><span set:html={spark} /></span>
+      <span class="note">{scoreDefinitions.posture} {posture.earned} of {posture.possible} points, {postureHistory[0].score} on the first scan.</span>
+      <a href="/frameworks#posture">How it is scored</a>
+    </div>
   </div>
 
-  <h2>Compliance progress</h2>
+  <div class="card">
+    <div class="card-head"><h2>This month</h2><span class="muted" style="font-size:.8125rem">Picked by what moves the {deadline.label}, then by what is overdue</span></div>
+    <ol class="list todo">
+      {monthItems.map((t) => (
+        <li>
+          <span class="grow">
+            <a href={t.href}>{t.title}</a>
+            <span class="meta"><strong>{t.ownerName}</strong>{t.due && <span data-overdue={String(t.overdue)}>{t.overdue ? `Overdue, due ${formatDate(t.due)}` : `Due ${formatDate(t.due)}`}</span>}{t.insurer && <span>For the insurer</span>}</span>
+            <span class="why">{t.why}</span>
+          </span>
+          <Pill label={GROUP_LABEL[t.group]} tone={groupTone[t.group]} />
+        </li>
+      ))}
+    </ol>
+    <p class="muted" style="margin:.75rem 0 0;font-size:.8125rem">
+      {monthCounts.byGroup.fix} to fix, {monthCounts.byGroup.renew} to renew, {monthCounts.byGroup.decide} to decide; {monthCounts.overdue} already overdue.
+      {monthCounts.more > 0 && <span> {monthCounts.more} more this month on the <a href="/owners">owners page</a>.</span>} Each person also has their own list: policies to accept, training due, MFA to register.
+    </p>
+  </div>
+
+  <div class="since">
+    <strong>Since the last scan ({formatDateTime(monitoring.collectedAt)}):</strong>
+    <span>{trend === 0 ? "no change" : trend > 0 ? `${trend} more failing` : `${-trend} fewer failing`}. {testCounts.failing} of {testCounts.automated} tests failing, {testCounts.first} were on the first scan. {lastRun.note} Next run {company.scan.schedule.toLowerCase()}.</span>
+    <a href="/monitoring">Monitoring</a>
+  </div>
+
+  <div class="summary-line">
+    <span><strong>{counts.ok}</strong> of {controls.length} controls Ok</span>
+    <span><strong>{peopleCounts.compliant}</strong> of {peopleCounts.total} people compliant</span>
+    <span><strong>{taskCounts.next30}</strong> tasks due in 30 days, <strong>{taskCounts.overdue}</strong> overdue</span>
+    <span>Bank review <strong>{questionnaires.bank.drafted}</strong> of {questionnaires.bank.questions.length} answered, due {formatDate(company.customer_review.due)}</span>
+    <a href="/overview">Full overview</a>
+  </div>
+
+  <h2>Frameworks on the account</h2>
   <div class="grid wide">
     {readiness.map((r) => (
       <div class="card">
@@ -51,71 +85,8 @@ function questionnaireProgress() {
         </div>
         <p class="value" style="font-size:1.75rem;font-weight:700;margin:0">{r.percent}%</p>
         <Bar percent={r.percent} label={`${r.short} readiness ${r.percent} percent`} />
-        <p class="muted" style="margin:0">{r.ok} of {r.controls.length} controls Ok · {r.remaining} remaining · {r.mappedRequirements} of {r.total} requirement IDs mapped</p>
+        <p class="muted" style="margin:0">{r.ok} of {r.controls.length} controls Ok · {r.remaining} remaining</p>
       </div>
     ))}
-  </div>
-
-  <div class="grid two">
-    <div class="card">
-      <div class="card-head"><h2>Needs attention</h2><a href="/controls">All controls</a></div>
-      <ul class="list">
-        {attention.map((a) => (
-          <li>
-            <Pill label={a.label} tone={a.tone} />
-            <span class="grow"><a href={a.href}>{a.text}</a><span class="sub muted" style="display:block;font-size:.8125rem">{a.sub}</span></span>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Tasks due</h2><a href="/owners">By owner</a></div>
-      <ul class="list">
-        {teamTasks.map((t) => (
-          <li>
-            <span class="grow"><a href={t.href}>{t.title}</a><span class="sub muted" style="display:block;font-size:.8125rem">{t.ownerName}</span></span>
-            <span class="when" data-overdue={String(t.overdue)}>{t.due ? (t.overdue ? `Overdue, ${formatDate(t.due)}` : formatDate(t.due)) : "No date"}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="muted" style="margin:.75rem 0 0;font-size:.8125rem">{taskCounts.team} team tasks in all; reminders go to each owner on Monday and again three days before a due date.</p>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="card-head"><h2>Policies</h2><a href="/policies">All policies</a></div>
-      <dl class="kv">
-        <dt>Published</dt><dd>{policyCounts.published}</dd>
-        <dt>Renews soon</dt><dd>{policyCounts.renews_soon}</dd>
-        <dt>Past due</dt><dd>{policyCounts.past_due}</dd>
-        <dt>Needs approval</dt><dd>{policyCounts.needs_approval}</dd>
-        <dt>Draft</dt><dd>{policyCounts.draft}</dd>
-      </dl>
-      <p class="muted" style="margin:0;font-size:.8125rem">{policies.filter((p) => p.status !== "draft").reduce((n, p) => n + p.acknowledged, 0)} acknowledgements on file across {policies.length} policies.</p>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Evidence</h2><a href="/evidence">Library</a></div>
-      <dl class="kv">
-        <dt>Ready</dt><dd>{evidenceCounts.ready}</dd>
-        <dt>Upcoming renewal</dt><dd>{evidenceCounts.upcoming}</dd>
-        <dt>Needs renewal</dt><dd>{evidenceCounts.needs_renewal}</dd>
-        <dt>Needs artifact</dt><dd>{evidenceCounts.needs_artifact}</dd>
-      </dl>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Vendors and AI</h2><a href="/vendors">Vendors</a></div>
-      <dl class="kv">
-        <dt>Vendors</dt><dd>{vendorCounts.total}, {vendorCounts.byTier.Critical} critical</dd>
-        <dt>Reviews to do</dt><dd>{vendorCounts.needingAction}</dd>
-        <dt>Alerts</dt><dd>{vendorCounts.alerts}</dd>
-        <dt>AI tools</dt><dd>{aiCounts.total}, {aiCounts.byStatus["Under review"]} under review</dd>
-      </dl>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Last scan</h2><a href="/monitoring">Monitoring</a></div>
-      <p style="margin:0 0 .35rem">{formatDateTime(monitoring.collectedAt)}, read-only, {company.workspace}.</p>
-      <p class="muted" style="margin:0;font-size:.8125rem">{monitoring.runs.at(-1).note} Next run {company.scan.schedule.toLowerCase()}.</p>
-    </div>
   </div>
 </App>

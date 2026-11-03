@@ -1,0 +1,44 @@
+---
+// The icon strip: twelve sections with a caption under each icon, so nothing has to be learned or
+// hovered. On a phone the strip hides behind a Menu link (opened with :target, no JavaScript) and a
+// five-slot bottom bar shows the four most used sections. Counts are computed, never typed.
+import { SECTIONS, BOTTOM_BAR, ICONS } from "../lib/nav.js";
+import { controlCounts, testCounts, vendorCounts, policyCounts } from "../lib/data.js";
+
+const { section } = Astro.props;
+const c = controlCounts();
+const badges = {
+  controls: { n: c.needs_attention + c.needs_evidence + c.needs_owner, tone: "neutral", what: "controls needing something" },
+  policies: { n: policyCounts.needs_approval + policyCounts.past_due, tone: "neutral", what: "policies waiting" },
+  monitoring: { n: testCounts.failing, tone: "danger", what: "failing tests" },
+  risk: { n: vendorCounts.alerts, tone: "danger", what: "vendor alerts" },
+};
+const bottom = SECTIONS.filter((s) => BOTTOM_BAR.includes(s.key));
+---
+
+<nav class="strip" id="nav" aria-label="Main">
+  <a class="strip-close" href="#main">Close menu</a>
+  <a class="strip-brand" href="/" aria-label="Alimi, home"><span class="brand-mark" aria-hidden="true">A</span><span class="strip-brand-text">Alimi</span><span class="brand-tag">Demo</span></a>
+  <ul>
+    {SECTIONS.map((s) => {
+      const badge = badges[s.key];
+      return (
+        <li>
+          <a class="strip-item" href={s.href} aria-current={s.key === section ? "page" : undefined}>
+            <span class="strip-icon" set:html={ICONS[s.icon]} />
+            {badge?.n ? <span class="strip-badge" data-tone={badge.tone} aria-label={`${badge.n} ${badge.what}`}>{badge.n}</span> : null}
+            {s.preview && <span class="strip-badge" data-tone="accent" aria-label="Preview" title="Preview">β</span>}
+            <span class="strip-label">{s.label}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<nav class="bottombar" aria-label="Main, short">
+  {bottom.map((s) => (
+    <a href={s.href} aria-current={s.key === section ? "page" : undefined}><span class="strip-icon" set:html={ICONS[s.icon]} />{s.label}</a>
+  ))}
+  <a href="#nav" aria-current={bottom.some((s) => s.key === section) ? undefined : "page"}><span class="strip-icon" set:html={ICONS.menu} />Menu</a>
+</nav>

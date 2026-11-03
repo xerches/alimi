@@ -1,0 +1,177 @@
+---
+import App from "../layouts/App.astro";
+import Tile from "../components/Tile.astro";
+import Pill from "../components/Pill.astro";
+import Bar from "../components/Bar.astro";
+import {
+  company, controlCounts, controls, readiness, testCounts, monitoring, peopleCounts, policyCounts, policies, tasks, taskCounts, owners,
+  evidence, evidenceCounts, vendors, vendorCounts, aiCounts, questionnaires, daysUntil, formatDate, formatDateTime, href, plural,
+} from "../lib/data.js";
+import { posture, postureHistory, auditReadiness } from "../lib/scores.js";
+import { lineChart } from "../lib/charts.js";
+
+const counts = controlCounts();
+const okPercent = Math.round((100 * counts.ok) / controls.length);
+const renewalDays = daysUntil(company.insurance.renewal);
+const packDays = daysUntil(company.insurance.questionnaire_due);
+const teamTasks = tasks.filter((t) => t.kind !== "person").slice(0, 12);
+const attention = [
+  ...monitoring.tests.filter((t) => t.status === "fail").map((t) => ({ text: `Test failing: ${t.title}`, sub: t.summary, href: href.test(t.check_id), tone: "danger", label: "Fail" })),
+  ...vendors.filter((v) => v.alerts.length).map((v) => ({ text: `Vendor alert: ${v.name}`, sub: v.alerts[0].text, href: href.vendor(v.id), tone: "danger", label: "Breach notice" })),
+  ...controls.filter((c) => c.status === "needs_owner").map((c) => ({ text: c.name, sub: c.assignmentNote, href: href.control(c.id), tone: "warning", label: "Needs owner" })),
+  ...controls.filter((c) => c.status === "needs_evidence").map((c) => ({ text: c.name, sub: `${c.evidenceItems.filter((e) => e.status !== "ready" && e.status !== "upcoming").map((e) => e.name).join("; ") || "No current evidence"}`, href: href.control(c.id), tone: "warning", label: "Needs evidence" })),
+];
+const trend = testCounts.failing - testCounts.previous;
+const bankDays = daysUntil(company.customer_review.due);
+
+// Charts: one series each, drawn from the five weekly scans.
+const runLabel = (date) => formatDate(date).replace(/, \d{4}$/, "");
+const failingSeries = monitoring.runs.map((r) => ({ label: runLabel(r.date), value: monitoring.tests.filter((t) => t.history.find((h) => h.date === r.date)?.status === "fail").length }));
+const failingChart = lineChart({ series: failingSeries, max: testCounts.automated, ticks: [0, 6, 12], title: "Failing tests per weekly scan", tone: "danger" });
+const postureChart = lineChart({ series: postureHistory.map((h) => ({ label: runLabel(h.date), value: h.score })), max: 100, ticks: [0, 50, 100], title: "Posture score per weekly scan" });
+
+// Evidence renewals over the next 90 days, plus what is already past.
+const HORIZON = 90;
+const renewals = evidence.filter((e) => e.renewal && e.status !== "needs_artifact").map((e) => ({ ...e, days: daysUntil(e.renewal) })).filter((e) => e.days <= HORIZON).sort((a, b) => a.days - b.days);
+const pastDue = renewals.filter((e) => e.days < 0);
+const ahead = renewals.filter((e) => e.days >= 0);
+const monthTicks = [30, 60, 90].map((d) => ({ at: d, label: formatDate(new Date(new Date(`${company.as_of}T00:00:00Z`).getTime() + d * 86_400_000)).replace(/, \d{4}$/, "") }));
+
+// Tasks by owner: the people with the most open team tasks, overdue shown as such.
+const byOwner = owners.filter((o) => o.tasks.length).sort((a, b) => b.tasks.length - a.tasks.length).slice(0, 6);
+const maxTasks = Math.max(...byOwner.map((o) => o.tasks.length), 1);
+---
+
+<App title="Overview" path="/overview" section="overview" eyebrow="Full overview" crumbs={[{ label: "Overview" }]}
+  description={`The whole programme for ${company.name} on one page: both scores with their trend, failing tests per scan, readiness per framework, evidence renewals ahead, tasks by owner, and the tiles behind them.`}
+  lead={`Everything behind this month's list. Cyber insurance renews ${formatDate(company.insurance.renewal)}, in ${renewalDays} days; the broker wants the evidence pack by ${formatDate(company.insurance.questionnaire_due)}, in ${packDays} days.`}>
+  <a slot="actions" class="button secondary" href="/">This month</a>
+  <a slot="actions" class="button" href="/owners">All tasks</a>
+
+  <div class="grid two">
+    <div class="card">
+      <div class="card-head"><h2>Failing tests, last {monitoring.runs.length} scans</h2><span class="muted">{testCounts.failing} of {testCounts.automated} now</span></div>
+      <div set:html={failingChart} />
+      <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">{monitoring.runs.at(-1).note} <a href="/monitoring">Every test</a></p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Posture score, last {postureHistory.length} scans</h2><span class="muted">{posture.score} of 100 now</span></div>
+      <div set:html={postureChart} />
+      <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">Alimi's own recommendations beyond compliance, weighted by severity and insurer impact; not a certification. <a href="/frameworks#posture">How it is scored</a></p>
+    </div>
+  </div>
+
+  <div class="grid tight">
+    <Tile label="Audit readiness" value={`${auditReadiness.percent}%`} note={`${auditReadiness.short}: ${auditReadiness.ok} of ${auditReadiness.total} controls Ok`} href={href.framework("insurer")} linkText="Insurer questionnaire" />
+    <Tile label="Controls Ok" value={counts.ok} unit={`of ${controls.length}`} percent={okPercent} tone={okPercent >= 90 ? "success" : "warning"} note={`${plural(counts.needs_attention, "test failing", "with failing tests")}, ${counts.needs_evidence} need evidence, ${counts.needs_owner} need an owner`} href="/controls" linkText="Controls" />
+    <Tile label="Failing tests" value={testCounts.failing} unit={`of ${testCounts.automated}`} note={`${trend === 0 ? "No change" : trend > 0 ? `${trend} more` : `${-trend} fewer`} since last week; ${testCounts.first} failing on the first scan`} href="/monitoring" linkText="Monitoring" />
+    <Tile label="People compliant" value={peopleCounts.compliant} unit={`of ${peopleCounts.total}`} percent={Math.round((100 * peopleCounts.compliant) / peopleCounts.total)} tone="warning" note={`${peopleCounts.onboarding} started this month; the rest owe a policy or a course`} href="/people" linkText="People" />
+    <Tile label="Tasks due in 30 days" value={taskCounts.next30} note={`${plural(taskCounts.overdue, "task")} overdue across the team`} href="/owners" linkText="By owner" />
+    <Tile label="Bank review" value={`${questionnaires.bank.drafted} of ${questionnaires.bank.questions.length}`} unit="answered" note={`First Quincy Savings Bank, due ${formatDate(company.customer_review.due)} (${bankDays} days)`} href="/questionnaires#bank" linkText="Questionnaire" />
+  </div>
+
+  <div class="grid two">
+    <div class="card">
+      <div class="card-head"><h2>Readiness per framework</h2><a href="/frameworks">Frameworks</a></div>
+      <ul class="list ranked">
+        {readiness.map((r) => (
+          <li>
+            <span class="grow"><a href={href.framework(r.id)}>{r.short}</a><span class="sub">{r.ok} of {r.controls.length} controls Ok{r.target?.date ? ` · ${r.target.label}, ${formatDate(r.target.date)}` : ""}</span></span>
+            <span class="track"><Bar percent={r.percent} label={`${r.short} readiness ${r.percent} percent`} /></span>
+            <span class="num">{r.percent}%</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Open tasks by owner</h2><a href="/owners">Owners</a></div>
+      <ul class="list ranked">
+        {byOwner.map((o) => (
+          <li>
+            <span class="grow">{o.person ? <a href={href.person(o.id)}>{o.name}</a> : <span>Unassigned</span>}<span class="sub">{o.overdue ? `${o.overdue} overdue` : "Nothing overdue"}</span></span>
+            <span class="track"><span class="stack" role="img" aria-label={`${o.tasks.length} tasks, ${o.overdue} overdue`}><span class="seg" data-tone="danger" style={`width:${(100 * o.overdue) / maxTasks}%`}></span><span class="seg" style={`width:${(100 * (o.tasks.length - o.overdue)) / maxTasks}%`}></span></span></span>
+            <span class="num">{o.tasks.length}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem"><span class="swatch" data-tone="danger"></span> overdue <span class="swatch"></span> due later. Team tasks only; each person's own list is on their page.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h2>Evidence renewals, next {HORIZON} days</h2><a href="/evidence">Evidence library</a></div>
+    <div class="timeline" role="img" aria-label={`${pastDue.length} evidence items past renewal, ${ahead.length} renew in the next ${HORIZON} days`}>
+      <span class="tick" style="left:0"><span>Today</span></span>
+      {monthTicks.map((t) => <span class="tick" style={`left:${(100 * t.at) / HORIZON}%`}><span>{t.label}</span></span>)}
+      {ahead.map((e) => <span class="dot" data-tone={e.days <= 30 ? "warning" : "ok"} style={`left:${(100 * e.days) / HORIZON}%`} title={`${e.name}: ${formatDate(e.renewal)} (${e.ownerName})`}></span>)}
+    </div>
+    <ul class="list">
+      {pastDue.map((e) => <li><Pill status="needs_renewal" /><span class="grow"><a href={href.evidence(e.id)}>{e.name}</a><span class="sub">{e.ownerName} · was due {formatDate(e.renewal)}</span></span></li>)}
+      {ahead.slice(0, 5).map((e) => <li><Pill status={e.status} /><span class="grow"><a href={href.evidence(e.id)}>{e.name}</a><span class="sub">{e.ownerName} · {formatDate(e.renewal)}, in {e.days} days</span></span></li>)}
+    </ul>
+    {ahead.length > 5 && <p class="muted" style="margin:.5rem 0 0;font-size:.8125rem">{ahead.length - 5} more in the <a href="/evidence">evidence library</a>.</p>}
+  </div>
+
+  <div class="grid two">
+    <div class="card">
+      <div class="card-head"><h2>Needs attention</h2><a href="/controls">All controls</a></div>
+      <ul class="list">
+        {attention.map((a) => (
+          <li>
+            <Pill label={a.label} tone={a.tone} />
+            <span class="grow"><a href={a.href}>{a.text}</a><span class="sub muted" style="display:block;font-size:.8125rem">{a.sub}</span></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Tasks due</h2><a href="/owners">By owner</a></div>
+      <ul class="list">
+        {teamTasks.map((t) => (
+          <li>
+            <span class="grow"><a href={t.href}>{t.title}</a><span class="sub muted" style="display:block;font-size:.8125rem">{t.ownerName}</span></span>
+            <span class="when" data-overdue={String(t.overdue)}>{t.due ? (t.overdue ? `Overdue, ${formatDate(t.due)}` : formatDate(t.due)) : "No date"}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="muted" style="margin:.75rem 0 0;font-size:.8125rem">{taskCounts.team} team tasks in all; reminders go to each owner on Monday and again three days before a due date.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-head"><h2>Policies</h2><a href="/policies">All policies</a></div>
+      <dl class="kv">
+        <dt>Published</dt><dd>{policyCounts.published}</dd>
+        <dt>Renews soon</dt><dd>{policyCounts.renews_soon}</dd>
+        <dt>Past due</dt><dd>{policyCounts.past_due}</dd>
+        <dt>Needs approval</dt><dd>{policyCounts.needs_approval}</dd>
+        <dt>Draft</dt><dd>{policyCounts.draft}</dd>
+      </dl>
+      <p class="muted" style="margin:0;font-size:.8125rem">{policies.filter((p) => p.status !== "draft").reduce((n, p) => n + p.acknowledged, 0)} acknowledgements on file across {policies.length} policies.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Evidence</h2><a href="/evidence">Library</a></div>
+      <dl class="kv">
+        <dt>Ready</dt><dd>{evidenceCounts.ready}</dd>
+        <dt>Upcoming renewal</dt><dd>{evidenceCounts.upcoming}</dd>
+        <dt>Needs renewal</dt><dd>{evidenceCounts.needs_renewal}</dd>
+        <dt>Needs artifact</dt><dd>{evidenceCounts.needs_artifact}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Vendors and AI</h2><a href="/vendors">Vendors</a></div>
+      <dl class="kv">
+        <dt>Vendors</dt><dd>{vendorCounts.total}, {vendorCounts.byTier.Critical} critical</dd>
+        <dt>Reviews to do</dt><dd>{vendorCounts.needingAction}</dd>
+        <dt>Alerts</dt><dd>{vendorCounts.alerts}</dd>
+        <dt>AI tools</dt><dd>{aiCounts.total}, {aiCounts.byStatus["Under review"]} under review</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Last scan</h2><a href="/monitoring">Monitoring</a></div>
+      <p style="margin:0 0 .35rem">{formatDateTime(monitoring.collectedAt)}, read-only, {company.workspace}.</p>
+      <p class="muted" style="margin:0;font-size:.8125rem">{monitoring.runs.at(-1).note} Next run {company.scan.schedule.toLowerCase()}.</p>
+    </div>
+  </div>
+</App>

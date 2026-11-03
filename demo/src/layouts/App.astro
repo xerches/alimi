@@ -1,15 +1,20 @@
 ---
-// The demo's page shell: brand tokens inlined from config/brand.yaml, the sample-company banner on
-// every page, the left navigation, a top bar with breadcrumbs, and the page header. Every page
-// passes its own path because build.format "file" makes Astro.url.pathname end in .html.
+// The demo's page shell (layout chosen Nov 3, 2026): brand tokens inlined from config/brand.yaml, the
+// sample-company banner on every page, the captioned icon strip on the left, a second column only
+// where the section has children, and a top bar with the company switcher, breadcrumbs and the viewer.
+// Every page passes its own path because build.format "file" makes Astro.url.pathname end in .html.
 import "../styles/app.css";
 import { brand } from "../lib/config.js";
 import { cssVariables } from "../lib/tokens.js";
 import { company, formatDate, person } from "../lib/data.js";
-import Nav from "../components/Nav.astro";
+import { resolveSection } from "../lib/nav.js";
+import Strip from "../components/Strip.astro";
+import Column from "../components/Column.astro";
 
-const { title, heading, description, path, section, eyebrow, lead, crumbs = [], wide = false } = Astro.props;
+const { title, heading, description, path, section, item, eyebrow, lead, crumbs = [], wide = false } = Astro.props;
 if (!path) throw new Error("App layout needs a path prop");
+const resolved = resolveSection(section, item);
+const hasColumn = Boolean(resolved.section.column);
 const origin = String(Astro.site).replace(/\/$/, "");
 const fullTitle = path === "/" ? `${company.short_name} on Alimi (demo)` : `${title} | ${company.short_name} on Alimi`;
 const viewer = person(company.roles["AI Lead"]);
@@ -32,20 +37,24 @@ const initials = viewer.name.split(" ").map((w) => w[0]).join("");
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="shell">
-      <Nav section={section} />
-      <div class="content">
+      <Strip section={resolved.section.key} />
+      <div class="content" data-column={hasColumn || undefined}>
         <div class="sample-banner" data-sample-banner>
           <strong>Sample company.</strong>
           <span>{company.name} is fictional. Static data as of {formatDate(company.as_of)}; nothing here was read from a real tenant.</span>
         </div>
         <div class="topbar">
-          <a class="menu-button" href="#nav">Menu</a>
+          <div class="company-switch" aria-label={`Company: ${company.short_name}`} title="A reseller switches between clients here; a multi-entity customer between entities">
+            <div><strong>{company.short_name}</strong><span>{company.location.split(",")[0]} · {company.headcount} people</span></div>
+            <span class="chev" aria-hidden="true">▾</span>
+          </div>
           <nav class="crumbs" aria-label="Breadcrumb">
             <a href="/">Home</a>
             {crumbs.map((crumb) => (<><span aria-hidden="true">/</span>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span>{crumb.label}</span>}</>))}
           </nav>
           <div class="who"><span>Viewing as {viewer.name}, {viewer.title}</span><span class="avatar" aria-hidden="true">{initials}</span></div>
         </div>
+        {hasColumn && <Column section={resolved.section} item={resolved.item} />}
         <main id="main" style={wide ? "max-width:none" : undefined}>
           <div class="page-header">
             <div>

@@ -47,7 +47,7 @@ const owners = [...new Set(controls.map((c) => c.ownerName))].sort();
           const failing = c.testResults.filter((t) => t.status === "fail").length;
           const attest = c.testResults.filter((t) => t.status === "attestation_needed").length;
           return (
-            <tr data-status={c.status} data-framework={c.frameworks.join(" ")}>
+            <tr data-status={c.status} data-framework={c.frameworks.join(" ")} data-domain={c.domain}>
               <td><a href={href.control(c.id)}>{c.name}</a><span class="sub mono">{c.id}</span></td>
               <td>{c.domainLabel}</td>
               <td>{c.owner ? <a href={href.person(c.owner.id)}>{c.ownerName}</a> : <span class="muted">Unassigned ({c.ownerRole})</span>}</td>

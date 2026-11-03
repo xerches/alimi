@@ -19,11 +19,12 @@ CHROME_PATH=/opt/pw-browsers/chromium npm run lighthouse   # or just npm run lig
 
 Node 22 or newer. The build reads `config/brand.yaml`, `config/controls.yaml`, `config/checks.yaml`, `policies/requirements.yaml` and `policies/*.md` from the repo, so run it from a full checkout.
 
-## The twenty screens
+## The screens
 
 | Group | Screen | What it shows |
 | --- | --- | --- |
-| Home | `/` | Readiness tiles, compliance progress per framework, what needs attention, tasks due, last scan |
+| Home | `/` | The month: days to renewal, the two scores (audit readiness for the insurer, the Alimi Recommended Security Posture Score with its trend), and the month's list of fixes, renewals and decisions, ordered by what moves the insurer evidence pack and then by what is overdue |
+| Home | `/overview` | The full overview: failing tests and posture score over the last five scans, readiness tiles, readiness per framework, open tasks by owner, evidence renewals on a 90-day timeline, what needs attention, tasks due, last scan |
 | Compliance | `/frameworks`, `/frameworks/:id` | Insurer questionnaire, SOC 2, ISO 27001, HIPAA, ISO 42001: percent ready, one row per requirement ID with the controls and policies that satisfy it |
 | Compliance | `/controls`, `/controls/:id` | 40 controls with owner, status, frameworks, evidence and tests; a control page with tests and their history, evidence with renewal dates, the add-evidence form, policies, risks, requirements and activity |
 | Compliance | `/policies`, `/policies/:id` | The policy library: status, owner, version, acknowledgements; the policy's outline and opening paragraph (the text itself is never published) with its requirement mapping and the controls it sets rules for |
@@ -40,6 +41,11 @@ Node 22 or newer. The build reads `config/brand.yaml`, `config/controls.yaml`, `
 | Trust | `/questionnaires` | The insurer questionnaire answered from the scan and a bank's 30-question review half drafted |
 | Assistant | `/assistant` | Placeholder for the assistant: five prepared answers from the same data, each with its sources |
 | Setup | `/integrations`, `/settings` | Microsoft 365 connected read-only with the exact permissions listed; what connects next; company settings |
+| Setup | `/audit` | The audit log: scans, evidence added or requested, policy approvals, people joining and connections made, in date order, filterable by kind |
+
+## Navigation (the app shell, chosen Nov 3, 2026)
+
+Every page sits in the same shell, which the platform's templates copy: a captioned icon strip on the left with the twelve sections, a second column only where the section has children (Frameworks lists the Posture Score and each framework on the account; Controls lists the ten areas and filters the table through `?domain=`; People, Risk, Trust and Settings list their pages, and the Audit log sits under Settings), a company switcher and breadcrumbs in the top bar. On a phone the strip hides behind the Menu slot of a bottom bar (opened with `:target`, no JavaScript) and the column becomes a row of chips. `src/lib/nav.js` holds the model, `tests/nav.test.mjs` proves every link points at a page, and the badges on the strip are computed from the data like everything else.
 
 ## How statuses are computed
 
@@ -48,6 +54,7 @@ Nothing on these pages is typed as a status. `src/lib/data.js` derives everythin
 - **Evidence** is `ready` when it has an artifact and a renewal date more than 30 days out, `upcoming` within 30 days, `needs_renewal` past it, and `needs_artifact` when the item exists but nothing was attached.
 - **Control** is `needs_owner` without an owner, `needs_attention` when a linked test fails, `needs_evidence` when an attestation test has no ready evidence or any evidence is missing or expired, otherwise `ok`.
 - **Framework readiness** is the share of mapped controls that are `ok`, counted over controls, not requirement IDs.
+- **The Alimi Recommended Security Posture Score** follows `config/scoring.yaml` (`src/lib/scores.js`, `tests/scores.test.mjs`): each test is worth points by severity (critical 4, high 3, medium 2, low 1), times 1.5 when it answers an insurer question; a passing test earns its points, an attestation earns them when current evidence attests it, and errors or not-run tests are left out; the score is earned over possible, so Saltmarsh is 73 today and was 50 on its first scan.
 - **People** are compliant when every check is a yes; tasks and overdue counts come from the same rows.
 - Dates are measured from `AS_OF` (Nov 1, 2026) in `scripts/make_sample_data.py`, so the story (75 days to renewal, 44 days to the broker's deadline) does not drift as real time passes.
 
@@ -67,7 +74,7 @@ The demo must stay free to run: static files only, no server, no analytics.
 
 ## Showing it (a 15-minute path)
 
-1. **Home.** "Renewal in 75 days, broker wants the pack in 44. Here is where we stand: 31 of 40 controls fine, three failing tests, 33 of 52 people compliant."
+1. **Home.** "Renewal in 75 days, broker wants the pack in 44. Readiness 80%, posture 73 and climbing. Here is November: 33 things to do, 11 of them for the pack, the first one overdue." Then **Full overview** for the trend charts and the tiles: 31 of 40 controls fine, three failing tests, 33 of 52 people compliant.
 2. **Monitoring.** The scanner's 12 checks on the tenant, read-only. Open the failing external-forwarding test: what it found, the plan, the owner, the due date.
 3. **Controls → CTL-09 (MFA).** One owner, one status. Tests set it where a tenant read can; evidence with a renewal date covers the rest. Show the add-evidence form.
 4. **Policies → Password and Authentication Policy.** The policy library in place: owner, version, who has acknowledged, and the requirement IDs it answers.

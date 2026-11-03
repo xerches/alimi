@@ -1,0 +1,40 @@
+# Alimi Recommended Security Posture Score: how the number is computed.
+#
+# Our own score, not an accredited framework. It says how much of what security teams recommend is
+# in place, weighted by how much each gap matters, the way Microsoft Secure Score scores a tenant.
+# The demo (demo/src/lib/scores.js) reads this file today; the platform's readiness dashboard
+# (prompt 12c) reads the same file, so the two never disagree. Bump `version` and add a changelog
+# line whenever a weight changes, because a customer's score moves with it.
+#
+# score = 100 x points earned / points possible, rounded to a whole number.
+#   points possible = the sum of every counted check's points
+#   points earned   = the points of the checks that pass, plus attested attestations
+#   a check's points = severity_points[severity] x (insurer_multiplier if it answers an insurer question, else 1)
+
+version: 1
+
+posture_score:
+  # Points by severity. Same ratio as the scanner's SEVERITY_WEIGHT: a critical gap costs four times a low one.
+  severity_points:
+    critical: 4
+    high: 3
+    medium: 2
+    low: 1
+  # A check that answers an underwriting question counts this much more, because an insurer will ask about it.
+  # Every check in config/checks.yaml answers one today; the multiplier starts to matter when posture-only
+  # checks (recommended, but no insurer asks) join the catalog.
+  insurer_multiplier: 1.5
+  # Attestations (what no API can read: EDR coverage, backup restores, the incident drill) count as earned
+  # when current evidence attests them, and as a gap when nothing does.
+  attestations_count: true
+  # Checks with these statuses are left out of the possible points and listed on the data-quality page
+  # (prompt 12c); they are never shown as a failure.
+  exclude_statuses:
+    - error
+    - not_applicable
+    - not_run
+
+changelog:
+  - version: 1
+    date: 2026-11-03
+    change: First definition, for the demo's monthly home and the platform's 12c dashboard.

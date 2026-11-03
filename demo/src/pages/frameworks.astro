@@ -2,6 +2,7 @@
 import App from "../layouts/App.astro";
 import Bar from "../components/Bar.astro";
 import { readiness, formatDate, href, company, frameworkCatalog } from "../lib/data.js";
+import { posture as postureScore, postureHistory, scoring, scoreDefinitions } from "../lib/scores.js";
 
 const active = new Set(readiness.map((r) => r.id));
 const posture = frameworkCatalog.find((f) => f.always_included);
@@ -31,12 +32,18 @@ const available = frameworkCatalog.filter((f) => !f.always_included && !active.h
     ))}
   </div>
 
-  <div class="card">
-    <h2>{posture.name}</h2>
-    <p>{posture.summary} It is in every plan and does not count toward the framework total; the score and its controls arrive with the readiness dashboard.</p>
+  <div class="card" id="posture">
+    <div class="card-head"><h2>{posture.name}</h2><span class="tag">In every plan</span></div>
+    <p>{posture.summary} It is in every plan and never counts toward the framework total.</p>
+    <div class="grid tight">
+      <div class="tile"><span class="label">Score today</span><span class="value">{postureScore.score}<small> of 100</small></span><span class="note">{postureScore.earned} of {postureScore.possible} points, {postureScore.counted} checks counted</span></div>
+      <div class="tile"><span class="label">First scan</span><span class="value">{postureHistory[0].score}</span><span class="note">{formatDate(postureHistory[0].date)}</span></div>
+      <div class="tile"><span class="label">Rule version</span><span class="value">{scoring.version}</span><span class="note">config/scoring.yaml, changed {scoring.changelog.at(-1).date}</span></div>
+    </div>
+    <p class="muted" style="margin:0">{scoreDefinitions.posture} A critical check is worth {scoring.posture_score.severity_points.critical} points, a low one {scoring.posture_score.severity_points.low}; a check an insurer asks about counts {scoring.posture_score.insurer_multiplier} times; the three attestations count when current evidence attests them. Checks that could not run are left out, never shown as failures.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="available">
     <h2>Available to add</h2>
     <p>The same controls serve {available.length} more frameworks from the catalog, each an add-on per user a month. Framework text is never copied in; Alimi stores requirement IDs and its own one-line summaries.</p>
     <ul class="list">{available.map((f) => <li><span class="grow"><strong>{f.name}</strong> <span class="muted">{f.summary}</span></span><span class="muted">{f.audience}</span></li>)}</ul>
