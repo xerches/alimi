@@ -21,7 +21,7 @@ Started Nov 2, 2026 at the founder's request ("add to our agenda at some point t
 | Jan 2027 | Pilots open; first partner conversations (15 planned, 5 of them MSPs on the reseller terms) | Pilot letter and runbook are ready; reseller incentives are proposals until the first conversation |
 | Feb 2027, then quarterly | Re-read the Compare page sources | Ratings, counts and reported prices change; the page states the month they were read |
 | Before the first paying customer | Re-check the pricing comparables in `docs/research/platform-pricing.md` | AWS Marketplace listings and Vendr data move every quarter |
-| After the LLC | Alimi runs its own programme in its own platform (the founder's tenant), publishes its own trust page, pursues SOC 2 Type I when revenue covers the audit fee | Decided Nov 2, 2026 from the site scan; prompt 12a seeds the Alimi organization |
+| After the LLC | Alimi runs its own program in its own platform (the founder's tenant), publishes its own trust page, pursues SOC 2 Type I when revenue covers the audit fee | Decided Nov 2, 2026 from the site scan; prompt 12a seeds the Alimi organization |
 
 ## The training review: what the frameworks require
 
@@ -31,22 +31,22 @@ Requirement IDs and our own one-line summaries only (the standards' text is copy
 | --- | --- | --- | --- |
 | Cyber insurance questionnaire | `training` (controls.yaml) | Security awareness and phishing training for all staff at least yearly | 1 to 7, yearly; phishing practice alongside |
 | SOC 2 | CC1.4, CC2.2 | Competent people; security responsibilities communicated internally, with evidence | 1 to 7 plus the role lesson for admins |
-| ISO 27001:2022 | 7.3, A.6.3 | Staff aware of the policy and their part in it; an awareness, education and training programme | 1 to 7; lesson 4 for data handling |
+| ISO 27001:2022 | 7.3, A.6.3 | Staff aware of the policy and their part in it; an awareness, education and training program | 1 to 7; lesson 4 for data handling |
 | ISO 27701 | via ISO 27001 7.3 and A.6.3 | The same, with privacy roles made explicit | 4 |
 | ISO 42001 | 7.2, 7.3 | Competence and awareness of people who work with AI systems | 6 |
-| HIPAA | 164.308(a)(5) | A security awareness and training programme for the workforce, with periodic reminders | 1, 3, 4, 7 |
-| PCI DSS 4.0 | 12.6 | A security awareness programme, at least yearly, with acknowledgement | 1, 2, 3, 4 |
+| HIPAA | 164.308(a)(5) | A security awareness and training program for the workforce, with periodic reminders | 1, 3, 4, 7 |
+| PCI DSS 4.0 | 12.6 | A security awareness program, at least yearly, with acknowledgement | 1, 2, 3, 4 |
 | GDPR | Art. 39(1)(b) | The data protection officer's tasks include awareness-raising and training of staff who process personal data | 4 |
 | CCPA | 1798.130(a)(6) | People who handle consumer requests are informed of the requirements | 4 |
 | NIST CSF 2.0 | PR.AT | Awareness and training so personnel can do their security duties | 1 to 7 |
 | NIST SP 800-53 | AT-2, AT-3 | Literacy training for everyone; role-based training for privileged roles | 1 to 7; 8 for admins |
 | NIST SP 800-171 | 3.2.1, 3.2.2 | Awareness of risks and policies; trained to carry out assigned duties | 1 to 7; 8 |
 | CMMC 2.0 | AT.L2-3.2.1, AT.L2-3.2.2 | The same two practices | 1 to 7; 8 |
-| CIS Controls v8 | Control 14 | A security awareness and skills training programme | 1 to 7 |
+| CIS Controls v8 | Control 14 | A security awareness and skills training program | 1 to 7 |
 | Cyber Essentials | none | No training control; good practice only | none required |
 | NIS2 | Art. 21(2)(g) | Basic cyber hygiene practices and cybersecurity training | 1 to 7 |
 | FTC Safeguards Rule | 16 CFR 314.4(e) | Security awareness training for personnel, kept current | 1 to 7 |
-| 201 CMR 17.00 | 17.03(2)(b)(1) | Ongoing employee training on the information security programme | 1 to 7 |
+| 201 CMR 17.00 | 17.03(2)(b)(1) | Ongoing employee training on the information security program | 1 to 7 |
 | NYDFS Part 500 | 500.14(a)(3) | Periodic awareness training, at least yearly, including social engineering | 1, 2, 7 |
 | SOX ITGC | none explicit | Training is a general control, not a named requirement | none required |
 | EU AI Act | Art. 4 | AI literacy for staff who deal with AI systems | 6 |

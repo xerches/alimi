@@ -133,7 +133,7 @@ Every SOC 2 requirement in the catalogue maps to at least one policy.
 | 8.3 | The risk treatment plan is implemented. | POL-15 |
 | 9.1 | Security performance is monitored, measured and evaluated. | POL-01, POL-15 |
 | 9.2.1 | Internal audits are conducted at planned intervals. | POL-01 |
-| 9.2.2 | An audit programme defines scope, criteria and reporting. | POL-01 |
+| 9.2.2 | An audit program defines scope, criteria and reporting. | POL-01 |
 | 9.3 | Management reviews the management system at planned intervals. | POL-01 |
 | 10.1 | The management system is continually improved. | POL-01 |
 | 10.2 | Nonconformities are corrected and their causes addressed. | POL-01 |
@@ -310,7 +310,7 @@ Every ISO 42001 requirement in the catalogue maps to at least one policy.
 | Requirement | What it is about (our words) | Policies |
 | --- | --- | --- |
 | 164.308(a)(1) | Security management process, including risk analysis, risk management, sanctions and activity review. | POL-01, POL-09, POL-10, POL-15 |
-| 164.308(a)(2) | A named security official is responsible for the security programme. | POL-01 |
+| 164.308(a)(2) | A named security official is responsible for the security program. | POL-01 |
 | 164.308(a)(3) | Workforce access is authorised, supervised and ended properly. | POL-03, POL-16 |
 | 164.308(a)(4) | Access to protected health information is authorised and managed. | POL-03 |
 | 164.308(a)(5) | Security awareness and training, including malware, log-in monitoring and passwords. | POL-02, POL-04, POL-16, POL-19 |

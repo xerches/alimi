@@ -79,7 +79,7 @@ Every record and data set {{Company}} creates or receives, in every format (docu
 ### 4.5 Records of this policy
 
 14. The disposal log (what was destroyed, when, how, by whom, with any certificate) and the retention schedule are kept for at least six years and are available to auditors, insurers and customers as evidence that data does not linger.
-15. The policies, procedures and records that document {{Company}}'s security and privacy programme are themselves retained for at least six years from their creation or last effective date, in the controlled document store under the Information Security Policy.
+15. The policies, procedures and records that document {{Company}}'s security and privacy program are themselves retained for at least six years from their creation or last effective date, in the controlled document store under the Information Security Policy.
 
 ## 5. Exceptions
 

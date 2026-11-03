@@ -99,7 +99,7 @@ Part A (secure development) applies when {{Company}} builds, customises or commi
 
 #### 4.8 Changes to the management system
 
-25. Planned changes to the security programme itself (new policies, new scope, new tools) go through the same request-and-approve steps with {{Security Lead}}, so the ISMS changes deliberately rather than by drift.
+25. Planned changes to the security program itself (new policies, new scope, new tools) go through the same request-and-approve steps with {{Security Lead}}, so the ISMS changes deliberately rather than by drift.
 
 ## 5. Exceptions
 

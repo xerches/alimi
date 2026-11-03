@@ -77,7 +77,7 @@ frameworks:
     short: CIS Controls
     category: security
     summary: The prioritised safeguards an IT provider or an insurer points a small company to first.
-    audience: Companies starting a security programme with their IT provider
+    audience: Companies starting a security program with their IT provider
     mapped: false
   - id: cyber_essentials
     name: UK Cyber Essentials
@@ -139,7 +139,7 @@ frameworks:
     name: AWS Foundational Technical Review
     short: AWS FTR
     category: security
-    summary: Amazon's technical review of a software partner's product, required for the AWS partner programmes.
+    summary: Amazon's technical review of a software partner's product, required for the AWS partner programs.
     audience: Software companies in the AWS Partner Network
     mapped: false
 
@@ -176,7 +176,7 @@ frameworks:
     name: Massachusetts 201 CMR 17.00
     short: 201 CMR 17
     category: privacy
-    summary: The written information security programme every company holding a Massachusetts resident's personal data must have.
+    summary: The written information security program every company holding a Massachusetts resident's personal data must have.
     audience: Every company with Massachusetts customers or employees
     mapped: false
   - id: iso27701
@@ -280,7 +280,7 @@ frameworks:
     name: FTC Safeguards Rule
     short: FTC Safeguards
     category: financial
-    summary: The written security programme the FTC requires of non-bank financial businesses.
+    summary: The written security program the FTC requires of non-bank financial businesses.
     audience: CPAs, tax preparers, mortgage brokers, auto dealers, lenders
     mapped: false
   - id: nydfs_500

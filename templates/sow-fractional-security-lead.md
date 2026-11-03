@@ -10,7 +10,7 @@ title: Statement of Work, Fractional Security and Compliance Lead
 
 ## 1. Objective
 
-Give {{Client}} the security and compliance lead it cannot hire: a named person who owns the security programme part time, keeps the controls working, answers the insurer and the customers, and makes the scoping and policy calls that tools leave to the owner.
+Give {{Client}} the security and compliance lead it cannot hire: a named person who owns the security program part time, keeps the controls working, answers the insurer and the customers, and makes the scoping and policy calls that tools leave to the owner.
 
 ## 2. Scope
 
@@ -25,7 +25,7 @@ Give {{Client}} the security and compliance lead it cannot hire: a named person 
 - First point of contact for suspected incidents during business hours (Eastern Time), running the response under the Client's incident response plan.
 - A quarterly written report to the owner: what changed, open risks, what is next.
 
-**Out of scope:** 24-hour on-call, hands-on IT administration beyond verification, software development, legal advice, audits that require independence from the person who runs the programme, and travel beyond the Boston area. Incident response beyond the included hours is billed as extra hours.
+**Out of scope:** 24-hour on-call, hands-on IT administration beyond verification, software development, legal advice, audits that require independence from the person who runs the program, and travel beyond the Boston area. Incident response beyond the included hours is billed as extra hours.
 
 ## 3. Deliverables
 
@@ -45,7 +45,7 @@ Read-only access to {{Tenant}} for the monthly scan and reviews, created by the 
 
 ## 7. Assumptions
 
-Up to 200 staff and one primary tenant; the Client has, or buys under separate SOWs, the scan, policies and procedures the programme runs on; Alimi acts as adviser and coordinator, and the Client remains responsible for its systems and decisions.
+Up to 200 staff and one primary tenant; the Client has, or buys under separate SOWs, the scan, policies and procedures the program runs on; Alimi acts as adviser and coordinator, and the Client remains responsible for its systems and decisions.
 
 ## 8. Fee and payment
 

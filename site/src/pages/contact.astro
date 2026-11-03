@@ -34,9 +34,24 @@ const id = (suffix) => `${formName}-${suffix}`;
           </div>
           <div class="form__row">
             <div class="field">
-              <label for={id("company")}>Company <span class="muted">(optional)</span></label>
-              <input id={id("company")} name="company" type="text" autocomplete="organization" />
+              <label for={id("company")}>Company</label>
+              <input id={id("company")} name="company" type="text" autocomplete="organization" required />
             </div>
+            <div class="field">
+              <label for={id("size")}>People at your company</label>
+              <select id={id("size")} name="company_size" required>
+                <option value="">Choose one</option>
+                <option>Fewer than 10</option>
+                <option>10 to 24</option>
+                <option>25 to 49</option>
+                <option>50 to 99</option>
+                <option>100 to 249</option>
+                <option>250 to 499</option>
+                <option>500 or more</option>
+              </select>
+            </div>
+          </div>
+          <div class="form__row">
             <div class="field">
               <label for={id("topic")}>About</label>
               <select id={id("topic")} name="topic">

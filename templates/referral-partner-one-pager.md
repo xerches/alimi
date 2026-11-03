@@ -27,7 +27,7 @@ Your clients run companies of 10 people and up. Their insurer sends a questionna
 | {{pricing.products.services.fraud_workshop.name}} | Half-day workshop, verification procedure tailored to the firm, yearly drill | {{pricing.products.services.fraud_workshop.price}} |
 | {{pricing.products.services.policy_adoption.name}} | Half-day session to tailor, approve and roll out the policy library | {{pricing.products.services.policy_adoption.price}} |
 | {{pricing.products.services.ai_policy_implementation.name}} | AI policy adoption, access rules, staff training, ISO 42001 gap check | {{pricing.products.services.ai_policy_implementation.price}} |
-| {{pricing.retainers.fractional_security_lead.name}} | A named security lead, {{pricing.retainers.fractional_security_lead.hours}}, who owns the programme and answers insurers and customers | {{pricing.retainers.fractional_security_lead.price}} |
+| {{pricing.retainers.fractional_security_lead.name}} | A named security lead, {{pricing.retainers.fractional_security_lead.hours}}, who owns the program and answers insurers and customers | {{pricing.retainers.fractional_security_lead.price}} |
 
 Prices are published, per user a month, and fixed in advance: {{pricing.products.platform.billing.terms}} Everything runs read-only; Alimi never holds your client's passwords.
 
@@ -36,7 +36,7 @@ Prices are published, per user a month, and fixed in advance: {{pricing.products
 - **Brokers:** applications come back complete, with evidence; clients with fixed findings are easier to place and keep.
 - **CPAs:** clients stop losing money to invoice fraud, and the controls you are asked about at year end exist.
 - **Attorneys:** clients can meet the security clauses in their contracts and answer a customer's security questionnaire with evidence.
-- **IT providers:** a compliance layer you can resell under your own name; ask about the reseller programme.
+- **IT providers:** a compliance layer you can resell under your own name; ask about the reseller program.
 
 ## How referring works
 
@@ -44,6 +44,6 @@ Introduce us by email with the client copied. We respond within two business day
 
 ## Who is behind it
 
-Alex Dennis, Boston. Security roles at a biopharma company, a software company and a managed IT provider; SOC 2, ISO 27001 and HIPAA programmes run from the inside.
+Alex Dennis, Boston. Security roles at a biopharma company, a software company and a managed IT provider; SOC 2, ISO 27001 and HIPAA programs run from the inside.
 
 **{{Contact Email}} · {{Contact Phone}} · {{Website}}**

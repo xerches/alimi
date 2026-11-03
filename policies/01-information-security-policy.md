@@ -43,8 +43,8 @@ The information security management system (ISMS) described here covers {{Compan
 
 | Role | Responsibilities |
 | --- | --- |
-| {{CEO}} | Owns the security programme. Approves this policy, the risk acceptance criteria and any exception to a policy that carries high risk. Provides the budget and time the programme needs. |
-| {{Security Lead}} | Runs the programme day to day: maintains the policies, the risk register and the asset inventory, coordinates incident response, reports to {{CEO}} at least quarterly, and is the named security contact for customers, insurers and authorities. This role may be held by an employee, a managed service provider or a fractional security lead. |
+| {{CEO}} | Owns the security program. Approves this policy, the risk acceptance criteria and any exception to a policy that carries high risk. Provides the budget and time the program needs. |
+| {{Security Lead}} | Runs the program day to day: maintains the policies, the risk register and the asset inventory, coordinates incident response, reports to {{CEO}} at least quarterly, and is the named security contact for customers, insurers and authorities. This role may be held by an employee, a managed service provider or a fractional security lead. |
 | {{IT Lead}} or managed service provider | Operates the systems to the standards in these policies and keeps the evidence that they do. |
 | {{HR Lead}} | Owns the people parts: screening, onboarding, training records, offboarding and the disciplinary process. |
 | Managers | Make sure their teams know and follow the policies, approve access requests for their staff, and report concerns. |
@@ -88,7 +88,7 @@ The information security management system (ISMS) described here covers {{Compan
 ### 4.7 Checking that controls work
 
 16. {{Security Lead}} measures the security objectives and reviews key control evidence at least quarterly, using the workspace security scan and the operational reports listed in the Logging and Monitoring Policy.
-17. Once a year someone independent of day-to-day operations (an internal reviewer from another function, the fractional security lead or an outside firm) reviews the programme against this policy set and reports findings to {{CEO}}.
+17. Once a year someone independent of day-to-day operations (an internal reviewer from another function, the fractional security lead or an outside firm) reviews the program against this policy set and reports findings to {{CEO}}.
 18. {{CEO}} and {{Security Lead}} hold a management review at least once a year covering: results of audits and reviews, incidents and near misses, status of risks and actions, changes in the business or the law, and whether the objectives and resources are still right. Decisions and actions are minuted.
 19. Audit and testing activities on live systems are planned with the system owner so they do not disrupt the business.
 

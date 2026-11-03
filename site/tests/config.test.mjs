@@ -59,7 +59,7 @@ test("platform tiers are Silver, Gold, Platinum, Diamond, per user, rising, each
   assert.ok(included.some((line) => /lessons|training/i.test(line)), "training is included at every tier");
   assert.match(billing, /paid monthly/);
   assert.match(billing, /No automatic increase/);
-  assert.match(billing, /locked for 24 months/);
+  assert.match(billing, /locked for 12 months/);
   assert.doesNotMatch(billing, /[Ee]xport/, "the exit promise left the billing text on Nov 2, 2026");
   assert.match(auditNote, /audit/i);
 });
@@ -162,7 +162,7 @@ test("reseller tiers, incentives and the referral fee come from pricing.yaml", (
   assert.deepEqual(tiers.map((t) => t.discountFraction), [0.1, 0.15, 0.2]);
   assert.equal(tiers[2].clients, "151 or more");
   const { reseller, referral } = partners();
-  assert.ok(reseller.incentives.length >= 3, "the reseller programme publishes incentives");
+  assert.ok(reseller.incentives.length >= 3, "the reseller program publishes incentives");
   for (const i of reseller.incentives) assert.ok(i.id && i.name && i.text.length > 20);
   assert.equal(referral.feeText, "10%");
   assert.match(retainer().price, /^\$3,000 to \$6,000 a month$/);

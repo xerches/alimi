@@ -1,7 +1,7 @@
 ---
-// Alimi's own trust page: the state of its own programme, its subprocessors, how to request documents
+// Alimi's own trust page: the state of its own program, its subprocessors, how to request documents
 // and how to report a problem. The customer-facing rules are on /security. Added Nov 2, 2026; the
-// programme itself runs in the platform after the LLC (decided Nov 2, 2026 from the site scan).
+// program itself runs in the platform after the LLC (decided Nov 2, 2026 from the site scan).
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
@@ -13,7 +13,7 @@ const status = [
   { label: "Company", value: "In formation; working name" },
   { label: "Customer data held", value: "None, by rule, until the outside review" },
   { label: "Certifications", value: "None yet; SOC 2 Type I planned" },
-  { label: "Own programme", value: "Runs in the platform after the entity exists" },
+  { label: "Own program", value: "Runs in the platform after the entity exists" },
 ];
 const subprocessors = [
   { name: "Netlify", purpose: "Hosts this site and the demo; receives form submissions (name, email, company, message)", where: "United States" },
@@ -29,8 +29,8 @@ const controls = [
 ];
 ---
 
-<Base title="Trust page" description="Alimi's own trust page: where its security programme stands, its subprocessors, the controls it runs on itself, how to request documents and how to report a problem. Pre-launch and honest about it." path="/trust">
-  <Hero eyebrow="Trust page" title={`${brand.display_name}'s own programme, in public`}>
+<Base title="Trust page" description="Alimi's own trust page: where its security program stands, its subprocessors, the controls it runs on itself, how to request documents and how to report a problem. Pre-launch and honest about it." path="/trust">
+  <Hero eyebrow="Trust page" title={`${brand.display_name}'s own program, in public`}>
     <p class="lede">The same page a customer of {brand.display_name} gets for their own company, applied to {brand.display_name}. It is pre-launch, so most of it is plan rather than proof; the plan is written down so you can hold us to it.</p>
     <div class="actions">
       <a class="button button--primary" href="/contact">Request documents</a>
