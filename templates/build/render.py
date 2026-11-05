@@ -150,8 +150,12 @@ def framework_terms(frameworks: dict) -> str:
 def billing_terms(billing: dict) -> str:
     return (
         f"Every plan is paid monthly: a {billing['term_months']}-month term at the list price, or month to month for "
-        f"{percent(billing['monthly_premium'])} more. No automatic increase at renewal, and the price is locked for "
-        f"{billing['price_lock_months']} months."
+        f"{percent(billing['monthly_premium'])} more. "
+        + (
+            f"No automatic increase at renewal, and the price is locked for {billing['price_lock_months']} months."
+            if billing["price_lock_months"] > billing["term_months"]
+            else "No automatic increase at renewal: the price signed at holds for the whole term, and any change after it is agreed with the Client, never applied by a clause."
+        )
     )
 
 

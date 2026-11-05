@@ -59,7 +59,7 @@ test("platform tiers are Silver, Gold, Platinum, Diamond, per user, rising, each
   assert.ok(included.some((line) => /lessons|training/i.test(line)), "training is included at every tier");
   assert.match(billing, /paid monthly/);
   assert.match(billing, /No automatic increase/);
-  assert.match(billing, /locked for 12 months/);
+  assert.match(billing, /holds for the whole term/, "the 12-month lock equals the term since Nov 3, 2026, so the sentence promises the term, not a number");
   assert.doesNotMatch(billing, /[Ee]xport/, "the exit promise left the billing text on Nov 2, 2026");
   assert.match(auditNote, /audit/i);
 });

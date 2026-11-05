@@ -63,7 +63,9 @@ export function tierNote(tier) {
 export function billingText(b = pricing.products.platform.billing) {
   return (
     `Every plan is paid monthly: a ${b.term_months}-month term at the list price, or month to month for ${percent(b.monthly_premium)} more. ` +
-    `No automatic increase at renewal, and your price is locked for ${b.price_lock_months} months.`
+    (b.price_lock_months > b.term_months
+      ? `No automatic increase at renewal, and your price is locked for ${b.price_lock_months} months.`
+      : "No automatic increase at renewal: the price you sign at holds for the whole term, and any change after it is agreed with you, never applied by a clause.")
   );
 }
 
