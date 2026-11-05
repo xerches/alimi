@@ -1916,9 +1916,11 @@ html:not([data-theme-active]) .theme-toggle {
     }
   }
 
+  /* The bar fills by scaling, not by animating its width: a transform runs on the compositor and
+     costs no layout per frame, which Lighthouse flagged on the home page (Nov 5, 2026). */
   @keyframes grow {
     from {
-      width: 0;
+      transform: scaleX(0);
     }
   }
 
@@ -1963,6 +1965,7 @@ html:not([data-theme-active]) .theme-toggle {
   }
 
   .meter__fill {
+    transform-origin: left;
     animation: grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 700ms both;
   }
 
