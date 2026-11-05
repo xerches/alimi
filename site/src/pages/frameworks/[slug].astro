@@ -1,12 +1,14 @@
 ---
 // One page per framework in config/frameworks.yaml: the "compliance resources" guides of the Resources
 // menu. Each page carries our own summary, who needs it, how Alimi handles it and what it costs; the
-// plain-English guide itself is marked as coming, honestly, until it is written. No standard's text.
+// plain-English guide itself is marked as coming, honestly, until it is written. No standard's text. The five
+// mapped frameworks carry an owner's FAQ from src/data/framework-faq.yaml (Nov 5, 2026).
 import Base from "../../layouts/Base.astro";
 import Hero from "../../components/Hero.astro";
 import Section from "../../components/Section.astro";
 import Callout from "../../components/Callout.astro";
 import { brand, platform, frameworkCatalog, FRAMEWORK_CATEGORIES, money } from "../../lib/config.js";
+import { frameworkFaq } from "../../lib/faq.js";
 
 export function getStaticPaths() {
   return frameworkCatalog().map((f) => ({ params: { slug: f.slug }, props: { framework: f } }));
@@ -19,6 +21,8 @@ const category = FRAMEWORK_CATEGORIES.find((c) => c.id === f.category);
 const related = frameworkCatalog().filter((o) => o.category === f.category && o.id !== f.id && !o.always_included);
 const gold = plat.tiers[1];
 const platinum = plat.tiers[2];
+// Five questions in an owner's words on each framework mapped today (Nov 5, 2026, after the Vanta review).
+const faq = frameworkFaq(f.id);
 
 const handling = f.always_included
   ? "The score is in every plan and counts nothing toward the framework total. Its controls are the ones security teams recommend beyond what any standard asks, scored by severity and insurer impact, so you can see the gap between passing an audit and being hard to break into."
@@ -68,7 +72,20 @@ const cost = f.always_included
     <p class="measure">{cost}</p>
   </Section>
 
-  <Section id="guide" tone="alt" title={`The ${f.short} guide`}>
+  {faq.length > 0 && (
+    <Section id="faq" tone="alt" title={`Questions owners ask about ${f.short}`} lede="Answered in plain English, with the price where there is one. The standard's own text is not quoted anywhere.">
+      <div class="grid grid--two">
+        {faq.map((item) => (
+          <article class="card">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )}
+
+  <Section id="guide" tone={faq.length > 0 ? "default" : "alt"} title={`The ${f.short} guide`}>
     <Callout label="Being written" tone="info">
       <p>A plain-English guide to {f.short} for a company without a security team, with what is asked, what it costs, how long it takes and where companies your size usually stumble, is on its way. Until it is published, the founder answers the same questions by email, and the <a href="/glossary">glossary</a> explains the terms.</p>
     </Callout>
@@ -76,7 +93,7 @@ const cost = f.always_included
   </Section>
 
   {related.length > 0 && (
-    <Section id="related" title={`Other ${category.name.toLowerCase()} frameworks`}>
+    <Section id="related" tone={faq.length > 0 ? "alt" : "default"} title={`Other ${category.name.toLowerCase()} frameworks`}>
       <ul class="columns">
         {related.map((o) => <li><a href={o.href}>{o.name}</a></li>)}
       </ul>
