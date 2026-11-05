@@ -1,6 +1,6 @@
 ---
 // Solutions: by who sent the buyer (the axis that fits a company without a security team), by industry, by company
-// size, by framework. Added Nov 2, 2026 because both larger vendors segment this way and the founder
+// size (each band names the person it is for, Nov 5, 2026, after the Drata review), by framework. Added Nov 2, 2026 because both larger vendors segment this way and the founder
 // asked for every section they have. Framework lists come from the catalog, never typed twice.
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
@@ -29,10 +29,10 @@ const industries = [
 ];
 
 const sizes = [
-  { range: "10 to 25 people", tier: silver, example: quote({ tierId: "silver", users: 25 }), text: "One insurer, one questionnaire, nobody whose job this is. The cyber insurance questionnaire as the framework, one integration, and the founder on a quarterly call." },
-  { range: "25 to 100 people", tier: gold, example: quote({ tierId: "gold", users: 50 }), text: "A customer or two asking for SOC 2 or ISO 27001, vendors that hold your data, and the first security questionnaires. Two frameworks, the trust page and a monthly call." },
-  { range: "100 to 500 people", tier: platinum, example: quote({ tierId: "platinum", users: 250, frameworks: 3 }), text: "Several frameworks, your own systems to connect, access reviews on a schedule and an AI program to govern. Unlimited integrations and the API." },
-  { range: "500 people and more", tier: diamond, example: quote({ tierId: "diamond", users: 600, frameworks: 4 }), text: "Several entities or business units, an audit every year, a board that wants a quarterly report, and a compliance lead who runs it all. The audit run by Alimi, multi-entity and unlimited questionnaires." },
+  { range: "10 to 25 people", who: "The owner who got the questionnaire", tier: silver, example: quote({ tierId: "silver", users: 25 }), text: "One insurer, one questionnaire, nobody whose job this is. The cyber insurance questionnaire as the framework, one integration, and the founder on a quarterly call." },
+  { range: "25 to 100 people", who: "The operations lead with two customers asking", tier: gold, example: quote({ tierId: "gold", users: 50 }), text: "A customer or two asking for SOC 2 or ISO 27001, vendors that hold your data, and the first security questionnaires. Two frameworks, the trust page and a monthly call." },
+  { range: "100 to 500 people", who: "The company with a compliance person and a yearly audit", tier: platinum, example: quote({ tierId: "platinum", users: 250, frameworks: 3 }), text: "Several frameworks, your own systems to connect, access reviews on a schedule and an AI program to govern. Unlimited integrations and the API." },
+  { range: "500 people and more", who: "Several entities and a board", tier: diamond, example: quote({ tierId: "diamond", users: 600, frameworks: 4 }), text: "Several entities or business units, an audit every year, a board that wants a quarterly report, and a compliance lead who runs it all. The audit managed by Alimi with an independent CPA firm, multi-entity and unlimited questionnaires." },
 ];
 ---
 
@@ -74,6 +74,7 @@ const sizes = [
     <div class="grid">
       {sizes.map((s) => (
         <article class="card">
+          <span class="eyebrow">{s.who}</span>
           <h3>{s.range}</h3>
           <p>{s.text}</p>
           <p class="small"><strong>{s.tier.name}</strong>, {s.tier.perUser} per user a month. Example: {s.example.seats} users{s.example.frameworks > 1 ? `, ${s.example.frameworks} frameworks` : ""}, {s.example.yearlyText}.</p>
