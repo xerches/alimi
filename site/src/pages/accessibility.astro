@@ -1,0 +1,65 @@
+---
+// The accessibility statement (Nov 5, 2026, after the Drata review): what is tested on every build, what is
+// not tested yet, and how to report a problem. It says what is checked, not a score, and it is honest about
+// the gaps: no person has yet tested the site with a screen reader, and no outside audit has been done.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Callout from "../components/Callout.astro";
+import { brand } from "../lib/config.js";
+
+const tested = [
+  { title: "An automated accessibility audit on every page, on every build", text: "Every page of this site is checked by an automated audit before it can deploy: missing labels, missing alternative text, heading order, link names, contrast and the document language fail the build. The threshold is the same for every page and is never lowered to get a page through." },
+  { title: "Contrast, proved in both themes", text: "Every pairing of text and background the stylesheet relies on is computed from the brand tokens and checked against the WCAG AA ratios (4.5:1 for text, 3:1 for controls and focus rings), in the light theme and the dark theme. A color that fails cannot be merged." },
+  { title: "Keyboard and no JavaScript", text: "The menus are native disclosure elements, so they open, close and move focus without any script; a skip link goes straight to the content; every interactive element shows a visible focus ring; and the site works without JavaScript, with the pricing calculator falling back to worked examples." },
+  { title: "Your settings, respected", text: "The site follows your device's light or dark setting, and a toggle overrides it. Motion is turned off for anyone whose device asks for reduced motion. Text scales with your browser's text size, and nothing is fixed in pixels that should not be. There are no webfonts to wait for, no autoplay and no cookies." },
+  { title: "Forms with labels", text: "Every form field has a visible label and the browser's own validation; required fields say so; nothing relies on color alone to carry meaning." },
+];
+
+const notYet = [
+  "A person has not yet tested every page with a screen reader (VoiceOver, NVDA, JAWS); the automated audit catches what a machine can and no more.",
+  "No outside audit against WCAG 2.2 at level AA has been done. One is planned before the hosted platform holds customer data, together with the security review.",
+  "The product demo wears the same shell and the same checks, but the hosted platform is not built yet; it will be tested before it opens.",
+];
+---
+
+<Base title="Accessibility" description="What Alimi tests for accessibility on every build of this site (an automated audit on every page, contrast in both themes, keyboard use without JavaScript, respect for device settings), what is not tested yet, and how to report a problem." path="/accessibility">
+  <Hero eyebrow="Accessibility" title="What is tested, what is not yet, and how to tell us">
+    <p class="lede">{brand.display_name} aims at WCAG 2.2 at level AA for this site, the demo and, when it exists, the platform. This page says what is checked on every build rather than claiming a score, and it names the gaps.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/contact">Report a problem</a>
+      <a class="button button--secondary" href="#tested">What is tested</a>
+    </div>
+  </Hero>
+
+  <Section id="tested" tone="alt" title="Tested on every build">
+    <div class="grid grid--two">
+      {tested.map((t) => (
+        <article class="card">
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="not-yet" title="Not tested yet">
+    <ul class="checklist">
+      {notYet.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="report" tone="alt" title="Report a problem">
+    <Callout label="Two business days" tone="brand">
+      <p>If something on this site does not work with your screen reader, your keyboard, your magnifier or your settings, <a href="/contact">tell the founder through the contact form</a> and say which page and which tool. You will get a reply within two business days and a fix date with it; the fix goes on this page when it ships.</p>
+    </Callout>
+    <p class="muted small">Requests for this page in another format are answered the same way. The <a href="/security">security page</a> covers how the platform protects your data, and the <a href="/trust">trust page</a> covers {brand.display_name}'s own program.</p>
+  </Section>
+
+  <Section id="next" tone="dark" title="See the platform" lede="Connect, watch, fix, prove; every module reads the same data.">
+    <div class="actions">
+      <a class="button button--primary" href="/platform">How it works</a>
+      <a class="button button--secondary" href="/trust">The trust page</a>
+    </div>
+  </Section>
+</Base>

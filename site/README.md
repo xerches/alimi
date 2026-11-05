@@ -58,18 +58,19 @@ Three checks keep it honest:
 | Page | Path | Netlify form |
 | --- | --- | --- |
 | Home | `/` | |
-| Platform (how it works, the modules) | `/platform` | |
-| Integrations (what each connection reads, what comes next) | `/integrations` | |
-| Frameworks (the catalog by category) and one page per framework | `/frameworks`, `/frameworks/<slug>` | |
+| Platform (how it works, the modules) and one page per module with screens from the demo (`src/lib/modules.js`, `public/screens`) | `/platform`, `/platform/<module>` | |
+| Integrations (a tile per connection, two connected, what each connection reads, what comes next) | `/integrations` | |
+| Frameworks (the catalog by category) and one page per framework; the five mapped ones carry an owner's FAQ from `src/data/framework-faq.yaml` | `/frameworks`, `/frameworks/<slug>` | |
 | Security (how the platform protects your data) | `/security` | |
 | Solutions (by who sent you, industry, size, framework) | `/solutions` | |
 | Pricing (catalog by group, add-on bands, calculator, worked examples, FAQ) | `/pricing` | `waitlist` |
 | Compare (Alimi, Vanta, Drata; sourced) | `/compare` | |
 | For partners | `/for-partners` | `partners` |
-| For resellers (tiers, margin examples, incentives) | `/for-resellers` | |
+| For resellers (tiers, margin examples, the per-client arithmetic, incentives) | `/for-resellers` | |
+| For insurance brokers, For CPAs (what each sees, what Alimi does for the client, the referral terms) | `/for-brokers`, `/for-accountants` | |
 | Resources (library), Glossary, Help center, Academy, Community, Customer stories | `/resources`, `/glossary`, `/help`, `/academy`, `/community`, `/customers` | |
 | About (mission, story, beliefs, leadership), Press, Careers | `/about`, `/press`, `/careers` | |
-| Trust page, Status, Legal, Privacy notice | `/trust`, `/status`, `/legal`, `/privacy` | |
+| Trust page, Status, Accessibility (what is tested, not a score), Legal, Privacy notice | `/trust`, `/status`, `/accessibility`, `/legal`, `/privacy` | |
 | Contact | `/contact` | `contact` |
 | Thank you | `/thank-you` | |
 | Not found | `/404` | |

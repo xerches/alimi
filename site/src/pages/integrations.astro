@@ -1,7 +1,10 @@
 ---
 // Integrations: what each read-only connection reads today, what it never reads, and what comes next
 // in the order customers ask. Added Nov 2, 2026. No integration count is printed (founder's rule);
-// the connected systems are named instead.
+// the connected systems are named instead. Since Nov 5, 2026 (after the Drata and Vanta reviews) the page
+// opens with a row of tiles, Microsoft 365 first, the planned connectors marked as planned (the list agreed with
+// the product thread, which added Monday.com and QuickBooks Online), and says in one sentence that nothing is
+// installed on anyone's computer.
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
@@ -28,6 +31,28 @@ const connected = [
   },
 ];
 
+// The tiles: the two connections that exist and the ones planned, in the order customers ask. A name is a plan,
+// not a promise of a date; every tile that is not connected says so. Wordmarks as text, so there is nothing to license.
+const connectors = [
+  { name: "Microsoft 365", kind: "Workspace", connected: true },
+  { name: "Google Workspace", kind: "Workspace", connected: true },
+  { name: "Microsoft Intune", kind: "Devices" },
+  { name: "Microsoft Defender", kind: "Endpoint protection" },
+  { name: "Microsoft Azure", kind: "Cloud" },
+  { name: "GitHub", kind: "Code" },
+  { name: "AWS", kind: "Cloud" },
+  { name: "Okta", kind: "Identity" },
+  { name: "Google Cloud", kind: "Cloud" },
+  { name: "Jamf", kind: "Devices" },
+  { name: "CrowdStrike", kind: "Endpoint protection" },
+  { name: "Gusto", kind: "People" },
+  { name: "Jira", kind: "Work tracking" },
+  { name: "Slack", kind: "Work tracking" },
+  { name: "Monday.com", kind: "Work tracking" },
+  { name: "QuickBooks Online", kind: "Finance" },
+  { name: "1Password", kind: "Passwords" },
+];
+
 const never = [
   "The contents of any mailbox, chat, file or document",
   "Passwords, recovery codes or session cookies",
@@ -41,21 +66,34 @@ const next = [
   { title: "Endpoint protection", items: ["Microsoft Defender", "CrowdStrike"], text: "Coverage of the EDR question every insurer asks, with the dates to prove it." },
   { title: "Code and cloud", items: ["GitHub", "AWS", "Azure", "Google Cloud"], text: "Branch protection, two-factor on the code host, public storage, encryption and logging in the cloud account." },
   { title: "People", items: ["Gusto", "Rippling", "BambooHR"], text: "Start and end dates, so onboarding and offboarding checks have a date to compare against." },
-  { title: "Work tracking", items: ["Jira", "Linear", "Slack"], text: "Change tickets and the security channel, as evidence for the controls that need them." },
+  { title: "Work tracking", items: ["Jira", "Monday.com", "Linear", "Slack"], text: "Change tickets, the tasks the platform hands to your project tool, and the security channel, as evidence for the controls that need them." },
+  { title: "Finance", items: ["QuickBooks Online"], text: "The accounts-payable list, so the vendors who hold your data are found from what you pay rather than from memory." },
   { title: "Backups and passwords", items: ["Datto", "Veeam", "Backblaze", "1Password", "Bitwarden"], text: "The backup and password-manager questions, answered from the tool rather than a promise." },
 ];
 ---
 
 <Base title="Integrations" description={`What each Alimi integration reads through a read-only connection: Microsoft 365 and Google Workspace today, and the identity, device, endpoint, cloud, HR and work-tracking systems that follow in the order customers ask. ${silver.integrationsLabel} on ${silver.name}, ${gold.integrationsLabel.toLowerCase()} on ${gold.name}, unlimited from ${platinum.name}.`} path="/integrations">
   <Hero eyebrow="Integrations" title="Read-only connections, and exactly what each one reads">
-    <p class="lede">{brand.display_name} starts where most companies keep their identities, mail and files, and adds the next system in the order customers ask for it. Every permission is listed before you approve it, and none of them can change a setting.</p>
+    <p class="lede">{brand.display_name} connects Microsoft 365 first, then Google Workspace, because that is where most companies keep their identities, mail and files, and adds the next system in the order customers ask for it. Every permission is listed before you approve it, none of them can change a setting, and nothing is installed on anyone's computer.</p>
     <div class="actions">
       <a class="button button--primary" href="#connected">Connected today</a>
       <a class="button button--secondary" href="#next">What comes next</a>
     </div>
   </Hero>
 
-  <Section id="connected" tone="alt" title="Connected today">
+  <Section id="connections" tone="alt" title="The connections" lede="Two are connected today; the rest are planned in the order customers ask, and each tile says which it is.">
+    <ul class="connectors">
+      {connectors.map((c) => (
+        <li class="tile">
+          <span class="tile__value tile__value--text">{c.name}</span>
+          <span class="tile__label">{c.kind}</span>
+          {c.connected ? <span class="tag tag--ready">Connected</span> : <span class="tag">Planned</span>}
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section id="connected" title="Connected today">
     <div class="grid grid--two">
       {connected.map((c) => (
         <article class="card">
@@ -71,14 +109,17 @@ const next = [
     <p style="margin-top:1.5rem" class="measure">Together they answer the questions an insurer asks: {questions.map((q) => q.id.replace(/_/g, " ")).join(", ")}. Where no API exposes the setting, the control asks for a dated screenshot instead and says so.</p>
   </Section>
 
-  <Section id="never" title="What a connection never reads">
+  <Section id="never" tone="alt" title="What a connection never reads">
     <ul class="checklist">
       {never.map((n) => <li>{n}</li>)}
     </ul>
+    <Callout label="Nothing installed on anyone's computer" tone="brand">
+      <p>No agent on anyone's laptop. Device checks, from disk encryption and screen lock to updates and endpoint protection, are read from the device management you already run, Microsoft Intune or Google endpoint management, through the same read-only connection. {brand.display_name} never installs software on a computer, so there is nothing for staff to resent and nothing for your IT provider to roll out.</p>
+    </Callout>
     <p class="measure muted">The exact permission names, the setup steps and the revocation steps are in the setup guide you receive with the authorization letter, and on the <a href="/security">security page</a>.</p>
   </Section>
 
-  <Section id="next" tone="alt" title="What comes next" lede="Planned, in the order customers ask. None of these is connected yet; a name here is a plan, not a promise of a date.">
+  <Section id="next" title="What each planned connection will read" lede="In the order customers ask. None of these is connected yet; a name here is a plan, not a promise of a date.">
     <div class="grid">
       {next.map((n) => (
         <article class="card">
@@ -90,7 +131,7 @@ const next = [
     </div>
   </Section>
 
-  <Section id="own" title="Your own systems">
+  <Section id="own" tone="alt" title="Your own systems">
     <Callout label="API and custom connections" tone="brand">
       <p>From the {platinum.name} tier, an API lets you or your IT provider push users, devices and evidence from a system {brand.display_name} does not connect to, and resellers can connect the monitoring tools they already run. The same read-only rule applies: the platform accepts data; it never reaches into a system it was not given.</p>
     </Callout>

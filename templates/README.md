@@ -20,6 +20,8 @@ Prices never appear in the templates as numbers. They are read from `config/pric
 | `referral-agreement-outline.md` | A broker, CPA or attorney will refer but not resell. Fee, and the option to decline it under professional rules. |
 | `case-study-template.md` | After a pilot or engagement, with the client's signed permission. Honest-claims rules built in. |
 | `referral-partner-one-pager.md` | Handing to a partner in a first conversation. |
+| `broker-one-pager.md` | Handing to an insurance broker in a first conversation; the broker page on the site says the same. |
+| `cpa-one-pager.md` | Handing to a CPA in a first conversation; the CPA page on the site says the same. |
 
 ## Placeholders
 

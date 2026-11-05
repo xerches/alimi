@@ -1,0 +1,116 @@
+---
+// For CPAs (Nov 5, 2026, after the Drata review: a page per referral partner type, with the one-pager split
+// in /templates). What a CPA sees in a client, what Alimi does for the client, what it does for the firm, and
+// how referring works, with the independence option (discount or charity) stated plainly.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import Callout from "../components/Callout.astro";
+import { brand, partners, platform, service, quote } from "../lib/config.js";
+
+const { referral, principle } = partners();
+const plat = platform();
+const [silver, gold] = plat.tiers;
+const diamond = plat.tiers[plat.tiers.length - 1];
+const example = quote({ tierId: "silver", users: 25 });
+const fraud = service("fraud_workshop");
+
+const sees = [
+  { title: "The near miss on a fake invoice", text: "A supplier's bank details changed by email, a payment approved by one person in a hurry, and the money gone or nearly gone. The question you ask afterwards is whether there was a written verification procedure and whether anyone followed it." },
+  { title: "The controls question at year end", text: "Who can approve a payment, who has admin rights, whether access ended when someone left, whether the backups were ever tested. The answers exist in someone's head and nowhere else." },
+  { title: "The client whose customer asked for SOC 2", text: "A security clause in a contract, or a procurement questionnaire with sixty questions, and a client who asks you what SOC 2 is and whether they need an audit firm." },
+];
+
+const steps = [
+  { title: "The payment verification procedure, written down and drilled", text: `The callback procedure for bank-detail changes and wires, the scripts, the poster for the finance team, and a short lesson for everyone who moves money, inside the platform. The ${fraud.name.toLowerCase()} (${fraud.price}) tailors it to the firm and runs the drill.` },
+  { title: "Controls with an owner, tested where a tenant can be read", text: "Admin accounts, MFA, access that ended when a person left, backups: tested on every scan of the client's Microsoft 365 or Google Workspace, or proven by dated evidence where no API can read it, each with one owner." },
+  { title: "Policies the staff actually sign", text: "A policy library written for a company of that size, with a version, an approver and a record of who has acknowledged it, so the control environment you ask about is written down and current." },
+  { title: "SOC 2 readiness when a customer asks", text: `The same controls and evidence mapped to the SOC 2 criteria by ID, a readiness score, and the export pack for whichever CPA firm the client chooses for the audit. ${brand.display_name} takes no fee from any auditor and never audits its own work.` },
+];
+
+const forYou = [
+  { title: "Clients that stop losing money to invoice fraud", text: "A written procedure, a drill once a year and a lesson for the people who approve payments. The loss that was going to be your phone call does not happen." },
+  { title: "Internal-control questions answered with evidence", text: "Who approves, who has admin rights, who left and when their access ended, when the backup was last tested: dated, owned, and exportable, instead of recollected." },
+  { title: "A fee, a discount for your client, or a charity", text: `${referral.feeText} of ${referral.of}, paid ${referral.paid}. If your independence or professional rules do not allow a fee, the same amount goes to your client as a discount or to a charity you name; you choose when you sign up.` },
+  { title: "Your audit practice, if you have one", text: `If your firm is licensed for SOC 2 engagements, the client may choose you as their auditor; the export pack goes to whichever firm they pick. On ${diamond.name}, ${brand.display_name} manages the audit with the firm, and the firm stays independent of ${brand.display_name}.` },
+];
+
+const faq = [
+  { q: `Is ${brand.display_name} an audit firm?`, a: `No. ${brand.display_name} is a compliance platform with a compliance lead behind it. A SOC 2 or ISO 27001 audit is done by a licensed, independent firm for its own fee; ${brand.display_name} gets the client ready, hands over the evidence pack and takes no fee from any auditor.` },
+  { q: "Can my firm be the client's SOC 2 auditor?", a: "If it is licensed for the engagement and independent of the client under your own rules, yes. The client chooses the firm; the export pack, the evidence for every criterion with its ID, goes to whichever firm they pick." },
+  { q: "What does the client pay?", a: `From ${silver.perUser} per user a month on ${silver.name}: ${example.yearlyText} for a 25-person company on the 12-month term, with one framework included. SOC 2 readiness, the trust page and questionnaire answers come with ${gold.name}, ${gold.perUser} per user a month. The published price list is on this site; nothing is quoted by sales call.` },
+  { q: "Does this replace the client's IT provider?", a: `No. The IT provider keeps administering the tenant and does the fixes it already does; ${brand.display_name} tests the result and keeps the evidence. Many IT providers resell the platform under their own name.` },
+  { q: "Does the client have to buy through me?", a: `No. You introduce us by email with the client copied; the client buys direct at the published price, and the fee or the discount follows the introduction. ${principle}` },
+];
+---
+
+<Base title="For CPAs" description={`Alimi for CPAs and accounting firms: a payment verification procedure your clients follow, controls with owners and evidence for the questions you ask at year end, SOC 2 readiness when a customer asks, and a ${referral.feeText} referral fee or the same amount to your client.`} path="/for-accountants">
+  <Hero eyebrow="For CPAs" title="The controls you ask about at year end, in place and written down">
+    <p class="lede">Your clients are companies of 10 people and up with nobody whose job security is. {brand.display_name} gives them a payment verification procedure the finance team follows, controls with an owner and evidence, policies the staff sign, and SOC 2 readiness when a customer asks, from a published price.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Start the conversation</a>
+      <a class="button button--secondary" href="#how">How referring works</a>
+    </div>
+  </Hero>
+
+  <Section id="sees" tone="alt" title="What you see in your clients">
+    <div class="grid">
+      {sees.map((s) => (
+        <article class="card">
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="client" title="What Alimi does for your client">
+    <Steps steps={steps} />
+  </Section>
+
+  <Section id="you" tone="alt" title="What it does for you">
+    <div class="grid grid--two">
+      {forYou.map((f) => (
+        <article class="card">
+          <h3>{f.title}</h3>
+          <p>{f.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="how" title="How referring works" lede="Introduce us by email with the client copied. We respond within two business days, keep you informed, and never market to your other clients.">
+    <div class="grid grid--two">
+      <article class="card">
+        <h3>The fee</h3>
+        <p>{referral.feeText} of {referral.of}, paid {referral.paid}.</p>
+      </article>
+      <article class="card">
+        <h3>If your independence rules do not allow a fee</h3>
+        <p>The same amount goes to your client as a discount, or to a charity you name. You choose when you sign up, and the referral agreement says so in writing, so nothing stands between you and your own rules.</p>
+      </article>
+    </div>
+    <Callout label="A one-page summary for your clients" tone="brand">
+      <p>Partners receive a one-page summary of the platform and the prices, under {brand.display_name}'s name, to hand to a client who asks. It is sent when you sign up, not published here.</p>
+    </Callout>
+  </Section>
+
+  <Section id="faq" tone="alt" title="Questions CPAs ask">
+    <div class="grid grid--two">
+      {faq.map((f) => (
+        <article class="card">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="start" tone="dark" title="Start the conversation" lede="Tell us about your clients and the questions you get. A reply within two business days, from the founder.">
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Become a partner</a>
+      <a class="button button--secondary" href="/pricing">The published prices</a>
+    </div>
+  </Section>
+</Base>

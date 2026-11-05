@@ -43,6 +43,8 @@ EXPECTED_SLUGS = {
     "referral-agreement-outline",
     "case-study-template",
     "referral-partner-one-pager",
+    "broker-one-pager",
+    "cpa-one-pager",
 }
 NEEDS_ATTORNEY_MARKERS = {
     "master-services-agreement-outline": 6,
@@ -174,8 +176,9 @@ def test_pilot_letter_renders_to_one_page():
 
 
 @pytest.mark.skipif(shutil.which("pandoc") is None, reason="pandoc not installed")
-def test_partner_one_pager_fits_one_page():
+@pytest.mark.parametrize("slug", ["referral-partner-one-pager", "broker-one-pager", "cpa-one-pager"])
+def test_partner_one_pager_fits_one_page(slug):
     weasyprint = pytest.importorskip("weasyprint")
-    html = to_html(BY_SLUG["referral-partner-one-pager"], PRICING, {"Contact Email": "hello@example.com", "Contact Phone": "555-0100", "Website": "example.com"})
+    html = to_html(BY_SLUG[slug], PRICING, {"Contact Email": "hello@example.com", "Contact Phone": "555-0100", "Website": "example.com"})
     pages = weasyprint.HTML(string=html, base_url=str(TEMPLATES / "build")).render().pages
-    assert len(pages) == 1, f"one-pager renders to {len(pages)} pages"
+    assert len(pages) == 1, f"{slug} renders to {len(pages)} pages"
