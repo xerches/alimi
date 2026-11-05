@@ -1,0 +1,138 @@
+---
+// One page per module in src/lib/modules.js (Nov 5, 2026, after the Drata and Vanta reviews): a short page on the
+// shared template with screens from the demo's sample company, what the module does, which tier it starts in and
+// the modules it works with. LAYOUT picks the shape of the page; the three were shown to the founder as pictures
+// before one was kept: "screen-first" (the copy beside the main screen, as the home hero does), "walkthrough"
+// (one screen per step, alternating sides) and "one-screen" (the copy, one wide screen, the facts).
+import Base from "../../layouts/Base.astro";
+import Hero from "../../components/Hero.astro";
+import Section from "../../components/Section.astro";
+import Screen from "../../components/Screen.astro";
+import { brand } from "../../lib/config.js";
+import { MODULES, availability, module } from "../../lib/modules.js";
+
+export const LAYOUT = "screen-first";
+
+export function getStaticPaths() {
+  return MODULES.map((m) => ({ params: { module: m.id }, props: { id: m.id } }));
+}
+
+const m = module(Astro.props.id);
+const [main, ...rest] = m.screens;
+const related = m.related.map(module);
+const tierText = availability(m);
+const index = MODULES.indexOf(m);
+const next = MODULES[(index + 1) % MODULES.length];
+const description = `${m.title} in the Alimi platform: ${m.lede} ${tierText}.`;
+---
+
+<Base title={m.title} description={description} path={m.href}>
+  {LAYOUT === "screen-first" ? (
+    <section class="hero hero--split">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <span class="eyebrow">A module of the platform · {tierText}</span>
+          <h1>{m.title}</h1>
+          <p class="lede">{m.lede}</p>
+          <div class="actions">
+            {m.demoHref && <a class="button button--primary" href={m.demoHref} rel="noopener">Click through it in the sample company</a>}
+            <a class="button button--secondary" href="/pricing#calculator">Work out your price</a>
+          </div>
+          <p class="muted small hero__note">Every status in the screens is computed from the scan, the evidence and the policies, never typed in.</p>
+        </div>
+        <div class="hero__product">
+          <Screen screen={main} eager />
+        </div>
+      </div>
+    </section>
+  ) : (
+    <Hero eyebrow={`A module of the platform · ${tierText}`} title={m.title}>
+      <p class="lede">{m.lede}</p>
+      <div class="actions">
+        {m.demoHref && <a class="button button--primary" href={m.demoHref} rel="noopener">Click through it in the sample company</a>}
+        <a class="button button--secondary" href="/pricing#calculator">Work out your price</a>
+      </div>
+    </Hero>
+  )}
+
+  {LAYOUT === "walkthrough" && (
+    <Section id="screens" tone="alt" title="How it looks, step by step">
+      <ol class="walk">
+        {m.screens.map((s) => (
+          <li class="walk__step">
+            <Screen screen={s} plain />
+            <div class="walk__text">
+              <h3>{s.title}</h3>
+              <p>{s.caption}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  )}
+
+  {LAYOUT === "one-screen" && (
+    <Section id="screens" tone="alt" tight>
+      <Screen screen={main} wide eager />
+    </Section>
+  )}
+
+  <Section id="what" tone={LAYOUT === "screen-first" ? "alt" : "default"} title="What it does" lede={m.text}>
+    {LAYOUT === "one-screen" ? (
+      <div class="grid grid--two" style="align-items:start">
+        <ul class="checklist">
+          {m.points.map((p) => <li><strong>{p.title}.</strong> {p.text}</li>)}
+        </ul>
+        <dl class="facts">
+          <div><dt>Tier</dt><dd>{tierText}</dd></div>
+          <div><dt>Works with</dt><dd>{related.map((r, i) => <>{i > 0 && ", "}<a href={r.href}>{r.title}</a></>)}</dd></div>
+          {m.demoHref && <div><dt>In the sample company</dt><dd><a href={m.demoHref} rel="noopener">Click through it</a></dd></div>}
+        </dl>
+      </div>
+    ) : (
+      <div class={m.points.length === 4 ? "grid grid--pairs" : "grid grid--two"}>
+        {m.points.map((p) => (
+          <article class="card">
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </article>
+        ))}
+      </div>
+    )}
+  </Section>
+
+  {LAYOUT === "screen-first" && rest.length > 0 && (
+    <Section id="screens" title="More of it">
+      <div class="grid grid--two">
+        {rest.map((s) => <Screen screen={s} />)}
+      </div>
+    </Section>
+  )}
+
+  {LAYOUT !== "one-screen" && (
+    <Section id="related" tone={LAYOUT === "screen-first" && rest.length > 0 ? "alt" : LAYOUT === "walkthrough" ? "alt" : "default"} title="Works with" lede="Every module reads the same data, so a control fixed once counts everywhere.">
+      <div class="grid">
+        {related.map((r) => (
+          <a class="card card--link" href={r.href}>
+            <h3>{r.title}</h3>
+            <p>{r.lede}</p>
+            <span class="card__cta">Read more</span>
+          </a>
+        ))}
+        <a class="card card--link" href="/frameworks">
+          <h3>Frameworks</h3>
+          <p>One set of controls answers every framework on the account; readiness is computed per framework.</p>
+          <span class="card__cta">The catalog</span>
+        </a>
+      </div>
+    </Section>
+  )}
+
+  <Section id="next" tone="dark" title="See the numbers" lede={`${tierText}. Four tiers per user a month, with one framework, the policy library and the training lessons in every one.`}>
+    <div class="actions">
+      <a class="button button--primary" href="/pricing">Pricing</a>
+      <a class="button button--secondary" href={next.href}>Next module: {next.title}</a>
+      <a class="button button--secondary" href="/platform">Every module</a>
+    </div>
+  </Section>
+</Base>

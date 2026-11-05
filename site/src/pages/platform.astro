@@ -3,67 +3,19 @@
 // the founder's request: the frameworks table lives on /frameworks, the data-protection rules on
 // /security, the integrations on /integrations, and no scalable count (checks, controls, policies,
 // requirement IDs) is printed anywhere on the site; the framework count is the one number allowed.
+// Since Nov 5, 2026 the module texts live in src/lib/modules.js and each module has its own page.
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Steps from "../components/Steps.astro";
-import { brand, decided, platform, choosableFrameworks, alwaysIncludedFrameworks, questionnaireAllowances } from "../lib/config.js";
+import { brand, decided, choosableFrameworks, alwaysIncludedFrameworks } from "../lib/config.js";
+import { PLATFORM_SECTIONS } from "../lib/modules.js";
 
-const plat = platform();
 const frameworkCount = choosableFrameworks().length;
 const posture = alwaysIncludedFrameworks()[0];
 const demo = decided(brand.demo_url);
-const allowances = questionnaireAllowances();
-const gold = plat.tiers[1];
 
-const modules = [
-  {
-    id: "controls",
-    title: "Controls and monitoring",
-    text: "A control catalog that covers governance, access, email, devices, payments, vendors, resilience and AI. Each control has one owner, one status and one source of truth: tested automatically on every scan of your tenant where an API exposes the setting, proven by evidence with a renewal date where none does. A failing test becomes a task with a plain-English fix and a due date. Nothing is typed as a status; it is computed.",
-  },
-  {
-    id: "evidence",
-    title: "Evidence",
-    text: "A library of screenshots, exports and reports, each filed against the control it proves, with an owner, a creation date and a renewal date. Four states, computed: ready, upcoming renewal, needs renewal, needs artifact. The export pack for a broker or an auditor is a filter, not a project.",
-  },
-  {
-    id: "policies",
-    title: "Policies",
-    text: "A policy library written for a company without a security team, from information security and acceptable use to incident response, vendor risk and AI governance. Each policy is mapped by criterion ID to the frameworks, carries a version, an owner and an approver, and tracks who has acknowledged it. Staff sign in the platform; the yearly review is a task like any other.",
-  },
-  {
-    id: "people",
-    title: "People and training",
-    text: "Everyone from your identity provider, one row each: policies accepted, training current, MFA registered, device compliant, background check done. Onboarding is a checklist with due dates; offboarding is a check that access actually ended. Short security awareness lessons for every user, each under ten minutes with a quiz: phishing and payment fraud, passwords and MFA, handling customer data, working safely from anywhere, using AI tools at work, and what to do when something looks wrong. Completion is tracked per person on a yearly cycle, so the insurer's training question is answered with dates rather than a promise.",
-  },
-  {
-    id: "frameworks",
-    title: "Frameworks",
-    text: `${frameworkCount} frameworks in the catalog, one included in every plan and the rest as add-ons, all answered by one set of controls. The cyber insurance questionnaire comes first because it is the one every company faces this year; SOC 2, ISO 27001, HIPAA, PCI DSS, GDPR and the others are answered by the same controls and policies when a customer or a regulator asks. Readiness is the share of mapped controls in order, per framework. Alongside them, in every plan, the ${posture.name} scores the controls security teams recommend beyond what any standard asks, because compliance is not security.`,
-    link: { href: "/frameworks", label: "The catalog, by who asks for each" },
-  },
-  {
-    id: "vendors",
-    title: "Vendors and risks",
-    text: "Vendors found from sign-in logs, app consents and accounts payable, not from memory. Each gets an inherent-risk score on four factors (data types, business criticality, integration access, communication scope), a review on a schedule that matches the score, and a place for the contract, the SOC 2 report and the findings. A vendor breach notice becomes a finding with a review behind it. Risks live in a register written in plain sentences, scored, owned and linked to the controls that treat them.",
-  },
-  {
-    id: "ai",
-    title: "AI governance",
-    text: "An inventory of the AI tools in use, with the model, the risk level, who has access and whether the vendor trains on your data; a feed of what changed at each vendor; the AI acceptable use policy with acknowledgements; and the ISO 42001 mapping for companies that need it.",
-  },
-  {
-    id: "trust",
-    title: "Trust page and questionnaires",
-    text: `A public page that shows a prospect or a bank which frameworks you follow and which controls are in place, with a request form for the full pack, from the ${gold.name} tier. Security questionnaires are answered from the evidence you already have, with the draft marked for review and every answer pointing at its source: ${allowances}. A questionnaire is one customer's or insurer's form, however long.`,
-  },
-  {
-    id: "assistant",
-    title: "The assistant",
-    text: "Ask in plain words: which policies answer the insurer's MFA question, what evidence is due before the renewal, who still owes a sign-off. It reads the same tables you see, nothing else, and shows its sources on every line. It suggests; a person accepts. When it finds nothing it says so, and says what it searched. It never changes a record on its own, and your data never leaves the platform to train a model. In preview; the prepared answers are already in the demo.",
-  },
-];
+const modules = PLATFORM_SECTIONS;
 
 const steps = [
   { title: "Connect", text: "A read-only connection to Microsoft 365 or Google Workspace, with the exact permissions listed before you approve them. Nothing is read beyond settings and directory data. Identity, device, code, cloud and HR systems follow as customers need them." },
@@ -100,7 +52,7 @@ const more = [
         <article class="card" id={m.id}>
           <h3>{m.title}</h3>
           <p>{m.text}</p>
-          {m.link && <p><a href={m.link.href}>{m.link.label}</a></p>}
+          <p><a href={m.link ? m.link.href : m.href}>{m.link ? m.link.label : `${m.title}, with screens from the sample company`}</a></p>
         </article>
       ))}
     </div>

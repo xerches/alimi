@@ -1,0 +1,13 @@
+---
+// A screen from the demo's sample company, in the app's frame, with its caption and the sample label
+// (Nov 5, 2026). The image is a WebP in public/screens with its size set, so the page does not jump;
+// eager for the one above the fold, lazy for the rest.
+import { SAMPLE } from "../lib/modules.js";
+// plain: the caption carries only the sample line, for a layout that prints the title and the caption beside the screen.
+const { screen, eager = false, wide = false, plain = false } = Astro.props;
+---
+
+<figure class={wide ? "screen screen--wide" : "screen"}>
+  <img src={screen.src} width={screen.width} height={screen.height} alt={screen.alt} loading={eager ? "eager" : "lazy"} decoding="async" fetchpriority={eager ? "high" : undefined} />
+  <figcaption class="sample__caption">{!plain && <><b>{screen.title}.</b> {screen.caption} </>}Sample company {SAMPLE.company}, data as of {SAMPLE.asOf}; not a customer.</figcaption>
+</figure>
