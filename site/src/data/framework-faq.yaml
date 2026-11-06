@@ -1,0 +1,62 @@
+# Five questions an owner asks about each framework that is mapped today, with the answers (Nov 5, 2026,
+# after the Vanta review: the FAQ is the page element Vanta uses best, and the one place a price can sit
+# beside a framework). Only the frameworks marked `mapped: true` in config/frameworks.yaml have entries;
+# tests/faq.test.mjs checks that. Tokens in double braces are filled at build time by src/lib/faq.js from
+# config/pricing.yaml and config/brand.yaml, so no price is typed here. The standards' text is never quoted:
+# these are our own words about what each one asks for. Plain English; define a term the first time.
+frameworks:
+  insurer:
+    - q: My broker sent me a questionnaire. Is this what {{brand}} answers?
+      a: Yes. The cyber insurance questionnaire is the first framework in the catalog because every company with a policy faces it at renewal. The questions carriers ask, such as MFA (a second step at sign-in) on email and remote access, backups, endpoint protection, admin accounts, staff training and payment verification, map to controls the platform tests on every scan or proves with dated evidence, and the report goes to your broker with the evidence attached.
+    - q: What does it cost?
+      a: It is the one framework included in every tier, so the price is the tier's, from {{silverPrice}} per user a month on {{silverName}}, which is {{silver25}} for a 25-person company on the 12-month term. There is no audit and no auditor's fee for this framework; the output is the completed questionnaire and the evidence pack for your broker. A one-off security assessment and insurer report is also available as a fixed-fee service, credited against the first year of the platform.
+    - q: How long until the questionnaire is answered?
+      a: The read-only connection is set up in under an hour on a call with the founder, and the first scan answers the questions it can read from your tenant the same day. The questions that need a dated artifact, such as a backup test or a training record, take as long as the fix. The home screen counts the days to the renewal and lists what has to be done before the broker's deadline.
+    - q: We had to answer no to a question last year. Does {{brand}} fix that?
+      a: Every failing check becomes a task with a plain-English fix and a due date. You do it yourself, hand it to your IT provider, or have {{brand}} do it for a fixed fee (the insurance-ready in 30 days service). The task list is ordered by what moves the application most, so the first fixes are the ones the underwriter looks at first.
+    - q: Will the insurer accept a report from {{brand}}?
+      a: The report presents your own evidence, question by question, in the carrier's order, with the date each item was checked. Whether a carrier accepts an answer is the carrier's decision and your broker's conversation; {{brand}}'s job is that every answer is true and backed by an artifact, which is what an underwriter asks for when a question comes back on an application.
+  soc2:
+    - q: A customer asked for our SOC 2. What do they actually want?
+      a: Usually a SOC 2 Type II report, a licensed CPA firm's opinion that your controls operated over a period of months, or a Type I to begin with, which describes the controls as designed at one date. Many customers accept a trust page and a completed security questionnaire while the audit is underway, which the {{goldName}} tier provides; the report follows when the auditor has finished.
+    - q: What does SOC 2 cost with {{brand}}?
+      a: On the platform, SOC 2 can be the included framework on any tier, from {{silverPrice}} per user a month, or an add-on at {{addon}} per user a month beside another framework; a 25-person company on {{goldName}} with the insurer questionnaire and SOC 2 pays {{gold25two}} a year. The audit itself is a separate fee paid to the CPA firm, as it is with every platform, quoted by the firm on the scope. On {{diamondName}}, {{brand}} manages the audit with an independent CPA firm for you.
+    - q: How long does it take?
+      a: The readiness work takes weeks to a few months, depending on how many controls need evidence or a fix, and the platform's readiness score shows the share of mapped controls in order, so the date is a reading rather than a guess. A Type II report then needs the observation period the auditor agrees with you, and the report follows it.
+    - q: Do we need a security person on staff?
+      a: No. The scoping and policy calls an auditor expects someone to make are made with your compliance lead, who is in every tier, and the fixes land with the IT provider that already administers your tenant. Staff read and sign the policies and take the lessons inside the platform.
+    - q: Which auditor do we use?
+      a: Whichever licensed CPA firm you choose; {{brand}} can introduce firms it has worked with, takes no fee from any auditor and never audits its own work. The export pack, the evidence for every requirement with its ID, goes to the firm you pick.
+  iso27001:
+    - q: Who asks for ISO 27001, and how is it different from SOC 2?
+      a: Customers in Europe and in regulated industries ask for ISO 27001; software buyers in the United States usually ask for SOC 2. ISO 27001 is a certificate from an accredited certification body that your information security management system meets the standard; SOC 2 is a CPA firm's report. The controls overlap heavily, so the second one is mostly a mapping of the work you did for the first.
+    - q: What does it cost?
+      a: On the platform, ISO 27001 can be the included framework on any tier, from {{silverPrice}} per user a month, or an add-on at {{addon}} per user a month beside another framework. The certification audit is a separate fee to the certification body, with a surveillance audit each year after it; {{brand}}'s price does not include it, and no platform's does.
+    - q: How long does it take?
+      a: The management system has to exist and run before the certification audit, with an internal audit and a management review behind it, so plan on months rather than weeks. The platform's readiness score and the task list set the date; the second stage of the audit then follows the first by a few weeks.
+    - q: What do we have to write?
+      a: The policy library covers the documents the standard expects, mapped by clause and control ID, and the risk assessment and the statement of applicability are built in the platform from the same controls and evidence. You do not start from a blank page, and the yearly review is a task like any other.
+    - q: Can we do ISO 27001 and SOC 2 together?
+      a: Yes, and most companies that need both do. One set of controls, one evidence library, two mappings; the second framework is an add-on at {{addon}} per user a month, and the readiness for each is computed from the same scan.
+  hipaa:
+    - q: Does HIPAA apply to us?
+      a: If you are a covered entity (a healthcare provider, a health plan or a clearinghouse) or a business associate (a company that handles protected health information for one), yes. The usual sign is a business associate agreement a customer asks you to sign before they share patient data.
+    - q: Is there a HIPAA certificate?
+      a: No. There is no official HIPAA certification; a company meets the rule or it does not, and the proof is the risk analysis, the policies, the training records and the safeguards in place. {{brand}} tracks exactly those, so a customer's HIPAA questionnaire or a regulator's request is answered with evidence rather than a certificate that does not exist.
+    - q: What does it cost?
+      a: On the platform, HIPAA can be the included framework on any tier, from {{silverPrice}} per user a month, or an add-on at {{addon}} per user a month beside another framework. There is no certification body to pay. If a customer insists on a third-party assessment, that is a separate engagement with the assessor.
+    - q: What do we have to do first?
+      a: The risk analysis, because the rule requires it and every investigation starts by asking for it; then the policies and the workforce training. The platform's risk register, policy library and training module are those three, and the people module keeps the training dates the rule expects.
+    - q: Our software vendor says it is HIPAA compliant. Are we covered?
+      a: No. A vendor's compliance covers the vendor's part. Yours is your own policies, training, access controls and the agreements you hold with each vendor, which the vendor module keeps in one place with the review dates.
+  iso42001:
+    - q: What is ISO 42001, and who asks for it?
+      a: The international standard for an AI management system, meaning how a company governs the AI it builds or uses. Enterprise customers and procurement teams have begun asking vendors for it by name, and it is the natural evidence behind an AI acceptable use policy.
+    - q: Do we need it if we only use AI tools rather than build them?
+      a: Not necessarily. For a company that uses AI tools, the AI governance module (the inventory of tools, a rule per tool, the vendor change feed and the policy with staff acknowledgements) usually answers a customer's questions; ISO 42001 certification is for a company whose customers ask for the certificate itself.
+    - q: What does it cost?
+      a: On the platform, ISO 42001 can be the included framework on any tier, from {{silverPrice}} per user a month, or an add-on at {{addon}} per user a month beside another framework; the AI governance module that produces the inventory and the vendor feed behind it is in {{platinumName}}, from {{platinumPrice}} per user a month. Certification is a separate fee to the certification body.
+    - q: How does it relate to ISO 27001?
+      a: It shares the management-system structure, so a company that holds ISO 27001 adds the AI-specific controls rather than starting over. The platform maps both from the same evidence, and the readiness for each is computed separately.
+    - q: What does the EU AI Act have to do with it?
+      a: The Act is law for companies that put AI systems on the market in the European Union or use them there; ISO 42001 is a standard that helps show the governance the Act expects. Both are in the catalog, and the AI inventory is the first thing either one asks for.

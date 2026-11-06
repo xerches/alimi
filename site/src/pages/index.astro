@@ -32,20 +32,28 @@ const sample = {
 
 // One line per module; the detail is on /platform. No scalable count appears on the site (founder's rule, Nov 2, 2026).
 const modules = [
-  { href: "/platform#controls", title: "Controls that check themselves", text: "An owner and a status per control, tested on every scan or proven by evidence with a renewal date." },
-  { href: "/platform#evidence", title: "Evidence with a renewal date", text: "Every export and screenshot is filed against the control it proves; the broker's pack builds itself." },
-  { href: "/platform#policies", title: "Policies your staff actually sign", text: "Written for your size, mapped by criterion ID, with sign-off tracking and a yearly review." },
-  { href: "/platform#people", title: "People and training", text: "One row per person, short lessons with a quiz, and a date behind the insurer's training question." },
+  { href: "/platform/controls", title: "Controls that check themselves", text: "An owner and a status per control, tested on every scan or proven by evidence with a renewal date." },
+  { href: "/platform/evidence", title: "Evidence with a renewal date", text: "Every export and screenshot is filed against the control it proves; the broker's pack builds itself." },
+  { href: "/platform/policies", title: "Policies your staff actually sign", text: "Written for your size, mapped by criterion ID, with sign-off tracking and a yearly review." },
+  { href: "/platform/people", title: "People and training", text: "One row per person, short lessons with a quiz, and a date behind the insurer's training question." },
   { href: "/frameworks", title: "Frameworks, insurer first", text: `${frameworkCount} frameworks in the catalog, one included, all answered by the same controls.` },
   { href: "/frameworks", title: "A security score, not only a compliance score", text: `The ${posture.name}, in every plan: the gap between passing the audit and being hard to break into.` },
-  { href: "/platform#vendors", title: "Vendors, risks and AI tools", text: "The vendors who hold your data, a risk register in plain sentences, and the AI tools in use." },
-  { href: "/platform#trust", title: "Trust page and questionnaires", text: `A page a prospect can read, and questionnaires drafted from answers you already have, from ${gold.name}.` },
-  { href: "/platform#assistant", title: "An assistant that drafts; you decide", text: "Reads your data, cites a source on every line, never changes a record on its own. In preview." },
+  { href: "/platform/vendors", title: "Vendors, risks and AI tools", text: "The vendors who hold your data, a risk register in plain sentences, and the AI tools in use." },
+  { href: "/platform/trust", title: "Trust page and questionnaires", text: `A page a prospect can read, and questionnaires drafted from answers you already have, from ${gold.name}.` },
+  { href: "/platform/assistant", title: "An assistant that drafts; you decide", text: "Reads your data, cites a source on every line, never changes a record on its own. In preview." },
 ];
 const steps = [
   { title: "Connect, read-only", text: "A read-only connection to Microsoft 365 or Google Workspace, agreed in a one-page letter. Alimi reads settings, never mail, files or passwords." },
   { title: "Watch and fix", text: "Weekly checks on MFA (the second step at sign-in), legacy sign-in, admin accounts, mail forwarding and sharing links. A failing check becomes a task with an owner and a due date." },
   { title: "Prove it", text: "Readiness per framework, an export pack for the broker or the auditor, a trust page, and questionnaire answers drafted from your own evidence." },
+];
+// The "built on" band (Nov 5, 2026, after the Drata review): what the platform reads and runs on, named as text,
+// in place of the customer logos every larger vendor shows, until the pilots produce a case study. Future tense
+// for the hosted platform, which holds no customer data yet.
+const builtOn = [
+  { name: "Microsoft Graph", text: "How the platform will read your Microsoft 365: settings and directory data, read-only." },
+  { name: "Google Admin SDK", text: "How it will read your Google Workspace, through a read-only service account." },
+  { name: "Netlify", text: "Serves this site and the product demo, with a strict content security policy and no cookies." },
 ];
 const audiences = [
   { href: "/solutions#broker", title: "Your insurance broker sent you", text: `The renewal questionnaire is due and the premium depends on the answers. Start on ${silver.name} with the insurance questionnaire; the report goes to the broker with the evidence.` },
@@ -139,6 +147,23 @@ const differences = [
 
   <Section id="how" title="How it works">
     <Steps steps={steps} />
+  </Section>
+
+  <Section id="built-on" tone="alt" tight>
+    <div class="built-on">
+      <div class="built-on__intro">
+        <span class="eyebrow">Built on</span>
+        <p class="muted">No customer logos yet, by rule: the first case studies arrive with the pilots in 2027. What the platform is built on is public now.</p>
+      </div>
+      <ul class="built-on__list">
+        {builtOn.map((b) => (
+          <li class="tile">
+            <span class="tile__value tile__value--text">{b.name}</span>
+            <span class="tile__note">{b.text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </Section>
 
   <Section id="pricing" tone="alt" title="Published prices" lede={`Four tiers, per user a month, one framework included in each with ${frameworkCount} to choose from. The policy library, training and a named compliance lead come with all of them.`}>

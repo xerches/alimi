@@ -2,8 +2,10 @@
 // and thank-you pages read from here. Added Nov 2, 2026 when the founder asked for the sections
 // Vanta and Drata have and we did not (solutions, integrations, frameworks, customers, help,
 // academy, community, press, careers, security, trust, status, legal) "even if there's no content
-// for now". Pages that are placeholders say so on the page itself, never here.
+// for now". Pages that are placeholders say so on the page itself, never here. The module pages
+// under /platform/ and their menu entries come from modules.js (Nov 5, 2026).
 import { brand, decided, framework, frameworkHref } from "./config.js";
+import { MODULES } from "./modules.js";
 
 const demo = decided(brand.demo_url);
 
@@ -31,14 +33,7 @@ export const MENUS = [
       {
         title: "Modules",
         items: [
-          { href: "/platform#controls", label: "Controls and monitoring" },
-          { href: "/platform#evidence", label: "Evidence" },
-          { href: "/platform#policies", label: "Policies" },
-          { href: "/platform#people", label: "People and training" },
-          { href: "/platform#vendors", label: "Vendors and risks" },
-          { href: "/platform#ai", label: "AI governance" },
-          { href: "/platform#trust", label: "Trust page and questionnaires" },
-          { href: "/platform#assistant", label: "The assistant" },
+          ...MODULES.map((m) => ({ href: m.href, label: m.title })),
         ],
       },
     ],
@@ -92,7 +87,9 @@ export const MENUS = [
         items: [
           { href: "/for-partners", label: "For partners", text: "Refer or resell; the terms are published" },
           { href: "/for-resellers", label: "For resellers", text: "Wholesale tiers, incentives, white label" },
-          { href: "/for-partners#referrers", label: "For referrers", text: "Brokers, CPAs and attorneys" },
+          { href: "/for-brokers", label: "For insurance brokers", text: "Applications that come back complete" },
+          { href: "/for-accountants", label: "For CPAs", text: "Controls that exist when you ask at year end" },
+          { href: "/for-partners#referrers", label: "For referrers", text: "Attorneys and other professionals" },
           { href: "/for-partners#partner-form", label: "Become a partner", text: "A short form and a 30-minute call" },
         ],
       },
@@ -136,8 +133,8 @@ export const MENUS = [
           guide("hitrust"),
           guide("cmmc"),
           guide("fedramp"),
-          { href: "/platform#vendors", label: "TPRM" },
-          { href: "/platform#trust", label: "Trust" },
+          { href: "/platform/vendors", label: "TPRM" },
+          { href: "/platform/trust", label: "Trust" },
           { href: "/platform", label: "GRC" },
         ],
       },
@@ -197,8 +194,23 @@ export const FOOTER = [
     items: [
       { href: "/for-partners", label: "For partners" },
       { href: "/for-resellers", label: "For resellers" },
+      { href: "/for-brokers", label: "For insurance brokers" },
+      { href: "/for-accountants", label: "For CPAs" },
       { href: "/for-partners#referrers", label: "For referrers" },
       { href: "/for-partners#partner-form", label: "Become a partner" },
+    ],
+  },
+  // A Trust column of its own (Nov 5, 2026, after the Drata review): the pages a buyer's security contact
+  // or an auditor looks for in a footer, together, with the accessibility statement beside them.
+  {
+    title: "Trust",
+    items: [
+      { href: "/security", label: "Security" },
+      { href: "/trust", label: "Trust page" },
+      { href: "/status", label: "Status" },
+      { href: "/accessibility", label: "Accessibility" },
+      { href: "/privacy", label: "Privacy" },
+      { href: "/legal", label: "Legal" },
     ],
   },
   {
@@ -207,9 +219,6 @@ export const FOOTER = [
       { href: "/about", label: "About" },
       { href: "/press", label: "Press" },
       { href: "/careers", label: "Careers" },
-      { href: "/trust", label: "Trust page" },
-      { href: "/status", label: "Status" },
-      { href: "/legal", label: "Legal and privacy" },
       { href: "/contact", label: "Contact" },
     ],
   },

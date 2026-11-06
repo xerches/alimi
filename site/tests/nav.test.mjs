@@ -12,6 +12,7 @@ const pagesDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../
 function pageFor(href) {
   if (href === "/") return path.join(pagesDir, "index.astro");
   if (href.startsWith("/frameworks/")) return path.join(pagesDir, "frameworks", "[slug].astro");
+  if (href.startsWith("/platform/")) return path.join(pagesDir, "platform", "[module].astro");
   return path.join(pagesDir, `${href.slice(1)}.astro`);
 }
 
@@ -44,7 +45,9 @@ test("every menu item and footer link has a label and an href; external links ar
     if (item.href.startsWith("http")) assert.ok(item.external, `${item.label} points off-site and is not marked external`);
     else assert.ok(item.href.startsWith("/"), `${item.label} has a relative href`);
   }
-  assert.deepEqual(FOOTER.map((c) => c.title), ["Platform", "Solutions", "Resources", "Partners", "Company"]);
+  assert.deepEqual(FOOTER.map((c) => c.title), ["Platform", "Solutions", "Resources", "Partners", "Trust", "Company"]);
+  const trust = FOOTER.find((c) => c.title === "Trust").items.map((i) => i.href);
+  for (const expected of ["/security", "/trust", "/status", "/accessibility"]) assert.ok(trust.includes(expected), `Trust column lacks ${expected}`);
 });
 
 test("every top-level menu has an icon drawing for the header strip", () => {

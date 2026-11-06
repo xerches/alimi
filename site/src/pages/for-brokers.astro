@@ -1,0 +1,118 @@
+---
+// For insurance brokers (Nov 5, 2026, after the Drata review: a page per referral partner type, with the
+// one-pager split in /templates). The fee terms come from config/pricing.yaml; the page says what a broker
+// sees, what Alimi does for the client, what it does for the broker, and how referring works. No outcome
+// claim: a carrier's decision is the carrier's.
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Steps from "../components/Steps.astro";
+import Callout from "../components/Callout.astro";
+import { brand, partners, platform, service, quote, money } from "../lib/config.js";
+
+const { referral, principle } = partners();
+const plat = platform();
+const [silver, gold] = plat.tiers;
+const example = quote({ tierId: "silver", users: 25 });
+const assessment = service("assessment");
+const ready30 = service("insurance_ready_30");
+
+const sees = [
+  { title: "The questionnaire nobody can answer", text: "The renewal form asks about MFA on email and remote access, backups, endpoint protection, admin accounts and training. The owner forwards it to the IT provider, who answers what the tenant shows and guesses the rest, and the application goes in late and incomplete." },
+  { title: "The client who cannot get MFA on", text: "A condition on the quote, a deadline, and nobody whose job it is. The premium rides on whether five people register a second sign-in step before the binder date." },
+  { title: "The claim after a fake invoice", text: "A supplier's bank details changed by email, a payment sent, and a claim under the funds-transfer fraud clause. The question afterwards is whether there was a verification procedure, written down and followed." },
+];
+
+const steps = [
+  { title: "A read-only scan under a signed letter", text: `The client signs a one-page authorization; ${brand.display_name} connects read-only to their Microsoft 365 or Google Workspace and reads the settings the questionnaire asks about. Nothing changes in the tenant and no password is held.` },
+  { title: "Every question answered from evidence", text: "The questions the tenant can answer are answered the same day, each with the date it was checked; the ones that need a dated artifact, such as a backup test or a training record, become tasks with an owner and a due date before your deadline." },
+  { title: "The findings fixed", text: `A failing check carries a plain-English fix. The client does it, their IT provider does it, or ${brand.display_name} does it for a fixed fee (${ready30.name}, ${ready30.price}).` },
+  { title: "The report to you, with the evidence attached", text: "Question by question, in the carrier's order, with the artifact behind each answer, from the platform. The home screen counts the days to the renewal and lists what is left, so the application goes in complete." },
+];
+
+const forYou = [
+  { title: "Applications that come back complete", text: "Every answer true and backed by a dated artifact, which is what the underwriter asks for when a question comes back. Fewer rounds, fewer conditions on the quote." },
+  { title: "Clients that are easier to place and keep", text: `A client whose findings are fixed and whose evidence renews itself is a better risk next year too. ${brand.display_name} keeps watching the tenant between renewals, so the next application starts from a current picture.` },
+  { title: "A fee, or the same amount to your client", text: `${referral.feeText} of ${referral.of}, paid ${referral.paid}. If your producer rules do not allow a fee, the same amount goes to your client as a discount or to a charity you name; you choose when you sign up.` },
+  { title: "No cost to you, and no competition", text: `${brand.display_name} sells no insurance, places no business and never markets to your other clients. The client buys direct from the published price list; you stay their broker.` },
+];
+
+const faq = [
+  { q: `Does ${brand.display_name} sell insurance or compete with me?`, a: `No. ${brand.display_name} is a compliance platform with a person behind it; it sells no insurance, works with no carrier on placement, and says so in the agreement. ${principle}` },
+  { q: "Does the client have to buy through me?", a: "No. You introduce us by email with the client copied; the client buys direct at the published price, and the fee or the discount follows the introduction. Nothing is invoiced through you." },
+  { q: "What does the client pay?", a: `From ${silver.perUser} per user a month on ${silver.name}, with the cyber insurance questionnaire as the included framework: ${example.yearlyText} for a 25-person company on the 12-month term. A one-off ${assessment.name.toLowerCase()} is ${assessment.price}, credited against the first year of the platform.` },
+  { q: "Can I see my client's status?", a: `Only with the client's consent. From ${gold.name}, the client can give you broker access to their readiness and the export pack, so you read the evidence yourself rather than asking for screenshots.` },
+  { q: "Will the carrier accept the report?", a: `That is the carrier's decision and your conversation. ${brand.display_name}'s job is that every answer on the application is true and backed by an artifact with a date, which is what an underwriter asks for when a question comes back.` },
+];
+---
+
+<Base title="For insurance brokers" description={`Alimi for insurance brokers: your clients' cyber insurance questionnaires answered from their own tenant and evidence, findings fixed before the deadline, the report to you with the evidence attached, and a ${referral.feeText} referral fee or the same amount to your client.`} path="/for-brokers">
+  <Hero eyebrow="For insurance brokers" title="Applications that come back complete, with the evidence attached">
+    <p class="lede">Your clients run companies of 10 people and up with nobody whose job security is. {brand.display_name} answers their renewal questionnaire from their own tenant and evidence, turns every failing answer into a fix with a date, and sends you the report with the artifacts behind it.</p>
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Start the conversation</a>
+      <a class="button button--secondary" href="#how">How referring works</a>
+    </div>
+  </Hero>
+
+  <Section id="sees" tone="alt" title="What you see every week">
+    <div class="grid">
+      {sees.map((s) => (
+        <article class="card">
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="client" title="What Alimi does for your client">
+    <Steps steps={steps} />
+    <p class="muted small" style="margin-top:1rem">Every connection is read-only and documented before the client approves it. The <a href="/frameworks/insurer">cyber insurance questionnaire page</a> answers the questions owners ask about it.</p>
+  </Section>
+
+  <Section id="you" tone="alt" title="What it does for you">
+    <div class="grid grid--two">
+      {forYou.map((f) => (
+        <article class="card">
+          <h3>{f.title}</h3>
+          <p>{f.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="how" title="How referring works" lede="Introduce us by email with the client copied. We respond within two business days, keep you informed, and never market to your other clients.">
+    <div class="grid grid--two">
+      <article class="card">
+        <h3>The fee</h3>
+        <p>{referral.feeText} of {referral.of}, paid {referral.paid}.</p>
+      </article>
+      <article class="card">
+        <h3>If your producer rules do not allow a fee</h3>
+        <p>The same amount goes to your client as a discount, or to a charity you name. You choose when you sign up, and the referral agreement says so in writing.</p>
+      </article>
+    </div>
+    <Callout label="A one-page summary for your clients" tone="brand">
+      <p>Partners receive a one-page summary of the platform and the prices, under {brand.display_name}'s name, to hand to a client who asks. It is sent when you sign up, not published here.</p>
+    </Callout>
+  </Section>
+
+  <Section id="faq" tone="alt" title="Questions brokers ask">
+    <div class="grid grid--two">
+      {faq.map((f) => (
+        <article class="card">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="start" tone="dark" title="Start the conversation" lede="Tell us about your book and the renewals that worry you. A reply within two business days, from the founder.">
+    <div class="actions">
+      <a class="button button--primary" href="/for-partners#partner-form">Become a partner</a>
+      <a class="button button--secondary" href="/pricing">The published prices</a>
+    </div>
+  </Section>
+</Base>

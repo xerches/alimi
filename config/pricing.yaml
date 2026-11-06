@@ -104,11 +104,11 @@ products:
         per_user_month: 50
         integrations: null
         questionnaires_per_year: unlimited
-        rule: "Platinum plus audit coordination run by Alimi (Vanta Seamless SOC $10,000 to $25,000 a year) priced for a 100-person company: $14.58 per user a month, minus 15%"
-        summary: For a company that wants Alimi to run the audit and the program, not only the platform.
+        rule: "Platinum plus the audit managed by Alimi with an independent CPA firm (Vanta Seamless SOC $10,000 to $25,000 a year) priced for a 100-person company: $14.58 per user a month, minus 15%"
+        summary: For a company that wants Alimi to manage the audit and the program, not only the platform.
         includes:
           - Everything in Platinum
-          - Alimi runs the audit with the CPA firm, from scoping to the final report
+          - The audit managed by Alimi with an independent CPA firm, from scoping to the final report
           - A dedicated compliance lead with a monthly working session
           - Quarterly board and insurer report
           - Multi-entity support and a one-business-day support response

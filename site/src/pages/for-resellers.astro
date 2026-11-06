@@ -10,7 +10,11 @@ import { brand, partners, platform, quote, money, percent } from "../lib/config.
 const { reseller, principle } = partners();
 const plat = platform();
 const [first, second, third] = reseller.tiers;
+const silver = plat.tiers[0];
 const silver25 = quote({ tierId: "silver", users: 25 });
+// The smallest client most resellers start with, month by month (Nov 5, 2026, after the Vanta review: Vanta shows its
+// service partners no discount at all, and the MSP tools that publish a per-client price charge for the software alone).
+const clientWholesale = Math.round(silver25.monthly * (1 - first.discountFraction) * 100) / 100;
 const gold50 = quote({ tierId: "gold", users: 50, frameworks: 2 });
 const examples = [
   { label: `${silver25.tier}, 25 users, one framework`, list: silver25.yearly },
@@ -70,6 +74,28 @@ const faq = [
       </table>
     </div>
     <p class="muted small">Margin at list price; most resellers bundle their own monitoring, help desk or vCISO hours and price the whole thing. Figures from the published price list; they move when it does.</p>
+  </Section>
+
+  <Section id="client" title="What one client costs you, month by month" lede="The arithmetic for the smallest client most resellers start with, so you can set a price before the first call.">
+    <div class="grid grid--two" style="align-items:start">
+      <article class="card">
+        <h3>A 25-person client on {silver25.tier}</h3>
+        <dl class="facts">
+          <div><dt>List price</dt><dd>{silver25.monthlyText}</dd></div>
+          <div><dt>You pay, at the {first.name} discount</dt><dd>{money(clientWholesale)} a month</dd></div>
+          <div><dt>Your margin at list</dt><dd>{money(silver25.monthly - clientWholesale)} a month</dd></div>
+          <div><dt>Your price to the client</dt><dd>Yours to set</dd></div>
+        </dl>
+        <p class="muted small">{silver25.seats} users at {silver.perUser} per user a month on the {silver.termLabel}, invoiced to you monthly; the same arithmetic as the <a href="/pricing#calculator">calculator</a>.</p>
+      </article>
+      <article class="card">
+        <h3>What the client gets for it</h3>
+        <ul class="checklist">
+          {silver.includes.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="muted small" style="margin-top:0.75rem">The MSP compliance tools that publish a per-client price charge $99 to $299 a client tenant a month for the software alone, as published in November 2026. {brand.display_name} comes with the policy library, the training lessons and a named compliance lead, and your discount rises with your client count.</p>
+      </article>
+    </div>
   </Section>
 
   <Section id="incentives" title="Incentives" lede="Published so you can plan on them, and recalculated with your tier every quarter.">

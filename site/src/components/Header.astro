@@ -24,9 +24,10 @@ const linkClass = (menu, extra = "") => ["nav__link", menu.button && "nav__link-
 
 <header class="site-header">
   <div class="container site-header__row">
-    <a class="brand" href="/" aria-label={`${brand.display_name} home`}>
+    <a class="brand" href="/">
       <span class="brand__mark" aria-hidden="true">{brand.display_name.slice(0, 1)}</span>
       <span class="brand__name">{brand.display_name}</span>
+      <span class="visually-hidden"> home</span>
     </a>
     <nav class="nav" aria-label="Main">
       <ul>
