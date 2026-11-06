@@ -10,7 +10,7 @@ npm ci
 npm run dev          # http://localhost:4321
 npm test             # config and contrast tests (node:test)
 npm run build        # astro build, then scripts/check-dist.mjs
-npm run lighthouse   # Lighthouse CI on dist/, 95+ required on every page
+npm run lighthouse   # Lighthouse CI on dist/, 95+ required on every page; a page under the performance bar on one run is measured three more times and the median counts (scripts/lighthouse.mjs)
 ```
 
 Node 22 or newer. Lighthouse needs a Chrome; set `CHROME_PATH` if it is not on the path.

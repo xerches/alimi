@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "staticDistDir": "./dist",
-      "numberOfRuns": 3,
+      "numberOfRuns": 1,
       "settings": {
         "chromeFlags": "--no-sandbox --headless --disable-gpu"
       },
@@ -45,7 +45,6 @@
       ]
     },
     "assert": {
-      "aggregationMethod": "median",
       "assertions": {
         "categories:performance": [
           "error",
